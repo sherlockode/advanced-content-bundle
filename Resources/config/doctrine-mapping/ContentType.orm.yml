@@ -1,0 +1,5 @@
+Sherlockode\AdvancedContentBundle\Model\ContentType:
+  type: mappedSuperclass
+  fields:
+    name:
+      type: string

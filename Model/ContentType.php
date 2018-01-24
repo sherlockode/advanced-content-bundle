@@ -1,23 +1,34 @@
 <?php
 
-namespace AdvancedContentBundle\Model;
+namespace Sherlockode\AdvancedContentBundle\Model;
 
-class ContentType
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+abstract class ContentType
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
-     * @var array
+     * @var Collection
      */
-    private $fields;
+    protected $fields;
+
+    /**
+     * ContentType constructor.
+     */
+    public function __construct()
+    {
+        $this->fields = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -48,7 +59,7 @@ class ContentType
     }
 
     /**
-     * @return array
+     * @return Collection|Field[]
      */
     public function getFields()
     {
@@ -56,13 +67,25 @@ class ContentType
     }
 
     /**
-     * @param array $fields
+     * @param Field $field
      *
      * @return $this
      */
-    public function setFields($fields)
+    public function addField(Field $field)
     {
-        $this->fields = $fields;
+        $this->fields[] = $field;
+
+        return $this;
+    }
+
+    /**
+     * @param Field $field
+     *
+     * @return $this
+     */
+    public function removeField(Field $field)
+    {
+        $this->fields->removeElement($field);
 
         return $this;
     }
