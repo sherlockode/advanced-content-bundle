@@ -1,0 +1,2 @@
+AdvancedContentBundle\Model\Content:
+  type: mappedSuperclass

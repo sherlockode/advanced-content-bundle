@@ -2,30 +2,12 @@
 
 namespace AdvancedContentBundle\Model;
 
-class ContentType
+abstract class ContentType
 {
-    /**
-     * @var int
-     */
-    private $id;
-
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var array
-     */
-    private $fields;
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    protected $name;
 
     /**
      * @return string
@@ -43,26 +25,6 @@ class ContentType
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFields()
-    {
-        return $this->fields;
-    }
-
-    /**
-     * @param array $fields
-     *
-     * @return $this
-     */
-    public function setFields($fields)
-    {
-        $this->fields = $fields;
 
         return $this;
     }
