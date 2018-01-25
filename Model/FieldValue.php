@@ -1,28 +1,28 @@
 <?php
 
-namespace AdvancedContentBundle\Model;
+namespace Sherlockode\AdvancedContentBundle\Model;
 
-class FieldValue
+abstract class FieldValue
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var int
+     * @var Content
      */
-    private $contentId;
+    protected $content;
 
     /**
-     * @var int
+     * @var Field
      */
-    private $fieldId;
+    protected $field;
 
     /**
      * @var string
      */
-    private $value;
+    protected $value;
 
     /**
      * @return int
@@ -33,41 +33,41 @@ class FieldValue
     }
 
     /**
-     * @return int
+     * @return Content
      */
-    public function getContentId()
+    public function getContent()
     {
-        return $this->contentId;
+        return $this->content;
     }
 
     /**
-     * @param int $contentId
+     * @param Content $content
      *
      * @return $this
      */
-    public function setContentId($contentId)
+    public function setContent(Content $content)
     {
-        $this->contentId = $contentId;
+        $this->content = $content;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Field
      */
-    public function getFieldId()
+    public function getField()
     {
-        return $this->fieldId;
+        return $this->field;
     }
 
     /**
-     * @param int $fieldId
+     * @param Field $field
      *
      * @return $this
      */
-    public function setFieldId($fieldId)
+    public function setField(Field $field)
     {
-        $this->fieldId = $fieldId;
+        $this->field = $field;
 
         return $this;
     }

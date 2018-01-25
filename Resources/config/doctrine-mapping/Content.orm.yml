@@ -1,0 +1,2 @@
+Sherlockode\AdvancedContentBundle\Model\Content:
+  type: mappedSuperclass

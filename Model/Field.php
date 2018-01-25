@@ -1,43 +1,43 @@
 <?php
 
-namespace AdvancedContentBundle\Model;
+namespace Sherlockode\AdvancedContentBundle\Model;
 
-class Field
+abstract class Field
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var bool
      */
-    private $isRequired;
+    protected $isRequired;
 
     /**
      * @var array
      */
-    private $options;
+    protected $options;
 
     /**
-     * @var int
+     * @var ContentType
      */
-    private $contentTypeId;
+    protected $contentType;
 
     /**
      * @return int
@@ -148,21 +148,21 @@ class Field
     }
 
     /**
-     * @return int
+     * @return ContentType
      */
-    public function getContentTypeId()
+    public function getContentType()
     {
-        return $this->contentTypeId;
+        return $this->contentType;
     }
 
     /**
-     * @param int $contentTypeId
+     * @param ContentType $contentType
      *
      * @return $this
      */
-    public function setContentTypeId($contentTypeId)
+    public function setContentType(ContentType $contentType)
     {
-        $this->contentTypeId = $contentTypeId;
+        $this->contentType = $contentType;
 
         return $this;
     }

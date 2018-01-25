@@ -1,23 +1,34 @@
 <?php
 
-namespace AdvancedContentBundle\Model;
+namespace Sherlockode\AdvancedContentBundle\Model;
 
-class Content
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+abstract class Content
 {
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var int
+     * @var ContentType
      */
-    private $contentTypeId;
+    protected $contentType;
 
     /**
-     * @var array
+     * @var Collection
      */
-    private $fieldValues;
+    protected $fieldValues;
+
+    /**
+     * Content constructor
+     */
+    public function __construct()
+    {
+        $this->fieldValues = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -28,27 +39,27 @@ class Content
     }
 
     /**
-     * @return int
+     * @return ContentType
      */
-    public function getContentTypeId()
+    public function getContentType()
     {
-        return $this->contentTypeId;
+        return $this->contentType;
     }
 
     /**
-     * @param int $contentTypeId
+     * @param ContentType $contentType
      *
      * @return $this
      */
-    public function setContentTypeId($contentTypeId)
+    public function setContentType(ContentType $contentType)
     {
-        $this->contentTypeId = $contentTypeId;
+        $this->contentType = $contentType;
 
         return $this;
     }
 
     /**
-     * @return array
+     * @return Collection|FieldValue[]
      */
     public function getFieldValues()
     {
@@ -56,13 +67,25 @@ class Content
     }
 
     /**
-     * @param array $fieldValues
+     * @param FieldValue $fieldValue
      *
      * @return $this
      */
-    public function setFieldValues($fieldValues)
+    public function addFieldValue(FieldValue $fieldValue)
     {
-        $this->fieldValues = $fieldValues;
+        $this->fieldValues[] = $fieldValue;
+
+        return $this;
+    }
+
+    /**
+     * @param FieldValue $fieldValue
+     *
+     * @return $this
+     */
+    public function removeFieldValue(FieldValue $fieldValue)
+    {
+        $this->fieldValues->removeElement($fieldValue);
 
         return $this;
     }
