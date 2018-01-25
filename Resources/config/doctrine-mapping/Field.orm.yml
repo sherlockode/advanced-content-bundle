@@ -1,0 +1,14 @@
+AdvancedContentBundle\Model\Field:
+  type: mappedSuperclass
+  fields:
+    type:
+      type: string
+    name:
+      type: string
+    slug:
+      type: string
+    isRequired:
+      type: boolean
+      column: is_required
+    options:
+      type: string

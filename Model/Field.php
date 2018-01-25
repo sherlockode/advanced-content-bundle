@@ -2,50 +2,36 @@
 
 namespace AdvancedContentBundle\Model;
 
-class Field
+use Gedmo\Mapping\Annotation as Gedmo;
+
+abstract class Field
 {
     /**
-     * @var int
+     * @var string
      */
-    private $id;
+    protected $type;
 
     /**
      * @var string
      */
-    private $type;
+    protected $name;
 
     /**
      * @var string
+     *
+     * @Gedmo\Slug(fields={"name"})
      */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $slug;
+    protected $slug;
 
     /**
      * @var bool
      */
-    private $isRequired;
+    protected $isRequired;
 
     /**
      * @var array
      */
-    private $options;
-
-    /**
-     * @var int
-     */
-    private $contentTypeId;
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    protected $options;
 
     /**
      * @return string
@@ -143,26 +129,6 @@ class Field
     public function setOptions($options)
     {
         $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getContentTypeId()
-    {
-        return $this->contentTypeId;
-    }
-
-    /**
-     * @param int $contentTypeId
-     *
-     * @return $this
-     */
-    public function setContentTypeId($contentTypeId)
-    {
-        $this->contentTypeId = $contentTypeId;
 
         return $this;
     }

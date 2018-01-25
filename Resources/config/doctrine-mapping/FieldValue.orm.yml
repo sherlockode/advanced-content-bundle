@@ -1,0 +1,5 @@
+AdvancedContentBundle\Model\FieldValue:
+  type: mappedSuperclass
+  fields:
+    value:
+      type: string
