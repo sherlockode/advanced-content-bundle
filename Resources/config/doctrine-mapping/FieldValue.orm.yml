@@ -3,3 +3,4 @@ Sherlockode\AdvancedContentBundle\Model\FieldValue:
   fields:
     value:
       type: string
+      nullable: true
