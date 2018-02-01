@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\FieldType\Text;
-use Sherlockode\AdvancedContentBundle\Model\Field;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
 class FieldManager
 {
@@ -22,11 +22,11 @@ class FieldManager
     /**
      * Get specific options to add on form
      *
-     * @param Field $field
+     * @param FieldInterface $field
      *
      * @return array
      */
-    public function getFieldOptions(Field $field)
+    public function getFieldOptions(FieldInterface $field)
     {
         if (!isset($this->getFieldTypes()[$field->getType()])) {
             return [];

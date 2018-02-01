@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-abstract class Field
+abstract class Field implements FieldInterface
 {
     /**
      * @var int
@@ -35,7 +35,7 @@ abstract class Field
     protected $options;
 
     /**
-     * @var ContentType
+     * @var ContentTypeInterface
      */
     protected $contentType;
 
@@ -148,7 +148,7 @@ abstract class Field
     }
 
     /**
-     * @return ContentType
+     * @return ContentTypeInterface
      */
     public function getContentType()
     {
@@ -156,11 +156,11 @@ abstract class Field
     }
 
     /**
-     * @param ContentType $contentType
+     * @param ContentTypeInterface $contentType
      *
      * @return $this
      */
-    public function setContentType(ContentType $contentType)
+    public function setContentType(ContentTypeInterface $contentType)
     {
         $this->contentType = $contentType;
 

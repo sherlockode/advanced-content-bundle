@@ -5,7 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-abstract class Content
+abstract class Content implements ContentInterface
 {
     /**
      * @var int
@@ -13,7 +13,7 @@ abstract class Content
     protected $id;
 
     /**
-     * @var ContentType
+     * @var ContentTypeInterface
      */
     protected $contentType;
 
@@ -39,7 +39,7 @@ abstract class Content
     }
 
     /**
-     * @return ContentType
+     * @return ContentTypeInterface
      */
     public function getContentType()
     {
@@ -47,11 +47,11 @@ abstract class Content
     }
 
     /**
-     * @param ContentType $contentType
+     * @param ContentTypeInterface $contentType
      *
      * @return $this
      */
-    public function setContentType(ContentType $contentType)
+    public function setContentType(ContentTypeInterface $contentType)
     {
         $this->contentType = $contentType;
 
@@ -59,7 +59,7 @@ abstract class Content
     }
 
     /**
-     * @return Collection|FieldValue[]
+     * @return Collection|FieldValueInterface[]
      */
     public function getFieldValues()
     {
@@ -67,11 +67,11 @@ abstract class Content
     }
 
     /**
-     * @param FieldValue $fieldValue
+     * @param FieldValueInterface $fieldValue
      *
      * @return $this
      */
-    public function addFieldValue(FieldValue $fieldValue)
+    public function addFieldValue(FieldValueInterface $fieldValue)
     {
         $this->fieldValues[] = $fieldValue;
 
@@ -79,11 +79,11 @@ abstract class Content
     }
 
     /**
-     * @param FieldValue $fieldValue
+     * @param FieldValueInterface $fieldValue
      *
      * @return $this
      */
-    public function removeFieldValue(FieldValue $fieldValue)
+    public function removeFieldValue(FieldValueInterface $fieldValue)
     {
         $this->fieldValues->removeElement($fieldValue);
 

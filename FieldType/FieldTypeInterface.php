@@ -2,8 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\Field;
-use Sherlockode\AdvancedContentBundle\Model\FieldValue;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 interface FieldTypeInterface
 {
@@ -17,18 +17,18 @@ interface FieldTypeInterface
     /**
      * Get options to apply on field value
      *
-     * @param Field $field
+     * @param FieldInterface $field
      *
      * @return array
      */
-    public function getFormFieldValueOptions(Field $field);
+    public function getFormFieldValueOptions(FieldInterface $field);
 
     /**
      * Get FieldValue value
      *
-     * @param FieldValue $fieldValue
+     * @param FieldValueInterface $fieldValue
      *
      * @return mixed
      */
-    public function getValue(FieldValue $fieldValue);
+    public function getValue(FieldValueInterface $fieldValue);
 }
