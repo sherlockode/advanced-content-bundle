@@ -22,36 +22,25 @@ class FormBuilderManager
     private $contentManager;
 
     /**
-     * @var string
+     * @var ConfigurationManager
      */
-    private $fieldValueClass;
-
-    /**
-     * @var string
-     */
-    private $contentTypeClass;
+    private $configurationManager;
 
     /**
      * ContentManager constructor.
      *
-     * @param ContentManager $contentManager
-     * @param FieldManager   $fieldManager
+     * @param ContentManager       $contentManager
+     * @param FieldManager         $fieldManager
+     * @param ConfigurationManager $configurationManager
      */
-    public function __construct(ContentManager $contentManager, FieldManager $fieldManager)
-    {
+    public function __construct(
+        ContentManager $contentManager,
+        FieldManager $fieldManager,
+        ConfigurationManager $configurationManager
+    ) {
         $this->contentManager = $contentManager;
         $this->fieldManager = $fieldManager;
-    }
-
-    /**
-     * Set entity class configuration
-     *
-     * @param $config
-     */
-    public function setConfig($config)
-    {
-        $this->fieldValueClass = $config['field_value'];
-        $this->contentTypeClass = $config['content_type'];
+        $this->configurationManager = $configurationManager;
     }
 
     /**
@@ -71,7 +60,7 @@ class FormBuilderManager
                 'label' => $field->getName(),
                 'required' => $field->isIsRequired(),
                 'field_type' => $field->getType(),
-                'data_class' => $this->fieldValueClass,
+                'data_class' => $this->configurationManager->getEntityClass('field_value'),
             ], $fieldOptions));
         }
         $builder->add($fieldsBuilder);
@@ -90,7 +79,7 @@ class FormBuilderManager
             'contentType',
             EntityType::class,
             [
-                'class' => $this->contentTypeClass,
+                'class' => $this->configurationManager->getEntityClass('content_type'),
                 'choice_label' => 'name'
             ]
         );

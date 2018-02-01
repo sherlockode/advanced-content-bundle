@@ -19,7 +19,7 @@ class SherlockodeAdvancedContentExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        $formBuilderManager = $container->getDefinition('Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager');
-        $formBuilderManager->addMethodCall('setConfig', [$config['entity_class']]);
+        $formBuilderManager = $container->getDefinition('Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager');
+        $formBuilderManager->addMethodCall('setConfig', [$config]);
     }
 }
