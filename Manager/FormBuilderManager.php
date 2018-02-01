@@ -3,8 +3,8 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
-use Sherlockode\AdvancedContentBundle\Model\Content;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldValuesTransformer;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -58,9 +58,9 @@ class FormBuilderManager
      * Build custom form for Content edit
      *
      * @param FormBuilderInterface $builder
-     * @param Content              $content
+     * @param ContentInterface     $content
      */
-    public function buildContentForm(FormBuilderInterface $builder, Content $content)
+    public function buildContentForm(FormBuilderInterface $builder, ContentInterface $content)
     {
         $fields = $content->getContentType()->getFields();
 

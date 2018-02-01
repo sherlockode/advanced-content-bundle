@@ -2,20 +2,20 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
-use Sherlockode\AdvancedContentBundle\Model\Content;
-use Sherlockode\AdvancedContentBundle\Model\Field;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
 class ContentManager
 {
     /**
      * Get field matching slug
      *
-     * @param Content $content
-     * @param string  $slug
+     * @param ContentInterface $content
+     * @param string           $slug
      *
-     * @return Field|null
+     * @return FieldInterface|null
      */
-    public function getFieldBySlug(Content $content, $slug)
+    public function getFieldBySlug(ContentInterface $content, $slug)
     {
         $fields = $content->getContentType()->getFields();
         foreach ($fields as $field) {

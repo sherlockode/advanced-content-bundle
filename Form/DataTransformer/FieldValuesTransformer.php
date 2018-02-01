@@ -3,17 +3,17 @@
 namespace Sherlockode\AdvancedContentBundle\Form\DataTransformer;
 
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldValue;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Sherlockode\AdvancedContentBundle\Model\Content;
 
 class FieldValuesTransformer implements DataTransformerInterface
 {
     /**
-     * @var Content
+     * @var ContentInterface
      */
     private $content;
 
@@ -25,10 +25,10 @@ class FieldValuesTransformer implements DataTransformerInterface
     /**
      * FieldValuesTransformer constructor.
      *
-     * @param ContentManager $contentManager
-     * @param Content $content
+     * @param ContentManager   $contentManager
+     * @param ContentInterface $content
      */
-    public function __construct(ContentManager $contentManager, Content $content)
+    public function __construct(ContentManager $contentManager, ContentInterface $content)
     {
         $this->contentManager = $contentManager;
         $this->content = $content;
@@ -81,8 +81,8 @@ class FieldValuesTransformer implements DataTransformerInterface
             if ($fieldValue === null) {
                 continue;
             }
-            if (!$fieldValue instanceof FieldValue) {
-                throw new TransformationFailedException('Expected a ' . FieldValue::class . ' object.');
+            if (!$fieldValue instanceof FieldValueInterface) {
+                throw new TransformationFailedException('Expected a ' . FieldValueInterface::class . ' object.');
             }
             if (!$fieldValue->getField()) {
                 $field = $this->contentManager->getFieldBySlug($this->content, $slug);

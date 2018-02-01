@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-abstract class FieldValue
+abstract class FieldValue implements FieldValueInterface
 {
     /**
      * @var int
@@ -10,12 +10,12 @@ abstract class FieldValue
     protected $id;
 
     /**
-     * @var Content
+     * @var ContentInterface
      */
     protected $content;
 
     /**
-     * @var Field
+     * @var FieldInterface
      */
     protected $field;
 
@@ -33,7 +33,7 @@ abstract class FieldValue
     }
 
     /**
-     * @return Content
+     * @return ContentInterface
      */
     public function getContent()
     {
@@ -41,11 +41,11 @@ abstract class FieldValue
     }
 
     /**
-     * @param Content $content
+     * @param ContentInterface $content
      *
      * @return $this
      */
-    public function setContent(Content $content)
+    public function setContent(ContentInterface $content)
     {
         $this->content = $content;
 
@@ -53,7 +53,7 @@ abstract class FieldValue
     }
 
     /**
-     * @return Field
+     * @return FieldInterface
      */
     public function getField()
     {
@@ -61,11 +61,11 @@ abstract class FieldValue
     }
 
     /**
-     * @param Field $field
+     * @param FieldInterface $field
      *
      * @return $this
      */
-    public function setField(Field $field)
+    public function setField(FieldInterface $field)
     {
         $this->field = $field;
 

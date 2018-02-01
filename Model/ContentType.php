@@ -5,7 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-abstract class ContentType
+abstract class ContentType implements ContentTypeInterface
 {
     /**
      * @var int
@@ -59,7 +59,7 @@ abstract class ContentType
     }
 
     /**
-     * @return Collection|Field[]
+     * @return Collection|FieldInterface[]
      */
     public function getFields()
     {
@@ -67,11 +67,11 @@ abstract class ContentType
     }
 
     /**
-     * @param Field $field
+     * @param FieldInterface $field
      *
      * @return $this
      */
-    public function addField(Field $field)
+    public function addField(FieldInterface $field)
     {
         $this->fields[] = $field;
 
@@ -79,11 +79,11 @@ abstract class ContentType
     }
 
     /**
-     * @param Field $field
+     * @param FieldInterface $field
      *
      * @return $this
      */
-    public function removeField(Field $field)
+    public function removeField(FieldInterface $field)
     {
         $this->fields->removeElement($field);
 
