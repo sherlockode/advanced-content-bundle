@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+
+    Sherlockode\AdvancedContentBundle\Manager\:
+        resource: '../../Manager/*'
+    Sherlockode\AdvancedContentBundle\Controller\:
+        resource: '../../Controller/*'
+        tags: ['controller.service_arguments']
