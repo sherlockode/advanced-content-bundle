@@ -36,6 +36,6 @@ class FieldManager
             return [];
         }
 
-        return $this->getFieldTypes()[$field->getType()]->getFieldOptions($field);
+        return $this->getFieldTypes()[$field->getType()]->getFormFieldValueOptions($field);
     }
 }

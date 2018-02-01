@@ -5,14 +5,14 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 use Sherlockode\AdvancedContentBundle\Model\Field;
 use Symfony\Component\Validator\Constraints\Length;
 
-class Text
+class Text extends AbstractFieldType
 {
     /**
-     * Get field available options
+     * Get available options for given field type
      *
      * @return array
      */
-    public function getOptions()
+    public function getFieldTypeOptions()
     {
         return [
             'minLength' => [
@@ -27,13 +27,13 @@ class Text
     }
 
     /**
-     * Get options setup for given field
+     * Get options to apply on field value
      *
      * @param Field $field
      *
      * @return array
      */
-    public function getFieldOptions(Field $field)
+    public function getFormFieldValueOptions(Field $field)
     {
         $fieldOptions = $field->getOptions();
 
