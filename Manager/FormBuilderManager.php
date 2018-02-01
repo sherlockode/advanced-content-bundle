@@ -27,7 +27,7 @@ class FormBuilderManager
     private $configurationManager;
 
     /**
-     * ContentManager constructor.
+     * FormBuilderManager constructor.
      *
      * @param ContentManager       $contentManager
      * @param FieldManager         $fieldManager
