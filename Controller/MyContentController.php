@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MyContentController extends Controller
 {
     /**
-     * @Route("/{id}/update", name="edit_mycontent")
+     * @Route("/{id}/update", name="sherlockode_ac_edit_mycontent")
      *
      * @param Request            $request
      * @param ObjectManager      $om
@@ -30,7 +30,7 @@ class MyContentController extends Controller
     public function editAction(Request $request, ObjectManager $om, Content $content, FormBuilderManager $formBuilderManager)
     {
         $formBuilder = $this->createFormBuilder($content, [
-            'action' => $this->generateUrl('edit_mycontent', ['id' => $content->getId()])
+            'action' => $this->generateUrl('sherlockode_ac_edit_mycontent', ['id' => $content->getId()])
         ]);
 
         $formBuilderManager->buildContentForm($formBuilder, $content);
@@ -41,7 +41,7 @@ class MyContentController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $om->flush();
 
-            return $this->redirectToRoute('edit_mycontent', ['id' => $content->getId()]);
+            return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
         }
 
         return $this->render('AdvancedContentBundle:Content:edit_content.html.twig', [
@@ -51,7 +51,7 @@ class MyContentController extends Controller
     }
 
     /**
-     * @Route("/create", name="create_mycontent")
+     * @Route("/create", name="sherlockode_ac_create_mycontent")
      *
      * @param Request            $request
      * @param ObjectManager      $om
@@ -62,7 +62,7 @@ class MyContentController extends Controller
     public function createAction(Request $request, ObjectManager $om, FormBuilderManager $formBuilderManager)
     {
         $content = new Content();
-        $formBuilder = $this->createFormBuilder($content, ['action' => $this->generateUrl('create_mycontent')]);
+        $formBuilder = $this->createFormBuilder($content, ['action' => $this->generateUrl('sherlockode_ac_create_mycontent')]);
 
         $formBuilderManager->buildCreateContentForm($formBuilder);
 
@@ -73,7 +73,7 @@ class MyContentController extends Controller
             $om->persist($content);
             $om->flush();
 
-            return $this->redirectToRoute('edit_mycontent', ['id' => $content->getId()]);
+            return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
         }
 
         return $this->render('AdvancedContentBundle:Content:create_content.html.twig', [
