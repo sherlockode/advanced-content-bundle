@@ -1,33 +1,20 @@
-{% extends 'TwigBundle::layout.html.twig' %}
+{% extends 'AdvancedContentBundle::layout.html.twig' %}
 {% block body %}
     {{ parent() }}
-    <div class="sonata-ba-form">
+    <div>
         {{ form_start(form) }}
         {{ form_errors(form) }}
         <div class="row">
             <div class="col-md-12">
-                <div class="x_panel">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="box-primary">
-                                <div class="x_title">
-                                    <h4>Edit Content</h4>
-                                </div>
-                                <div class="x_content">
-                                    <div class="form-group">
-                                        {{ form_label(form.fieldValues) }}
-                                        {{ form_widget(form.fieldValues) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <h4>Edit Content</h4>
+                <div class="form-group">
+                    {{ form_label(form.fieldValues) }}
+                    {{ form_widget(form.fieldValues) }}
                 </div>
             </div>
         </div>
 
         <button type="submit" class="btn btn-success">
-            <i class="fa fa-save"></i>
             Update
         </button>
 
