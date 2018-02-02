@@ -8,9 +8,9 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
- * Class AdvancedContentExtension
+ * Class SherlockodeAdvancedContentExtension
  */
-class AdvancedContentExtension extends Extension
+class SherlockodeAdvancedContentExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
