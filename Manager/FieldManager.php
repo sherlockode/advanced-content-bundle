@@ -2,7 +2,14 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
+use Sherlockode\AdvancedContentBundle\Exception\InvalidFieldTypeException;
+use Sherlockode\AdvancedContentBundle\FieldType\Checkbox;
+use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
+use Sherlockode\AdvancedContentBundle\FieldType\Link;
+use Sherlockode\AdvancedContentBundle\FieldType\Radio;
 use Sherlockode\AdvancedContentBundle\FieldType\Text;
+use Sherlockode\AdvancedContentBundle\FieldType\TextArea;
+use Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
 class FieldManager
@@ -16,26 +23,28 @@ class FieldManager
     {
         return [
             'text' => new Text(),
+            'textarea' => new TextArea(),
+            'checkbox' => new Checkbox(),
+            'radio' => new Radio(),
+            'wysiwyg' => new Wysiwyg(),
+            'link' => new Link(),
         ];
     }
 
     /**
-     * Get specific options to add on form
+     * Get field type
      *
      * @param FieldInterface $field
      *
-     * @return array
+     * @return FieldTypeInterface
+     *
+     * @throws InvalidFieldTypeException
      */
-    public function getFieldOptions(FieldInterface $field)
+    public function getFieldType(FieldInterface $field)
     {
         if (!isset($this->getFieldTypes()[$field->getType()])) {
-            return [];
+            throw new InvalidFieldTypeException(sprintf("Field type %s is not handled.", $field->getType()));
         }
-
-        if (!$field->getOptions()) {
-            return [];
-        }
-
-        return $this->getFieldTypes()[$field->getType()]->getFormFieldValueOptions($field);
+        return $this->getFieldTypes()[$field->getType()];
     }
 }

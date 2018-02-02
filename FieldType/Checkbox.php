@@ -2,22 +2,16 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
+use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-abstract class AbstractFieldType implements FieldTypeInterface
+class Checkbox extends AbstractChoice
 {
     /**
-     * Get field's options
-     *
-     * @param FieldInterface $field
-     *
-     * @return array
+     * @var bool
      */
-    public function getFieldOptions(FieldInterface $field)
-    {
-        return unserialize($field->getOptions());
-    }
+    protected $isMultipleChoice = true;
 
     /**
      * Add field value's field(s) to content form
@@ -29,6 +23,9 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field)
     {
-        $builder->add('value', $this->getFormFieldType(), $this->getFormFieldValueOptions($field));
+        parent::buildContentFieldValue($builder, $field);
+
+        $builder->get('value')
+            ->addModelTransformer(new StringToArrayTransformer());
     }
 }

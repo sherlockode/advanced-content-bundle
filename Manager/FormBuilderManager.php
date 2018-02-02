@@ -55,13 +55,13 @@ class FormBuilderManager
 
         $fieldsBuilder = $builder->create('fieldValues', FormType::class);
         foreach ($fields as $field) {
-            $fieldOptions = $this->fieldManager->getFieldOptions($field);
-            $fieldsBuilder->add($field->getSlug(), FieldValueType::class, array_merge([
+            $fieldsBuilder->add($field->getSlug(), FieldValueType::class, [
                 'label' => $field->getName(),
                 'required' => $field->isIsRequired(),
-                'field_type' => $field->getType(),
+                'field_type' => $this->fieldManager->getFieldType($field),
+                'field' => $field,
                 'data_class' => $this->configurationManager->getEntityClass('field_value'),
-            ], $fieldOptions));
+            ]);
         }
         $builder->add($fieldsBuilder);
         $fieldsBuilder
