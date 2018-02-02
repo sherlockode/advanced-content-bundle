@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('advanced_content');
+        $rootNode = $treeBuilder->root('sherlockode_advanced_content');
 
         $rootNode
             ->children()

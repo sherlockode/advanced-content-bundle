@@ -44,7 +44,7 @@ class MyContentController extends Controller
             return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
         }
 
-        return $this->render('AdvancedContentBundle:Content:edit_content.html.twig', [
+        return $this->render('SherlockodeAdvancedContentBundle:Content:edit_content.html.twig', [
                 'form' => $form->createView(),
                 'data' => $content,
             ]);
@@ -76,7 +76,7 @@ class MyContentController extends Controller
             return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
         }
 
-        return $this->render('AdvancedContentBundle:Content:create_content.html.twig', [
+        return $this->render('SherlockodeAdvancedContentBundle:Content:create_content.html.twig', [
             'form' => $form->createView(),
             'data' => $content,
         ]);

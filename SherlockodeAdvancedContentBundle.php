@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 
-class AdvancedContentBundle extends Bundle
+class SherlockodeAdvancedContentBundle extends Bundle
 {
     /**
      * @param ContainerBuilder $container
