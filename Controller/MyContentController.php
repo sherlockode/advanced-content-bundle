@@ -2,7 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
-use AppBundle\Entity\Content;
+use Doctrine\ORM\EntityNotFoundException;
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
+use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,15 +22,34 @@ class MyContentController extends Controller
     /**
      * @Route("/{id}/update", name="sherlockode_ac_edit_mycontent")
      *
-     * @param Request            $request
-     * @param ObjectManager      $om
-     * @param Content            $content
-     * @param FormBuilderManager $formBuilderManager
+     * @param int                  $id
+     * @param Request              $request
+     * @param ObjectManager        $om
+     * @param FormBuilderManager   $formBuilderManager
+     * @param ContentManager       $contentManager
+     * @param ConfigurationManager $configurationManager
      *
      * @return Response
+     *
+     * @throws EntityNotFoundException
      */
-    public function editAction(Request $request, ObjectManager $om, Content $content, FormBuilderManager $formBuilderManager)
-    {
+    public function editAction(
+        $id,
+        Request $request,
+        ObjectManager $om,
+        FormBuilderManager $formBuilderManager,
+        ContentManager $contentManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $content = $contentManager->getContentById($id);
+
+        if ($content === null) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(
+                $configurationManager->getEntityClass('content'),
+                [$id]
+            );
+        }
+
         $formBuilder = $this->createFormBuilder($content, [
             'action' => $this->generateUrl('sherlockode_ac_edit_mycontent', ['id' => $content->getId()])
         ]);
@@ -53,16 +74,24 @@ class MyContentController extends Controller
     /**
      * @Route("/create", name="sherlockode_ac_create_mycontent")
      *
-     * @param Request            $request
-     * @param ObjectManager      $om
-     * @param FormBuilderManager $formBuilderManager
+     * @param Request              $request
+     * @param ObjectManager        $om
+     * @param FormBuilderManager   $formBuilderManager
+     * @param ConfigurationManager $configurationManager
      *
      * @return Response
      */
-    public function createAction(Request $request, ObjectManager $om, FormBuilderManager $formBuilderManager)
-    {
-        $content = new Content();
-        $formBuilder = $this->createFormBuilder($content, ['action' => $this->generateUrl('sherlockode_ac_create_mycontent')]);
+    public function createAction(
+        Request $request,
+        ObjectManager $om,
+        FormBuilderManager $formBuilderManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $contentEntityClass = $configurationManager->getEntityClass('content');
+        $content = new $contentEntityClass;
+        $formBuilder = $this->createFormBuilder($content, [
+            'action' => $this->generateUrl('sherlockode_ac_create_mycontent')
+        ]);
 
         $formBuilderManager->buildCreateContentForm($formBuilder);
 
