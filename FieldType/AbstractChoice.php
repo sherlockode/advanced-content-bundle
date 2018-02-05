@@ -4,6 +4,9 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class AbstractChoice extends AbstractFieldType
 {
@@ -52,5 +55,20 @@ abstract class AbstractChoice extends AbstractFieldType
     public function getFormFieldType()
     {
         return ChoiceType::class;
+    }
+
+    /**
+     * Add field's options
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        $builder->get('options')
+            ->add('choices', FormType::class)
+        ;
     }
 }
