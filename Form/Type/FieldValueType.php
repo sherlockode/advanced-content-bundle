@@ -2,8 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\FieldType\Text;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,9 +16,7 @@ class FieldValueType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('value', $options['field_type'])
-        ;
+        $options['field_type']->buildContentFieldValue($builder, $options['field']);
     }
 
     /**
@@ -25,6 +24,6 @@ class FieldValueType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['field_type' => TextType::class]);
+        $resolver->setDefaults(['field_type' => Text::class, 'field' => FieldInterface::class]);
     }
 }

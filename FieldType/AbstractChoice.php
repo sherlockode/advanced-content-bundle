@@ -3,11 +3,15 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class Text extends AbstractFieldType
+abstract class AbstractChoice extends AbstractFieldType
 {
+    /**
+     * @var bool
+     */
+    protected $isMultipleChoice;
+
     /**
      * Get available options for given field type
      *
@@ -16,13 +20,9 @@ class Text extends AbstractFieldType
     public function getFieldTypeOptions()
     {
         return [
-            'minLength' => [
-                'label' => 'Min Length',
-                'type'  => 'text'
-            ],
-            'maxLength' => [
-                'label' => 'Max Length',
-                'type'  => 'text'
+            'choices' => [
+                'label' => 'Choices',
+                'type'  => 'choices'
             ],
         ];
     }
@@ -39,12 +39,9 @@ class Text extends AbstractFieldType
         $fieldOptions = $this->getFieldOptions($field);
 
         $formFieldOptions = [];
-        if (isset($fieldOptions['minLength'])) {
-            $formFieldOptions['constraints'][] = new Length(['min' => $fieldOptions['minLength']]);
-        }
-        if (isset($fieldOptions['maxLength'])) {
-            $formFieldOptions['constraints'][] = new Length(['max' => $fieldOptions['maxLength']]);
-        }
+        $formFieldOptions['choices'] = array_flip($fieldOptions['choices']);
+        $formFieldOptions['expanded'] = true;
+        $formFieldOptions['multiple'] = $this->isMultipleChoice;
 
         return $formFieldOptions;
     }
@@ -54,6 +51,6 @@ class Text extends AbstractFieldType
      */
     public function getFormFieldType()
     {
-        return TextType::class;
+        return ChoiceType::class;
     }
 }

@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
 interface FieldTypeInterface
 {
@@ -24,11 +24,28 @@ interface FieldTypeInterface
     public function getFormFieldValueOptions(FieldInterface $field);
 
     /**
-     * Get FieldValue value
+     * Get field's options
      *
-     * @param FieldValueInterface $fieldValue
+     * @param FieldInterface $field
      *
-     * @return mixed
+     * @return array
      */
-    public function getValue(FieldValueInterface $fieldValue);
+    public function getFieldOptions(FieldInterface $field);
+
+    /**
+     * Add field value's field(s) to content form
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field);
+
+    /**
+     * Get form field type
+     *
+     * @return string
+     */
+    public function getFormFieldType();
 }
