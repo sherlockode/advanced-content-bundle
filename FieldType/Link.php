@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -67,6 +68,26 @@ class Link extends AbstractFieldType
             ->add('href', UrlType::class, $options)
             ->add('anchor', TextType::class, $options)
             ->addModelTransformer(new StringToArrayTransformer())
+        ;
+    }
+
+    /**
+     * Add field's options
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        $builder->get('options')
+            ->add('target', ChoiceType::class, [
+                'choices' => [
+                    'Blank' => 'blank',
+                    'Self' => 'self'
+                ]
+            ])
         ;
     }
 }

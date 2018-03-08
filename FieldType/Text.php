@@ -3,30 +3,13 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 
 class Text extends AbstractFieldType
 {
-    /**
-     * Get available options for given field type
-     *
-     * @return array
-     */
-    public function getFieldTypeOptions()
-    {
-        return [
-            'minLength' => [
-                'label' => 'Min Length',
-                'type'  => 'text'
-            ],
-            'maxLength' => [
-                'label' => 'Max Length',
-                'type'  => 'text'
-            ],
-        ];
-    }
-
     /**
      * Get options to apply on field value
      *
@@ -55,5 +38,21 @@ class Text extends AbstractFieldType
     public function getFormFieldType()
     {
         return TextType::class;
+    }
+
+    /**
+     * Add field's options
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        $builder->get('options')
+            ->add('minLength', IntegerType::class)
+            ->add('maxLength', IntegerType::class)
+        ;
     }
 }

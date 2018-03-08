@@ -4,6 +4,8 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class Wysiwyg extends AbstractFieldType
 {
@@ -48,5 +50,26 @@ class Wysiwyg extends AbstractFieldType
     public function getFormFieldType()
     {
         return CKEditorType::class;
+    }
+
+    /**
+     * Add field's options
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        $builder->get('options')
+            ->add('toolbar', ChoiceType::class, [
+                'choices' => [
+                    'Basic' => 'basic',
+                    'Standard' => 'standard',
+                    'Full' => 'full'
+                ]
+            ])
+        ;
     }
 }

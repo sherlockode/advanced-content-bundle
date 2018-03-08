@@ -3,34 +3,13 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 
 class TextArea extends AbstractFieldType
 {
-    /**
-     * Get available options for given field type
-     *
-     * @return array
-     */
-    public function getFieldTypeOptions()
-    {
-        return [
-            'minLength' => [
-                'label' => 'Min Length',
-                'type'  => 'text'
-            ],
-            'maxLength' => [
-                'label' => 'Max Length',
-                'type'  => 'text'
-            ],
-            'nbRows' => [
-                'label' => 'Number of rows',
-                'type' => 'text',
-            ]
-        ];
-    }
-
     /**
      * Get options to apply on field value
      *
@@ -62,5 +41,22 @@ class TextArea extends AbstractFieldType
     public function getFormFieldType()
     {
         return TextareaType::class;
+    }
+
+    /**
+     * Add field's options
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        $builder->get('options')
+            ->add('minLength', IntegerType::class)
+            ->add('maxLength', IntegerType::class)
+            ->add('nbRows', IntegerType::class)
+        ;
     }
 }

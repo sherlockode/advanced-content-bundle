@@ -8,13 +8,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 interface FieldTypeInterface
 {
     /**
-     * Get available options for given field type
-     *
-     * @return array
-     */
-    public function getFieldTypeOptions();
-
-    /**
      * Get options to apply on field value
      *
      * @param FieldInterface $field
@@ -48,4 +41,24 @@ interface FieldTypeInterface
      * @return string
      */
     public function getFormFieldType();
+
+    /**
+     * Add field's options field(s) to content type form
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function buildContentTypeFieldOptions(FormBuilderInterface $builder, FieldInterface $field);
+
+    /**
+     * Add field's options
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field);
 }

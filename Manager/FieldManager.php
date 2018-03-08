@@ -22,13 +22,23 @@ class FieldManager
     public function getFieldTypes()
     {
         return [
-            'text' => new Text(),
-            'textarea' => new TextArea(),
-            'checkbox' => new Checkbox(),
-            'radio' => new Radio(),
-            'wysiwyg' => new Wysiwyg(),
-            'link' => new Link(),
+            'text' => ['label' => 'Text', 'class' => new Text()],
+            'textarea' => ['label' => 'Text Area', 'class' => new TextArea()],
+            'checkbox' => ['label' => 'Checkbox', 'class' => new Checkbox()],
+            'radio' => ['label' => 'Radio', 'class' => new Radio()],
+            'wysiwyg' => ['label' => 'Wysiwyg', 'class' => new Wysiwyg()],
+            'link' => ['label' => 'Link', 'class' => new Link()],
         ];
+    }
+
+    public function getFieldTypeFormChoices()
+    {
+        $choices = [];
+        foreach ($this->getFieldTypes() as $code => $detail) {
+            $choices[$detail['label']] = $code;
+        }
+
+        return $choices;
     }
 
     /**
@@ -45,6 +55,6 @@ class FieldManager
         if (!isset($this->getFieldTypes()[$field->getType()])) {
             throw new InvalidFieldTypeException(sprintf("Field type %s is not handled.", $field->getType()));
         }
-        return $this->getFieldTypes()[$field->getType()];
+        return $this->getFieldTypes()[$field->getType()]['class'];
     }
 }

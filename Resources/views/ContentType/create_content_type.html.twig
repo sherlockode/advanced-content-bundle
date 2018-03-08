@@ -1,0 +1,24 @@
+{% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
+{% block body %}
+    {{ parent() }}
+    <div>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Create Content Type</h4>
+                <div class="form-group">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Create
+        </button>
+
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
