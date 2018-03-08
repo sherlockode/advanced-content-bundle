@@ -60,4 +60,14 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
     {
     }
+
+    /**
+     * Get field's label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return ucfirst($this->getCode());
+    }
 }

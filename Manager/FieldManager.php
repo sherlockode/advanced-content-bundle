@@ -15,27 +15,35 @@ use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 class FieldManager
 {
     /**
+     * @var FieldTypeInterface[]
+     */
+    private $fieldTypes;
+
+    public function __construct()
+    {
+        $this->fieldTypes = [];
+    }
+
+    /**
+     * Add field type
+     *
+     * @param FieldTypeInterface $fieldType
+     */
+    public function addFieldType(FieldTypeInterface $fieldType)
+    {
+        $this->fieldTypes[$fieldType->getCode()] = $fieldType;
+    }
+
+    /**
      * Get available field types
      *
      * @return array
      */
-    public function getFieldTypes()
-    {
-        return [
-            'text' => ['label' => 'Text', 'class' => new Text()],
-            'textarea' => ['label' => 'Text Area', 'class' => new TextArea()],
-            'checkbox' => ['label' => 'Checkbox', 'class' => new Checkbox()],
-            'radio' => ['label' => 'Radio', 'class' => new Radio()],
-            'wysiwyg' => ['label' => 'Wysiwyg', 'class' => new Wysiwyg()],
-            'link' => ['label' => 'Link', 'class' => new Link()],
-        ];
-    }
-
     public function getFieldTypeFormChoices()
     {
         $choices = [];
-        foreach ($this->getFieldTypes() as $code => $detail) {
-            $choices[$detail['label']] = $code;
+        foreach ($this->fieldTypes as $code => $fieldType) {
+            $choices[$fieldType->getLabel()] = $code;
         }
 
         return $choices;
@@ -52,9 +60,9 @@ class FieldManager
      */
     public function getFieldType(FieldInterface $field)
     {
-        if (!isset($this->getFieldTypes()[$field->getType()])) {
+        if (!isset($this->fieldTypes[$field->getType()])) {
             throw new InvalidFieldTypeException(sprintf("Field type %s is not handled.", $field->getType()));
         }
-        return $this->getFieldTypes()[$field->getType()]['class'];
+        return $this->fieldTypes[$field->getType()];
     }
 }

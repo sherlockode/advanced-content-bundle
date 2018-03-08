@@ -59,4 +59,14 @@ class TextArea extends AbstractFieldType
             ->add('nbRows', IntegerType::class)
         ;
     }
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return 'textarea';
+    }
 }
