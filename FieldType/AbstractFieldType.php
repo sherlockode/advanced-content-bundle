@@ -2,10 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
 
 abstract class AbstractFieldType implements FieldTypeInterface
 {
@@ -35,29 +34,13 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Add field's options field(s) to content type form
-     *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
-     *
-     * @return void
-     */
-    public function buildContentTypeFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
-    {
-        $builder->add('options', FormType::class);
-        $this->addFieldOptions($builder, $field);
-        $builder->get('options')->addModelTransformer(new StringToArrayTransformer());
-    }
-
-    /**
      * Add field's options
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param Form|FormBuilderInterface $builder
      *
      * @return void
      */
-    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    public function addFieldOptions($builder)
     {
     }
 

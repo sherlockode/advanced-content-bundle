@@ -1,24 +1,38 @@
 {% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
 {% block body %}
     {{ parent() }}
-    <div>
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
                 <h4>Edit Content Type</h4>
-                <div class="form-group">
-                    {{ form_label(form.fields) }}
-                    {{ form_widget(form.fields) }}
+                <div class="row">
+                    <div class="col-md-6 content-type-fields">
+                        {% for field in form.fields %}
+                            {% include 'SherlockodeAdvancedContentBundle:ContentType:content_type_field.html.twig' with {field: field} only%}
+                        {% endfor %}
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-success">
+                            Update
+                        </button>
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
             </div>
         </div>
-
-        <button type="submit" class="btn btn-success">
-            Update
-        </button>
-
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
+        <hr />
+        <div class="add-field-form">
+            {{ render(controller('Sherlockode\\AdvancedContentBundle\\Controller\\MyContentTypeController::addFieldAction', {contentTypeId: data.id})) }}
+        </div>
+        <hr />
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/sherlockodeadvancedcontent/js/content-type.js') }}"></script>
 {% endblock %}

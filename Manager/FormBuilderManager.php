@@ -8,6 +8,7 @@ use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldValuesTransformer;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,10 +61,10 @@ class FormBuilderManager
         $fieldsBuilder = $builder->create('fieldValues', FormType::class);
         foreach ($fields as $field) {
             $fieldsBuilder->add($field->getSlug(), FieldValueType::class, [
-                'label' => $field->getName(),
-                'required' => $field->isIsRequired(),
+                'label'      => $field->getName(),
+                'required'   => $field->isIsRequired(),
                 'field_type' => $this->fieldManager->getFieldType($field),
-                'field' => $field,
+                'field'      => $field,
                 'data_class' => $this->configurationManager->getEntityClass('field_value'),
             ]);
         }
@@ -83,7 +84,7 @@ class FormBuilderManager
             'contentType',
             EntityType::class,
             [
-                'class' => $this->configurationManager->getEntityClass('content_type'),
+                'class'        => $this->configurationManager->getEntityClass('content_type'),
                 'choice_label' => 'name'
             ]
         );
@@ -97,21 +98,36 @@ class FormBuilderManager
      */
     public function buildContentTypeForm(FormBuilderInterface $builder, ContentTypeInterface $contentType)
     {
-        $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
         $fields = $contentType->getFields();
         $fieldsBuilder = $builder->create('fields', FormType::class);
+
         foreach ($fields as $field) {
-            $fieldsBuilder->add($field->getSlug(), FieldType::class, [
-                'label' => $field->getName(),
-                'field_type' => $this->fieldManager->getFieldType($field),
-                'field' => $field,
-                'type_choices' => $fieldTypeChoices,
-                'data_class' => $this->configurationManager->getEntityClass('field'),
-            ]);
+            $this->buildContentTypeFieldForm($fieldsBuilder, $field);
         }
         $builder->add($fieldsBuilder);
         $fieldsBuilder
-            ->addViewTransformer(new FieldsTransformer($contentType));
+            ->addViewTransformer(new FieldsTransformer($contentType))
+        ;
+    }
+
+    /**
+     * Add given field on content type form
+     *
+     * @param FormBuilderInterface $formBuilder
+     * @param FieldInterface       $field
+     */
+    public function buildContentTypeFieldForm(FormBuilderInterface $formBuilder, FieldInterface $field)
+    {
+        $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
+        $formBuilder->add($field->getSlug(), FieldType::class, [
+            'label'        => $field->getName(),
+            'field_type'   => $this->fieldManager->getFieldType($field),
+            'field'        => $field,
+            'type_choices' => $fieldTypeChoices,
+            'data_class'   => $this->configurationManager->getEntityClass('field'),
+            'data'         => $field,
+            'field_manager' => $this->fieldManager,
+        ]);
     }
 
     /**
@@ -122,5 +138,18 @@ class FormBuilderManager
     public function buildCreateContentTypeForm(FormBuilderInterface $builder)
     {
         $builder->add('name', TextType::class, ['required' => true]);
+    }
+
+    /**
+     * Add new field on content type form
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     */
+    public function buildSingleContentTypeFieldForm(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        $fieldsBuilder = $builder->create('fields', FormType::class, ['mapped' => false]);
+        $this->buildContentTypeFieldForm($fieldsBuilder, $field);
+        $builder->add($fieldsBuilder);
     }
 }

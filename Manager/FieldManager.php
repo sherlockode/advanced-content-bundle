@@ -55,14 +55,26 @@ class FieldManager
      * @param FieldInterface $field
      *
      * @return FieldTypeInterface
-     *
-     * @throws InvalidFieldTypeException
      */
     public function getFieldType(FieldInterface $field)
     {
-        if (!isset($this->fieldTypes[$field->getType()])) {
-            throw new InvalidFieldTypeException(sprintf("Field type %s is not handled.", $field->getType()));
+        return $this->getFieldTypeByCode($field->getType());
+    }
+
+    /**
+     * Get field type
+     *
+     * @param string $fieldTypeCode
+     *
+     * @return FieldTypeInterface
+     *
+     * @throws InvalidFieldTypeException
+     */
+    public function getFieldTypeByCode($fieldTypeCode)
+    {
+        if (!isset($this->fieldTypes[$fieldTypeCode])) {
+            throw new InvalidFieldTypeException(sprintf("Field type %s is not handled.", $fieldTypeCode));
         }
-        return $this->fieldTypes[$field->getType()];
+        return $this->fieldTypes[$fieldTypeCode];
     }
 }

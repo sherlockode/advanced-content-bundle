@@ -4,9 +4,9 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
 
 abstract class AbstractChoice extends AbstractFieldType
 {
@@ -39,14 +39,36 @@ abstract class AbstractChoice extends AbstractFieldType
      */
     public function getFormFieldValueOptions(FieldInterface $field)
     {
-        $fieldOptions = $this->getFieldOptions($field);
-
         $formFieldOptions = [];
-        $formFieldOptions['choices'] = array_flip($fieldOptions['choices']);
+        $formFieldOptions['choices'] = array_flip($this->getFieldOptionsArray($field));
         $formFieldOptions['expanded'] = true;
         $formFieldOptions['multiple'] = $this->isMultipleChoice;
 
         return $formFieldOptions;
+    }
+
+    /**
+     * Get field's options
+     *
+     * @param FieldInterface $field
+     *
+     * @return array
+     */
+    private function getFieldOptionsArray(FieldInterface $field)
+    {
+        $choices = [];
+        $fieldOptions = $this->getFieldOptions($field);
+        if (!empty($fieldOptions['choices'])) {
+            $fieldChoices = preg_split("/\r\n|\n|\r/", $fieldOptions['choices']);
+            foreach ($fieldChoices as $choice) {
+                $choice = explode('::', $choice);
+                if (count($choice) != 2) {
+                    continue;
+                }
+                $choices[trim($choice[0])] = trim($choice[1]);
+            }
+        }
+        return $choices;
     }
 
     /**
@@ -60,15 +82,14 @@ abstract class AbstractChoice extends AbstractFieldType
     /**
      * Add field's options
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param Form|FormBuilderInterface $builder
      *
      * @return void
      */
-    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    public function addFieldOptions($builder)
     {
         $builder->get('options')
-            ->add('choices', FormType::class)
+            ->add('choices', TextareaType::class)
         ;
     }
 }

@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Form;
 
 class TextArea extends AbstractFieldType
 {
@@ -46,12 +47,11 @@ class TextArea extends AbstractFieldType
     /**
      * Add field's options
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param Form|FormBuilderInterface $builder
      *
      * @return void
      */
-    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    public function addFieldOptions($builder)
     {
         $builder->get('options')
             ->add('minLength', IntegerType::class)

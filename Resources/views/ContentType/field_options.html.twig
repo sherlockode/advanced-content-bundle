@@ -1,0 +1,4 @@
+{% set formFields = form.fields %}
+{% set formField = attribute(formFields, slug) %}
+
+{{ form_widget(formField.options) }}

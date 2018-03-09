@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
 
 interface FieldTypeInterface
 {
@@ -43,24 +44,13 @@ interface FieldTypeInterface
     public function getFormFieldType();
 
     /**
-     * Add field's options field(s) to content type form
-     *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
-     *
-     * @return void
-     */
-    public function buildContentTypeFieldOptions(FormBuilderInterface $builder, FieldInterface $field);
-
-    /**
      * Add field's options
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param Form|FormBuilderInterface $builder
      *
      * @return void
      */
-    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field);
+    public function addFieldOptions($builder);
 
     /**
      * Get field's code
