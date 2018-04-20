@@ -7,3 +7,15 @@ services:
     Sherlockode\AdvancedContentBundle\Controller\:
         resource: '../../Controller/*'
         tags: ['controller.service_arguments']
+    Sherlockode\AdvancedContentBundle\FieldType\Checkbox:
+        tags: ['sherlockode_advanced_content.fieldtype']
+    Sherlockode\AdvancedContentBundle\FieldType\Link:
+        tags: ['sherlockode_advanced_content.fieldtype']
+    Sherlockode\AdvancedContentBundle\FieldType\Radio:
+        tags: ['sherlockode_advanced_content.fieldtype']
+    Sherlockode\AdvancedContentBundle\FieldType\Text:
+        tags: ['sherlockode_advanced_content.fieldtype']
+    Sherlockode\AdvancedContentBundle\FieldType\TextArea:
+        tags: ['sherlockode_advanced_content.fieldtype']
+    Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg:
+        tags: ['sherlockode_advanced_content.fieldtype']

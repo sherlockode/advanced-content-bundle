@@ -55,4 +55,14 @@ class Text extends AbstractFieldType
             ->add('maxLength', IntegerType::class)
         ;
     }
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return 'text';
+    }
 }

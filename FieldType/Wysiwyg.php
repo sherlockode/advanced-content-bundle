@@ -72,4 +72,14 @@ class Wysiwyg extends AbstractFieldType
             ])
         ;
     }
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return 'wysiwyg';
+    }
 }

@@ -90,4 +90,14 @@ class Link extends AbstractFieldType
             ])
         ;
     }
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return 'link';
+    }
 }

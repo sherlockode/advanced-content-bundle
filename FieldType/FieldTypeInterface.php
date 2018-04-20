@@ -61,4 +61,18 @@ interface FieldTypeInterface
      * @return void
      */
     public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field);
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode();
+
+    /**
+     * Get field's label
+     *
+     * @return string
+     */
+    public function getLabel();
 }

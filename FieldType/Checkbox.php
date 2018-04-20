@@ -28,4 +28,14 @@ class Checkbox extends AbstractChoice
         $builder->get('value')
             ->addModelTransformer(new StringToArrayTransformer());
     }
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return 'checkbox';
+    }
 }
