@@ -1,24 +1,56 @@
 {% extends is_ajax is defined and is_ajax ? 'SherlockodeAdvancedContentBundle::empty.html.twig' :  'SherlockodeAdvancedContentBundle::layout.html.twig' %}
 {% block body %}
     {{ parent() }}
-    <div>
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
-        <div class="row">
+    <div class="container edit-content">
+        <div class="row page-info">
             <div class="col-md-12">
-                <h4>Edit Content</h4>
-                <div class="form-group">
-                    {{ form_label(form.fieldValues) }}
-                    {{ form_widget(form.fieldValues) }}
-                </div>
+                <h1>Edit Content</h1>
+                <a href="{{ path('sherlockode_ac_list_mycontent') }}" class="pull-right">Back to list</a>
             </div>
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for fieldValue in form.fieldValues %}
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    {{ form_label(fieldValue) }}
+                                </div>
+                                <div class="col-md-10">
+                                    {% for option in fieldValue.value %}
+                                        <div class="form-group row">
+                                            <div class="col-md-2">
+                                                {{ form_label(option) }}
+                                            </div>
+                                            <div class="col-md-10">
+                                                {{ form_widget(option) }}
+                                                {{ form_errors(option) }}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        {{ form_widget(fieldValue.value) }}
+                                        {{ form_errors(fieldValue) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-        <button type="submit" class="btn btn-success">
-            Update
-        </button>
+                <div class="buttons">
+                    <a href="{{ path('sherlockode_ac_list_mycontent') }}" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-success">
+                        Update
+                    </button>
+                </div>
 
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

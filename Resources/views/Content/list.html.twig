@@ -1,0 +1,36 @@
+{% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
+{% block body %}
+    {{ parent() }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Contents</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Content Type</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for content in contents %}
+                        <tr>
+                            <td>{{ content.id }}</td>
+                            <td>{{ content.contentType.name }}</td>
+                            <td>
+                                <a href="{{ path('sherlockode_ac_edit_mycontent', {id: content.id}) }}">Edit</a>
+                                 | <a href="{{ path('sherlockode_ac_delete_mycontent', {id: content.id}) }}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

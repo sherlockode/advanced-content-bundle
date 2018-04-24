@@ -61,4 +61,14 @@ class ContentManager
     {
         return $this->om->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
     }
+
+    /**
+     * Get all contents
+     *
+     * @return array
+     */
+    public function getContents()
+    {
+        return $this->om->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
+    }
 }
