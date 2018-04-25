@@ -19,3 +19,6 @@ services:
         tags: ['sherlockode_advanced_content.fieldtype']
     Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg:
         tags: ['sherlockode_advanced_content.fieldtype']
+    Sherlockode\AdvancedContentBundle\Twig\Extension\:
+        resource: '../../Twig/Extension/*'
+        tags: ['twig.extension']

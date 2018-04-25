@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -84,8 +85,8 @@ class Link extends AbstractFieldType
         $builder->get('options')
             ->add('target', ChoiceType::class, [
                 'choices' => [
-                    'Blank' => 'blank',
-                    'Self' => 'self'
+                    'Blank' => '_blank',
+                    'Self' => '_self'
                 ]
             ])
         ;
@@ -99,5 +100,23 @@ class Link extends AbstractFieldType
     public function getCode()
     {
         return 'link';
+    }
+
+    /**
+     * Render field value
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function render(FieldValueInterface $fieldValue)
+    {
+        $value = $fieldValue->getValue();
+        $value = unserialize($value);
+
+        $options = $this->getFieldOptions($fieldValue->getField());
+        $target = $options['target'];
+
+        return '<a href="' . $value['href'] . '" target="' . $target . '">' . $value['anchor']. '</a>';
     }
 }

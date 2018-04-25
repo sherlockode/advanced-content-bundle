@@ -54,7 +54,7 @@ abstract class AbstractChoice extends AbstractFieldType
      *
      * @return array
      */
-    private function getFieldOptionsArray(FieldInterface $field)
+    protected function getFieldOptionsArray(FieldInterface $field)
     {
         $choices = [];
         $fieldOptions = $this->getFieldOptions($field);

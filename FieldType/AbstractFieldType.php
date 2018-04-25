@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 
@@ -52,5 +53,17 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function getLabel()
     {
         return ucfirst($this->getCode());
+    }
+
+    /**
+     * Render field value
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function render(FieldValueInterface $fieldValue)
+    {
+        return $fieldValue->getValue();
     }
 }

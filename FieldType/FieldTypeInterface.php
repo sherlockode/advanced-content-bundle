@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 
@@ -65,4 +66,13 @@ interface FieldTypeInterface
      * @return string
      */
     public function getLabel();
+
+    /**
+     * Render field value
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function render(FieldValueInterface $fieldValue);
 }
