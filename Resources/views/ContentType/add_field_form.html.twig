@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row add-field">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="col-md-4">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_label(form.type) }}
+                {{ form_widget(form.type) }}
+            </div>
+            <input type="hidden" name="contentTypeId" value="{{ contentTypeId }}">
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success btn-add-field">
+                    Add Field
+                </button>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

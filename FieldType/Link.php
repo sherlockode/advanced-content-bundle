@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
 
 class Link extends AbstractFieldType
 {
@@ -74,12 +75,11 @@ class Link extends AbstractFieldType
     /**
      * Add field's options
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param Form|FormBuilderInterface $builder
      *
      * @return void
      */
-    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    public function addFieldOptions($builder)
     {
         $builder->get('options')
             ->add('target', ChoiceType::class, [

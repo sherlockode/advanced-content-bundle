@@ -2,6 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+
 abstract class Field implements FieldInterface
 {
     /**
@@ -21,6 +23,8 @@ abstract class Field implements FieldInterface
 
     /**
      * @var string
+     *
+     * @Gedmo\Slug(fields={"name"})
      */
     protected $slug;
 
@@ -93,18 +97,6 @@ abstract class Field implements FieldInterface
     public function getSlug()
     {
         return $this->slug;
-    }
-
-    /**
-     * @param string $slug
-     *
-     * @return $this
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     /**

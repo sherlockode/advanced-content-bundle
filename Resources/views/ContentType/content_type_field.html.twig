@@ -1,0 +1,34 @@
+<div class="field-row" data-field-id="{{ field.vars.value.id }}" data-content-type-id="{{ field.vars.value.contentType.id }}">
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_label(field.name) }}
+            {{ form_widget(field.name) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_label(field.type) }}
+            {{ form_widget(field.type, {'attr': {'class': 'field-type'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(field.isRequired) }}
+            {{ form_widget(field.isRequired) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_label(field.options) }}
+            <div class="options">
+                {{ form_widget(field.options) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{{ path('sherlockode_ac_delete_field') }}" class="btn btn-danger remove-field">
+                Remove field
+            </a>
+        </div>
+    </div>
+    <hr />
+</div>

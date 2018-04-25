@@ -6,6 +6,7 @@ use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
 
 class Wysiwyg extends AbstractFieldType
 {
@@ -55,12 +56,11 @@ class Wysiwyg extends AbstractFieldType
     /**
      * Add field's options
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param Form|FormBuilderInterface $builder
      *
      * @return void
      */
-    public function addFieldOptions(FormBuilderInterface $builder, FieldInterface $field)
+    public function addFieldOptions($builder)
     {
         $builder->get('options')
             ->add('toolbar', ChoiceType::class, [
