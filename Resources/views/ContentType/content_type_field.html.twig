@@ -1,34 +1,60 @@
-<div class="field-row" data-field-id="{{ field.vars.value.id }}" data-content-type-id="{{ field.vars.value.contentType.id }}">
-    <div class="row">
-        <div class="col-md-6">
-            {{ form_label(field.name) }}
-            {{ form_widget(field.name) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            {{ form_label(field.type) }}
-            {{ form_widget(field.type, {'attr': {'class': 'field-type'}}) }}
-        </div>
-        <div class="col-md-6">
-            {{ form_label(field.isRequired) }}
-            {{ form_widget(field.isRequired) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_label(field.options) }}
-            <div class="options">
-                {{ form_widget(field.options) }}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <a href="{{ path('sherlockode_ac_delete_field') }}" class="btn btn-danger remove-field">
-                Remove field
+<div class="panel panel-primary field-row" data-field-id="{{ field.vars.value.id }}" data-content-type-id="{{ field.vars.value.contentType.id }}">
+    <div class="panel-heading">
+        <span data-toggle="collapse" data-target="#field-{{ field.vars.value.id }}" data-parent="#fields" class="edit-field">{{ field.vars.label }}</span>
+        <div class="pull-right actions">
+            <span data-toggle="collapse" data-target="#field-{{ field.vars.value.id }}" data-parent="#fields" class="edit-field">
+                <i class="glyphicon glyphicon-pencil"></i> Edit field
+            </span>
+            <a href="{{ path('sherlockode_ac_delete_field') }}" class="remove-field">
+                <i class="glyphicon glyphicon-trash"></i> Remove field
             </a>
         </div>
     </div>
-    <hr />
+    <div class="panel-body collapse" id="field-{{ field.vars.value.id }}">
+        <div class="form-group row">
+            <div class="col-md-2">
+                {{ form_label(field.name) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(field.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-2">
+                {{ form_label(field.type) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(field.type, {'attr': {'class': 'field-type form-control'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-2">
+                {{ form_label(field.isRequired) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(field.isRequired, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-2">
+                {{ form_label(field.options) }}
+            </div>
+            <div class="col-md-10 options">
+                {% for option in field.options %}
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            {{ form_label(option) }}
+                        </div>
+                        <div class="col-md-10">
+                            {{ form_widget(option, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(option) }}
+                        </div>
+                    </div>
+                {% else %}
+                    {{ form_widget(field.options, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(field) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
