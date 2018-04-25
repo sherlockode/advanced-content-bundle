@@ -32,20 +32,28 @@ class FormBuilderManager
     private $configurationManager;
 
     /**
+     * @var ContentTypeManager
+     */
+    private $contentTypeManager;
+
+    /**
      * FormBuilderManager constructor.
      *
      * @param ContentManager       $contentManager
      * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
+     * @param ContentTypeManager   $contentTypeManager
      */
     public function __construct(
         ContentManager $contentManager,
         FieldManager $fieldManager,
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
+        ContentTypeManager $contentTypeManager
     ) {
         $this->contentManager = $contentManager;
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
+        $this->contentTypeManager = $contentTypeManager;
     }
 
     /**
@@ -56,7 +64,7 @@ class FormBuilderManager
      */
     public function buildContentForm(FormBuilderInterface $builder, ContentInterface $content)
     {
-        $fields = $content->getContentType()->getFields();
+        $fields = $this->contentTypeManager->getOrderedFields($content->getContentType());
 
         $fieldsBuilder = $builder->create('fieldValues', FormType::class);
         foreach ($fields as $field) {
@@ -98,7 +106,7 @@ class FormBuilderManager
      */
     public function buildContentTypeForm(FormBuilderInterface $builder, ContentTypeInterface $contentType)
     {
-        $fields = $contentType->getFields();
+        $fields = $this->contentTypeManager->getOrderedFields($contentType);
         $fieldsBuilder = $builder->create('fields', FormType::class);
 
         foreach ($fields as $field) {

@@ -22,3 +22,8 @@ Sherlockode\AdvancedContentBundle\Model\Field:
     options:
       type: string
       nullable: true
+    sortOrder:
+      type: integer
+      column: sort_order
+      options:
+        default: 0
