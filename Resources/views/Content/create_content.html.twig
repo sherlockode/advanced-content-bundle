@@ -1,24 +1,57 @@
 {% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
 {% block body %}
     {{ parent() }}
+
     <div>
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
         <div class="row">
             <div class="col-md-12">
                 <h4>Create Content</h4>
                 <div class="form-group">
                     {{ form_label(form.contentType) }}
-                    {{ form_widget(form.contentType) }}
+                    {{ form_widget(form.contentType, {'attr': {'class': 'content-type'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content-fields" data-change-content-type-url="{{ path('sherlockode_ac_create_mycontent_by_type', {id: '__TO_REPLACE__'}) }}">
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success">
-            Create
-        </button>
-
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function ($) {
+            'use strict';
+
+            function ajaxFailCallback(jqXhr) {
+                alert('An error occurred.');
+            }
+
+            $('body').on('change', '.content-type', function (e) {
+                refreshContentFields();
+            });
+
+            function refreshContentFields() {
+                var contentTypeId = $('.content-type').val();
+                if (contentTypeId == '') {
+                    $('.content-fields').html('');
+                    return;
+                }
+
+                var url = $('.content-fields').data('change-content-type-url').replace('__TO_REPLACE__', contentTypeId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                }).done(function (data) {
+                    $('.content-fields').html(data);
+                }).fail(ajaxFailCallback);
+            }
+
+            refreshContentFields();
+        });
+    </script>
 {% endblock %}

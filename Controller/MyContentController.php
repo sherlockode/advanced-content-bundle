@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Controller;
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
+use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -107,7 +108,63 @@ class MyContentController extends Controller
 
         return $this->render('SherlockodeAdvancedContentBundle:Content:create_content.html.twig', [
             'form' => $form->createView(),
-            'data' => $content,
+        ]);
+    }
+
+    /**
+     * @Route("/create/{id}", name="sherlockode_ac_create_mycontent_by_type", defaults={"id"=""})
+     *
+     * @param int                  $id
+     * @param Request              $request
+     * @param ObjectManager        $om
+     * @param FormBuilderManager   $formBuilderManager
+     * @param ContentTypeManager   $contentTypeManager
+     * @param ConfigurationManager $configurationManager
+     *
+     * @return Response
+     *
+     * @throws EntityNotFoundException
+     */
+    public function createByTypeAction(
+        $id,
+        Request $request,
+        ObjectManager $om,
+        FormBuilderManager $formBuilderManager,
+        ContentTypeManager $contentTypeManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $contentType = $contentTypeManager->getContentTypeById($id);
+
+        if ($contentType === null) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(
+                $configurationManager->getEntityClass('content_type'),
+                [$id]
+            );
+        }
+
+        $contentEntityClass = $configurationManager->getEntityClass('content');
+        $content = new $contentEntityClass;
+        $content->setContentType($contentType);
+
+        $formBuilder = $this->createFormBuilder($content, [
+            'action' => $this->generateUrl('sherlockode_ac_create_mycontent_by_type', ['id' => $contentType->getId()])
+        ]);
+
+        $formBuilderManager->buildContentForm($formBuilder, $content);
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $om->persist($content);
+            $om->flush();
+
+            return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
+        }
+
+        return $this->render('SherlockodeAdvancedContentBundle:Content:edit_content.html.twig', [
+            'form' => $form->createView(),
+            'is_ajax' => $request->isXmlHttpRequest(),
         ]);
     }
 }
