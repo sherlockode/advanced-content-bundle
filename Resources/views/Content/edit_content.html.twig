@@ -1,4 +1,4 @@
-{% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
+{% extends is_ajax is defined and is_ajax ? 'SherlockodeAdvancedContentBundle::empty.html.twig' :  'SherlockodeAdvancedContentBundle::layout.html.twig' %}
 {% block body %}
     {{ parent() }}
     <div>
