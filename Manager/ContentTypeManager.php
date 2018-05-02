@@ -40,4 +40,17 @@ class ContentTypeManager
     {
         return $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->find($id);
     }
+
+    /**
+     * Get content type ordered fields
+     *
+     * @param ContentTypeInterface $contentType
+     *
+     * @return array
+     */
+    public function getOrderedFields(ContentTypeInterface $contentType)
+    {
+        return $this->om->getRepository($this->configurationManager->getEntityClass('field'))
+            ->findBy(['contentType' => $contentType], ['sortOrder' => 'ASC']);
+    }
 }

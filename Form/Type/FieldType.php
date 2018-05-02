@@ -8,6 +8,7 @@ use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -33,7 +34,10 @@ class FieldType extends AbstractType
                     'Yes' => true,
                     'No' => false,
                 ]
-            ]);
+            ])
+            ->add('sortOrder', IntegerType::class, ['required' => true])
+        ;
+
         $builder->add('options', FormType::class);
         $options['field_type']->addFieldOptions($builder);
         $builder->get('options')->addModelTransformer(new StringToArrayTransformer());

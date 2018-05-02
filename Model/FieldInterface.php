@@ -97,4 +97,20 @@ interface FieldInterface
      * @return $this
      */
     public function setContentType(ContentTypeInterface $contentType);
+
+    /**
+     * Get field's sort order
+     *
+     * @return int
+     */
+    public function getSortOrder();
+
+    /**
+     * Set field's sort order
+     *
+     * @param int $sortOrder
+     *
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
 }

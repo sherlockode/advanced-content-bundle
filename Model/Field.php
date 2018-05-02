@@ -44,6 +44,11 @@ abstract class Field implements FieldInterface
     protected $contentType;
 
     /**
+     * @var int
+     */
+    protected $sortOrder;
+
+    /**
      * @return int
      */
     public function getId()
@@ -155,6 +160,26 @@ abstract class Field implements FieldInterface
     public function setContentType(ContentTypeInterface $contentType)
     {
         $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * @param int $sortOrder
+     *
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }
