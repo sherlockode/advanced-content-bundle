@@ -167,4 +167,53 @@ class MyContentController extends Controller
             'is_ajax' => $request->isXmlHttpRequest(),
         ]);
     }
+
+    /**
+     * @Route("/list", name="sherlockode_ac_list_mycontent")
+     *
+     * @param ContentManager $contentManager
+     *
+     * @return Response
+     */
+    public function listAction(ContentManager $contentManager)
+    {
+        $contents = $contentManager->getContents();
+
+        return $this->render('SherlockodeAdvancedContentBundle:Content:list.html.twig', [
+            'contents' => $contents,
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="sherlockode_ac_delete_mycontent")
+     *
+     * @param int                  $id
+     * @param ObjectManager        $om
+     * @param ContentManager       $contentManager
+     * @param ConfigurationManager $configurationManager
+     *
+     * @return Response
+     *
+     * @throws EntityNotFoundException
+     */
+    public function deleteAction(
+        $id,
+        ObjectManager $om,
+        ContentManager $contentManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $content = $contentManager->getContentById($id);
+
+        if ($content === null) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(
+                $configurationManager->getEntityClass('content'),
+                [$id]
+            );
+        }
+
+        $om->remove($content);
+        $om->flush();
+
+        return $this->redirectToRoute('sherlockode_ac_list_mycontent');
+    }
 }

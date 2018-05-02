@@ -53,4 +53,14 @@ class ContentTypeManager
         return $this->om->getRepository($this->configurationManager->getEntityClass('field'))
             ->findBy(['contentType' => $contentType], ['sortOrder' => 'ASC']);
     }
+
+    /**
+     * Get all content types
+     *
+     * @return array
+     */
+    public function getContentTypes()
+    {
+        return $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
+    }
 }

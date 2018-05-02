@@ -245,7 +245,8 @@ class MyContentTypeController extends Controller
         Request $request,
         FieldManager $fieldManager,
         ContentTypeManager $contentTypeManager
-    ) {
+    )
+    {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createAccessDeniedException();
         }
@@ -280,8 +281,7 @@ class MyContentTypeController extends Controller
 
         $formBuilder
             ->get('fields')
-            ->add($slug, FormType::class)
-        ;
+            ->add($slug, FormType::class);
 
         $formBuilder
             ->get('fields')
@@ -293,11 +293,61 @@ class MyContentTypeController extends Controller
 
         $response = [
             'success' => 1,
-            'html' => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:field_options.html.twig', [
+            'html'    => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:field_options.html.twig', [
                 'form' => $formBuilder->getForm()->createView(),
                 'slug' => $slug,
             ])
         ];
+
         return new JsonResponse($response);
+    }
+
+    /*
+     * @Route("/list", name="sherlockode_ac_list_mycontenttype")
+     *
+     * @param ContentTypeManager $contentTypeManager
+     *
+     * @return Response
+     */
+    public function listAction(ContentTypeManager $contentTypeManager)
+    {
+        $contentTypes = $contentTypeManager->getContentTypes();
+
+        return $this->render('SherlockodeAdvancedContentBundle:ContentType:list.html.twig', [
+            'contentTypes' => $contentTypes,
+        ]);
+    }
+
+    /*
+     * @Route("/delete/{id}", name="sherlockode_ac_delete_mycontenttype")
+     *
+     * @param int                  $id
+     * @param ObjectManager        $om
+     * @param ContentTypeManager $contentTypeManager
+     * @param ConfigurationManager $configurationManager
+     *
+     * @return Response
+     *
+     * @throws EntityNotFoundException
+     */
+    public function deleteAction(
+        $id,
+        ObjectManager $om,
+        ContentTypeManager $contentTypeManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $contentType = $contentTypeManager->getContentTypeById($id);
+
+        if ($contentType === null) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(
+                $configurationManager->getEntityClass('content_type'),
+                [$id]
+            );
+        }
+
+        $om->remove($contentType);
+        $om->flush();
+
+        return $this->redirectToRoute('sherlockode_ac_list_mycontenttype');
     }
 }

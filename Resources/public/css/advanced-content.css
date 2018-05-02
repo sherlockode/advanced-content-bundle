@@ -1,0 +1,12 @@
+.content .page-info {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+.content .page-info h1 {
+    display: inline;
+}
+.content .buttons {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+}
