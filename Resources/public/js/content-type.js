@@ -16,6 +16,7 @@ jQuery(function ($) {
         }).done(function (resp) {
             if (resp.success) {
                 $('.content-type-fields').append(resp.html);
+                $('.content-type-fields .panel:last-of-type .edit-field').click();
             } else {
                 $('.add-field-form').html(resp.html);
             }
@@ -28,7 +29,7 @@ jQuery(function ($) {
         e.preventDefault();
         var button = $(this);
         button.prop('disabled', true);
-        var fieldRow = $(this).closest('div.field-row');
+        var fieldRow = $(this).closest('.field-row');
         var fieldId = fieldRow.data('field-id');
         var contentTypeId = fieldRow.data('content-type-id');
         if (typeof(fieldId) === 'undefined') {
@@ -52,7 +53,7 @@ jQuery(function ($) {
     });
 
     $('.content-type-fields').on('change', '.field-type', function (e) {
-        var fieldRow = $(this).closest('div.field-row');
+        var fieldRow = $(this).closest('.field-row');
         var fieldId = fieldRow.data('field-id');
         var contentTypeId = fieldRow.data('content-type-id');
         var data = {

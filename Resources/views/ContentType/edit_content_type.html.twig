@@ -1,22 +1,33 @@
 {% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/sherlockodeadvancedcontent/css/content-type.css') }}">
+{% endblock %}
 {% block body %}
     {{ parent() }}
     <div class="container">
+        <div class="row page-info">
+            <div class="col-md-12">
+                <h1>Edit Content Type</h1>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-md-12">
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
-                <h4>Edit Content Type</h4>
                 <div class="row">
-                    <div class="col-md-6 content-type-fields">
+                    <div class="col-md-12">
+                        <div class="panel-group content-type-fields" id="fields">
                         {% for field in form.fields %}
                             {% include 'SherlockodeAdvancedContentBundle:ContentType:content_type_field.html.twig' with {field: field} only%}
                         {% endfor %}
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-success">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success pull-right">
                             Update
                         </button>
                     </div>

@@ -1,0 +1,18 @@
+.remove-field {
+    color: #fff;
+}
+.remove-field:hover {
+    color: #fff;
+}
+.edit-field:hover {
+    cursor: pointer;
+}
+.actions {
+    display: none;
+}
+.panel-heading:hover > .actions {
+    display: block;
+}
+.btn-add-field {
+    margin-top: 25px;
+}
