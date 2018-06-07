@@ -1,0 +1,26 @@
+{% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
+{% block body %}
+    {{ parent() }}
+    <div class="container edit-content">
+        <div class="row page-info">
+            <div class="col-md-12">
+                <h1>View Content</h1>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    {% for fieldValue in content.fieldValues %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ acb_field(content, fieldValue.field.slug) }}
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

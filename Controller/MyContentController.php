@@ -108,6 +108,7 @@ class MyContentController extends Controller
 
         return $this->render('SherlockodeAdvancedContentBundle:Content:create_content.html.twig', [
             'form' => $form->createView(),
+            'data' => $content,
         ]);
     }
 
@@ -215,5 +216,35 @@ class MyContentController extends Controller
         $om->flush();
 
         return $this->redirectToRoute('sherlockode_ac_list_mycontent');
+    }
+
+    /**
+     * @Route("/view/{id}", name="sherlockode_ac_view_mycontent")
+     *
+     * @param int                  $id
+     * @param ContentManager       $contentManager
+     * @param ConfigurationManager $configurationManager
+     *
+     * @return Response
+     *
+     * @throws EntityNotFoundException
+     */
+    public function viewAction(
+        $id,
+        ContentManager $contentManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $content = $contentManager->getContentById($id);
+
+        if ($content === null) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(
+                $configurationManager->getEntityClass('content'),
+                [$id]
+            );
+        }
+
+        return $this->render('SherlockodeAdvancedContentBundle:Content:view.html.twig', [
+            'content' => $content,
+        ]);
     }
 }

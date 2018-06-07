@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class Checkbox extends AbstractChoice
@@ -37,5 +38,28 @@ class Checkbox extends AbstractChoice
     public function getCode()
     {
         return 'checkbox';
+    }
+
+    /**
+     * Render field value
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function render(FieldValueInterface $fieldValue)
+    {
+        $value = $fieldValue->getValue();
+        $value = unserialize($value);
+
+        $values = [];
+        $options = $this->getFieldOptionsArray($fieldValue->getField());
+        foreach ($value as $valueId) {
+            if (!empty($options[$valueId])) {
+                $values[] = $options[$valueId];
+            }
+        }
+        // TODO return array of labels
+        return implode(',', $values);
     }
 }
