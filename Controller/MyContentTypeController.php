@@ -302,7 +302,7 @@ class MyContentTypeController extends Controller
         return new JsonResponse($response);
     }
 
-    /*
+    /**
      * @Route("/list", name="sherlockode_ac_list_mycontenttype")
      *
      * @param ContentTypeManager $contentTypeManager
@@ -318,7 +318,7 @@ class MyContentTypeController extends Controller
         ]);
     }
 
-    /*
+    /**
      * @Route("/delete/{id}", name="sherlockode_ac_delete_mycontenttype")
      *
      * @param int                  $id
