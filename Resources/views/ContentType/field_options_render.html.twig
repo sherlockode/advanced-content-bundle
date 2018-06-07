@@ -1,0 +1,30 @@
+{% if options.choices is not defined %}
+    {% for option in options %}
+        <div class="form-group row">
+            <div class="col-md-2">
+                {{ form_label(option) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(option, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(option) }}
+            </div>
+        </div>
+    {% else %}
+        {{ form_widget(options, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(options) }}
+    {% endfor %}
+{% else %}
+    <ul data-prototype="{{ form_widget(options.choices.vars.prototype)|e }}"
+        data-widget-tags="{{ '<li class="choice-row"></li>'|e }}"
+        data-widget-counter="{{ options.choices|length }}"
+        class="list-unstyled choice-list">
+        {% for choice in options.choices %}
+            <li class="choice-row">{{ form_widget(choice) }}</li>
+        {% endfor %}
+    </ul>
+    <a href="#"
+       class="add-another-choice">
+        <i class="glyphicon glyphicon-plus-sign"></i>
+        Add another choice
+    </a>
+{% endif %}

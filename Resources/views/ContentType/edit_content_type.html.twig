@@ -1,4 +1,4 @@
-{% extends 'SherlockodeAdvancedContentBundle::layout.html.twig' %}
+{% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/sherlockodeadvancedcontent/css/content-type.css') }}">
@@ -20,7 +20,7 @@
                     <div class="col-md-12">
                         <div class="panel-group content-type-fields" id="fields">
                         {% for field in form.fields %}
-                            {% include 'SherlockodeAdvancedContentBundle:ContentType:content_type_field.html.twig' with {field: field} only%}
+                            {% include '@SherlockodeAdvancedContent/ContentType/content_type_field.html.twig' with {field: field} only%}
                         {% endfor %}
                         </div>
                     </div>
@@ -32,13 +32,16 @@
                         </button>
                     </div>
                 </div>
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
+                {{ form_widget(form._token) }}
+                {{ form_end(form, {"render_rest": false}) }}
             </div>
         </div>
         <hr />
         <div class="add-field-form">
             {{ render(url('sherlockode_acb_content_type_add_field', {contentTypeId: data.id})) }}
+        </div>
+        <div class="field-options-remove-link" style="display: none">
+            <a href="#" class="delete-choice"><i class="glyphicon glyphicon-trash"></i></a>
         </div>
         <hr />
     </div>
