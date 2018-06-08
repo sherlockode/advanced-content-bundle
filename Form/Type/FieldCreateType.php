@@ -2,8 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Sherlockode\AdvancedContentBundle\FieldType\Text;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

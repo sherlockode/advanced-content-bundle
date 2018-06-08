@@ -3,13 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Exception\InvalidFieldTypeException;
-use Sherlockode\AdvancedContentBundle\FieldType\Checkbox;
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
-use Sherlockode\AdvancedContentBundle\FieldType\Link;
-use Sherlockode\AdvancedContentBundle\FieldType\Radio;
-use Sherlockode\AdvancedContentBundle\FieldType\Text;
-use Sherlockode\AdvancedContentBundle\FieldType\TextArea;
-use Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
 class FieldManager
