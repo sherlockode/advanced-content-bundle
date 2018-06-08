@@ -9,7 +9,6 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -180,7 +179,7 @@ class MyContentTypeController extends Controller
 
             return new JsonResponse([
                 'success' => 0,
-                'html'    => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:add_field_form.html.twig', [
+                'html' => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:add_field_form.html.twig', [
                     'form' => $addFieldForm->createView(),
                     'contentTypeId' => $id,
                 ])
@@ -245,8 +244,7 @@ class MyContentTypeController extends Controller
         Request $request,
         FieldManager $fieldManager,
         ContentTypeManager $contentTypeManager
-    )
-    {
+    ) {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createAccessDeniedException();
         }
@@ -302,7 +300,7 @@ class MyContentTypeController extends Controller
         return new JsonResponse($response);
     }
 
-    /*
+    /**
      * @Route("/list", name="sherlockode_ac_list_mycontenttype")
      *
      * @param ContentTypeManager $contentTypeManager
@@ -318,7 +316,7 @@ class MyContentTypeController extends Controller
         ]);
     }
 
-    /*
+    /**
      * @Route("/delete/{id}", name="sherlockode_ac_delete_mycontenttype")
      *
      * @param int                  $id
