@@ -8,62 +8,95 @@ use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class MyContentController
- *
- * @Route("/mycontent")
  */
 class MyContentController extends Controller
 {
     /**
-     * @Route("/{id}/update", name="sherlockode_ac_edit_mycontent")
+     * @var ObjectManager
+     */
+    private $om;
+
+    /**
+     * @var FormBuilderManager
+     */
+    private $formBuilderManager;
+
+    /**
+     * @var ContentManager
+     */
+    private $contentManager;
+
+    /**
+     * @var ContentTypeManager
+     */
+    private $contentTypeManager;
+
+    /**
+     * @var ConfigurationManager
+     */
+    private $configurationManager;
+
+    /**
+     * MyContentController constructor.
      *
-     * @param int                  $id
-     * @param Request              $request
      * @param ObjectManager        $om
      * @param FormBuilderManager   $formBuilderManager
      * @param ContentManager       $contentManager
+     * @param ContentTypeManager   $contentTypeManager
      * @param ConfigurationManager $configurationManager
+     */
+    public function __construct(
+        ObjectManager $om,
+        FormBuilderManager $formBuilderManager,
+        ContentManager $contentManager,
+        ContentTypeManager $contentTypeManager,
+        ConfigurationManager $configurationManager
+    ) {
+        $this->om = $om;
+        $this->formBuilderManager = $formBuilderManager;
+        $this->contentManager = $contentManager;
+        $this->contentTypeManager = $contentTypeManager;
+        $this->configurationManager = $configurationManager;
+    }
+
+    /**
+     * @param int                  $id
+     * @param Request              $request
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function editAction(
-        $id,
-        Request $request,
-        ObjectManager $om,
-        FormBuilderManager $formBuilderManager,
-        ContentManager $contentManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $content = $contentManager->getContentById($id);
+    public function editAction($id, Request $request)
+    {
+        $content = $this->contentManager->getContentById($id);
 
         if ($content === null) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $configurationManager->getEntityClass('content'),
+                $this->configurationManager->getEntityClass('content'),
                 [$id]
             );
         }
 
         $formBuilder = $this->createFormBuilder($content, [
-            'action' => $this->generateUrl('sherlockode_ac_edit_mycontent', ['id' => $content->getId()])
+            'action' => $this->generateUrl('sherlockode_acb_content_edit', ['id' => $content->getId()])
         ]);
 
-        $formBuilderManager->buildContentForm($formBuilder, $content);
+        $this->formBuilderManager->buildContentForm($formBuilder, $content);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $om->flush();
+            $this->om->flush();
 
-            return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
+            return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
         return $this->render('SherlockodeAdvancedContentBundle:Content:edit_content.html.twig', [
@@ -73,37 +106,28 @@ class MyContentController extends Controller
     }
 
     /**
-     * @Route("/create", name="sherlockode_ac_create_mycontent")
-     *
      * @param Request              $request
-     * @param ObjectManager        $om
-     * @param FormBuilderManager   $formBuilderManager
-     * @param ConfigurationManager $configurationManager
      *
      * @return Response
      */
-    public function createAction(
-        Request $request,
-        ObjectManager $om,
-        FormBuilderManager $formBuilderManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $contentEntityClass = $configurationManager->getEntityClass('content');
+    public function createAction(Request $request)
+    {
+        $contentEntityClass = $this->configurationManager->getEntityClass('content');
         $content = new $contentEntityClass;
         $formBuilder = $this->createFormBuilder($content, [
-            'action' => $this->generateUrl('sherlockode_ac_create_mycontent')
+            'action' => $this->generateUrl('sherlockode_acb_content_create')
         ]);
 
-        $formBuilderManager->buildCreateContentForm($formBuilder);
+        $this->formBuilderManager->buildCreateContentForm($formBuilder);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $om->persist($content);
-            $om->flush();
+            $this->om->persist($content);
+            $this->om->flush();
 
-            return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
+            return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
         return $this->render('SherlockodeAdvancedContentBundle:Content:create_content.html.twig', [
@@ -113,54 +137,42 @@ class MyContentController extends Controller
     }
 
     /**
-     * @Route("/create/{id}", name="sherlockode_ac_create_mycontent_by_type", defaults={"id"=""})
-     *
      * @param int                  $id
      * @param Request              $request
-     * @param ObjectManager        $om
-     * @param FormBuilderManager   $formBuilderManager
-     * @param ContentTypeManager   $contentTypeManager
-     * @param ConfigurationManager $configurationManager
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function createByTypeAction(
-        $id,
-        Request $request,
-        ObjectManager $om,
-        FormBuilderManager $formBuilderManager,
-        ContentTypeManager $contentTypeManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $contentType = $contentTypeManager->getContentTypeById($id);
+    public function createByTypeAction($id, Request $request)
+    {
+        $contentType = $this->contentTypeManager->getContentTypeById($id);
 
         if ($contentType === null) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $configurationManager->getEntityClass('content_type'),
+                $this->configurationManager->getEntityClass('content_type'),
                 [$id]
             );
         }
 
-        $contentEntityClass = $configurationManager->getEntityClass('content');
+        $contentEntityClass = $this->configurationManager->getEntityClass('content');
         $content = new $contentEntityClass;
         $content->setContentType($contentType);
 
         $formBuilder = $this->createFormBuilder($content, [
-            'action' => $this->generateUrl('sherlockode_ac_create_mycontent_by_type', ['id' => $contentType->getId()])
+            'action' => $this->generateUrl('sherlockode_acb_content_create_by_type', ['id' => $contentType->getId()])
         ]);
 
-        $formBuilderManager->buildContentForm($formBuilder, $content);
+        $this->formBuilderManager->buildContentForm($formBuilder, $content);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $om->persist($content);
-            $om->flush();
+            $this->om->persist($content);
+            $this->om->flush();
 
-            return $this->redirectToRoute('sherlockode_ac_edit_mycontent', ['id' => $content->getId()]);
+            return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
         return $this->render('SherlockodeAdvancedContentBundle:Content:edit_content.html.twig', [
@@ -170,15 +182,11 @@ class MyContentController extends Controller
     }
 
     /**
-     * @Route("/list", name="sherlockode_ac_list_mycontent")
-     *
-     * @param ContentManager $contentManager
-     *
      * @return Response
      */
-    public function listAction(ContentManager $contentManager)
+    public function listAction()
     {
-        $contents = $contentManager->getContents();
+        $contents = $this->contentManager->getContents();
 
         return $this->render('SherlockodeAdvancedContentBundle:Content:list.html.twig', [
             'contents' => $contents,
@@ -186,59 +194,43 @@ class MyContentController extends Controller
     }
 
     /**
-     * @Route("/delete/{id}", name="sherlockode_ac_delete_mycontent")
-     *
-     * @param int                  $id
-     * @param ObjectManager        $om
-     * @param ContentManager       $contentManager
-     * @param ConfigurationManager $configurationManager
+     * @param int $id
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function deleteAction(
-        $id,
-        ObjectManager $om,
-        ContentManager $contentManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $content = $contentManager->getContentById($id);
+    public function deleteAction($id)
+    {
+        $content = $this->contentManager->getContentById($id);
 
         if ($content === null) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $configurationManager->getEntityClass('content'),
+                $this->configurationManager->getEntityClass('content'),
                 [$id]
             );
         }
 
-        $om->remove($content);
-        $om->flush();
+        $this->om->remove($content);
+        $this->om->flush();
 
-        return $this->redirectToRoute('sherlockode_ac_list_mycontent');
+        return $this->redirectToRoute('sherlockode_acb_content_list');
     }
 
     /**
-     * @Route("/view/{id}", name="sherlockode_ac_view_mycontent")
-     *
      * @param int                  $id
-     * @param ContentManager       $contentManager
-     * @param ConfigurationManager $configurationManager
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function viewAction(
-        $id,
-        ContentManager $contentManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $content = $contentManager->getContentById($id);
+    public function viewAction($id)
+    {
+        $content = $this->contentManager->getContentById($id);
 
         if ($content === null) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $configurationManager->getEntityClass('content'),
+                $this->configurationManager->getEntityClass('content'),
                 [$id]
             );
         }

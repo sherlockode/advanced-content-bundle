@@ -23,8 +23,8 @@
                             <td>{{ content.id }}</td>
                             <td>{{ content.contentType.name }}</td>
                             <td>
-                                <a href="{{ path('sherlockode_ac_edit_mycontent', {id: content.id}) }}">Edit</a>
-                                 | <a href="{{ path('sherlockode_ac_delete_mycontent', {id: content.id}) }}">Delete</a>
+                                <a href="{{ path('sherlockode_acb_content_edit', {id: content.id}) }}">Edit</a>
+                                 | <a href="{{ path('sherlockode_acb_content_delete', {id: content.id}) }}">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}
