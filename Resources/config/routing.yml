@@ -1,0 +1,3 @@
+sherlockode_acb:
+    resource: '@SherlockodeAdvancedContentBundle/Controller/'
+    type: annotation
