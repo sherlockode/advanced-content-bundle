@@ -27,3 +27,6 @@ Sherlockode\AdvancedContentBundle\Model\Field:
       column: sort_order
       options:
         default: 0
+    hint:
+      type: string
+      nullable: true

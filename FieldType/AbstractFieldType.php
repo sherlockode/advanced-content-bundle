@@ -31,7 +31,10 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field)
     {
-        $builder->add('value', $this->getFormFieldType(), $this->getFormFieldValueOptions($field));
+        $builder->add('value', $this->getFormFieldType(), array_merge(
+            $this->getDefaultFormFieldValueOptions($field),
+            $this->getFormFieldValueOptions($field)
+        ));
     }
 
     /**
@@ -65,5 +68,21 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function render(FieldValueInterface $fieldValue)
     {
         return $fieldValue->getValue();
+    }
+
+    /**
+     * Add field hint to field value form
+     *
+     * @param $field
+     *
+     * @return array
+     */
+    public function getDefaultFormFieldValueOptions(FieldInterface $field)
+    {
+        $defaultOptions = [];
+        if ($field->getHint()) {
+            $defaultOptions['attr']['help'] = $field->getHint();
+        }
+        return $defaultOptions;
     }
 }
