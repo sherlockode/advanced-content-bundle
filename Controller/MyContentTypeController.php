@@ -173,7 +173,7 @@ class MyContentTypeController extends Controller
                 $contentType = $this->contentTypeManager->getContentTypeById($id);
                 $field->setIsRequired(false);
                 $field->setContentType($contentType);
-                $field->setSortOrder(0);
+                $field->setSortOrder($this->contentTypeManager->getNewFieldSortOrder($contentType));
                 $this->om->persist($field);
                 $this->om->flush();
 
