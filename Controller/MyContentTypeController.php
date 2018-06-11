@@ -10,7 +10,6 @@ use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,59 +18,93 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class MyContentTypeController
- *
- * @Route("/mycontent-type")
  */
 class MyContentTypeController extends Controller
 {
     /**
-     * @Route("/{id}/update", name="sherlockode_ac_edit_mycontenttype")
+     * @var ObjectManager
+     */
+    private $om;
+
+    /**
+     * @var FormBuilderManager
+     */
+    private $formBuilderManager;
+
+    /**
+     * @var ContentTypeManager
+     */
+    private $contentTypeManager;
+
+    /**
+     * @var ConfigurationManager
+     */
+    private $configurationManager;
+
+    /**
+     * @var FieldManager
+     */
+    private $fieldManager;
+
+    /**
+     * MyContentTypeController constructor.
      *
-     * @param int                  $id
-     * @param Request              $request
      * @param ObjectManager        $om
      * @param FormBuilderManager   $formBuilderManager
      * @param ContentTypeManager   $contentTypeManager
      * @param ConfigurationManager $configurationManager
+     * @param FieldManager         $fieldManager
+     */
+    public function __construct(
+        ObjectManager $om,
+        FormBuilderManager $formBuilderManager,
+        ContentTypeManager $contentTypeManager,
+        ConfigurationManager $configurationManager,
+        FieldManager $fieldManager
+    ) {
+        $this->om = $om;
+        $this->formBuilderManager = $formBuilderManager;
+        $this->contentTypeManager = $contentTypeManager;
+        $this->configurationManager = $configurationManager;
+        $this->fieldManager = $fieldManager;
+    }
+
+    /**
+     * @param int                  $id
+     * @param Request              $request
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function editAction(
-        $id,
-        Request $request,
-        ObjectManager $om,
-        FormBuilderManager $formBuilderManager,
-        ContentTypeManager $contentTypeManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $contentType = $contentTypeManager->getContentTypeById($id);
+    public function editAction($id, Request $request)
+    {
+        $contentType = $this->contentTypeManager->getContentTypeById($id);
 
         if ($contentType === null) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $configurationManager->getEntityClass('content_type'),
+                $this->configurationManager->getEntityClass('content_type'),
                 [$id]
             );
         }
 
         $formBuilder = $this->createFormBuilder($contentType, [
-            'action' => $this->generateUrl('sherlockode_ac_edit_mycontenttype', ['id' => $contentType->getId()]),
+            'action' => $this->generateUrl('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]),
             'attr' => [
-                'data-change-type-url' => $this->generateUrl('sherlockode_ac_change_field_type'),
+                'data-change-type-url' => $this->generateUrl('sherlockode_acb_content_type_change_field_type'),
                 'class' => 'edit-content-type'
             ],
         ]);
 
-        $formBuilderManager->buildContentTypeForm($formBuilder, $contentType);
+        $this->formBuilderManager->buildContentTypeForm($formBuilder, $contentType);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $om->flush();
+            $this->om->flush();
 
-            return $this->redirectToRoute('sherlockode_ac_edit_mycontenttype', ['id' => $contentType->getId()]);
+            return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);
         }
 
         return $this->render('SherlockodeAdvancedContentBundle:ContentType:edit_content_type.html.twig', [
@@ -81,37 +114,28 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @Route("/create", name="sherlockode_ac_create_mycontenttype")
-     *
      * @param Request              $request
-     * @param ObjectManager        $om
-     * @param FormBuilderManager   $formBuilderManager
-     * @param ConfigurationManager $configurationManager
      *
      * @return Response
      */
-    public function createAction(
-        Request $request,
-        ObjectManager $om,
-        FormBuilderManager $formBuilderManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $contentTypeEntityClass = $configurationManager->getEntityClass('content_type');
+    public function createAction(Request $request)
+    {
+        $contentTypeEntityClass = $this->configurationManager->getEntityClass('content_type');
         $contentType = new $contentTypeEntityClass;
         $formBuilder = $this->createFormBuilder($contentType, [
-            'action' => $this->generateUrl('sherlockode_ac_create_mycontenttype')
+            'action' => $this->generateUrl('sherlockode_acb_content_type_create')
         ]);
 
-        $formBuilderManager->buildCreateContentTypeForm($formBuilder);
+        $this->formBuilderManager->buildCreateContentTypeForm($formBuilder);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $om->persist($contentType);
-            $om->flush();
+            $this->om->persist($contentType);
+            $this->om->flush();
 
-            return $this->redirectToRoute('sherlockode_ac_edit_mycontenttype', ['id' => $contentType->getId()]);
+            return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);
         }
 
         return $this->render('SherlockodeAdvancedContentBundle:ContentType:create_content_type.html.twig', [
@@ -121,36 +145,23 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @Route("/add-field-type", name="sherlockode_ac_content_type_add_field_type")
-     *
      * @param Request              $request
-     * @param ObjectManager        $om
-     * @param FormBuilderManager   $formBuilderManager
-     * @param ConfigurationManager $configurationManager
-     * @param FieldManager         $fieldManager
-     * @param ContentTypeManager   $contentTypeManager
      *
      * @return Response
      */
-    public function addFieldAction(
-        Request $request,
-        ObjectManager $om,
-        FormBuilderManager $formBuilderManager,
-        ConfigurationManager $configurationManager,
-        FieldManager $fieldManager,
-        ContentTypeManager $contentTypeManager
-    ) {
+    public function addFieldAction(Request $request)
+    {
         $id = $request->get('contentTypeId');
 
-        $fieldClass = $configurationManager->getEntityClass('field');
+        $fieldClass = $this->configurationManager->getEntityClass('field');
         $field = new $fieldClass;
         $fieldTypeChoices = ['Select field type' => ''];
-        $fieldTypeChoices = array_merge($fieldTypeChoices, $fieldManager->getFieldTypeFormChoices());
+        $fieldTypeChoices = array_merge($fieldTypeChoices, $this->fieldManager->getFieldTypeFormChoices());
 
         $formOptions = [
-            'action' => $this->generateUrl('sherlockode_ac_content_type_add_field_type'),
+            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field'),
             'attr' => ['class' => 'form-create-field'],
-            'data_class' => $configurationManager->getEntityClass('field'),
+            'data_class' => $fieldClass,
             'type_choices' => $fieldTypeChoices,
         ];
 
@@ -159,14 +170,15 @@ class MyContentTypeController extends Controller
 
         if ($addFieldForm->isSubmitted()) {
             if ($addFieldForm->isValid()) {
-                $contentType = $contentTypeManager->getContentTypeById($id);
+                $contentType = $this->contentTypeManager->getContentTypeById($id);
                 $field->setIsRequired(false);
                 $field->setContentType($contentType);
-                $om->persist($field);
-                $om->flush();
+                $field->setSortOrder(0);
+                $this->om->persist($field);
+                $this->om->flush();
 
                 $formBuilder = $this->createFormBuilder();
-                $formBuilderManager->buildSingleContentTypeFieldForm($formBuilder, $field);
+                $this->formBuilderManager->buildSingleContentTypeFieldForm($formBuilder, $field);
                 $form = $formBuilder->getForm();
 
                 return new JsonResponse([
@@ -193,19 +205,12 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @Route("/delete-field", name="sherlockode_ac_delete_field")
-     *
      * @param Request            $request
-     * @param ObjectManager      $om
-     * @param ContentTypeManager $contentTypeManager
      *
      * @return Response
      */
-    public function deleteFieldAction(
-        Request $request,
-        ObjectManager $om,
-        ContentTypeManager $contentTypeManager
-    ) {
+    public function deleteFieldAction(Request $request)
+    {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createAccessDeniedException();
         }
@@ -213,7 +218,7 @@ class MyContentTypeController extends Controller
         $id = $request->get('id');
         $fieldId = $request->get('fieldId');
 
-        $contentType = $contentTypeManager->getContentTypeById($id);
+        $contentType = $this->contentTypeManager->getContentTypeById($id);
 
         if ($contentType === null) {
             throw $this->createNotFoundException('Unable to find content type');
@@ -221,8 +226,8 @@ class MyContentTypeController extends Controller
 
         foreach ($contentType->getFields() as $field) {
             if ($field->getId() == $fieldId) {
-                $om->remove($field);
-                $om->flush();
+                $this->om->remove($field);
+                $this->om->flush();
 
                 return new JsonResponse();
             }
@@ -232,28 +237,21 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @Route("/change-field-type", name="sherlockode_ac_change_field_type")
-     *
      * @param Request            $request
-     * @param FieldManager       $fieldManager
-     * @param ContentTypeManager $contentTypeManager
      *
      * @return Response
      */
-    public function changeFieldTypeAction(
-        Request $request,
-        FieldManager $fieldManager,
-        ContentTypeManager $contentTypeManager
-    ) {
+    public function changeFieldTypeAction(Request $request)
+    {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createAccessDeniedException();
         }
 
         $type = $request->get('type');
-        $fieldType = $fieldManager->getFieldTypeByCode($type);
+        $fieldType = $this->fieldManager->getFieldTypeByCode($type);
 
         $contentTypeId = $request->get('contentTypeId');
-        $contentType = $contentTypeManager->getContentTypeById($contentTypeId);
+        $contentType = $this->contentTypeManager->getContentTypeById($contentTypeId);
         $fieldId = $request->get('fieldId');
 
         if ($contentType === null) {
@@ -301,15 +299,11 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @Route("/list", name="sherlockode_ac_list_mycontenttype")
-     *
-     * @param ContentTypeManager $contentTypeManager
-     *
      * @return Response
      */
-    public function listAction(ContentTypeManager $contentTypeManager)
+    public function listAction()
     {
-        $contentTypes = $contentTypeManager->getContentTypes();
+        $contentTypes = $this->contentTypeManager->getContentTypes();
 
         return $this->render('SherlockodeAdvancedContentBundle:ContentType:list.html.twig', [
             'contentTypes' => $contentTypes,
@@ -317,35 +311,26 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @Route("/delete/{id}", name="sherlockode_ac_delete_mycontenttype")
-     *
      * @param int                  $id
-     * @param ObjectManager        $om
-     * @param ContentTypeManager $contentTypeManager
-     * @param ConfigurationManager $configurationManager
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function deleteAction(
-        $id,
-        ObjectManager $om,
-        ContentTypeManager $contentTypeManager,
-        ConfigurationManager $configurationManager
-    ) {
-        $contentType = $contentTypeManager->getContentTypeById($id);
+    public function deleteAction($id)
+    {
+        $contentType = $this->contentTypeManager->getContentTypeById($id);
 
         if ($contentType === null) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $configurationManager->getEntityClass('content_type'),
+                $this->configurationManager->getEntityClass('content_type'),
                 [$id]
             );
         }
 
-        $om->remove($contentType);
-        $om->flush();
+        $this->om->remove($contentType);
+        $this->om->flush();
 
-        return $this->redirectToRoute('sherlockode_ac_list_mycontenttype');
+        return $this->redirectToRoute('sherlockode_acb_content_type_list');
     }
 }

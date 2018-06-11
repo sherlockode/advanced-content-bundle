@@ -38,7 +38,7 @@
         </div>
         <hr />
         <div class="add-field-form">
-            {{ render(controller('Sherlockode\\AdvancedContentBundle\\Controller\\MyContentTypeController::addFieldAction', {contentTypeId: data.id})) }}
+            {{ render(url('sherlockode_acb_content_type_add_field', {contentTypeId: data.id})) }}
         </div>
         <hr />
     </div>

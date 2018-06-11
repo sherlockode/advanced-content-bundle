@@ -1,12 +1,48 @@
 services:
-    _defaults:
-        autowire: true
+    sherlockode_advanced_content.controller.content:
+        class: Sherlockode\AdvancedContentBundle\Controller\MyContentController
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sherlockode_advanced_content.form_builder_manager'
+            - '@sherlockode_advanced_content.content_manager'
+            - '@sherlockode_advanced_content.content_type_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
 
-    Sherlockode\AdvancedContentBundle\Manager\:
-        resource: '../../Manager/*'
-    Sherlockode\AdvancedContentBundle\Controller\:
-        resource: '../../Controller/*'
-        tags: ['controller.service_arguments']
+    sherlockode_advanced_content.controller.content_type:
+        class: Sherlockode\AdvancedContentBundle\Controller\MyContentTypeController
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sherlockode_advanced_content.form_builder_manager'
+            - '@sherlockode_advanced_content.content_type_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@sherlockode_advanced_content.field_manager'
+
+    sherlockode_advanced_content.form_builder_manager:
+        class: Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager
+        arguments:
+            - '@sherlockode_advanced_content.content_manager'
+            - '@sherlockode_advanced_content.field_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@sherlockode_advanced_content.content_type_manager'
+
+    sherlockode_advanced_content.content_manager:
+        class: Sherlockode\AdvancedContentBundle\Manager\ContentManager
+        arguments:
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@doctrine.orm.entity_manager'
+
+    sherlockode_advanced_content.content_type_manager:
+        class: Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager
+        arguments:
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@doctrine.orm.entity_manager'
+
+    sherlockode_advanced_content.configuration_manager:
+        class: Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager
+
+    sherlockode_advanced_content.field_manager:
+        class: Sherlockode\AdvancedContentBundle\Manager\FieldManager
+
     Sherlockode\AdvancedContentBundle\FieldType\Checkbox:
         tags: ['sherlockode_advanced_content.fieldtype']
     Sherlockode\AdvancedContentBundle\FieldType\Link:
@@ -19,6 +55,9 @@ services:
         tags: ['sherlockode_advanced_content.fieldtype']
     Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg:
         tags: ['sherlockode_advanced_content.fieldtype']
-    Sherlockode\AdvancedContentBundle\Twig\Extension\:
-        resource: '../../Twig/Extension/*'
+
+    sherlockode_advanced_content.content_extension:
+        class: Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension
+        arguments:
+            - '@sherlockode_advanced_content.field_manager'
         tags: ['twig.extension']
