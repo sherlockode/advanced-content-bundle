@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
 class ContentTypeManager
 {
@@ -62,5 +63,25 @@ class ContentTypeManager
     public function getContentTypes()
     {
         return $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
+    }
+
+    /**
+     * Get new field sort order
+     *
+     * @param ContentTypeInterface $contentType
+     *
+     * @return int
+     */
+    public function getNewFieldSortOrder(ContentTypeInterface $contentType)
+    {
+        $field = $this->om->getRepository($this->configurationManager->getEntityClass('field'))
+            ->findOneBy(['contentType' => $contentType], ['sortOrder' => 'DESC']);
+
+        $sortOrder = 0;
+        if ($field instanceof FieldInterface) {
+            $sortOrder = $field->getSortOrder();
+        }
+
+        return ++$sortOrder;
     }
 }
