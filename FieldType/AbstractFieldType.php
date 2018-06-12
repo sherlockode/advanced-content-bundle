@@ -49,6 +49,18 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
+     * Get options to apply on field value
+     *
+     * @param FieldInterface $field
+     *
+     * @return array
+     */
+    public function getFormFieldValueOptions(FieldInterface $field)
+    {
+        return [];
+    }
+
+    /**
      * Get field's label
      *
      * @return string

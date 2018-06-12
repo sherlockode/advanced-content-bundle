@@ -2,6 +2,7 @@ jQuery(function ($) {
     'use strict';
 
     updateChoiceList();
+    hideEmptyOptionsRow();
 
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
@@ -19,6 +20,7 @@ jQuery(function ($) {
             if (resp.success) {
                 $('.content-type-fields').append(resp.html);
                 $('.content-type-fields .panel:last-of-type .edit-field').click();
+                hideEmptyOptionsRow();
             } else {
                 $('.add-field-form').html(resp.html);
             }
@@ -71,6 +73,7 @@ jQuery(function ($) {
         }).done(function (data) {
             $(this).closest('div.field-row').find('.options').html(data.html);
             updateChoiceList();
+            hideEmptyOptionsRow();
         }).fail(ajaxFailCallback);
     });
 
@@ -101,5 +104,14 @@ jQuery(function ($) {
     });
     function addChoiceRemoveLink(choiceLi) {
         choiceLi.append($('.field-options-remove-link').html());
+    }
+
+    function hideEmptyOptionsRow() {
+        $('.options-row').each(function() {
+            $(this).show();
+            if ($(this).find('.no-option').length > 0) {
+                $(this).hide();
+            }
+        });
     }
 });

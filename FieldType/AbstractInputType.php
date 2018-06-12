@@ -4,11 +4,11 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
-class TextArea extends AbstractInputType
+abstract class AbstractInputType extends AbstractFieldType
 {
     /**
      * Get options to apply on field value
@@ -21,20 +21,15 @@ class TextArea extends AbstractInputType
     {
         $fieldOptions = $this->getFieldOptions($field);
 
-        $formFieldOptions = parent::getFormFieldValueOptions($field);
-        if (isset($fieldOptions['nbRows'])) {
-            $formFieldOptions['attr'] = ['rows' => $fieldOptions['nbRows']];
+        $formFieldOptions = [];
+        if (isset($fieldOptions['minLength'])) {
+            $formFieldOptions['constraints'][] = new Length(['min' => $fieldOptions['minLength']]);
+        }
+        if (isset($fieldOptions['maxLength'])) {
+            $formFieldOptions['constraints'][] = new Length(['max' => $fieldOptions['maxLength']]);
         }
 
         return $formFieldOptions;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
-    {
-        return TextareaType::class;
     }
 
     /**
@@ -46,19 +41,9 @@ class TextArea extends AbstractInputType
      */
     public function addFieldOptions($builder)
     {
-        parent::addFieldOptions($builder);
         $builder->get('options')
-            ->add('nbRows', IntegerType::class, ['required' => false])
+            ->add('minLength', IntegerType::class, ['required' => false])
+            ->add('maxLength', IntegerType::class, ['required' => false])
         ;
-    }
-
-    /**
-     * Get field's code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return 'textarea';
     }
 }
