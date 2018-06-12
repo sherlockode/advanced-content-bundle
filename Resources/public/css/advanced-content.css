@@ -10,3 +10,8 @@
     bottom: 30px;
     right: 30px;
 }
+.content-type-fields .form-control.choice-label {
+    display: inline-block;
+    width: 90%;
+    margin-right: 10px;
+}

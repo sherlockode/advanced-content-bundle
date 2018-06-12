@@ -4,7 +4,8 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 
@@ -58,15 +59,8 @@ abstract class AbstractChoice extends AbstractFieldType
     {
         $choices = [];
         $fieldOptions = $this->getFieldOptions($field);
-        if (!empty($fieldOptions['choices'])) {
-            $fieldChoices = preg_split("/\r\n|\n|\r/", $fieldOptions['choices']);
-            foreach ($fieldChoices as $choice) {
-                $choice = explode('::', $choice);
-                if (count($choice) != 2) {
-                    continue;
-                }
-                $choices[trim($choice[0])] = trim($choice[1]);
-            }
+        if (isset($fieldOptions['choices']) && is_array($fieldOptions['choices'])) {
+            $choices = $fieldOptions['choices'];
         }
         return $choices;
     }
@@ -89,7 +83,13 @@ abstract class AbstractChoice extends AbstractFieldType
     public function addFieldOptions($builder)
     {
         $builder->get('options')
-            ->add('choices', TextareaType::class)
+            ->add('choices', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'entry_options' => ['attr' => ['class' => 'form-control choice-label']],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'attr' => ['class' => 'choices'],
+            ])
         ;
     }
 }

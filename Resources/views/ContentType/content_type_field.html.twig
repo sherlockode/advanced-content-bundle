@@ -37,23 +37,18 @@
         </div>
         <div class="form-group row">
             <div class="col-md-2">
+                {{ form_label(field.sortOrder) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(field.sortOrder, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-2">
                 {{ form_label(field.options) }}
             </div>
             <div class="col-md-10 options">
-                {% for option in field.options %}
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            {{ form_label(option) }}
-                        </div>
-                        <div class="col-md-10">
-                            {{ form_widget(option, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(option) }}
-                        </div>
-                    </div>
-                {% else %}
-                    {{ form_widget(field.options, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(field) }}
-                {% endfor %}
+                {% include '@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig' with {options: field.options} only %}
             </div>
         </div>
     </div>

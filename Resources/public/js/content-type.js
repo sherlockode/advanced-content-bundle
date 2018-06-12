@@ -1,6 +1,8 @@
 jQuery(function ($) {
     'use strict';
 
+    updateChoiceList();
+
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
@@ -68,6 +70,36 @@ jQuery(function ($) {
             context: this
         }).done(function (data) {
             $(this).closest('div.field-row').find('.options').html(data.html);
+            updateChoiceList();
         }).fail(ajaxFailCallback);
     });
+
+    function updateChoiceList() {
+        $('.choice-list').find('li').each(function() {
+            if ($(this).find('.delete-choice').length === 0) {
+                addChoiceRemoveLink($(this));
+            }
+        });
+    }
+    $('body').on('click', '.add-another-choice', function (e) {
+        e.preventDefault();
+        var list = $(this).siblings('.choice-list');
+        var counter = list.data('widget-counter');
+        var newWidget = list.data('prototype');
+
+        counter++;
+        newWidget = newWidget.replace(/__name__/g, counter);
+        list.data('widget-counter', counter);
+
+        var newElem = $(list.data('widget-tags')).html(newWidget);
+        addChoiceRemoveLink(newElem);
+        newElem.appendTo(list);
+    });
+    $('body').on('click', '.delete-choice', function (e) {
+        e.preventDefault();
+        $(this).closest('.choice-row').remove();
+    });
+    function addChoiceRemoveLink(choiceLi) {
+        choiceLi.append($('.field-options-remove-link').html());
+    }
 });
