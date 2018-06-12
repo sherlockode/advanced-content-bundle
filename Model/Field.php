@@ -49,6 +49,11 @@ abstract class Field implements FieldInterface
     protected $sortOrder;
 
     /**
+     * @var string
+     */
+    protected $hint;
+
+    /**
      * @return int
      */
     public function getId()
@@ -180,6 +185,30 @@ abstract class Field implements FieldInterface
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get field's hint
+     *
+     * @return string
+     */
+    public function getHint()
+    {
+        return $this->hint;
+    }
+
+    /**
+     * Set field's hint
+     *
+     * @param string $hint
+     *
+     * @return $this
+     */
+    public function setHint($hint)
+    {
+        $this->hint = $hint;
 
         return $this;
     }

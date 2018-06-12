@@ -32,9 +32,16 @@
                                             </div>
                                         </div>
                                     {% else %}
-                                        {{ form_widget(fieldValue.value) }}
+                                        {{ form_widget(fieldValue.value, {'attr': {'help': ''}}) }}
                                         {{ form_errors(fieldValue) }}
                                     {% endfor %}
+                                    {% if fieldValue.value.vars.attr.help is defined %}
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <em>{{ fieldValue.value.vars.attr.help|nl2br }}</em>
+                                            </div>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}

@@ -113,4 +113,20 @@ interface FieldInterface
      * @return $this
      */
     public function setSortOrder($sortOrder);
+
+    /**
+     * Get field's hint
+     *
+     * @return string
+     */
+    public function getHint();
+
+    /**
+     * Set field's hint
+     *
+     * @param string $hint
+     *
+     * @return $this
+     */
+    public function setHint($hint);
 }
