@@ -84,4 +84,39 @@ class ContentTypeManager
 
         return ++$sortOrder;
     }
+
+    /**
+     * When field type has changed, remove it and create new one
+     * By cascading, will also remove associated fieldValues
+     *
+     * @param ContentTypeInterface $contentType
+     * @param array                $fieldTypes
+     */
+    public function processFieldsChangeType(ContentTypeInterface $contentType, $fieldTypes)
+    {
+        foreach ($contentType->getFields() as $field) {
+            if (!isset($fieldTypes[$field->getId()])) {
+                continue;
+            }
+            if ($fieldTypes[$field->getId()] == $field->getType()) {
+                continue;
+            }
+
+            $this->om->remove($field);
+            // When persisting new field with same name, slug is incremented instead of remaining the same
+            // Flushing avoids this behavior
+            $this->om->flush();
+
+            $fieldClass = $this->configurationManager->getEntityClass('field');
+            $newField = new $fieldClass;
+            $newField->setType($field->getType());
+            $newField->setContentType($field->getContentType());
+            $newField->setName($field->getName());
+            $newField->setIsRequired($field->isIsRequired());
+            $newField->setSortOrder($field->getSortOrder());
+            $newField->setOptions($field->getOptions());
+            $newField->setHint($field->getHint());
+            $this->om->persist($newField);
+        }
+    }
 }

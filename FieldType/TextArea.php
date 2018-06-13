@@ -53,6 +53,16 @@ class TextArea extends AbstractInputType
     }
 
     /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return array_merge(parent::getFieldOptionNames(), ['nbRows']);
+    }
+
+    /**
      * Get field's code
      *
      * @return string

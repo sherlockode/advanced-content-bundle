@@ -59,6 +59,16 @@ class Wysiwyg extends AbstractFieldType
     }
 
     /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return ['toolbar'];
+    }
+
+    /**
      * Get field's code
      *
      * @return string

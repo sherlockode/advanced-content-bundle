@@ -190,4 +190,14 @@ abstract class AbstractChoice extends AbstractFieldType
 
         return '';
     }
+
+    /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return ['choices'];
+    }
 }

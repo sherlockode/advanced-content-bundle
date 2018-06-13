@@ -48,4 +48,14 @@ class Select extends AbstractChoice
 
         parent::addFieldOptions($builder);
     }
+
+    /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return array_merge(parent::getFieldOptionNames(), ['is_multiple']);
+    }
 }

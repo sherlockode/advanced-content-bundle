@@ -49,6 +49,37 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
+     * Cleanup field options (in case of field type change)
+     *
+     * @param FieldInterface $field
+     */
+    public function clearOptions(FieldInterface $field)
+    {
+        $options = $field->getOptions();
+        $options = unserialize($options);
+
+        $optionNames = $this->getFieldOptionNames();
+        foreach ($options as $key => $value) {
+            if (in_array($key, $optionNames)) {
+                continue;
+            }
+            unset($options[$key]);
+        }
+
+        $field->setOptions(serialize($options));
+    }
+
+    /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return [];
+    }
+
+    /**
      * Get options to apply on field value
      *
      * @param FieldInterface $field
