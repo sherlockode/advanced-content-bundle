@@ -2,13 +2,15 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
-class Wysiwyg extends AbstractFieldType
+class Number extends AbstractFieldType
 {
     /**
      * Get options to apply on field value
@@ -21,11 +23,13 @@ class Wysiwyg extends AbstractFieldType
     {
         $fieldOptions = $this->getFieldOptions($field);
 
-        if (!isset($fieldOptions['toolbar'])) {
-            throw new \RuntimeException("Missing mandatory option toolbar.");
+        $formFieldOptions = [];
+        if (isset($fieldOptions['minValue'])) {
+            $formFieldOptions['constraints'][] = new GreaterThanOrEqual(['value' => $fieldOptions['minValue']]);
         }
-
-        $formFieldOptions = ['config' => ['toolbar' => $fieldOptions['toolbar']]];
+        if (isset($fieldOptions['maxValue'])) {
+            $formFieldOptions['constraints'][] = new LessThanOrEqual(['value' => $fieldOptions['maxValue']]);
+        }
 
         return $formFieldOptions;
     }
@@ -35,7 +39,7 @@ class Wysiwyg extends AbstractFieldType
      */
     public function getFormFieldType()
     {
-        return CKEditorType::class;
+        return NumberType::class;
     }
 
     /**
@@ -48,13 +52,8 @@ class Wysiwyg extends AbstractFieldType
     public function addFieldOptions($builder)
     {
         $builder->get('options')
-            ->add('toolbar', ChoiceType::class, [
-                'choices' => [
-                    'Basic' => 'basic',
-                    'Standard' => 'standard',
-                    'Full' => 'full'
-                ]
-            ])
+            ->add('minValue', IntegerType::class, ['required' => false])
+            ->add('maxValue', IntegerType::class, ['required' => false])
         ;
     }
 
@@ -65,6 +64,6 @@ class Wysiwyg extends AbstractFieldType
      */
     public function getCode()
     {
-        return 'wysiwyg';
+        return 'number';
     }
 }

@@ -2,16 +2,16 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
-class Text extends AbstractInputType
+class Email extends AbstractFieldType
 {
     /**
      * @return string
      */
     public function getFormFieldType()
     {
-        return TextType::class;
+        return EmailType::class;
     }
 
     /**
@@ -21,6 +21,6 @@ class Text extends AbstractInputType
      */
     public function getCode()
     {
-        return 'text';
+        return 'email';
     }
 }

@@ -33,7 +33,7 @@
                                         </div>
                                     {% else %}
                                         {{ form_widget(fieldValue.value, {'attr': {'help': ''}}) }}
-                                        {{ form_errors(fieldValue) }}
+                                        {{ form_errors(fieldValue.value) }}
                                     {% endfor %}
                                     {% if fieldValue.value.vars.attr.help is defined %}
                                         <div class="form-group row">

@@ -2,7 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
+use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,19 +19,9 @@ abstract class AbstractChoice extends AbstractFieldType
     protected $isMultipleChoice;
 
     /**
-     * Get available options for given field type
-     *
-     * @return array
+     * @var bool
      */
-    public function getFieldTypeOptions()
-    {
-        return [
-            'choices' => [
-                'label' => 'Choices',
-                'type'  => 'choices'
-            ],
-        ];
-    }
+    protected $isExpanded;
 
     /**
      * Get options to apply on field value
@@ -42,8 +34,8 @@ abstract class AbstractChoice extends AbstractFieldType
     {
         $formFieldOptions = [];
         $formFieldOptions['choices'] = array_flip($this->getFieldOptionsArray($field));
-        $formFieldOptions['expanded'] = true;
-        $formFieldOptions['multiple'] = $this->isMultipleChoice;
+        $formFieldOptions['expanded'] = $this->isExpanded;
+        $formFieldOptions['multiple'] = $this->getIsMultipleChoice($field);
 
         return $formFieldOptions;
     }
@@ -91,5 +83,111 @@ abstract class AbstractChoice extends AbstractFieldType
                 'attr' => ['class' => 'choices'],
             ])
         ;
+    }
+
+    /**
+     * Render field value
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function render(FieldValueInterface $fieldValue)
+    {
+        $options = $this->getFieldOptionsArray($fieldValue->getField());
+        $value = $this->getFieldValueValue($fieldValue);
+        if (is_array($value)) {
+            return $this->renderMultipleValue($value, $options);
+        }
+
+        return $this->renderSingleValue($value, $options);
+    }
+
+    /**
+     * Add field value's field(s) to content form
+     *
+     * @param FormBuilderInterface $builder
+     * @param FieldInterface       $field
+     *
+     * @return void
+     */
+    public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field)
+    {
+        parent::buildContentFieldValue($builder, $field);
+
+        if ($this->getIsMultipleChoice($field)) {
+            $builder->get('value')
+                ->addModelTransformer(new StringToArrayTransformer());
+        }
+    }
+
+    /**
+     * Check if field accept several choices
+     *
+     * @param FieldInterface $field
+     *
+     * @return bool
+     */
+    protected function getIsMultipleChoice(FieldInterface $field)
+    {
+        $fieldOptions = $this->getFieldOptions($field);
+        if (isset($fieldOptions['is_multiple'])) {
+            return $fieldOptions['is_multiple'];
+        }
+
+        return $this->isMultipleChoice;
+    }
+
+    /**
+     * Get value of fieldValue
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return string|array
+     */
+    protected function getFieldValueValue(FieldValueInterface $fieldValue)
+    {
+        if ($this->getIsMultipleChoice($fieldValue->getField())) {
+            return unserialize($fieldValue->getValue());
+        }
+
+        return $fieldValue->getValue();
+    }
+
+    /**
+     * Render values for multiple choices field type
+     *
+     * @param array $value
+     * @param array $options
+     *
+     * @return string
+     */
+    protected function renderMultipleValue($value, $options)
+    {
+        $values = [];
+        foreach ($value as $valueId) {
+            if (!empty($options[$valueId])) {
+                $values[] = $options[$valueId];
+            }
+        }
+
+        return implode(',', $values);
+    }
+
+    /**
+     * Render value for single choice field type
+     *
+     * @param string $value
+     * @param array  $options
+     *
+     * @return string
+     */
+    protected function renderSingleValue($value, $options)
+    {
+        if (!empty($options[$value])) {
+            return $options[$value];
+        }
+
+        return '';
     }
 }

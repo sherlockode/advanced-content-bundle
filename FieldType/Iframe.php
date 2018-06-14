@@ -5,14 +5,13 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class Link extends AbstractFieldType
+class Iframe extends AbstractFieldType
 {
     /**
      * @return string
@@ -35,13 +34,14 @@ class Link extends AbstractFieldType
         parent::buildContentFieldValue($builder, $field);
 
         $options = [];
+        $isRequired = false;
         if ($field->isIsRequired()) {
-            $options['required'] = true;
+            $isRequired = true;
         }
+        $options['required'] = $isRequired;
 
         $builder->get('value')
             ->add('href', UrlType::class, $options)
-            ->add('anchor', TextType::class, $options)
             ->addModelTransformer(new StringToArrayTransformer())
         ;
     }
@@ -56,12 +56,8 @@ class Link extends AbstractFieldType
     public function addFieldOptions($builder)
     {
         $builder->get('options')
-            ->add('target', ChoiceType::class, [
-                'choices' => [
-                    'Blank' => '_blank',
-                    'Self' => '_self'
-                ]
-            ])
+            ->add('width', NumberType::class, ['required' => false])
+            ->add('height', NumberType::class, ['required' => false])
         ;
     }
 
@@ -72,7 +68,7 @@ class Link extends AbstractFieldType
      */
     public function getCode()
     {
-        return 'link';
+        return 'iframe';
     }
 
     /**
@@ -92,8 +88,16 @@ class Link extends AbstractFieldType
         }
 
         $options = $this->getFieldOptions($fieldValue->getField());
-        $target = $options['target'];
 
-        return '<a href="' . $value['href'] . '" target="' . $target . '">' . $value['anchor']. '</a>';
+        $width = '';
+        $height = '';
+        if (!empty($options['width'])) {
+            $width = 'width="' . $options['width'] . '"';
+        }
+        if (!empty($options['height'])) {
+            $height = 'height="' . $options['height'] . '"';
+        }
+
+        return '<iframe src="' . $value['href'] . '" ' . $width . ' ' . $height . '></iframe>';
     }
 }

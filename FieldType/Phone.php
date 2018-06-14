@@ -2,16 +2,16 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 
-class Text extends AbstractInputType
+class Phone extends AbstractInputType
 {
     /**
      * @return string
      */
     public function getFormFieldType()
     {
-        return TextType::class;
+        return TelType::class;
     }
 
     /**
@@ -21,6 +21,6 @@ class Text extends AbstractInputType
      */
     public function getCode()
     {
-        return 'text';
+        return 'phone';
     }
 }
