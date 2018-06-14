@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 
@@ -89,4 +90,13 @@ interface FieldTypeInterface
      * @return array
      */
     public function getFieldOptionNames();
+
+    /**
+     * Get model transformer for value field
+     *
+     * @param FieldInterface $field
+     *
+     * @return DataTransformerInterface|null
+     */
+    public function getValueModelTransformer(FieldInterface $field);
 }

@@ -3,8 +3,10 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
+use Sherlockode\AdvancedContentBundle\Form\DataTransformer\SerializedStringToStringTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -95,30 +97,32 @@ abstract class AbstractChoice extends AbstractFieldType
     public function render(FieldValueInterface $fieldValue)
     {
         $options = $this->getFieldOptionsArray($fieldValue->getField());
-        $value = $this->getFieldValueValue($fieldValue);
-        if (is_array($value)) {
-            return $this->renderMultipleValue($value, $options);
+        $value = unserialize($fieldValue->getValue());
+
+        $values = [];
+        foreach ($value as $valueId) {
+            if (!empty($options[$valueId])) {
+                $values[] = $options[$valueId];
+            }
         }
 
-        return $this->renderSingleValue($value, $options);
+        return implode(',', $values);
     }
 
     /**
-     * Add field value's field(s) to content form
+     * Get model transformer for value field
      *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
+     * @param FieldInterface $field
      *
-     * @return void
+     * @return DataTransformerInterface
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field)
+    public function getValueModelTransformer(FieldInterface $field)
     {
-        parent::buildContentFieldValue($builder, $field);
-
         if ($this->getIsMultipleChoice($field)) {
-            $builder->get('value')
-                ->addModelTransformer(new StringToArrayTransformer());
+            return new StringToArrayTransformer();
         }
+
+        return new SerializedStringToStringTransformer();
     }
 
     /**
@@ -136,59 +140,6 @@ abstract class AbstractChoice extends AbstractFieldType
         }
 
         return $this->isMultipleChoice;
-    }
-
-    /**
-     * Get value of fieldValue
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return string|array
-     */
-    protected function getFieldValueValue(FieldValueInterface $fieldValue)
-    {
-        if ($this->getIsMultipleChoice($fieldValue->getField())) {
-            return unserialize($fieldValue->getValue());
-        }
-
-        return $fieldValue->getValue();
-    }
-
-    /**
-     * Render values for multiple choices field type
-     *
-     * @param array $value
-     * @param array $options
-     *
-     * @return string
-     */
-    protected function renderMultipleValue($value, $options)
-    {
-        $values = [];
-        foreach ($value as $valueId) {
-            if (!empty($options[$valueId])) {
-                $values[] = $options[$valueId];
-            }
-        }
-
-        return implode(',', $values);
-    }
-
-    /**
-     * Render value for single choice field type
-     *
-     * @param string $value
-     * @param array  $options
-     *
-     * @return string
-     */
-    protected function renderSingleValue($value, $options)
-    {
-        if (!empty($options[$value])) {
-            return $options[$value];
-        }
-
-        return '';
     }
 
     /**
