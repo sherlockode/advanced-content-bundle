@@ -1,8 +1,8 @@
-<div class="panel panel-primary field-row" data-field-id="{{ field.vars.value.id }}" data-content-type-id="{{ field.vars.value.contentType.id }}">
-    <div class="panel-heading">
-        <span data-toggle="collapse" data-target="#field-{{ field.vars.value.id }}" data-parent="#fields" class="edit-field">{{ field.vars.label }}</span>
+<div class="panel panel-primary field-row" data-field-id="{{ form.vars.value.id }}" data-content-type-id="{{ form.vars.value.contentType.id }}">
+    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value.id }}" data-parent="#fields">
+        <span class="edit-field">{{ form.vars.label }}</span>
         <div class="pull-right actions">
-            <span data-toggle="collapse" data-target="#field-{{ field.vars.value.id }}" data-parent="#fields" class="edit-field">
+            <span class="edit-field">
                 <i class="glyphicon glyphicon-pencil"></i> Edit field
             </span>
             <a href="{{ path('sherlockode_acb_content_type_delete_field') }}" class="remove-field">
@@ -10,53 +10,53 @@
             </a>
         </div>
     </div>
-    <div class="panel-body collapse" id="field-{{ field.vars.value.id }}">
+    <div class="panel-body collapse" id="field-{{ form.vars.value.id }}">
         <div class="form-group row">
             <div class="col-md-2">
-                {{ form_label(field.name) }}
+                {{ form_label(form.name) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(field.name, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="form-group row">
             <div class="col-md-2">
-                {{ form_label(field.type) }}
+                {{ form_label(form.type) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(field.type, {'attr': {'class': 'field-type form-control'}}) }}
+                {{ form_widget(form.type, {'attr': {'class': 'field-type form-control'}}) }}
             </div>
         </div>
         <div class="form-group row">
             <div class="col-md-2">
-                {{ form_label(field.isRequired) }}
+                {{ form_label(form.isRequired) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(field.isRequired, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.isRequired, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="form-group row">
             <div class="col-md-2">
-                {{ form_label(field.sortOrder) }}
+                {{ form_label(form.sortOrder) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(field.sortOrder, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.sortOrder, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="form-group row options-row">
             <div class="col-md-2">
-                {{ form_label(field.hint) }}
+                {{ form_label(form.hint) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(field.hint, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.hint, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
         <div class="form-group row">
             <div class="col-md-2">
-                {{ form_label(field.options) }}
+                {{ form_label(form.options) }}
             </div>
             <div class="col-md-10 options">
-                {% include '@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig' with {options: field.options} only %}
+                {% include '@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig' with {options: form.options} only %}
             </div>
         </div>
     </div>
