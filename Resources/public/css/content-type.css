@@ -1,16 +1,18 @@
-.remove-field {
+.acb-field .remove-field {
+    color: #fff;
+    border: 0;
+    background: none;
+}
+.acb-field .remove-field:hover {
     color: #fff;
 }
-.remove-field:hover {
-    color: #fff;
-}
-.edit-field:hover {
+.acb-field .edit-field:hover {
     cursor: pointer;
 }
-.actions {
+.acb-field .actions {
     display: none;
 }
-.panel-heading:hover > .actions {
+.acb-field .panel-heading:hover > .actions {
     display: block;
 }
 .btn-add-field {

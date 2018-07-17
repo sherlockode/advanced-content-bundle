@@ -1,3 +1,5 @@
+{% form_theme form '@SherlockodeAdvancedContent/Form/content_type.html.twig' %}
+
 {% for field in form.fields %}
-    {% include '@SherlockodeAdvancedContent/ContentType/content_type_field.html.twig' with {form: field} only %}
+    {{ form_widget(field) }}
 {% endfor %}

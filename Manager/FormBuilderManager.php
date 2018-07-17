@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldsTransformer;
+use Sherlockode\AdvancedContentBundle\Form\Type\FieldsType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldValuesTransformer;
@@ -109,7 +110,7 @@ class FormBuilderManager
     public function buildContentTypeForm(FormBuilderInterface $builder, ContentTypeInterface $contentType)
     {
         $fields = $this->contentTypeManager->getOrderedFields($contentType);
-        $fieldsBuilder = $builder->create('fields', FormType::class);
+        $fieldsBuilder = $builder->create('fields', FieldsType::class);
 
         foreach ($fields as $field) {
             $this->buildContentTypeFieldForm($fieldsBuilder, $field);

@@ -5,10 +5,12 @@
             {{ form_errors(form) }}
             <div class="col-md-5">
                 {{ form_label(form.name) }}
+                {{ form_errors(form.name) }}
                 {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="col-md-5">
                 {{ form_label(form.type) }}
+                {{ form_errors(form.type) }}
                 {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
             </div>
             <input type="hidden" name="contentTypeId" value="{{ contentTypeId }}">

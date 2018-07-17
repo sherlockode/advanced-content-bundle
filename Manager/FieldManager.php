@@ -67,7 +67,7 @@ class FieldManager
     public function getFieldTypeByCode($fieldTypeCode)
     {
         if (!isset($this->fieldTypes[$fieldTypeCode])) {
-            throw new InvalidFieldTypeException(sprintf("Field type %s is not handled.", $fieldTypeCode));
+            throw new InvalidFieldTypeException(sprintf('Field type "%s" is not handled.', $fieldTypeCode));
         }
         return $this->fieldTypes[$fieldTypeCode];
     }

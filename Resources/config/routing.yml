@@ -38,10 +38,6 @@ sherlockode_acb_content_type_add_field:
     path: /mycontent-type/add-field
     defaults: { _controller: sherlockode_advanced_content.controller.content_type:addFieldAction }
 
-sherlockode_acb_content_type_delete_field:
-    path: /mycontent-type/delete-field
-    defaults: { _controller: sherlockode_advanced_content.controller.content_type:deleteFieldAction }
-
 sherlockode_acb_content_type_change_field_type:
     path: /mycontent-type/change-field-type
     defaults: { _controller: sherlockode_advanced_content.controller.content_type:changeFieldTypeAction }
