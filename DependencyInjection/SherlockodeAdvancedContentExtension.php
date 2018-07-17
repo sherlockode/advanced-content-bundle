@@ -21,5 +21,7 @@ class SherlockodeAdvancedContentExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $configurationManager = $container->getDefinition('sherlockode_advanced_content.configuration_manager');
         $configurationManager->addMethodCall('setConfig', [$config]);
+
+        $container->setParameter('sherlockode_advanced_content.entity_class_mapping', $config['entity_class']);
     }
 }
