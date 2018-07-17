@@ -33,14 +33,20 @@
                 {{ form_end(form, {"render_rest": false}) }}
             </div>
         </div>
-        <hr />
-        <div class="add-field-form">
-            {{ render(url('sherlockode_acb_content_type_add_field', {contentTypeId: data.id})) }}
-        </div>
         <div class="field-options-remove-link" style="display: none">
             <a href="#" class="delete-choice"><i class="glyphicon glyphicon-trash"></i></a>
         </div>
         <hr />
+    </div>
+    <div class="modal fade acb-modal-add-field">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add field</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block javascripts %}

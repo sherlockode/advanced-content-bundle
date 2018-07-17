@@ -8,25 +8,38 @@ jQuery(function ($) {
         alert('An error occurred.');
     }
 
-    $('.form-create-field').on('submit', function (e) {
+    $('body').on('submit', '.form-create-field', function (e) {
         e.preventDefault();
-        var button = $('.btn-add-field');
+        var form = $(this);
+        var button = form.children('.btn-add-field');
         button.prop('disabled', true);
         $.ajax({
             url: $(this).attr('action'),
             type: 'POST',
-            data: $(this).serialize()
+            data: form.serialize()
         }).done(function (resp) {
             if (resp.success) {
                 $('.acb-fields').append(resp.html);
                 $('.acb-fields .panel:last-of-type .edit-field').click();
                 hideEmptyOptionsRow();
+                var modal = form.closest('.modal');
+                if (modal.length) {
+                    modal.modal('hide');
+                }
             } else {
-                $('.add-field-form').html(resp.html);
+                $('.add-field-form').replaceWith(resp.html);
             }
         }).always(function () {
             button.prop('disabled', false);
         }).fail(ajaxFailCallback);
+    });
+
+    $('body').on('click', '.acb-btn-add-field', function () {
+        var url = $(this).data('url');
+        $.get(url, function (response) {
+            $('.acb-modal-add-field .modal-body').html(response);
+            $('.acb-modal-add-field').modal();
+        });
     });
 
     $('.acb-fields').on('click', '.remove-field', function (e) {
