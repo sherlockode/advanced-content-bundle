@@ -71,4 +71,9 @@ class FieldType extends AbstractType
         $resolver->setDefaults(['field_type' => Text::class, 'field' => FieldInterface::class, 'type_choices' => []]);
         $resolver->setRequired('field_manager');
     }
+
+    public function getBlockPrefix()
+    {
+        return 'acb_field';
+    }
 }

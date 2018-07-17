@@ -215,38 +215,6 @@ class MyContentTypeController extends Controller
      *
      * @return Response
      */
-    public function deleteFieldAction(Request $request)
-    {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $id = $request->get('id');
-        $fieldId = $request->get('fieldId');
-
-        $contentType = $this->contentTypeManager->getContentTypeById($id);
-
-        if ($contentType === null) {
-            throw $this->createNotFoundException('Unable to find content type');
-        }
-
-        foreach ($contentType->getFields() as $field) {
-            if ($field->getId() == $fieldId) {
-                $this->om->remove($field);
-                $this->om->flush();
-
-                return new JsonResponse();
-            }
-        }
-
-        throw $this->createNotFoundException('Unable to find field');
-    }
-
-    /**
-     * @param Request            $request
-     *
-     * @return Response
-     */
     public function changeFieldTypeAction(Request $request)
     {
         if (!$request->isXmlHttpRequest()) {

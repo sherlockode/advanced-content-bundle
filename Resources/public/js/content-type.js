@@ -18,8 +18,8 @@ jQuery(function ($) {
             data: $(this).serialize()
         }).done(function (resp) {
             if (resp.success) {
-                $('.content-type-fields').append(resp.html);
-                $('.content-type-fields .panel:last-of-type .edit-field').click();
+                $('.acb-fields').append(resp.html);
+                $('.acb-fields .panel:last-of-type .edit-field').click();
                 hideEmptyOptionsRow();
             } else {
                 $('.add-field-form').html(resp.html);
@@ -29,35 +29,12 @@ jQuery(function ($) {
         }).fail(ajaxFailCallback);
     });
 
-    $('.content-type-fields').on('click', '.remove-field', function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        var button = $(this);
-        button.prop('disabled', true);
+    $('.acb-fields').on('click', '.remove-field', function (e) {
         var fieldRow = $(this).closest('.field-row');
-        var fieldId = fieldRow.data('field-id');
-        var contentTypeId = fieldRow.data('content-type-id');
-        if (typeof(fieldId) === 'undefined') {
-            fieldRow.remove();
-            return;
-        }
-
-        var data = {
-            id: contentTypeId,
-            fieldId: fieldId
-        };
-        $.ajax({
-            url: $(this).attr('href'),
-            type: 'DELETE',
-            data: data
-        }).done(function () {
-            fieldRow.remove();
-        }).always(function () {
-            button.prop('disabled', false);
-        }).fail(ajaxFailCallback);
+        fieldRow.remove();
     });
 
-    $('.content-type-fields').on('change', '.field-type', function (e) {
+    $('.acb-fields').on('change', '.field-type', function (e) {
         var fieldRow = $(this).closest('.field-row');
         var fieldId = fieldRow.data('field-id');
         var contentTypeId = fieldRow.data('content-type-id');

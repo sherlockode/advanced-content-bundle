@@ -1,13 +1,27 @@
-<div class="panel panel-primary field-row" data-field-id="{{ form.vars.value.id }}" data-content-type-id="{{ form.vars.value.contentType.id }}">
-    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value.id }}" data-parent="#fields">
+{% block acb_fields_widget %}
+    <div class="panel-group acb-fields" id="acb-fields">
+        {% for field in form %}
+            {{ form_row(field) }}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block acb_field_row %}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block acb_field_widget %}
+<div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value.id }}" data-content-type-id="{{ form.vars.value.contentType.id }}">
+    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value.id }}" data-parent="#acb-fields">
         <span class="edit-field">{{ form.vars.label }}</span>
         <div class="pull-right actions">
             <span class="edit-field">
                 <i class="glyphicon glyphicon-pencil"></i> Edit field
             </span>
-            <a href="{{ path('sherlockode_acb_content_type_delete_field') }}" class="remove-field">
+            <button type="button" class="remove-field">
                 <i class="glyphicon glyphicon-trash"></i> Remove field
-            </a>
+            </button>
         </div>
     </div>
     <div class="panel-body collapse" id="field-{{ form.vars.value.id }}">
@@ -61,3 +75,4 @@
         </div>
     </div>
 </div>
+{% endblock %}

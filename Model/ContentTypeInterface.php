@@ -30,7 +30,7 @@ interface ContentTypeInterface
     /**
      * Get content type's list of fields
      *
-     * @return \Traversable
+     * @return Field[]
      */
     public function getFields();
 

@@ -26,4 +26,9 @@ class FieldValueType extends AbstractType
     {
         $resolver->setDefaults(['field_type' => Text::class, 'field' => FieldInterface::class]);
     }
+
+    public function getBlockPrefix()
+    {
+        return 'acb_field_value';
+    }
 }

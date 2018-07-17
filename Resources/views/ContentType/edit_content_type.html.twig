@@ -1,4 +1,5 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+{% form_theme form '@SherlockodeAdvancedContent/Form/content_type.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/sherlockodeadvancedcontent/css/content-type.css') }}">
@@ -18,11 +19,7 @@
                 {{ form_errors(form) }}
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="panel-group content-type-fields" id="fields">
-                        {% for field in form.fields %}
-                            {% include '@SherlockodeAdvancedContent/ContentType/content_type_field.html.twig' with {form: field} only%}
-                        {% endfor %}
-                        </div>
+                        {{ form_row(form.fields) }}
                     </div>
                 </div>
                 <div class="row">
