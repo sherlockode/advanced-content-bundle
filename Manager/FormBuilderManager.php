@@ -13,6 +13,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class FormBuilderManager
 {
@@ -113,8 +115,33 @@ class FormBuilderManager
             $this->buildContentTypeFieldForm($fieldsBuilder, $field);
         }
         $builder->add($fieldsBuilder);
+        $fieldsBuilder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+            foreach ($form as $child) {
+                if (!isset($data[$child->getName()])) {
+                    $form->remove($child->getName());
+                }
+            }
+            $event->setData($data);
+        });
+        $fieldsBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            $toDelete = [];
+            foreach ($data as $name => $value) {
+                if (!$form->has($name)) {
+                    $toDelete[] = $name;
+                }
+            }
+            foreach ($toDelete as $name) {
+                unset($data[$name]);
+            }
+            $event->setData($data);
+        });
         $fieldsBuilder
-            ->addViewTransformer(new FieldsTransformer($contentType))
+            ->addModelTransformer(new FieldsTransformer($contentType))
         ;
     }
 
