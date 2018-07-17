@@ -88,6 +88,11 @@ class MyContentTypeController extends Controller
             );
         }
 
+        $fieldTypes = [];
+        foreach ($contentType->getFields() as $field) {
+            $fieldTypes[$field->getId()] = $field->getType();
+        }
+
         $formBuilder = $this->createFormBuilder($contentType, [
             'action' => $this->generateUrl('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]),
             'attr' => [
@@ -102,6 +107,7 @@ class MyContentTypeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->contentTypeManager->processFieldsChangeType($contentType, $fieldTypes);
             $this->om->flush();
 
             return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);

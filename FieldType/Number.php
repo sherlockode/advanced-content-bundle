@@ -58,6 +58,16 @@ class Number extends AbstractFieldType
     }
 
     /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return ['minValue', 'maxValue'];
+    }
+
+    /**
      * Get field's code
      *
      * @return string

@@ -53,6 +53,14 @@ class FieldType extends AbstractType
                 $options['field_manager']->getFieldTypeByCode($child['type'])->addFieldOptions($form);
             }
         );
+
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) use ($options) {
+                $field = $event->getData();
+                $options['field_manager']->getFieldTypeByCode($field->getType())->clearOptions($field);
+            }
+        );
     }
 
     /**

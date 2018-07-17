@@ -61,6 +61,11 @@ class Iframe extends AbstractFieldType
         ;
     }
 
+    public function getFieldOptionNames()
+    {
+        return ['width', 'height'];
+    }
+
     /**
      * Get field's code
      *

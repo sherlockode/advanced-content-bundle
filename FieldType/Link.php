@@ -66,6 +66,16 @@ class Link extends AbstractFieldType
     }
 
     /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return ['target'];
+    }
+
+    /**
      * Get field's code
      *
      * @return string

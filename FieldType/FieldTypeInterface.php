@@ -75,4 +75,18 @@ interface FieldTypeInterface
      * @return mixed
      */
     public function render(FieldValueInterface $fieldValue);
+
+    /**
+     * Cleanup field options (in case of field type change)
+     *
+     * @param FieldInterface $field
+     */
+    public function clearOptions(FieldInterface $field);
+
+    /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames();
 }

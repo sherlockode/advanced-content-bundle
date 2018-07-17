@@ -46,4 +46,14 @@ abstract class AbstractInputType extends AbstractFieldType
             ->add('maxLength', IntegerType::class, ['required' => false])
         ;
     }
+
+    /**
+     * Get Field option names
+     *
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return ['minLength', 'maxLength'];
+    }
 }
