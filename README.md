@@ -60,7 +60,7 @@ class ContentType extends BaseContentType
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Field", mappedBy="contentType", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Field", mappedBy="contentType", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $fields;
 
@@ -186,7 +186,7 @@ class FieldValue extends BaseFieldValue
     /**
      * @var Field
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Field")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Field", inversedBy="fieldValues")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
     protected $field;
