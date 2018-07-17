@@ -20,7 +20,7 @@
                     <div class="col-md-12">
                         <div class="panel-group content-type-fields" id="fields">
                         {% for field in form.fields %}
-                            {% include '@SherlockodeAdvancedContent/ContentType/content_type_field.html.twig' with {field: field} only%}
+                            {% include '@SherlockodeAdvancedContent/ContentType/content_type_field.html.twig' with {form: field} only%}
                         {% endfor %}
                         </div>
                     </div>

@@ -31,6 +31,7 @@ jQuery(function ($) {
 
     $('.content-type-fields').on('click', '.remove-field', function (e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         var button = $(this);
         button.prop('disabled', true);
         var fieldRow = $(this).closest('.field-row');
