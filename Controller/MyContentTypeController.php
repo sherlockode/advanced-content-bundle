@@ -165,7 +165,7 @@ class MyContentTypeController extends Controller
         $fieldTypeChoices = array_merge($fieldTypeChoices, $this->fieldManager->getFieldTypeFormChoices());
 
         $formOptions = [
-            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field'),
+            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field', ['contentTypeId' => $id]),
             'attr' => ['class' => 'form-create-field'],
             'data_class' => $fieldClass,
             'type_choices' => $fieldTypeChoices,
