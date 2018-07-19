@@ -105,7 +105,7 @@ class MyContentTypeController extends Controller
         $formBuilder = $this->createFormBuilder($contentType, [
             'action' => $this->generateUrl('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]),
             'attr' => [
-                'data-change-type-url' => $this->generateUrl('sherlockode_acb_content_type_change_field_type'),
+                'data-change-type-url' => $this->generateUrl('sherlockode_acb_content_type_change_field_type', ['contentTypeId' => $contentType->getId()]),
                 'class' => 'edit-content-type'
             ],
         ]);
@@ -188,7 +188,6 @@ class MyContentTypeController extends Controller
             if ($addFieldForm->isValid()) {
                 $contentType = $this->contentTypeManager->getContentTypeById($id);
                 $field->setIsRequired(false);
-                $field->setContentType($contentType);
                 $field->setSortOrder($this->contentTypeManager->getNewFieldSortOrder($contentType));
 
                 $formBuilder = $this->formFactory->createNamedBuilder($formName);

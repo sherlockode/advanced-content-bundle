@@ -50,14 +50,12 @@ jQuery(function ($) {
     $('.acb-fields').on('change', '.field-type', function (e) {
         var fieldRow = $(this).closest('.field-row');
         var fieldId = fieldRow.data('field-id');
-        var contentTypeId = fieldRow.data('content-type-id');
         var data = {
-            contentTypeId: contentTypeId,
             fieldId: fieldId,
             type: $(this).val()
         };
         $.ajax({
-            url: $('.edit-content-type').data('change-type-url'),
+            url: $(this).closest('.edit-content-type').data('change-type-url'),
             type: 'POST',
             data: data,
             context: this
