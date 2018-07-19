@@ -113,7 +113,7 @@ class MyContentTypeController extends Controller
             return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:ContentType:edit_content_type.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/ContentType/edit_content_type.html.twig', [
             'form' => $form->createView(),
             'data' => $contentType,
         ]);
@@ -144,7 +144,7 @@ class MyContentTypeController extends Controller
             return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:ContentType:create_content_type.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/ContentType/create_content_type.html.twig', [
             'form' => $form->createView(),
             'data' => $contentType,
         ]);
@@ -189,7 +189,7 @@ class MyContentTypeController extends Controller
 
                 return new JsonResponse([
                     'success' => 1,
-                    'html'    => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:new_field.html.twig', [
+                    'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/new_field.html.twig', [
                         'form' => $form->createView(),
                     ])
                 ]);
@@ -197,14 +197,14 @@ class MyContentTypeController extends Controller
 
             return new JsonResponse([
                 'success' => 0,
-                'html' => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:add_field_form.html.twig', [
+                'html' => $this->renderView('@SherlockodeAdvancedContent/ContentType/add_field_form.html.twig', [
                     'form' => $addFieldForm->createView(),
                     'contentTypeId' => $id,
                 ])
             ]);
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:ContentType:add_field_form.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/ContentType/add_field_form.html.twig', [
             'form' => $addFieldForm->createView(),
             'contentTypeId' => $id,
         ]);
@@ -263,7 +263,7 @@ class MyContentTypeController extends Controller
 
         $response = [
             'success' => 1,
-            'html'    => $this->renderView('SherlockodeAdvancedContentBundle:ContentType:field_options.html.twig', [
+            'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_options.html.twig', [
                 'form' => $formBuilder->getForm()->createView(),
                 'slug' => $slug,
             ])
@@ -279,7 +279,7 @@ class MyContentTypeController extends Controller
     {
         $contentTypes = $this->contentTypeManager->getContentTypes();
 
-        return $this->render('SherlockodeAdvancedContentBundle:ContentType:list.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/ContentType/list.html.twig', [
             'contentTypes' => $contentTypes,
         ]);
     }
