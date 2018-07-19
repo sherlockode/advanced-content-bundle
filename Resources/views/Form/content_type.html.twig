@@ -4,7 +4,7 @@
             {{ form_row(field) }}
         {% endfor %}
     </div>
-    {% if form.parent %}
+    {% if form.parent and form.parent.vars.value.id %}
     <button type="button" class="btn btn-success acb-btn-add-field" data-url="{{ path('sherlockode_acb_content_type_add_field', {contentTypeId: form.parent.vars.value.id, form_name: form.parent.vars.name}) }}">Add field</button>
     {% endif %}
 {% endblock %}
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block acb_field_widget %}
-<div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value.id }}" data-content-type-id="{{ form.vars.value.contentType.id }}">
+<div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value.id }}">
     <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value.id }}" data-parent="#acb-fields">
         <span class="edit-field">{{ form.vars.label }}</span>
         <div class="pull-right actions">
