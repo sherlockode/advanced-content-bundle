@@ -2,9 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Sherlockode\AdvancedContentBundle\FieldType\Text;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -18,6 +17,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FieldType extends AbstractType
 {
+    /**
+     * @var FieldManager
+     */
+    private $fieldManager;
+
+    /**
+     * @param FieldManager $fieldManager
+     */
+    public function __construct(FieldManager $fieldManager)
+    {
+        $this->fieldManager = $fieldManager;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -50,7 +62,7 @@ class FieldType extends AbstractType
                 $form = $event->getForm();
                 $child = $event->getData();
 
-                $options['field_manager']->getFieldTypeByCode($child['type'])->addFieldOptions($form);
+                $this->fieldManager->getFieldTypeByCode($child['type'])->addFieldOptions($form);
             }
         );
 
@@ -58,7 +70,7 @@ class FieldType extends AbstractType
             FormEvents::SUBMIT,
             function (FormEvent $event) use ($options) {
                 $field = $event->getData();
-                $options['field_manager']->getFieldTypeByCode($field->getType())->clearOptions($field);
+                $this->fieldManager->getFieldTypeByCode($field->getType())->clearOptions($field);
             }
         );
     }
@@ -68,8 +80,8 @@ class FieldType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['field_type' => Text::class, 'field' => FieldInterface::class, 'type_choices' => []]);
-        $resolver->setRequired('field_manager');
+        $resolver->setDefaults(['type_choices' => []]);
+        $resolver->setRequired(['field_type']);
     }
 
     public function getBlockPrefix()

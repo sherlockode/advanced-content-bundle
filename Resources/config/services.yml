@@ -12,6 +12,7 @@ services:
         class: Sherlockode\AdvancedContentBundle\Controller\MyContentTypeController
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@form.factory'
             - '@sherlockode_advanced_content.form_builder_manager'
             - '@sherlockode_advanced_content.content_type_manager'
             - '@sherlockode_advanced_content.configuration_manager'
@@ -42,6 +43,12 @@ services:
 
     sherlockode_advanced_content.field_manager:
         class: Sherlockode\AdvancedContentBundle\Manager\FieldManager
+    sherlockode_advanced_content.form.field:
+        class: Sherlockode\AdvancedContentBundle\Form\Type\FieldType
+        arguments:
+            - '@sherlockode_advanced_content.field_manager'
+        tags:
+            - {name: form.type }
 
     Sherlockode\AdvancedContentBundle\FieldType\Text:
         tags: ['sherlockode_advanced_content.fieldtype']
