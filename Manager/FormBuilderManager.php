@@ -118,7 +118,7 @@ class FormBuilderManager
         $builder->add($fieldsBuilder);
         $fieldsBuilder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
-            $data = $event->getData();
+            $data = $event->getData() ?? [];
             foreach ($form as $child) {
                 if (!isset($data[$child->getName()])) {
                     $form->remove($child->getName());
