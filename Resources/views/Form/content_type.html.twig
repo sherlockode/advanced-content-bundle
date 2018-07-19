@@ -5,7 +5,7 @@
         {% endfor %}
     </div>
     {% if form.parent %}
-    <button type="button" class="btn btn-success acb-btn-add-field" data-url="{{ path('sherlockode_acb_content_type_add_field', {contentTypeId: form.parent.vars.value.id}) }}">Add field</button>
+    <button type="button" class="btn btn-success acb-btn-add-field" data-url="{{ path('sherlockode_acb_content_type_add_field', {contentTypeId: form.parent.vars.value.id, form_name: form.parent.vars.name}) }}">Add field</button>
     {% endif %}
 {% endblock %}
 

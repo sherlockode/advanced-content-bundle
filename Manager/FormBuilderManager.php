@@ -124,6 +124,15 @@ class FormBuilderManager
                     $form->remove($child->getName());
                 }
             }
+            foreach ($data as $key => $value) {
+                if (!$form->has($key)) {
+                    $form->add($key, FieldType::class, [
+                        'field_type'   => $this->fieldManager->getFieldTypeByCode($value['type']),
+                        'type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
+                        'data_class'   => $this->configurationManager->getEntityClass('field'),
+                    ]);
+                }
+            }
             $event->setData($data);
         });
         $fieldsBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
@@ -155,14 +164,12 @@ class FormBuilderManager
     public function buildContentTypeFieldForm(FormBuilderInterface $formBuilder, FieldInterface $field)
     {
         $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
-        $formBuilder->add($field->getSlug(), FieldType::class, [
+        $formBuilder->add($field->getSlug() ?? $field->getName(), FieldType::class, [
             'label'        => $field->getName(),
             'field_type'   => $this->fieldManager->getFieldType($field),
-            'field'        => $field,
             'type_choices' => $fieldTypeChoices,
             'data_class'   => $this->configurationManager->getEntityClass('field'),
             'data'         => $field,
-            'field_manager' => $this->fieldManager,
         ]);
     }
 

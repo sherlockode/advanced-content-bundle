@@ -11,6 +11,7 @@ use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -25,6 +26,11 @@ class MyContentTypeController extends Controller
      * @var ObjectManager
      */
     private $om;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
 
     /**
      * @var FormBuilderManager
@@ -50,6 +56,7 @@ class MyContentTypeController extends Controller
      * MyContentTypeController constructor.
      *
      * @param ObjectManager        $om
+     * @param FormFactoryInterface $formFactory
      * @param FormBuilderManager   $formBuilderManager
      * @param ContentTypeManager   $contentTypeManager
      * @param ConfigurationManager $configurationManager
@@ -57,12 +64,14 @@ class MyContentTypeController extends Controller
      */
     public function __construct(
         ObjectManager $om,
+        FormFactoryInterface $formFactory,
         FormBuilderManager $formBuilderManager,
         ContentTypeManager $contentTypeManager,
         ConfigurationManager $configurationManager,
         FieldManager $fieldManager
     ) {
         $this->om = $om;
+        $this->formFactory = $formFactory;
         $this->formBuilderManager = $formBuilderManager;
         $this->contentTypeManager = $contentTypeManager;
         $this->configurationManager = $configurationManager;
@@ -164,8 +173,9 @@ class MyContentTypeController extends Controller
         $fieldTypeChoices = ['Select field type' => ''];
         $fieldTypeChoices = array_merge($fieldTypeChoices, $this->fieldManager->getFieldTypeFormChoices());
 
+        $formName = $request->get('form_name', 'form');
         $formOptions = [
-            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field', ['contentTypeId' => $id]),
+            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field', ['contentTypeId' => $id, 'form_name' => $formName]),
             'attr' => ['class' => 'form-create-field'],
             'data_class' => $fieldClass,
             'type_choices' => $fieldTypeChoices,
@@ -180,10 +190,8 @@ class MyContentTypeController extends Controller
                 $field->setIsRequired(false);
                 $field->setContentType($contentType);
                 $field->setSortOrder($this->contentTypeManager->getNewFieldSortOrder($contentType));
-                $this->om->persist($field);
-                $this->om->flush();
 
-                $formBuilder = $this->createFormBuilder();
+                $formBuilder = $this->formFactory->createNamedBuilder($formName);
                 $this->formBuilderManager->buildSingleContentTypeFieldForm($formBuilder, $field);
                 $form = $formBuilder->getForm();
 
