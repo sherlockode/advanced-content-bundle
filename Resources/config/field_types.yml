@@ -1,0 +1,40 @@
+services:
+    sherlockode_acb.field_type.text:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Text
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.textarea:
+        class: Sherlockode\AdvancedContentBundle\FieldType\TextArea
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.wysiwyg:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.number:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Number
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.email:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Email
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.password:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Password
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.phone:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Phone
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.link:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Link
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.select:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Select
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.checkbox:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Checkbox
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.radio:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Radio
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.boolean:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Boolean
+        tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.iframe:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Iframe
+        tags: ['sherlockode_advanced_content.fieldtype']

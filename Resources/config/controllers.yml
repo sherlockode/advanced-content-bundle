@@ -1,0 +1,19 @@
+services:
+    sherlockode_advanced_content.controller.content:
+        class: Sherlockode\AdvancedContentBundle\Controller\MyContentController
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@sherlockode_advanced_content.form_builder_manager'
+            - '@sherlockode_advanced_content.content_manager'
+            - '@sherlockode_advanced_content.content_type_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
+
+    sherlockode_advanced_content.controller.content_type:
+        class: Sherlockode\AdvancedContentBundle\Controller\MyContentTypeController
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@form.factory'
+            - '@sherlockode_advanced_content.form_builder_manager'
+            - '@sherlockode_advanced_content.content_type_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@sherlockode_advanced_content.field_manager'
