@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
@@ -9,7 +10,6 @@ use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -99,7 +99,7 @@ class MyContentController extends Controller
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:Content:edit_content.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/edit_content.html.twig', [
                 'form' => $form->createView(),
                 'data' => $content,
             ]);
@@ -130,7 +130,7 @@ class MyContentController extends Controller
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:Content:create_content.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/create_content.html.twig', [
             'form' => $form->createView(),
             'data' => $content,
         ]);
@@ -175,7 +175,7 @@ class MyContentController extends Controller
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:Content:edit_content.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/edit_content.html.twig', [
             'form' => $form->createView(),
             'is_ajax' => $request->isXmlHttpRequest(),
         ]);
@@ -188,7 +188,7 @@ class MyContentController extends Controller
     {
         $contents = $this->contentManager->getContents();
 
-        return $this->render('SherlockodeAdvancedContentBundle:Content:list.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/list.html.twig', [
             'contents' => $contents,
         ]);
     }
@@ -235,7 +235,7 @@ class MyContentController extends Controller
             );
         }
 
-        return $this->render('SherlockodeAdvancedContentBundle:Content:view.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/view.html.twig', [
             'content' => $content,
         ]);
     }
