@@ -1,7 +1,7 @@
 {
     "name": "sherlockode/advanced-content-bundle",
     "type": "symfony-bundle",
-    "description": "Advanced Content",
+    "description": "Symfony Bundle for CMS content with custom fields",
     "license": "MIT",
     "authors": [
         {
@@ -10,8 +10,11 @@
         }
     ],
     "require": {
-        "php": "5.6 || ^7.1",
-        "symfony/framework-bundle": "^2.8 || ^3.4"
+        "php": "^5.6 || ^7.1",
+        "symfony/framework-bundle": "^3.0"
+    },
+    "suggest": {
+        "sherlockode/sonata-advanced-content-bundle": "Integration with SonataAdminBundle"
     },
     "autoload": {
         "psr-4": { "Sherlockode\\AdvancedContentBundle\\": "" }
