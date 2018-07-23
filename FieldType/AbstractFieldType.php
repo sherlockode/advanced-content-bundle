@@ -35,6 +35,12 @@ abstract class AbstractFieldType implements FieldTypeInterface
             $this->getDefaultFormFieldValueOptions($field),
             $this->getFormFieldValueOptions($field)
         ));
+
+        $modelTransformer = $this->getValueModelTransformer($field);
+        if ($modelTransformer !== null) {
+            $builder->get('value')
+                ->addModelTransformer($modelTransformer);
+        }
     }
 
     /**
@@ -111,6 +117,18 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function render(FieldValueInterface $fieldValue)
     {
         return $fieldValue->getValue();
+    }
+
+    /**
+     * Get model transformer for value field
+     *
+     * @param FieldInterface $field
+     *
+     * @return null
+     */
+    public function getValueModelTransformer(FieldInterface $field)
+    {
+        return null;
     }
 
     /**
