@@ -38,3 +38,6 @@ services:
     sherlockode_acb.field_type.iframe:
         class: Sherlockode\AdvancedContentBundle\FieldType\Iframe
         tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.message:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Message
+        tags: ['sherlockode_advanced_content.fieldtype']
