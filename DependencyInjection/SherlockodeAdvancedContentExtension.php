@@ -25,5 +25,14 @@ class SherlockodeAdvancedContentExtension extends Extension
         $configurationManager->addMethodCall('setConfig', [$config]);
 
         $container->setParameter('sherlockode_advanced_content.entity_class_mapping', $config['entity_class']);
+
+        $targetDir = $config['upload']['image_directory'] ?? sys_get_temp_dir();
+        $webPath = $config['upload']['uri_prefix'] ?? '/';
+
+        $uploadManager = $container->getDefinition('sherlockode_advanced_content.upload_manager');
+        $uploadManager->setArguments([
+            $targetDir,
+            $webPath,
+        ]);
     }
 }

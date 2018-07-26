@@ -83,3 +83,50 @@
 {% block acb_message_widget %}
     <p>{{ message|nl2br }}</p>
 {% endblock %}
+
+{% block acb_image_widget %}
+    <div class="form-group row">
+        <div class="col-md-2">
+            {{ form_label(form.file) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.file) }}
+            {{ form_errors(form.file) }}
+        </div>
+    </div>
+
+    {% set source = '' %}
+    {% if form.src.vars.data is not null %}
+        {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
+    {% endif %}
+    {% if source != '' %}
+        <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <a href="{{ asset(source) }}">
+                    <img src="{{ asset(source) }}" height="50px">
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="form-group row" {% if source == '' %} style="display: none;"{% endif %}>
+        <div class="col-md-2">
+            {{ form_label(form.delete) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.delete) }}
+            {{ form_errors(form.delete) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            {{ form_label(form.alt) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.alt) }}
+            {{ form_errors(form.alt) }}
+        </div>
+    </div>
+{% endblock %}

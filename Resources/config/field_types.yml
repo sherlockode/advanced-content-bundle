@@ -41,3 +41,9 @@ services:
     sherlockode_acb.field_type.message:
         class: Sherlockode\AdvancedContentBundle\FieldType\Message
         tags: ['sherlockode_advanced_content.fieldtype']
+    sherlockode_acb.field_type.image:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Image
+        tags: ['sherlockode_advanced_content.fieldtype']
+        arguments:
+            - '@sherlockode_advanced_content.upload_manager'
+            - '@assets.packages'

@@ -146,4 +146,16 @@ abstract class AbstractFieldType implements FieldTypeInterface
         }
         return $defaultOptions;
     }
+
+    /**
+     * Update fieldValue value before saving it
+     *
+     * @param FieldValueInterface $fieldValue
+     * @param array               $changeSet
+     *
+     * @return void
+     */
+    public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet)
+    {
+    }
 }

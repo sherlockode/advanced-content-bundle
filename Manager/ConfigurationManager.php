@@ -38,4 +38,12 @@ class ConfigurationManager
 
         return $this->config['entity_class'][$type];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getImageDirectory()
+    {
+        return $this->config['upload']['image_directory'];
+    }
 }

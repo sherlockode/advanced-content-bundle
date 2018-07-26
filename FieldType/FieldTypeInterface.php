@@ -99,4 +99,14 @@ interface FieldTypeInterface
      * @return DataTransformerInterface|null
      */
     public function getValueModelTransformer(FieldInterface $field);
+
+    /**
+     * Update fieldValue value before saving it
+     *
+     * @param FieldValueInterface $fieldValue
+     * @param array               $changeSet
+     *
+     * @return void
+     */
+    public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet);
 }
