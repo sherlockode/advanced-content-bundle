@@ -24,20 +24,25 @@
                                     {{ form_label(fieldValue) }}
                                 </div>
                                 <div class="col-md-10">
-                                    {% for option in fieldValue.value %}
-                                        <div class="form-group row">
-                                            <div class="col-md-2">
-                                                {{ form_label(option) }}
-                                            </div>
-                                            <div class="col-md-10">
-                                                {{ form_widget(option) }}
-                                                {{ form_errors(option) }}
-                                            </div>
-                                        </div>
-                                    {% else %}
+                                    {% if fieldValue.value.vars.customWidget is defined %}
                                         {{ form_widget(fieldValue.value, {'attr': {'help': ''}}) }}
                                         {{ form_errors(fieldValue.value) }}
-                                    {% endfor %}
+                                    {% else %}
+                                        {% for option in fieldValue.value %}
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    {{ form_label(option) }}
+                                                </div>
+                                                <div class="col-md-10">
+                                                    {{ form_widget(option) }}
+                                                    {{ form_errors(option) }}
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            {{ form_widget(fieldValue.value, {'attr': {'help': ''}}) }}
+                                            {{ form_errors(fieldValue.value) }}
+                                        {% endfor %}
+                                    {% endif %}
                                     {% if fieldValue.value.vars.attr.help is defined %}
                                         <div class="form-group row">
                                             <div class="col-md-12">

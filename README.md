@@ -214,6 +214,20 @@ sherlockode_advanced_content:
         field_value: AppBundle\Entity\FieldValue
 ```
 
+
+### Upload configuration
+
+If you want to use Field Type Image, you need to configure the directory in which the images will be saved
+If not defined, images will be saved in web/uploads directly
+
+```yaml
+# app/config/config.yml
+sherlockode_advanced_content:
+    upload:
+        image_directory: 'uploads/acb_images'
+```
+
+
 ### Routing
 
 ```yaml

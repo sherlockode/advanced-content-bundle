@@ -39,6 +39,16 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('upload')
+                    ->children()
+                        ->scalarNode('image_directory')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('uri_prefix')
+                            ->cannotBeEmpty()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
