@@ -1,0 +1,28 @@
+content_type:
+    name: Nom
+    label: Type de contenu avancé
+    form:
+        fields: Champs
+        add_field: Ajouter un champ
+        field:
+            add: Ajouter
+            edit: Modifier
+            remove: Supprimer
+            name: Nom
+            type: Type de champ
+            required: Obligatoire
+            sort_order: Ordre
+            hint: Informations
+            options: Options
+content:
+    label: Contenu avancé
+    id: Identifiant
+    content_type: Type de contenu
+    form:
+        field_values: Champs
+field_type:
+    image:
+        name: Image
+        alt: Texte alternatif
+        delete: Supprimer
+        file: Fichier

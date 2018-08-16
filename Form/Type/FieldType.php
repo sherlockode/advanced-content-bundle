@@ -38,21 +38,32 @@ class FieldType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
+                'label' => 'content_type.form.field.type',
                 'choices' => $options['type_choices'],
                 'required' => true,
             ])
-            ->add('name', TextType::class, ['required' => true])
+            ->add('name', TextType::class, [
+                'required' => true,
+                'label' => 'content_type.form.field.name',
+            ])
             ->add('required', ChoiceType::class, [
+                'label' => 'content_type.form.field.required',
                 'choices' => [
                     'Yes' => true,
                     'No' => false,
                 ]
             ])
-            ->add('sortOrder', IntegerType::class, ['required' => true])
-            ->add('hint', TextareaType::class, ['required' => false])
+            ->add('sortOrder', IntegerType::class, [
+                'label' => 'content_type.form.field.sort_order',
+                'required' => true,
+            ])
+            ->add('hint', TextareaType::class, [
+                'label' => 'content_type.form.field.hint',
+                'required' => false,
+            ])
         ;
 
-        $builder->add('options', FormType::class);
+        $builder->add('options', FormType::class, ['label' => 'content_type.form.field.options']);
         $options['field_type']->addFieldOptions($builder);
         $builder->get('options')->addModelTransformer(new StringToArrayTransformer());
 
@@ -80,7 +91,7 @@ class FieldType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['type_choices' => []]);
+        $resolver->setDefaults(['type_choices' => [], 'translation_domain' => 'AdvancedContentBundle']);
         $resolver->setRequired(['field_type']);
     }
 

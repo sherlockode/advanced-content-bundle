@@ -1,3 +1,4 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
 {% block acb_fields_widget %}
     <div class="panel-group acb-fields" id="acb-fields">
         {% for field in form %}
@@ -5,7 +6,10 @@
         {% endfor %}
     </div>
     {% if form.parent and form.parent.vars.value.id %}
-    <button type="button" class="btn btn-success acb-btn-add-field" data-url="{{ path('sherlockode_acb_content_type_add_field', {contentTypeId: form.parent.vars.value.id, form_name: form.parent.vars.name}) }}">Add field</button>
+    <button type="button" class="btn btn-success acb-btn-add-field"
+            data-url="{{ path('sherlockode_acb_content_type_add_field', {contentTypeId: form.parent.vars.value.id, form_name: form.parent.vars.name}) }}">
+        {{ 'content_type.form.add_field'|trans }}
+    </button>
     {% endif %}
 {% endblock %}
 
@@ -20,10 +24,10 @@
         <span class="edit-field">{{ form.vars.label }}</span>
         <div class="pull-right actions">
             <span class="edit-field">
-                <i class="glyphicon glyphicon-pencil"></i> Edit field
+                <i class="glyphicon glyphicon-pencil"></i> {{ 'content_type.form.field.edit'|trans }}
             </span>
             <button type="button" class="remove-field">
-                <i class="glyphicon glyphicon-trash"></i> Remove field
+                <i class="glyphicon glyphicon-trash"></i> {{ 'content_type.form.field.remove'|trans }}
             </button>
         </div>
     </div>

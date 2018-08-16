@@ -19,10 +19,10 @@ class ImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class)
+            ->add('file', FileType::class, ['label' => 'field_type.image.file'])
             ->add('src', HiddenType::class)
-            ->add('delete', CheckboxType::class, ['required' => false])
-            ->add('alt', TextType::class)
+            ->add('delete', CheckboxType::class, ['required' => false, 'label' => 'field_type.image.delete'])
+            ->add('alt', TextType::class, ['label' => 'field_type.image.alt'])
         ;
 
         $builder->addEventListener(
@@ -41,6 +41,7 @@ class ImageType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefault('translation_domain', 'AdvancedContentBundle');
         $resolver->setRequired(['uploadManager']);
     }
 

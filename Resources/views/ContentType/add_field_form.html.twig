@@ -1,3 +1,4 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
 <div class="row add-field-form">
     {{ form_start(form) }}
     {{ form_errors(form) }}
@@ -14,7 +15,7 @@
     <input type="hidden" name="contentTypeId" value="{{ contentTypeId }}">
     <div class="col-md-3 pull-right">
         <button type="submit" class="btn btn-success btn-block btn-add-field">
-            Add Field
+            {{ 'content_type.form.field.add'|trans }}
         </button>
     </div>
     {{ form_rest(form) }}
