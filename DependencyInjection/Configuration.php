@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('entity_class')
+                    ->isRequired()
                     ->children()
                         ->scalarNode('field_value')
                             ->isRequired()
