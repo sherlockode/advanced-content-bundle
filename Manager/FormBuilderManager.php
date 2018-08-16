@@ -73,7 +73,7 @@ class FormBuilderManager
         foreach ($fields as $field) {
             $fieldsBuilder->add($field->getSlug(), FieldValueType::class, [
                 'label'      => $field->getName(),
-                'required'   => $field->isIsRequired(),
+                'required'   => $field->isRequired(),
                 'field_type' => $this->fieldManager->getFieldType($field),
                 'field'      => $field,
                 'data_class' => $this->configurationManager->getEntityClass('field_value'),

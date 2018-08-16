@@ -34,15 +34,8 @@ class Iframe extends AbstractFieldType
     {
         parent::buildContentFieldValue($builder, $field);
 
-        $options = [];
-        $isRequired = false;
-        if ($field->isIsRequired()) {
-            $isRequired = true;
-        }
-        $options['required'] = $isRequired;
-
         $builder->get('value')
-            ->add('href', UrlType::class, $options)
+            ->add('href', UrlType::class)
         ;
     }
 

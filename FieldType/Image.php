@@ -45,7 +45,7 @@ class Image extends AbstractFieldType
      */
     public function getFormFieldValueOptions(FieldInterface $field)
     {
-        return ['field' => $field, 'uploadManager' => $this->uploadManager];
+        return ['uploadManager' => $this->uploadManager];
     }
 
     /**

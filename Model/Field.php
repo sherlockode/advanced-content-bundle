@@ -31,7 +31,7 @@ abstract class Field implements FieldInterface
     /**
      * @var bool
      */
-    protected $isRequired;
+    protected $required;
 
     /**
      * @var array
@@ -112,19 +112,19 @@ abstract class Field implements FieldInterface
     /**
      * @return bool
      */
-    public function isIsRequired()
+    public function isRequired()
     {
-        return $this->isRequired;
+        return $this->required;
     }
 
     /**
-     * @param bool $isRequired
+     * @param bool $required
      *
      * @return $this
      */
-    public function setIsRequired($isRequired)
+    public function setRequired($required)
     {
-        $this->isRequired = $isRequired;
+        $this->required = $required;
 
         return $this;
     }

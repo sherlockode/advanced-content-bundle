@@ -35,14 +35,9 @@ class Link extends AbstractFieldType
     {
         parent::buildContentFieldValue($builder, $field);
 
-        $options = [];
-        if ($field->isIsRequired()) {
-            $options['required'] = true;
-        }
-
         $builder->get('value')
-            ->add('href', UrlType::class, $options)
-            ->add('anchor', TextType::class, $options)
+            ->add('href', UrlType::class)
+            ->add('anchor', TextType::class)
         ;
     }
 

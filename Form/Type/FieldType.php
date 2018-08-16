@@ -42,7 +42,7 @@ class FieldType extends AbstractType
                 'required' => true,
             ])
             ->add('name', TextType::class, ['required' => true])
-            ->add('isRequired', ChoiceType::class, [
+            ->add('required', ChoiceType::class, [
                 'choices' => [
                     'Yes' => true,
                     'No' => false,
