@@ -217,14 +217,19 @@ sherlockode_advanced_content:
 
 ### Upload configuration
 
-If you want to use Field Type Image, you need to configure the directory in which the images will be saved
-If not defined, images will be saved in web/uploads directly
+If you want to use the Image field type, you need to configure the directory in which the images will be saved.
+
+If not defined, images will be saved in the system's temporary directory.
+
+THe uri_prefix is used to retrieve the image on display.
+The resulting image URL will be the URL prefix with the uploaded file name appended.
 
 ```yaml
 # app/config/config.yml
 sherlockode_advanced_content:
     upload:
-        image_directory: 'uploads/acb_images'
+        image_directory: '%kernel.project_dir%/uploads/acb_images'
+        uri_prefix: /uploads/acb_images
 ```
 
 
@@ -245,3 +250,5 @@ The bundle provides a twig function that will render the html of a field for a g
 ```twig
 {{ acb_field(content, slug) }}
 ```
+
+Note that each FieldType has a `render()` method that will output the html for a given field.
