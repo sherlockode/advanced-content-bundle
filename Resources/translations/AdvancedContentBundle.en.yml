@@ -1,0 +1,28 @@
+content_type:
+    name: Name
+    label: Content type
+    form:
+        fields: Fields
+        add_field: Add field
+        field:
+            add: Add
+            edit: Edit
+            remove: Remove
+            name: Name
+            type: Field type
+            required: Required
+            sort_order: Sort order
+            hint: Hint
+            options: Options
+content:
+    label: Content
+    id: ID
+    content_type: Content type
+    form:
+        field_values: Fields
+field_type:
+    image:
+        name: Image
+        alt: Alt text
+        delete: Delete
+        file: File

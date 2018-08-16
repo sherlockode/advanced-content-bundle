@@ -1,5 +1,6 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
 {% form_theme form '@SherlockodeAdvancedContent/Form/content_type.html.twig' %}
+{% trans_default_domain 'AdvancedContentBundle' %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/sherlockodeadvancedcontent/css/content-type.css') }}">
@@ -42,7 +43,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add field</h4>
+                    <h4 class="modal-title">{{ 'content_type.form.add_field'|trans }}</h4>
                 </div>
                 <div class="modal-body"></div>
             </div>

@@ -17,10 +17,10 @@ class FieldCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['required' => true])
+            ->add('name', TextType::class, ['label' => 'content_type.form.field.name'])
             ->add('type', ChoiceType::class, [
+                'label' => 'content_type.form.field.type',
                 'choices' => $options['type_choices'],
-                'required' => true,
             ]);
     }
 
@@ -29,6 +29,6 @@ class FieldCreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['type_choices' => []]);
+        $resolver->setDefaults(['type_choices' => [], 'translation_domain' => 'AdvancedContentBundle']);
     }
 }

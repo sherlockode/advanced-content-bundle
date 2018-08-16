@@ -69,7 +69,10 @@ class FormBuilderManager
     {
         $fields = $this->contentTypeManager->getOrderedFields($content->getContentType());
 
-        $fieldsBuilder = $builder->create('fieldValues', FormType::class);
+        $fieldsBuilder = $builder->create('fieldValues', FormType::class, [
+            'label' => 'content.form.field_values',
+            'translation_domain' => 'AdvancedContentBundle',
+        ]);
         foreach ($fields as $field) {
             $fieldsBuilder->add($field->getSlug(), FieldValueType::class, [
                 'label'      => $field->getName(),
@@ -77,6 +80,7 @@ class FormBuilderManager
                 'field_type' => $this->fieldManager->getFieldType($field),
                 'field'      => $field,
                 'data_class' => $this->configurationManager->getEntityClass('field_value'),
+                'translation_domain' => false,
             ]);
         }
         $builder->add($fieldsBuilder);
@@ -110,7 +114,10 @@ class FormBuilderManager
     public function buildContentTypeForm(FormBuilderInterface $builder, ContentTypeInterface $contentType)
     {
         $fields = $this->contentTypeManager->getOrderedFields($contentType);
-        $fieldsBuilder = $builder->create('fields', FieldsType::class);
+        $fieldsBuilder = $builder->create('fields', FieldsType::class, [
+            'label' => 'content_type.form.fields',
+            'translation_domain' => 'AdvancedContentBundle',
+        ]);
 
         foreach ($fields as $field) {
             $this->buildContentTypeFieldForm($fieldsBuilder, $field);

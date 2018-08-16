@@ -140,7 +140,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function getDefaultFormFieldValueOptions(FieldInterface $field)
     {
-        $defaultOptions = [];
+        $defaultOptions = ['label' => false];
         if ($field->getHint()) {
             $defaultOptions['attr']['help'] = $field->getHint();
         }
