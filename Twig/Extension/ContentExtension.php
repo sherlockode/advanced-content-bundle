@@ -33,8 +33,11 @@ class ContentExtension extends \Twig_Extension
      *
      * @return bool
      */
-    public function displayField(ContentInterface $content, $slug)
+    public function displayField(ContentInterface $content = null, $slug)
     {
+        if (null === $content) {
+            return '';
+        }
         foreach ($content->getFieldValues() as $fieldValue) {
             if ($fieldValue->getField()->getSlug() == $slug) {
                 return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
