@@ -47,7 +47,7 @@ class ContentTypeManager
      *
      * @param ContentTypeInterface $contentType
      *
-     * @return array
+     * @return FieldInterface[]
      */
     public function getOrderedFields(ContentTypeInterface $contentType)
     {
@@ -112,7 +112,7 @@ class ContentTypeManager
             $newField->setType($field->getType());
             $newField->setContentType($field->getContentType());
             $newField->setName($field->getName());
-            $newField->setIsRequired($field->isIsRequired());
+            $newField->setRequired($field->isRequired());
             $newField->setSortOrder($field->getSortOrder());
             $newField->setOptions($field->getOptions());
             $newField->setHint($field->getHint());

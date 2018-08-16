@@ -18,16 +18,11 @@ class ImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $fieldOptions = [];
-        if ($options['field']->isIsRequired()) {
-            $fieldOptions['required'] = true;
-        }
-
         $builder
-            ->add('file', FileType::class, $fieldOptions)
-            ->add('src', HiddenType::class, $fieldOptions)
+            ->add('file', FileType::class)
+            ->add('src', HiddenType::class)
             ->add('delete', CheckboxType::class, ['required' => false])
-            ->add('alt', TextType::class, $fieldOptions)
+            ->add('alt', TextType::class)
         ;
 
         $builder->addEventListener(
@@ -46,7 +41,7 @@ class ImageType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['field', 'uploadManager']);
+        $resolver->setRequired(['uploadManager']);
     }
 
     /**

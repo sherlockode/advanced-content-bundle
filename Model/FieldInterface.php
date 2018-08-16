@@ -55,16 +55,16 @@ interface FieldInterface
      *
      * @return bool
      */
-    public function isIsRequired();
+    public function isRequired();
 
     /**
      * Set field's requiredness
      *
-     * @param bool $isRequired
+     * @param bool $required
      *
      * @return $this
      */
-    public function setIsRequired($isRequired);
+    public function setRequired($required);
 
     /**
      * Get field's options

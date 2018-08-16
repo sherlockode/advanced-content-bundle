@@ -187,7 +187,7 @@ class MyContentTypeController extends Controller
         if ($addFieldForm->isSubmitted()) {
             if ($addFieldForm->isValid()) {
                 $contentType = $this->contentTypeManager->getContentTypeById($id);
-                $field->setIsRequired(false);
+                $field->setRequired(false);
                 $field->setSortOrder($this->contentTypeManager->getNewFieldSortOrder($contentType));
 
                 $formBuilder = $this->formFactory->createNamedBuilder($formName);

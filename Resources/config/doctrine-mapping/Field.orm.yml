@@ -13,7 +13,7 @@ Sherlockode\AdvancedContentBundle\Model\Field:
           updatable: true
           fields:
             - name
-    isRequired:
+    required:
       type: boolean
       column: is_required
       nullable: false
