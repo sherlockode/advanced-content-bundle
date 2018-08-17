@@ -74,6 +74,7 @@ abstract class ContentType implements ContentTypeInterface
     public function addField(FieldInterface $field)
     {
         $this->fields[] = $field;
+        $field->setContentType($this);
 
         return $this;
     }
