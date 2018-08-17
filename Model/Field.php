@@ -53,6 +53,12 @@ abstract class Field implements FieldInterface
      */
     protected $hint;
 
+    public function __construct()
+    {
+        $this->required = false;
+        $this->sortOrder = 0;
+    }
+
     /**
      * @return int
      */
