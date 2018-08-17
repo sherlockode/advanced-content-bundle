@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": "^5.6 || ^7.1",
+        "stof/doctrine-extensions-bundle": "^1.0",
         "symfony/framework-bundle": "^3.0"
     },
     "suggest": {
