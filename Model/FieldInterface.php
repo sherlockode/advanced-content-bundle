@@ -51,6 +51,13 @@ interface FieldInterface
     public function getSlug();
 
     /**
+     * Set field's slug
+     *
+     * @return $this
+     */
+    public function setSlug();
+
+    /**
      * Check if field is required
      *
      * @return bool

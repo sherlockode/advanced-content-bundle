@@ -116,6 +116,18 @@ abstract class Field implements FieldInterface
     }
 
     /**
+     * @param string $slug
+     *
+     * @return $this
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isRequired()
