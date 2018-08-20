@@ -53,9 +53,11 @@ interface FieldInterface
     /**
      * Set field's slug
      *
+     * @param string $slug
+     *
      * @return $this
      */
-    public function setSlug();
+    public function setSlug($slug);
 
     /**
      * Check if field is required
