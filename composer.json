@@ -15,6 +15,7 @@
         "symfony/framework-bundle": "^3.0"
     },
     "suggest": {
+        "friendsofsymfony/ckeditor-bundle": "Required for the WYSIWYG field type",
         "sherlockode/sonata-advanced-content-bundle": "Integration with SonataAdminBundle"
     },
     "autoload": {
