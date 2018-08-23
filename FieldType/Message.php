@@ -64,7 +64,6 @@ class Message extends AbstractFieldType
     public function getFormFieldValueOptions(FieldInterface $field)
     {
         $options = $field->getOptions();
-        $options = unserialize($options);
 
         $message = '';
         if (isset($options['message'])) {

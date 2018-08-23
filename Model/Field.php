@@ -34,7 +34,7 @@ abstract class Field implements FieldInterface
     protected $required;
 
     /**
-     * @var array
+     * @var string
      */
     protected $options;
 
@@ -152,7 +152,7 @@ abstract class Field implements FieldInterface
      */
     public function getOptions()
     {
-        return $this->options;
+        return unserialize($this->options);
     }
 
     /**
@@ -162,7 +162,7 @@ abstract class Field implements FieldInterface
      */
     public function setOptions($options)
     {
-        $this->options = $options;
+        $this->options = serialize($options);
 
         return $this;
     }

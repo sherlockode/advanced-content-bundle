@@ -18,7 +18,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function getFieldOptions(FieldInterface $field)
     {
-        return unserialize($field->getOptions());
+        return $field->getOptions();
     }
 
     /**
@@ -62,7 +62,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function clearOptions(FieldInterface $field)
     {
         $options = $field->getOptions();
-        $options = unserialize($options);
 
         $optionNames = $this->getFieldOptionNames();
         foreach ($options as $key => $value) {
@@ -72,7 +71,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
             unset($options[$key]);
         }
 
-        $field->setOptions(serialize($options));
+        $field->setOptions($options);
     }
 
     /**
