@@ -9,6 +9,7 @@ content_type:
             edit: Modifier
             remove: Supprimer
             name: Nom
+            slug: Clé
             type: Type de champ
             required: Obligatoire
             sort_order: Ordre

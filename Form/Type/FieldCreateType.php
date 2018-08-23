@@ -18,6 +18,7 @@ class FieldCreateType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'content_type.form.field.name'])
+            ->add('slug', TextType::class, ['label' => 'content_type.form.field.slug'])
             ->add('type', ChoiceType::class, [
                 'label' => 'content_type.form.field.type',
                 'choices' => $options['type_choices'],

@@ -9,6 +9,7 @@ content_type:
             edit: Edit
             remove: Remove
             name: Name
+            slug: Slug
             type: Field type
             required: Required
             sort_order: Sort order
