@@ -42,6 +42,9 @@ class FieldType extends AbstractType
                 'choices' => $options['type_choices'],
                 'required' => true,
             ])
+            ->add('slug', TextType::class, [
+                'label' => 'content_type.form.field.slug',
+            ])
             ->add('name', TextType::class, [
                 'required' => true,
                 'label' => 'content_type.form.field.name',
