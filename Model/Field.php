@@ -57,6 +57,7 @@ abstract class Field implements FieldInterface
     {
         $this->required = false;
         $this->sortOrder = 0;
+        $this->options = serialize([]);
     }
 
     /**
