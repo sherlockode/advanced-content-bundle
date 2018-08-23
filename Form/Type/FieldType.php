@@ -65,7 +65,6 @@ class FieldType extends AbstractType
 
         $builder->add('options', FormType::class, ['label' => 'content_type.form.field.options']);
         $options['field_type']->addFieldOptions($builder);
-        $builder->get('options')->addModelTransformer(new StringToArrayTransformer());
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,

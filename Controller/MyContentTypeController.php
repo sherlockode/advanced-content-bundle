@@ -266,7 +266,6 @@ class MyContentTypeController extends Controller
             ->add('options', FormType::class);
 
         $fieldType->addFieldOptions($formBuilder->get('fields')->get($slug));
-        $formBuilder->get('fields')->get($slug)->get('options')->addModelTransformer(new StringToArrayTransformer());
 
         $response = [
             'success' => 1,
