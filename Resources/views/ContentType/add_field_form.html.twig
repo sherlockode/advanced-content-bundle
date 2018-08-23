@@ -12,8 +12,13 @@
         {{ form_errors(form.type) }}
         {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
     </div>
-    <input type="hidden" name="contentTypeId" value="{{ contentTypeId }}">
+    <div class="col-md-6">
+        {{ form_label(form.slug) }}
+        {{ form_errors(form.slug) }}
+        {{ form_widget(form.slug, {'attr': {'class': 'form-control acb-slug', 'data-slug-source': '#' ~ form.name.vars.id}}) }}
+    </div>
     <div class="col-md-3 pull-right">
+        <input type="hidden" name="contentTypeId" value="{{ contentTypeId }}">
         <button type="submit" class="btn btn-success btn-block btn-add-field">
             {{ 'content_type.form.field.add'|trans }}
         </button>

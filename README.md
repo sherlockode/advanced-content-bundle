@@ -30,8 +30,6 @@ class AppKernel extends Kernel
 }
 ```
 
-You will also need to enable the [StofDoctrineExtensionsBundle](https://github.com/stof/StofDoctrineExtensionsBundle) and enable the Sluggable behavior.
-
 Configuration
 -------------
 

@@ -7,12 +7,6 @@ Sherlockode\AdvancedContentBundle\Model\Field:
       type: string
     slug:
       type: string
-      gedmo:
-        slug:
-          separator: _
-          updatable: true
-          fields:
-            - name
     required:
       type: boolean
       column: is_required
