@@ -74,6 +74,7 @@ abstract class Content implements ContentInterface
     public function addFieldValue(FieldValueInterface $fieldValue)
     {
         $this->fieldValues[] = $fieldValue;
+        $fieldValue->setContent($this);
 
         return $this;
     }
