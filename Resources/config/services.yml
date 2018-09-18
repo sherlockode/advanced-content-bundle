@@ -33,6 +33,7 @@ services:
         class: Sherlockode\AdvancedContentBundle\Form\Type\FieldType
         arguments:
             - '@sherlockode_advanced_content.field_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
         tags:
             - {name: form.type }
 

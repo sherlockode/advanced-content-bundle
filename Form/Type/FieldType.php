@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,11 +23,18 @@ class FieldType extends AbstractType
     private $fieldManager;
 
     /**
-     * @param FieldManager $fieldManager
+     * @var ConfigurationManager
      */
-    public function __construct(FieldManager $fieldManager)
+    private $configurationManager;
+
+    /**
+     * @param FieldManager         $fieldManager
+     * @param ConfigurationManager $configurationManager
+     */
+    public function __construct(FieldManager $fieldManager, ConfigurationManager $configurationManager)
     {
         $this->fieldManager = $fieldManager;
+        $this->configurationManager = $configurationManager;
     }
 
     /**
@@ -93,7 +100,11 @@ class FieldType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['type_choices' => [], 'translation_domain' => 'AdvancedContentBundle']);
+        $resolver->setDefaults([
+            'type_choices' => [],
+            'translation_domain' => 'AdvancedContentBundle',
+            'data_class' => $this->configurationManager->getEntityClass('field'),
+        ]);
         $resolver->setRequired(['field_type']);
     }
 
