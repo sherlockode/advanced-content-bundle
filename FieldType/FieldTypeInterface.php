@@ -39,13 +39,6 @@ interface FieldTypeInterface
     public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field);
 
     /**
-     * Get form field type
-     *
-     * @return string
-     */
-    public function getFormFieldType();
-
-    /**
      * Add field's options
      *
      * @param Form|FormBuilderInterface $builder

@@ -157,4 +157,11 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet)
     {
     }
+
+    /**
+     * Get form field type
+     *
+     * @return string
+     */
+    abstract public function getFormFieldType();
 }
