@@ -84,7 +84,9 @@ class FieldType extends AbstractType
                 $form = $event->getForm();
                 $child = $event->getData();
 
-                $this->fieldManager->getFieldTypeByCode($child['type'])->addFieldOptions($form);
+                if (isset($child['type'])) {
+                    $this->fieldManager->getFieldTypeByCode($child['type'])->addFieldOptions($form);
+                }
             }
         );
 
