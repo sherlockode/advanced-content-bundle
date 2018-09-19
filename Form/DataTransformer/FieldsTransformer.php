@@ -47,7 +47,7 @@ class FieldsTransformer implements DataTransformerInterface
 
         $values = [];
         foreach ($collection as $field) {
-            $values[$field->getSlug()] = $field;
+            $values[$field->getId()] = $field;
         }
 
         return $values;
