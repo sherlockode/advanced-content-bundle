@@ -2,6 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 abstract class Field implements FieldInterface
 {
     /**
@@ -49,11 +52,22 @@ abstract class Field implements FieldInterface
      */
     protected $hint;
 
+    /**
+     * @var FieldInterface
+     */
+    protected $parent;
+
+    /**
+     * @var FieldInterface[]|Collection
+     */
+    protected $children;
+
     public function __construct()
     {
         $this->required = false;
         $this->sortOrder = 0;
         $this->options = serialize([]);
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -224,6 +238,59 @@ abstract class Field implements FieldInterface
     public function setHint($hint)
     {
         $this->hint = $hint;
+
+        return $this;
+    }
+
+    /**
+     * @return FieldInterface
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param FieldInterface|null $parent
+     *
+     * @return $this
+     */
+    public function setParent(FieldInterface $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FieldInterface[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param FieldInterface $child
+     *
+     * @return $this
+     */
+    public function addChild(FieldInterface $child)
+    {
+        $this->children->add($child);
+        $child->setParent($this);
+
+        return $this;
+    }
+
+    /**
+     * @param FieldInterface $child
+     *
+     * @return $this
+     */
+    public function removeChild(FieldInterface $child)
+    {
+        $this->children->removeElement($child);
 
         return $this;
     }

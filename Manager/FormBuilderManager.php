@@ -74,6 +74,10 @@ class FormBuilderManager
             'translation_domain' => 'AdvancedContentBundle',
         ]);
         foreach ($fields as $field) {
+            if ($field->getParent()) {
+                // do not add fields which are not top-level
+                continue;
+            }
             $fieldsBuilder->add($field->getSlug(), FieldValueType::class, [
                 'label'      => $field->getName(),
                 'required'   => $field->isRequired(),
@@ -120,6 +124,10 @@ class FormBuilderManager
         ]);
 
         foreach ($fields as $field) {
+            if ($field->getParent()) {
+                // do not add fields which are not top-level
+                continue;
+            }
             $this->buildContentTypeFieldForm($fieldsBuilder, $field);
         }
         $builder->add($fieldsBuilder);

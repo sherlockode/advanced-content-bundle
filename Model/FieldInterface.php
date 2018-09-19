@@ -138,4 +138,21 @@ interface FieldInterface
      * @return $this
      */
     public function setHint($hint);
+
+    /**
+     * @return FieldInterface
+     */
+    public function getParent();
+
+    /**
+     * @param FieldInterface $parent
+     *
+     * @return $this
+     */
+    public function setParent(FieldInterface $parent = null);
+
+    /**
+     * @return FieldInterface[]
+     */
+    public function getChildren();
 }
