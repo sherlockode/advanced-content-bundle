@@ -35,7 +35,8 @@
 
 {% block acb_field_widget %}
 <div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value ? form.vars.value.id : '' }}">
-    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value ? form.vars.value.id : '' }}" data-parent="#acb-fields">
+    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value ? form.vars.value.id : '' }}"
+         {% if form.parent is not empty and form.parent.vars.name == 'fields' %}data-parent="#acb-fields"{% endif %}>
         <span class="edit-field">{{ form.vars.label }}</span>
         <div class="pull-right actions">
             <span class="edit-field">
