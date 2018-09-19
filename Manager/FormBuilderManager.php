@@ -89,7 +89,7 @@ class FormBuilderManager
         }
         $builder->add($fieldsBuilder);
         $fieldsBuilder
-            ->addViewTransformer(new FieldValuesTransformer($this->contentManager, $content));
+            ->addViewTransformer(new FieldValuesTransformer($this->contentManager, $content->getContentType()));
     }
 
     /**
