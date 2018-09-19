@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Form\DataTransformer;
 
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
-use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -13,9 +13,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class FieldValuesTransformer implements DataTransformerInterface
 {
     /**
-     * @var ContentInterface
+     * @var ContentTypeInterface
      */
-    private $content;
+    private $contentType;
 
     /**
      * @var ContentManager
@@ -25,13 +25,13 @@ class FieldValuesTransformer implements DataTransformerInterface
     /**
      * FieldValuesTransformer constructor.
      *
-     * @param ContentManager   $contentManager
-     * @param ContentInterface $content
+     * @param ContentManager       $contentManager
+     * @param ContentTypeInterface $contentType
      */
-    public function __construct(ContentManager $contentManager, ContentInterface $content)
+    public function __construct(ContentManager $contentManager, ContentTypeInterface $contentType)
     {
         $this->contentManager = $contentManager;
-        $this->content = $content;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -85,12 +85,11 @@ class FieldValuesTransformer implements DataTransformerInterface
                 throw new TransformationFailedException('Expected a ' . FieldValueInterface::class . ' object.');
             }
             if (!$fieldValue->getField()) {
-                $field = $this->contentManager->getFieldBySlug($this->content, $slug);
+                $field = $this->contentManager->getFieldBySlug($this->contentType, $slug);
                 if ($field === null) {
                     continue;
                 }
                 $fieldValue->setField($field);
-                $fieldValue->setContent($this->content);
             }
             $values[] = $fieldValue;
         }
