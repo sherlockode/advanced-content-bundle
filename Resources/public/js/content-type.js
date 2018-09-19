@@ -88,10 +88,11 @@ jQuery(function ($) {
         var list = $($(this).attr('data-list'));
         var counter = list.data('widget-counter') || list.children().length;
         var newWidget = list.data('prototype');
+        newWidget = newWidget.replace(/__name__label__/g, counter);
         newWidget = newWidget.replace(/__name__/g, counter);
         counter++;
         list.data('widget-counter', counter);
-        var newElem = $('<div>').html(newWidget);
+        var newElem = $(newWidget);
         newElem.appendTo(list);
     });
 
