@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FieldType extends AbstractType
@@ -104,6 +106,13 @@ class FieldType extends AbstractType
             'type_choices' => [],
             'translation_domain' => 'AdvancedContentBundle',
             'data_class' => $this->configurationManager->getEntityClass('field'),
+            'label' => function (Options $options) {
+                if (isset($options['data']) && $options['data'] instanceof FieldInterface) {
+                    return $options['data']->getName();
+                }
+
+                return null;
+            },
         ]);
         $resolver->setRequired(['field_type']);
     }

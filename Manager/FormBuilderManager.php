@@ -180,7 +180,6 @@ class FormBuilderManager
     {
         $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
         $formBuilder->add($field->getSlug() ?? $field->getName(), FieldType::class, [
-            'label'        => $field->getName(),
             'field_type'   => $this->fieldManager->getFieldType($field),
             'type_choices' => $fieldTypeChoices,
             'data_class'   => $this->configurationManager->getEntityClass('field'),
