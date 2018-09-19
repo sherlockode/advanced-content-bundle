@@ -27,3 +27,5 @@ field_type:
         alt: Texte alternatif
         delete: Supprimer
         file: Fichier
+    repeater:
+        field_list: Liste des champs

@@ -83,6 +83,18 @@ jQuery(function ($) {
         }).fail(ajaxFailCallback);
     });
 
+    $('body').on('click', '.acb-add-collection-item', function (e) {
+        e.preventDefault();
+        var list = $($(this).attr('data-list'));
+        var counter = list.data('widget-counter') || list.children().length;
+        var newWidget = list.data('prototype');
+        newWidget = newWidget.replace(/__name__/g, counter);
+        counter++;
+        list.data('widget-counter', counter);
+        var newElem = $('<div>').html(newWidget);
+        newElem.appendTo(list);
+    });
+
     function updateChoiceList() {
         $('.choice-list').find('li').each(function() {
             if ($(this).find('.delete-choice').length === 0) {

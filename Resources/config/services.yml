@@ -37,6 +37,21 @@ services:
         tags:
             - {name: form.type }
 
+    sherlockode_advanced_content.form.repeater_field:
+        class: Sherlockode\AdvancedContentBundle\Form\Type\RepeaterFieldType
+        arguments:
+            - '@sherlockode_advanced_content.field_manager'
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@sherlockode_advanced_content.content_manager'
+        tags:
+            - {name: form.type }
+    sherlockode_advanced_content.form.repeater_group:
+        class: Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupType
+        arguments:
+            - '@sherlockode_advanced_content.configuration_manager'
+        tags:
+            - {name: form.type }
+
     sherlockode_advanced_content.content_extension:
         class: Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension
         arguments:

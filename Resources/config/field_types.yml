@@ -47,3 +47,7 @@ services:
         arguments:
             - '@sherlockode_advanced_content.upload_manager'
             - '@assets.packages'
+    sherlockode_acb.field_type.repeater:
+        class: Sherlockode\AdvancedContentBundle\FieldType\Repeater
+        arguments: ['@sherlockode_advanced_content.field_manager']
+        tags: ['sherlockode_advanced_content.fieldtype']

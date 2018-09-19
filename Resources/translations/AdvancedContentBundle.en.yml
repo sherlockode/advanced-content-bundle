@@ -27,3 +27,5 @@ field_type:
         alt: Alt text
         delete: Delete
         file: File
+    repeater:
+        field_list: Field list
