@@ -18,9 +18,24 @@
     {{ form_widget(form) }}
 {% endblock %}
 
+{% block acb_simple_collection %}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+    <button type="button" class="btn btn-success acb-add-collection-item" data-list="#{{ form.vars.id }}">{{ 'content_type.form.add_field'|trans }}</button>
+{% endblock  %}
+{% block acb_repeater_widget %}
+    {{ block('acb_simple_collection') }}
+{% endblock %}
+
+{% block acb_group_collection_widget %}
+    {{ block('acb_simple_collection') }}
+{% endblock %}
+
 {% block acb_field_widget %}
-<div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value.id }}">
-    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value.id }}" data-parent="#acb-fields">
+<div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value ? form.vars.value.id : '' }}">
+    <div class="panel-heading" data-toggle="collapse" data-target="#field-{{ form.vars.value ? form.vars.value.id : '' }}" data-parent="#acb-fields">
         <span class="edit-field">{{ form.vars.label }}</span>
         <div class="pull-right actions">
             <span class="edit-field">
@@ -31,7 +46,7 @@
             </button>
         </div>
     </div>
-    <div class="panel-body collapse" id="field-{{ form.vars.value.id }}">
+    <div class="panel-body collapse" id="field-{{ form.vars.value ? form.vars.value.id : '' }}">
         <div class="form-group row">
             <div class="col-md-2">
                 {{ form_label(form.name) }}
@@ -80,6 +95,16 @@
                 {{ form_widget(form.hint, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
+        {% if form['children'] is defined %}
+        <div class="form-group row options-row">
+            <div class="col-md-2">
+                {{ form_label(form['children']) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(form['children']) }}
+            </div>
+        </div>
+        {% endif %}
         <div class="form-group row">
             <div class="col-md-2">
                 {{ form_label(form.options) }}
