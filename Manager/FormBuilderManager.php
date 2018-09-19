@@ -78,7 +78,7 @@ class FormBuilderManager
                 // do not add fields which are not top-level
                 continue;
             }
-            $fieldsBuilder->add($field->getSlug(), FieldValueType::class, [
+            $fieldsBuilder->add($field->getId(), FieldValueType::class, [
                 'label'      => $field->getName(),
                 'required'   => $field->isRequired(),
                 'field_type' => $this->fieldManager->getFieldType($field),

@@ -35,15 +35,24 @@ class ContentManager
      * Get field matching slug
      *
      * @param ContentTypeInterface $contentType
-     * @param string               $slug
+     * @param int                  $fieldId
      *
      * @return FieldInterface|null
      */
-    public function getFieldBySlug(ContentTypeInterface $contentType, $slug)
+    public function getFieldById(ContentTypeInterface $contentType, $fieldId)
     {
-        $fields = $contentType->getFields();
-        foreach ($fields as $field) {
-            if ($field->getSlug() == $slug) {
+        $field = $this->om->getRepository($this->configurationManager->getEntityClass('field'))->find($fieldId);
+
+
+        if (!$field instanceof FieldInterface) {
+            return null;
+        }
+        if ($field->getContentType() && $field->getContentType()->getId() == $contentType->getId()) {
+            return $field;
+        }
+
+        while ($parent = $field->getParent()) {
+            if ($parent->getContentType() !== null && $parent->getContentType()->getId() == $contentType->getId()) {
                 return $field;
             }
         }

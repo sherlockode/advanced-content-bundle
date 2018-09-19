@@ -55,7 +55,7 @@ class FieldValuesTransformer implements DataTransformerInterface
 
         $values = [];
         foreach ($collection as $fieldValue) {
-            $values[$fieldValue->getField()->getSlug()] = $fieldValue;
+            $values[$fieldValue->getField()->getId()] = $fieldValue;
         }
 
         return $values;
@@ -77,7 +77,7 @@ class FieldValuesTransformer implements DataTransformerInterface
         }
 
         $values = [];
-        foreach ($array as $slug => $fieldValue) {
+        foreach ($array as $fieldId => $fieldValue) {
             if ($fieldValue === null) {
                 continue;
             }
@@ -85,7 +85,7 @@ class FieldValuesTransformer implements DataTransformerInterface
                 throw new TransformationFailedException('Expected a ' . FieldValueInterface::class . ' object.');
             }
             if (!$fieldValue->getField()) {
-                $field = $this->contentManager->getFieldBySlug($this->contentType, $slug);
+                $field = $this->contentManager->getFieldById($this->contentType, $fieldId);
                 if ($field === null) {
                     continue;
                 }
