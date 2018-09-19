@@ -10,6 +10,7 @@ use Sherlockode\AdvancedContentBundle\Form\Type\RepeaterType;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -83,5 +84,17 @@ class Repeater extends AbstractFieldType
                 'type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
             ],
         ]);
+    }
+
+    /**
+     * Repeater cannot be rendered directly, FieldGroupValues should be iterated through
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed|string
+     */
+    public function render(FieldValueInterface $fieldValue)
+    {
+        return '';
     }
 }

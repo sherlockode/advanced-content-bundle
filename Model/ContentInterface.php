@@ -2,6 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
+
 interface ContentInterface
 {
     /**
@@ -30,7 +32,7 @@ interface ContentInterface
     /**
      * Get content's field values
      *
-     * @return \Traversable
+     * @return Collection|FieldValueInterface[]
      */
     public function getFieldValues();
 
