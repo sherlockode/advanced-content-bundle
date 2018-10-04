@@ -1,6 +1,7 @@
 services:
     sherlockode_advanced_content.controller.content:
         class: Sherlockode\AdvancedContentBundle\Controller\MyContentController
+        public: true
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@sherlockode_advanced_content.form_builder_manager'
@@ -10,6 +11,7 @@ services:
 
     sherlockode_advanced_content.controller.content_type:
         class: Sherlockode\AdvancedContentBundle\Controller\MyContentTypeController
+        public: true
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@form.factory'
