@@ -131,7 +131,7 @@ abstract class FieldValue implements FieldValueInterface
     }
 
     /**
-     * @return ArrayCollection|Collection|FieldGroupValueInterface[]
+     * @return Collection|FieldGroupValueInterface[]
      */
     public function getChildren()
     {

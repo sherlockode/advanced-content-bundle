@@ -140,19 +140,19 @@ interface FieldInterface
     public function setHint($hint);
 
     /**
-     * @return FieldInterface
+     * @return LayoutInterface[]
      */
-    public function getParent();
+    public function getChildren();
 
     /**
-     * @param FieldInterface $parent
+     * @param LayoutInterface $layout
      *
      * @return $this
      */
-    public function setParent(FieldInterface $parent = null);
+    public function setLayout(LayoutInterface $layout = null);
 
     /**
-     * @return FieldInterface[]
+     * @return LayoutInterface
      */
-    public function getChildren();
+    public function getLayout();
 }

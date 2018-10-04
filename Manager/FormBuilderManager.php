@@ -74,7 +74,7 @@ class FormBuilderManager
             'translation_domain' => 'AdvancedContentBundle',
         ]);
         foreach ($fields as $field) {
-            if ($field->getParent()) {
+            if ($field->getLayout()) {
                 // do not add fields which are not top-level
                 continue;
             }
@@ -124,7 +124,7 @@ class FormBuilderManager
         ]);
 
         foreach ($fields as $field) {
-            if ($field->getParent()) {
+            if ($field->getLayout()) {
                 // do not add fields which are not top-level
                 continue;
             }

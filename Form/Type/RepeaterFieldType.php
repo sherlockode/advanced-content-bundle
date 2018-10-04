@@ -9,8 +9,14 @@ use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class RepeaterFieldType
+ *
+ * Represents the FieldValue form for 1 child element of a repeater field
+ */
 class RepeaterFieldType extends AbstractType
 {
     private $fieldManager;

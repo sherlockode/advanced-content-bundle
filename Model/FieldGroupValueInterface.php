@@ -25,4 +25,16 @@ interface FieldGroupValueInterface
      * @return FieldValueInterface[]
      */
     public function getChildren();
+
+    /**
+     * @return LayoutInterface
+     */
+    public function getLayout();
+
+    /**
+     * @param LayoutInterface $layout
+     *
+     * @return $this
+     */
+    public function setLayout(LayoutInterface $layout = null);
 }

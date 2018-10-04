@@ -22,6 +22,11 @@ abstract class FieldGroupValue implements FieldGroupValueInterface
      */
     protected $children;
 
+    /**
+     * @var LayoutInterface
+     */
+    protected $layout;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -60,6 +65,26 @@ abstract class FieldGroupValue implements FieldGroupValueInterface
     public function removeChild(FieldValueInterface $child)
     {
         $this->children->removeElement($child);
+
+        return $this;
+    }
+
+    /**
+     * @return LayoutInterface
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param LayoutInterface $layout
+     *
+     * @return $this
+     */
+    public function setLayout(LayoutInterface $layout = null)
+    {
+        $this->layout = $layout;
 
         return $this;
     }

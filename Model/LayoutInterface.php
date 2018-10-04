@@ -1,0 +1,54 @@
+<?php
+
+namespace Sherlockode\AdvancedContentBundle\Model;
+
+interface LayoutInterface
+{
+    /**
+     * @return int
+     */
+    public function getId();
+
+    /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
+     * @return FieldInterface
+     */
+    public function getParent();
+
+    /**
+     * @param FieldInterface|null $parent
+     *
+     * @return $this
+     */
+    public function setParent(FieldInterface $parent = null);
+
+    /**
+     * @return FieldInterface[]
+     */
+    public function getChildren();
+
+    /**
+     * @param FieldInterface $child
+     *
+     * @return $this
+     */
+    public function addChild(FieldInterface $child);
+
+    /**
+     * @param FieldInterface $child
+     *
+     * @return $this
+     */
+    public function removeChild(FieldInterface $child);
+}
