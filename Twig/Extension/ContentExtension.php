@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 class ContentExtension extends \Twig_Extension
 {
@@ -24,9 +25,11 @@ class ContentExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('acb_field', [$this, 'displayField'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_field', [$this, 'displayContentField'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_field_value', [$this, 'displayFieldValue'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('acb_group_field', [$this, 'displayGroupValue'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_groups', [$this, 'getFieldGroupValues'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_groups', [$this, 'getFieldGroupValuesForContent'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_group_fields', [$this, 'getGroupFieldValues'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -36,7 +39,7 @@ class ContentExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function displayField(ContentInterface $content = null, $slug)
+    public function displayContentField(ContentInterface $content = null, $slug)
     {
         if (null === $content) {
             return '';
@@ -55,7 +58,7 @@ class ContentExtension extends \Twig_Extension
      *
      * @return FieldGroupValueInterface[]
      */
-    public function getFieldGroupValues(ContentInterface $content = null, $slug)
+    public function getFieldGroupValuesForContent(ContentInterface $content = null, $slug)
     {
         if (null === $content) {
             return [];
@@ -67,6 +70,15 @@ class ContentExtension extends \Twig_Extension
             }
         }
         return [];
+    }
+
+    public function getGroupFieldValues(FieldGroupValueInterface $group = null)
+    {
+        if (null === $group) {
+            return [];
+        }
+
+        return $group->getChildren();
     }
 
     /**
@@ -84,5 +96,10 @@ class ContentExtension extends \Twig_Extension
         }
 
         return '';
+    }
+
+    public function displayFieldValue(FieldValueInterface $fieldValue)
+    {
+        return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
     }
 }

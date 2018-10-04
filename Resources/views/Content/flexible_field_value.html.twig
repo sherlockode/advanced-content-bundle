@@ -1,0 +1,5 @@
+{% form_theme form '@SherlockodeAdvancedContent/Form/content_type.html.twig' %}
+
+{% for child in form %}
+    {{ form_row(child) }}
+{% endfor %}

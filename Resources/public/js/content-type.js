@@ -96,6 +96,27 @@ jQuery(function ($) {
         var newElem = $(newWidget);
         newElem.appendTo(list);
     });
+    $('body').on('click', '.acb-add-flexible-item', function (e) {
+        e.preventDefault();
+        var wrapper = $(this).closest('.acb-flexible-add-wrapper');
+        var list = $(wrapper.attr('data-list'));
+        var counter = list.data('widget-counter') || list.children().length;
+        var name = wrapper.attr('data-name-prefix') + '[' + counter + ']';
+        var id = wrapper.attr('data-id-prefix') + '_' + counter;
+
+        $.get(wrapper.data('url'), {
+            contentTypeId: wrapper.data('content-type'),
+            layoutId: $(this).data('layout')
+        }, function (response) {
+            var newWidget = response;
+            newWidget = newWidget.replace(/__flexible_name__/g, name);
+            newWidget = newWidget.replace(/flexible_name__/g, id);
+            counter++;
+            list.data('widget-counter', counter);
+            var newElem = $(newWidget);
+            newElem.appendTo(list);
+        });
+    });
 
     function updateChoiceList() {
         $('.choice-list').find('li').each(function() {
