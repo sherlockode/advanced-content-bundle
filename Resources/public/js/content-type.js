@@ -90,6 +90,7 @@ jQuery(function ($) {
         var newWidget = list.data('prototype');
         newWidget = newWidget.replace(/__name__label__/g, counter);
         newWidget = newWidget.replace(/__name__/g, counter);
+        newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
         counter++;
         list.data('widget-counter', counter);
         var newElem = $(newWidget);
