@@ -61,8 +61,8 @@ class FieldType extends AbstractType
             ->add('required', ChoiceType::class, [
                 'label' => 'content_type.form.field.required',
                 'choices' => [
-                    'Yes' => true,
-                    'No' => false,
+                    'yes' => true,
+                    'no' => false,
                 ]
             ])
             ->add('sortOrder', IntegerType::class, [

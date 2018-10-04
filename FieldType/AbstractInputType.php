@@ -42,8 +42,8 @@ abstract class AbstractInputType extends AbstractFieldType
     public function addFieldOptions($builder)
     {
         $builder->get('options')
-            ->add('minLength', IntegerType::class, ['required' => false])
-            ->add('maxLength', IntegerType::class, ['required' => false])
+            ->add('minLength', IntegerType::class, ['required' => false, 'label' => 'field_type.text.min_length'])
+            ->add('maxLength', IntegerType::class, ['required' => false, 'label' => 'field_type.text.max_length'])
         ;
     }
 
