@@ -35,10 +35,11 @@ Configuration
 
 ### Create your entities
 
-AdvancedContentBundle provides 4 entity models : ContentType, Field, Content and FieldValue
+AdvancedContentBundle provides 6 entity models : ContentType, Layout, Field, Content, FieldGroupValue and FieldValue
 To be able to use them, you need to create your own entities : 
 
 ```php
+<?php
 // src/AppBundle/Entity/ContentType.php
 
 namespace AppBundle\Entity;
@@ -72,6 +73,7 @@ class ContentType extends BaseContentType
 ```
 
 ```php
+<?php
 // src/AppBundle/Entity/Field.php
 
 namespace AppBundle\Entity;
@@ -102,10 +104,22 @@ class Field extends BaseField
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldValue", mappedBy="field", cascade={"persist", "remove"})
      */
     protected $fieldValues;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Acb\Layout", inversedBy="children")
+     * @ORM\JoinColumn(name="layout_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $layout;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Acb\Layout", mappedBy="parent", cascade={"persist", "remove"})
+     */
+    protected $children;
 }
 ```
 
 ```php
+<?php
 // src/AppBundle/Entity/Content.php
 
 namespace AppBundle\Entity;
@@ -136,23 +150,11 @@ class Content extends BaseContent
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldValue", mappedBy="content", cascade={"persist", "remove"})
      */
     protected $fieldValues;
-
-    /**
-     * Get content type label
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if ($this->getContentType()) {
-            return $this->getContentType()->getName();
-        }
-        return '';
-    }
 }
 ```
 
 ```php
+<?php
 // src/AppBundle/Entity/FieldValue.php
 
 namespace AppBundle\Entity;
@@ -190,8 +192,119 @@ class FieldValue extends BaseFieldValue
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
     protected $field;
-}
 
+    /**
+     * @var FieldGroupValue
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\FieldGroupValue", inversedBy="children")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $group;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldGroupValue", mappedBy="parent", cascade={"persist", "remove"})
+     */
+    protected $children;
+}
+```
+
+```php
+<?php
+// src/AppBundle/Entity/FieldGroupValue.php
+
+namespace AppBundle\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Sherlockode\AdvancedContentBundle\Model\FieldGroupValue as BaseFieldGroupValue;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
+use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="field_group_value")
+ */
+class FieldGroupValue extends BaseFieldGroupValue
+{
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var FieldValueInterface
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\FieldValue", inversedBy="children")
+     */
+    protected $parent;
+
+    /**
+     * @var FieldValueInterface[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldValue", mappedBy="group", cascade={"persist", "remove"})
+     */
+    protected $children;
+
+    /**
+     * @var LayoutInterface
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Layout")
+     */
+    protected $layout;
+}
+```
+
+```php
+<?php
+// src/AppBundle/Entity/Layout.php
+
+namespace AppBundle\Entity\Acb;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Sherlockode\AdvancedContentBundle\Model\Layout as BaseLayout;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="layout")
+ */
+class Layout extends BaseLayout
+{
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", nullable=true)
+     */
+    protected $name;
+
+    /**
+     * @var FieldInterface
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Acb\Field", inversedBy="children")
+     */
+    protected $parent;
+
+    /**
+     * @var FieldInterface[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Acb\Field", mappedBy="layout", cascade={"persist", "remove"})
+     */
+    protected $children;
+}
 ```
 
 ### Entity Mapping
@@ -212,6 +325,8 @@ sherlockode_advanced_content:
         field: AppBundle\Entity\Field
         content: AppBundle\Entity\Content
         field_value: AppBundle\Entity\FieldValue
+        field_group_value: AppBundle\Entity\FieldGroupValue
+        layout: AppBundle\Entity\Layout
 ```
 
 
@@ -252,3 +367,13 @@ The bundle provides a twig function that will render the html of a field for a g
 ```
 
 Note that each FieldType has a `render()` method that will output the html for a given field.
+
+
+For fields with hierarchy, like the Repeater, you will need to build a loop that will browse each
+group of FieldValue and allow you to render each field of this group.
+```twig
+{% for group in acb_groups(yourContent, 'my-repeater-field') %}
+    {{ acb_group_field(group, 'first-field') }}
+    {{ acb_group_field(group, 'other-field') }}
+{% endfor %}
+```
