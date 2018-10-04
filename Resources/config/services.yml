@@ -51,7 +51,18 @@ services:
             - '@sherlockode_advanced_content.configuration_manager'
         tags:
             - {name: form.type }
-
+    sherlockode_advanced_content.form.layout:
+        class: Sherlockode\AdvancedContentBundle\Form\Type\LayoutType
+        arguments:
+            - '@sherlockode_advanced_content.configuration_manager'
+        tags:
+            - {name: form.type }
+    sherlockode_advanced_content.form.layout_field_collection:
+        class: Sherlockode\AdvancedContentBundle\Form\Type\LayoutFieldCollectionType
+        arguments:
+            - '@sherlockode_advanced_content.field_manager'
+        tags:
+            - {name: form.type }
     sherlockode_advanced_content.content_extension:
         class: Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension
         arguments:

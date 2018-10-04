@@ -15,6 +15,9 @@ content_type:
             sort_order: Ordre
             hint: Informations
             options: Options
+        layout:
+            name: Nom du groupe
+            children: Champs
 content:
     label: Contenu avancé
     id: Identifiant

@@ -19,13 +19,19 @@
 {% endblock %}
 
 {% block acb_simple_collection %}
+    {% set button_label = 'content_type.form.add_field' %}
     {% if prototype is defined %}
         {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
     {% endif %}
     {{- block('form_widget') -}}
-    <button type="button" class="btn btn-success acb-add-collection-item" data-list="#{{ form.vars.id }}">{{ 'content_type.form.add_field'|trans }}</button>
+    {% if allow_add %}
+    <button type="button" class="btn btn-success acb-add-collection-item" data-list="#{{ form.vars.id }}">{{ button_label|trans }}</button>
+    {% endif %}
 {% endblock  %}
 {% block acb_repeater_widget %}
+    {{ block('acb_simple_collection') }}
+{% endblock %}
+{% block acb_layout_field_collection_widget %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 

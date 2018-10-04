@@ -53,14 +53,14 @@ abstract class Field implements FieldInterface
     protected $hint;
 
     /**
-     * @var FieldInterface
-     */
-    protected $parent;
-
-    /**
-     * @var FieldInterface[]|Collection
+     * @var LayoutInterface[]|Collection
      */
     protected $children;
+
+    /**
+     * @var LayoutInterface
+     */
+    protected $layout;
 
     public function __construct()
     {
@@ -243,27 +243,7 @@ abstract class Field implements FieldInterface
     }
 
     /**
-     * @return FieldInterface
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param FieldInterface|null $parent
-     *
-     * @return $this
-     */
-    public function setParent(FieldInterface $parent = null)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|FieldInterface[]
+     * @return Collection|LayoutInterface[]
      */
     public function getChildren()
     {
@@ -271,11 +251,11 @@ abstract class Field implements FieldInterface
     }
 
     /**
-     * @param FieldInterface $child
+     * @param LayoutInterface $child
      *
      * @return $this
      */
-    public function addChild(FieldInterface $child)
+    public function addChild(LayoutInterface $child)
     {
         $this->children->add($child);
         $child->setParent($this);
@@ -284,13 +264,33 @@ abstract class Field implements FieldInterface
     }
 
     /**
-     * @param FieldInterface $child
+     * @param LayoutInterface $child
      *
      * @return $this
      */
-    public function removeChild(FieldInterface $child)
+    public function removeChild(LayoutInterface $child)
     {
         $this->children->removeElement($child);
+
+        return $this;
+    }
+
+    /**
+     * @return LayoutInterface
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param LayoutInterface $layout
+     *
+     * @return $this
+     */
+    public function setLayout(LayoutInterface $layout = null)
+    {
+        $this->layout = $layout;
 
         return $this;
     }

@@ -51,9 +51,12 @@ class ContentManager
             return $field;
         }
 
-        while ($parent = $field->getParent()) {
-            if ($parent->getContentType() !== null && $parent->getContentType()->getId() == $contentType->getId()) {
-                return $field;
+        $parent = $field;
+        while ($parent && $parentLayout = $parent->getLayout()) {
+            if ($parent = $parentLayout->getParent()) {
+                if ($parent->getContentType() !== null && $parent->getContentType()->getId() == $contentType->getId()) {
+                    return $field;
+                }
             }
         }
 

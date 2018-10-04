@@ -15,6 +15,9 @@ content_type:
             sort_order: Sort order
             hint: Hint
             options: Options
+        layout:
+            name: Group name
+            children: Fields
 content:
     label: Content
     id: ID
