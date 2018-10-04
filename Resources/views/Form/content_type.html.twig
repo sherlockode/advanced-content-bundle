@@ -19,11 +19,17 @@
 {% endblock %}
 
 {% block acb_simple_collection %}
-    {% set button_label = 'content_type.form.add_field' %}
+    {% set button_label = button_label|default('content_type.form.add_field') %}
     {% if prototype is defined %}
         {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
     {% endif %}
-    {{- block('form_widget') -}}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        <div class="acb-collection-element">
+            {{- form_widget(child) -}}
+        </div>
+    {% endfor %}
+    </div>
     {% if allow_add %}
     <button type="button" class="btn btn-success acb-add-collection-item" data-list="#{{ form.vars.id }}">{{ button_label|trans }}</button>
     {% endif %}
@@ -40,10 +46,11 @@
 {% endblock %}
 
 {% block acb_field_widget %}
-<div class="acb-field panel panel-primary field-row" data-field-id="{{ form.vars.value ? form.vars.value.id : '' }}">
-    <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ form.vars.value ? form.vars.value.id : '' }}"
+    {% set fieldId = form.vars.value ? form.vars.value.id : '__random_id__' %}
+<div class="acb-field panel panel-primary field-row" data-field-id="{{ fieldId }}">
+    <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}"
          {% if form.parent is not empty and form.parent.vars.name == 'fields' %}data-parent="#acb-fields"{% endif %}>
-        <span class="panel-title">{{ form.vars.label }}</span>
+        <span class="panel-title">{{ form.vars.label ?? (form.vars.value.name ?? '') }}</span>
         <div class="pull-right actions">
             <span>
                 <i class="glyphicon glyphicon-pencil"></i> {{ 'content_type.form.field.edit'|trans }}
@@ -53,7 +60,7 @@
             </button>
         </div>
     </div>
-    <div class="panel-body collapse" id="field-{{ form.vars.value ? form.vars.value.id : '' }}">
+    <div class="panel-body collapse" id="field-{{ fieldId }}">
         <div class="form-group row">
             <div class="col-md-2">
                 {{ form_label(form.name) }}
