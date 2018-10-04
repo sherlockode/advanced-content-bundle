@@ -25,6 +25,9 @@ content:
     form:
         field_values: Fields
 field_type:
+    text:
+        min_length: Min. length
+        max_length: Max. length
     image:
         name: Image
         alt: Alt text
@@ -32,3 +35,5 @@ field_type:
         file: File
     repeater:
         field_list: Field list
+yes: Yes
+no: No
