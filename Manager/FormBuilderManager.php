@@ -7,7 +7,6 @@ use Sherlockode\AdvancedContentBundle\Form\Type\FieldsType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldValuesTransformer;
-use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -63,11 +62,11 @@ class FormBuilderManager
      * Build custom form for Content edit
      *
      * @param FormBuilderInterface $builder
-     * @param ContentInterface     $content
+     * @param ContentTypeInterface $contentType
      */
-    public function buildContentForm(FormBuilderInterface $builder, ContentInterface $content)
+    public function buildContentForm(FormBuilderInterface $builder, ContentTypeInterface $contentType)
     {
-        $fields = $this->contentTypeManager->getOrderedFields($content->getContentType());
+        $fields = $this->contentTypeManager->getOrderedFields($contentType);
 
         $fieldsBuilder = $builder->create('fieldValues', FormType::class, [
             'label' => 'content.form.field_values',
@@ -89,7 +88,7 @@ class FormBuilderManager
         }
         $builder->add($fieldsBuilder);
         $fieldsBuilder
-            ->addViewTransformer(new FieldValuesTransformer($this->contentManager, $content->getContentType()));
+            ->addViewTransformer(new FieldValuesTransformer($this->contentManager, $contentType));
     }
 
     /**
