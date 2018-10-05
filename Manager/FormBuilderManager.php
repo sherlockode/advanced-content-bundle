@@ -141,7 +141,6 @@ class FormBuilderManager
             foreach ($data as $key => $value) {
                 if (!$form->has($key)) {
                     $form->add($key, FieldType::class, [
-                        'field_type'   => $this->fieldManager->getFieldTypeByCode($value['type']),
                         'type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
                         'data_class'   => $this->configurationManager->getEntityClass('field'),
                     ]);
@@ -179,7 +178,6 @@ class FormBuilderManager
     {
         $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
         $formBuilder->add($field->getSlug() ?? $field->getName(), FieldType::class, [
-            'field_type'   => $this->fieldManager->getFieldType($field),
             'type_choices' => $fieldTypeChoices,
             'data_class'   => $this->configurationManager->getEntityClass('field'),
             'data'         => $field,

@@ -76,7 +76,20 @@ class FieldType extends AbstractType
         ;
 
         $builder->add('options', FormType::class, ['label' => 'content_type.form.field.options']);
-        $options['field_type']->addFieldOptions($builder);
+
+        $builder->addEventListener(
+            FormEvents::POST_SET_DATA,
+            function (FormEvent $event) use ($options) {
+                $form = $event->getForm();
+                $field = $event->getData();
+                if ($field) {
+                    $type = $field->getType();
+                } else {
+                    $type = reset($options['type_choices']);
+                }
+                $this->fieldManager->getFieldTypeByCode($type)->addFieldOptions($form);
+            }
+        );
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
@@ -116,7 +129,6 @@ class FieldType extends AbstractType
                 return null;
             },
         ]);
-        $resolver->setRequired(['field_type']);
     }
 
     public function getBlockPrefix()

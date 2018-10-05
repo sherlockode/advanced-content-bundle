@@ -27,7 +27,6 @@ class LayoutFieldCollectionType extends AbstractType
             'by_reference' => false,
             'entry_type' => FieldType::class,
             'entry_options' => [
-                'field_type' => $this->fieldManager->getFieldTypeByCode('text'),
                 'type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
             ]
         ]);
