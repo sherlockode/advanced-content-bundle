@@ -101,7 +101,7 @@
                 {{ form_widget(form.sortOrder, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
-        <div class="form-group row options-row">
+        <div class="form-group row">
             <div class="col-md-2">
                 {{ form_label(form.hint) }}
             </div>
@@ -110,7 +110,7 @@
             </div>
         </div>
         {% if form['children'] is defined %}
-        <div class="form-group row options-row">
+        <div class="form-group row">
             <div class="col-md-2">
                 {{ form_label(form['children']) }}
             </div>
@@ -119,7 +119,7 @@
             </div>
         </div>
         {% endif %}
-        <div class="form-group row">
+        <div class="form-group row options-row">
             <div class="col-md-2">
                 {{ form_label(form.options) }}
             </div>

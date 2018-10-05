@@ -129,7 +129,7 @@ jQuery(function ($) {
     function hideEmptyOptionsRow() {
         $('.options-row').each(function() {
             $(this).show();
-            if ($(this).find('.no-option').length > 0) {
+            if ($(this).find('.options > .no-option').length > 0) {
                 $(this).hide();
             }
         });
