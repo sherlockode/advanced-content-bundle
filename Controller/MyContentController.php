@@ -88,7 +88,7 @@ class MyContentController extends Controller
             'action' => $this->generateUrl('sherlockode_acb_content_edit', ['id' => $content->getId()])
         ]);
 
-        $this->formBuilderManager->buildContentForm($formBuilder, $content);
+        $this->formBuilderManager->buildContentForm($formBuilder, $content->getContentType());
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
@@ -163,7 +163,7 @@ class MyContentController extends Controller
             'action' => $this->generateUrl('sherlockode_acb_content_create_by_type', ['id' => $contentType->getId()])
         ]);
 
-        $this->formBuilderManager->buildContentForm($formBuilder, $content);
+        $this->formBuilderManager->buildContentForm($formBuilder, $contentType);
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
