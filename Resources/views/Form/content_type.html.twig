@@ -37,12 +37,41 @@
 {% block acb_repeater_widget %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
+{% block acb_flexible_widget %}
+    {% set button_label = 'content_type.form.add_layout' %}
+    {{ block('acb_simple_collection') }}
+{% endblock %}
 {% block acb_layout_field_collection_widget %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 
 {% block acb_group_collection_widget %}
     {{ block('acb_simple_collection') }}
+{% endblock %}
+
+{% block acb_flexible_group_collection_widget %}
+    {% set button_label = 'content_type.form.add_group' %}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+    {% if allow_add %}
+    <div class="acb-flexible-add-wrapper dropup"
+         data-content-type="{{ contentType.id }}"
+         data-id-prefix="{{ id }}"
+         data-name-prefix="{{ full_name }}"
+         data-url="{{ path('sherlockode_acb_content_flexible_form') }}"
+         data-list="#{{ form.vars.id }}">
+        <button type="button" class="btn btn-success dropdown-toggle acb-open-layout-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ button_label|trans }}
+        </button>
+        <ul class="dropdown-menu">
+            {% for layout in layouts %}
+            <li><a href="#" class="acb-add-flexible-item" data-layout="{{ layout.id }}">{{ layout.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block acb_field_widget %}

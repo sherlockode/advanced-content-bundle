@@ -45,3 +45,7 @@ sherlockode_acb_content_type_change_field_type:
 sherlockode_acb_content_type_list:
     path: /mycontent-type/list
     defaults: { _controller: sherlockode_advanced_content.controller.content_type:listAction }
+
+sherlockode_acb_content_flexible_form:
+    path: /mycontent/flexible
+    defaults: { _controller: sherlockode_advanced_content.controller.content:flexibleFormAction }

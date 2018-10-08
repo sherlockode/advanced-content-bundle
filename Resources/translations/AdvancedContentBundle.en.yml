@@ -4,6 +4,7 @@ content_type:
     form:
         fields: Fields
         add_field: Add field
+        add_layout: Add group
         field:
             add: Add
             edit: Edit
@@ -35,5 +36,7 @@ field_type:
         file: File
     repeater:
         field_list: Field list
+    flexible:
+        layout_list: Group list
 yes: Yes
 no: No

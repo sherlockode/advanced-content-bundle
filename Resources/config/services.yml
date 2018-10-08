@@ -51,6 +51,13 @@ services:
             - '@sherlockode_advanced_content.configuration_manager'
         tags:
             - {name: form.type }
+    sherlockode_advanced_content.form.flexible_group:
+        class: Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType
+        arguments:
+            - '@sherlockode_advanced_content.configuration_manager'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - {name: form.type }
     sherlockode_advanced_content.form.layout:
         class: Sherlockode\AdvancedContentBundle\Form\Type\LayoutType
         arguments:
