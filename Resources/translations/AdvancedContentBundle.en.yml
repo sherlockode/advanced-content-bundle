@@ -25,6 +25,9 @@ content:
     content_type: Content type
     form:
         field_values: Fields
+        add_group: Add group
+        field:
+            remove: Remove
 field_type:
     text:
         min_length: Min. length

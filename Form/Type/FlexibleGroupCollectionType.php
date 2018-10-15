@@ -28,6 +28,7 @@ class FlexibleGroupCollectionType extends AbstractType
             'label' => false,
             'entry_type' => FlexibleGroupType::class,
             'allow_add' => true,
+            'allow_delete' => true,
             'by_reference' => false,
             'entry_options' => function (Options $options) {
                 return ['contentType' => $options['contentType']];
