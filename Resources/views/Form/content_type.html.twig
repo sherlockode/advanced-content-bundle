@@ -50,7 +50,7 @@
 {% endblock %}
 
 {% block acb_flexible_group_collection_widget %}
-    {% set button_label = 'content_type.form.add_group' %}
+    {% set button_label = 'content.form.add_group' %}
     {% if prototype is defined %}
         {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
     {% endif %}
@@ -72,6 +72,14 @@
         </ul>
     </div>
     {% endif %}
+{% endblock %}
+{% block acb_flexible_group_widget %}
+<div class="acb-group">
+    {% for child in form %}
+        {{ form_row(child) }}
+    {% endfor %}
+    <button class="acb-remove-group btn btn-danger" type="button">{{ 'content.form.field.remove'|trans }}</button>
+</div>
 {% endblock %}
 
 {% block acb_field_widget %}

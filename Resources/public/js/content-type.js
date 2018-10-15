@@ -118,6 +118,11 @@ jQuery(function ($) {
         });
     });
 
+    $('body').on('click', '.acb-remove-group', function (e) {
+        e.preventDefault();
+        $(this).closest('.acb-group').remove();
+    });
+
     function updateChoiceList() {
         $('.choice-list').find('li').each(function() {
             if ($(this).find('.delete-choice').length === 0) {

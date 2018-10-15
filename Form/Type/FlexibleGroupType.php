@@ -32,7 +32,10 @@ class FlexibleGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $layoutClass = $this->configurationManager->getEntityClass('layout');
-        $builder->add('layout', EntityType::class, ['class' => $layoutClass, 'choice_label' => 'name']);
+        $builder->add('layout', EntityType::class, [
+            'class' => $layoutClass,
+            'choice_label' => 'name',
+        ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
             $form = $event->getForm();
@@ -42,7 +45,7 @@ class FlexibleGroupType extends AbstractType
             }
             $form->add('children', RepeaterFieldType::class, [
                 'label' => false,
-                'fields' => $data->getLayout()->getChildren(),
+                'fields' => $data->getLayout() ? $data->getLayout()->getChildren() : [],
                 'contentType' => $options['contentType'],
             ]);
         });
@@ -70,8 +73,13 @@ class FlexibleGroupType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => $this->configurationManager->getEntityClass('field_group_value'),
-            'label' => 'tutu'
+            'label' => false,
         ]);
         $resolver->setRequired(['contentType']);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'acb_flexible_group';
     }
 }
