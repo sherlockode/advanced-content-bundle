@@ -49,10 +49,11 @@ class Wysiwyg extends AbstractFieldType
     {
         $builder->get('options')
             ->add('toolbar', ChoiceType::class, [
+                'label' => 'field_type.wysiwyg.toolbar.label',
                 'choices' => [
-                    'Basic' => 'basic',
-                    'Standard' => 'standard',
-                    'Full' => 'full'
+                    'field_type.wysiwyg.toolbar.basic' => 'basic',
+                    'field_type.wysiwyg.toolbar.standard' => 'standard',
+                    'field_type.wysiwyg.toolbar.full' => 'full'
                 ]
             ])
         ;

@@ -32,6 +32,12 @@ field_type:
     text:
         min_length: Longueur min.
         max_length: Longueur max.
+    wysiwyg:
+        toolbar:
+            label: Barre d'outils
+            basic: Basique
+            standard: Standard
+            full: Complète
     image:
         name: Image
         alt: Texte alternatif
