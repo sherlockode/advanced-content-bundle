@@ -1,4 +1,9 @@
-# advanced-content-bundle
+# Sherlockode AdvancedContentBundle
+
+This bundle provides advanced CMS features inspired by the wordpress ACF plugin.
+
+Users are able to define content types as a list of fields.
+These models are used by contributors to create actual contents based on the previously defined structure.
 
 Installation
 ------------
@@ -308,6 +313,8 @@ class Layout extends BaseLayout
 ```
 
 ### Entity Mapping
+
+Make the bundle aware of your entities by adding a few lines to your configuration:
 
 ```yaml
 # app/config/config.yml
