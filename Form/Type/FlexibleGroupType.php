@@ -35,6 +35,7 @@ class FlexibleGroupType extends AbstractType
         $builder->add('layout', EntityType::class, [
             'class' => $layoutClass,
             'choice_label' => 'name',
+            'choices' => $options['layouts'],
         ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
@@ -75,7 +76,7 @@ class FlexibleGroupType extends AbstractType
             'data_class' => $this->configurationManager->getEntityClass('field_group_value'),
             'label' => false,
         ]);
-        $resolver->setRequired(['contentType']);
+        $resolver->setRequired(['contentType', 'layouts']);
     }
 
     public function getBlockPrefix()

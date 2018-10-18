@@ -266,6 +266,7 @@ class MyContentController extends Controller
         $formBuilder = $this->get('form.factory')->createNamedBuilder($name, FlexibleGroupType::class, $group, [
             'contentType' => $contentType,
             'csrf_protection' => false,
+            'layouts' => [$layout],
         ]);
         $form = $formBuilder->getForm();
 
