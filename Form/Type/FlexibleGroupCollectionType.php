@@ -31,7 +31,7 @@ class FlexibleGroupCollectionType extends AbstractType
             'allow_delete' => true,
             'by_reference' => false,
             'entry_options' => function (Options $options) {
-                return ['contentType' => $options['contentType']];
+                return ['contentType' => $options['contentType'], 'layouts' => $options['layouts']];
             }
         ]);
         $resolver->setRequired(['contentType', 'layouts']);
