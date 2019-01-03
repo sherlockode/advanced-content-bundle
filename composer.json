@@ -11,7 +11,10 @@
     ],
     "require": {
         "php": "^5.6 || ^7.1",
-        "symfony/framework-bundle": "^3.0"
+        "symfony/form": "^3.0 || ^4.0",
+        "symfony/framework-bundle": "^3.0 || ^4.0",
+        "symfony/twig-bundle": "^3.0 || ^4.0",
+        "twig/twig": "^1.0 || ^2.0"
     },
     "suggest": {
         "friendsofsymfony/ckeditor-bundle": "Required for the WYSIWYG field type",
