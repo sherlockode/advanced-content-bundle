@@ -111,13 +111,13 @@ class Field extends BaseField
     protected $fieldValues;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Acb\Layout", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Layout", inversedBy="children")
      * @ORM\JoinColumn(name="layout_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $layout;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Acb\Layout", mappedBy="parent", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Layout", mappedBy="parent", cascade={"persist", "remove"})
      */
     protected $children;
 }
@@ -146,7 +146,7 @@ class Content extends BaseContent
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ContentType")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ContentType", inversedBy="contents")
      * @ORM\JoinColumn(name="content_type_id", referencedColumnName="id")
      */
     protected $contentType;
@@ -267,7 +267,7 @@ class FieldGroupValue extends BaseFieldGroupValue
 <?php
 // src/AppBundle/Entity/Layout.php
 
-namespace AppBundle\Entity\Acb;
+namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -299,14 +299,14 @@ class Layout extends BaseLayout
     /**
      * @var FieldInterface
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Acb\Field", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Field", inversedBy="children")
      */
     protected $parent;
 
     /**
      * @var FieldInterface[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Acb\Field", mappedBy="layout", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Field", mappedBy="layout", cascade={"persist", "remove"})
      */
     protected $children;
 }
@@ -325,6 +325,8 @@ doctrine:
             SherlockodeAdvancedContentBundle\Model\ContentInterface: AppBundle\Entity\Content
             SherlockodeAdvancedContentBundle\Model\FieldInterface: AppBundle\Entity\Field
             SherlockodeAdvancedContentBundle\Model\FieldValueInterface: AppBundle\Entity\FieldValue
+            SherlockodeAdvancedContentBundle\Model\FieldGroupValueInterface: AppBundle\Entity\FieldGroupValue
+            SherlockodeAdvancedContentBundle\Model\LayoutInterface: AppBundle\Entity\Layout
 
 sherlockode_advanced_content:
     entity_class:
