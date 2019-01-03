@@ -1,6 +1,0 @@
-Sherlockode\AdvancedContentBundle\Model\FieldValue:
-  type: mappedSuperclass
-  fields:
-    value:
-      type: text
-      nullable: true

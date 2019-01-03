@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sherlockode_advanced_content.form_builder_manager" class="Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager">
+            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentManager">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_type_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.configuration_manager" class="Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager" />
+        <service id="sherlockode_advanced_content.field_manager" class="Sherlockode\AdvancedContentBundle\Manager\FieldManager" />
+        <service id="sherlockode_advanced_content.upload_manager" class="Sherlockode\AdvancedContentBundle\Manager\UploadManager">
+            <argument/>
+            <argument/>
+        </service>
+        <service id="sherlockode_advanced_content.form.field" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldType">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.repeater_field" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterFieldType">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.repeater_group" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.flexible_group" class="Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.layout" class="Sherlockode\AdvancedContentBundle\Form\Type\LayoutType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.layout_field_collection" class="Sherlockode\AdvancedContentBundle\Form\Type\LayoutFieldCollectionType">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_extension" class="Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <tag name="twig.extension"/>
+        </service>
+        <service id="sherlockode_advanced_content.field_value_listener" class="Sherlockode\AdvancedContentBundle\EventListener\FieldValueListener">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sherlockode_advanced_content.controller.content" class="Sherlockode\AdvancedContentBundle\Controller\MyContentController" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.form_builder_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.controller.content_type" class="Sherlockode\AdvancedContentBundle\Controller\MyContentTypeController" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="form.factory"/>
+            <argument type="service" id="sherlockode_advanced_content.form_builder_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+    </services>
+</container>
