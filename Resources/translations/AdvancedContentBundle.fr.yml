@@ -30,6 +30,7 @@ content:
             remove: Supprimer
 field_type:
     text:
+        label: Texte
         min_length: Longueur min.
         max_length: Longueur max.
     wysiwyg:
@@ -38,17 +39,50 @@ field_type:
             basic: Basique
             standard: Standard
             full: Complète
+        label: Editeur
     image:
         name: Image
         alt: Texte alternatif
         delete: Supprimer
         file: Fichier
+        label: Image
     repeater:
         field_list: Liste des champs
+        label: Répéteur
     flexible:
         layout_list: Liste des groupes
+        label: Flexible
+    textarea:
+        label: Zone de texte
+    boolean:
+        label: Oui/Non
+    checkbox:
+        label: Case à cocher
+    email:
+        label: Email
+    iframe:
+        label: Iframe
+    link:
+        label: Lien
+    message:
+        label: Message
+    number:
+        label: Nombre
+    password:
+        label: Mot de passe
+    phone:
+        label: Téléphone
+    radio:
+        label: Radio bouton
+    select:
+        label: Liste déroulante
     color:
         label: Couleur
+    group:
+        other: Autres
+        simple: Simple
+        choice: Choix
+        layout: Agencement
     errors:
         empty_collection: Veuillez ajouter au moins une option
         empty_collection_field: Veuillez ajouter au moins une option pour le champ "%fieldName%"

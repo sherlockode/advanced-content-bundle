@@ -55,13 +55,6 @@ interface FieldTypeInterface
     public function getCode();
 
     /**
-     * Get field's label
-     *
-     * @return string
-     */
-    public function getLabel();
-
-    /**
      * Render field value
      *
      * @param FieldValueInterface $fieldValue
@@ -102,4 +95,9 @@ interface FieldTypeInterface
      * @return void
      */
     public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet);
+
+    /**
+     * @return string
+     */
+    public function getFieldGroup();
 }
