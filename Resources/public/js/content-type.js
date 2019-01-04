@@ -4,6 +4,8 @@ jQuery(function ($) {
     updateChoiceList();
     hideEmptyOptionsRow();
 
+    console.log('Happy Birthday Julien !');
+
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
