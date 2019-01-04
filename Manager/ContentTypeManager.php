@@ -103,15 +103,13 @@ class ContentTypeManager
             }
 
             $this->om->remove($field);
-            // When persisting new field with same name, slug is incremented instead of remaining the same
-            // Flushing avoids this behavior
-            $this->om->flush();
 
             $fieldClass = $this->configurationManager->getEntityClass('field');
             $newField = new $fieldClass;
             $newField->setType($field->getType());
             $newField->setContentType($field->getContentType());
             $newField->setName($field->getName());
+            $newField->setSlug($field->getSlug());
             $newField->setRequired($field->isRequired());
             $newField->setSortOrder($field->getSortOrder());
             $newField->setOptions($field->getOptions());
