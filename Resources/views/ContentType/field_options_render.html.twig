@@ -1,3 +1,4 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
 {% for option in options %}
     <div class="form-group row">
         <div class="col-md-2">
@@ -18,6 +19,7 @@
                     <i class="glyphicon glyphicon-plus-sign"></i>
                     Add another choice
                 </a>
+                <span class="acb-collection-error" style="display: none;">{{ 'field_type.errors.empty_collection'|trans }}</span>
             {% else %}
                 {{ form_widget(option, {'attr': {'class': 'form-control'}}) }}
             {% endif %}

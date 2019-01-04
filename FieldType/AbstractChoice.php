@@ -12,8 +12,10 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 
-abstract class AbstractChoice extends AbstractFieldType
+abstract class AbstractChoice extends AbstractFieldType implements FieldValidationInterface
 {
     /**
      * @var bool
@@ -150,5 +152,24 @@ abstract class AbstractChoice extends AbstractFieldType
     public function getFieldOptionNames()
     {
         return ['choices'];
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function validate($data)
+    {
+        if ($data['required']) {
+            if (!isset($data['options']['choices']) ||
+                !is_array($data['options']['choices']) ||
+                count($data['options']['choices']) == 0
+            ) {
+                return ['empty_collection_field'];
+            }
+        }
+
+        return [];
     }
 }
