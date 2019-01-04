@@ -252,7 +252,7 @@ class MyContentTypeController extends Controller
 
         $slug = $field->getSlug();
 
-        $formBuilder = $this->createFormBuilder();
+        $formBuilder = $this->createFormBuilder(null, ['translation_domain' => 'AdvancedContentBundle']);
         $formBuilder
             ->add('fields', FormType::class);
 
