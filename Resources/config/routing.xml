@@ -33,7 +33,7 @@
     <route id="sherlockode_acb_content_type_add_field" path="/mycontent-type/add-field/{contentTypeId}">
         <default key="_controller">sherlockode_advanced_content.controller.content_type:addFieldAction</default>
     </route>
-    <route id="sherlockode_acb_content_type_change_field_type" path="/mycontent-type/change-field-type/{contentTypeId}">
+    <route id="sherlockode_acb_content_type_change_field_type" path="/mycontent-type/change-field-type">
         <default key="_controller">sherlockode_advanced_content.controller.content_type:changeFieldTypeAction</default>
     </route>
     <route id="sherlockode_acb_content_type_list" path="/mycontent-type/list">

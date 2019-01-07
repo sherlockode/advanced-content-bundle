@@ -105,7 +105,7 @@ class MyContentTypeController extends Controller
         $formBuilder = $this->createFormBuilder($contentType, [
             'action' => $this->generateUrl('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]),
             'attr' => [
-                'data-change-type-url' => $this->generateUrl('sherlockode_acb_content_type_change_field_type', ['contentTypeId' => $contentType->getId()]),
+                'data-change-type-url' => $this->generateUrl('sherlockode_acb_content_type_change_field_type'),
                 'class' => 'edit-content-type'
             ],
         ]);
@@ -231,26 +231,7 @@ class MyContentTypeController extends Controller
         $type = $request->get('type');
         $fieldType = $this->fieldManager->getFieldTypeByCode($type);
 
-        $contentTypeId = $request->get('contentTypeId');
-        $contentType = $this->contentTypeManager->getContentTypeById($contentTypeId);
-        $fieldId = $request->get('fieldId');
-
-        if ($contentType === null) {
-            throw $this->createNotFoundException('Unable to find content type');
-        }
-
-        $field = null;
-        foreach ($contentType->getFields() as $contentTypeField) {
-            if ($contentTypeField->getId() == $fieldId) {
-                $field = $contentTypeField;
-            }
-        }
-
-        if ($field === null) {
-            throw $this->createNotFoundException('Unable to find field');
-        }
-
-        $slug = $field->getSlug();
+        $slug = $request->get('fieldSlug');
 
         $formBuilder = $this->createFormBuilder(null, ['translation_domain' => 'AdvancedContentBundle']);
         $formBuilder
