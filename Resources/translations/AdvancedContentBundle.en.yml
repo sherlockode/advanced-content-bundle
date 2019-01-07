@@ -47,5 +47,7 @@ field_type:
         field_list: Field list
     flexible:
         layout_list: Group list
+    color:
+        label: Color
 yes: Yes
 no: No
