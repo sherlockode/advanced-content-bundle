@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sherlockode_acb.field_type.text" class="Sherlockode\AdvancedContentBundle\FieldType\Text">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.textarea" class="Sherlockode\AdvancedContentBundle\FieldType\TextArea">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.wysiwyg" class="Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.number" class="Sherlockode\AdvancedContentBundle\FieldType\Number">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.email" class="Sherlockode\AdvancedContentBundle\FieldType\Email">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.password" class="Sherlockode\AdvancedContentBundle\FieldType\Password">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.phone" class="Sherlockode\AdvancedContentBundle\FieldType\Phone">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.link" class="Sherlockode\AdvancedContentBundle\FieldType\Link">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.select" class="Sherlockode\AdvancedContentBundle\FieldType\Select">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.checkbox" class="Sherlockode\AdvancedContentBundle\FieldType\Checkbox">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.radio" class="Sherlockode\AdvancedContentBundle\FieldType\Radio">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.boolean" class="Sherlockode\AdvancedContentBundle\FieldType\Boolean">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.iframe" class="Sherlockode\AdvancedContentBundle\FieldType\Iframe">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.message" class="Sherlockode\AdvancedContentBundle\FieldType\Message">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+        <service id="sherlockode_acb.field_type.image" class="Sherlockode\AdvancedContentBundle\FieldType\Image">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+            <argument type="service" id="assets.packages"/>
+        </service>
+        <service id="sherlockode_acb.field_type.flexible" class="Sherlockode\AdvancedContentBundle\FieldType\Flexible">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+        <service id="sherlockode_acb.field_type.repeater" class="Sherlockode\AdvancedContentBundle\FieldType\Repeater">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
+    </services>
+</container>

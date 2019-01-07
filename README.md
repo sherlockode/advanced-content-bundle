@@ -290,13 +290,6 @@ class Layout extends BaseLayout
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", nullable=true)
-     */
-    protected $name;
-
-    /**
      * @var FieldInterface
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Field", inversedBy="children")
@@ -362,7 +355,7 @@ sherlockode_advanced_content:
 ```yaml
 # app/config/routing.yml
 sherlockode_advanced_content:
-    resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.yml'
+    resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.xml'
 ```
 
 
