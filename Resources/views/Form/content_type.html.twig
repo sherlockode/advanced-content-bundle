@@ -50,7 +50,8 @@
                 {{ form_label(form.slug) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.slug, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.slug, {'attr': {'class': 'form-control acb-slug'}}) }}
+                <span class="acb-slug-error acb-error" style="display: none;">{{ 'field_type.errors.duplicated_slug'|trans }}</span>
             </div>
         </div>
         <div class="form-group row">
