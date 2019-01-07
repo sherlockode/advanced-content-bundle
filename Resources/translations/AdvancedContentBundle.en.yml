@@ -78,6 +78,10 @@ field_type:
         label: Select
     color:
         label: Color
+    date:
+        label: Date
+        time:
+            label: Include time ?
     group:
         other: Others
         simple: Simple

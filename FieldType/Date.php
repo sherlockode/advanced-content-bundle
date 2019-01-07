@@ -1,0 +1,104 @@
+<?php
+
+namespace Sherlockode\AdvancedContentBundle\FieldType;
+
+use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToDateTimeTransformer;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
+
+class Date extends AbstractFieldType
+{
+    /**
+     * @return string
+     */
+    public function getFormFieldType()
+    {
+        return DateTimeType::class;
+    }
+
+    /**
+     * Add field's options
+     *
+     * @param Form|FormBuilderInterface $builder
+     *
+     * @return void
+     */
+    public function addFieldOptions($builder)
+    {
+        $builder->get('options')
+            ->add('time', ChoiceType::class, [
+                'required' => false,
+                'label' => 'field_type.date.time.label',
+                'choices' => [
+                    'yes' => 1,
+                    'no' => 0,
+                ],
+                'choice_translation_domain' => 'AdvancedContentBundle',
+            ])
+        ;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFieldOptionNames()
+    {
+        return ['time'];
+    }
+
+    /**
+     * Get options to apply on field value
+     *
+     * @param FieldInterface $field
+     *
+     * @return array
+     */
+    public function getFormFieldValueOptions(FieldInterface $field)
+    {
+        $fieldOptions = $this->getFieldOptions($field);
+
+        if (!isset($fieldOptions['time'])) {
+            throw new \RuntimeException("Missing mandatory option time.");
+        }
+
+        $class = 'acb-date';
+        $format = 'dd/MM/yyyy';
+        if ($fieldOptions['time']) {
+            $format .= ' hh:mm:ss';
+            $class .= ' datetimepicker';
+        }
+
+        $formFieldOptions = [];
+        $formFieldOptions['attr'] = ['class' => $class];
+        $formFieldOptions['widget'] = 'single_text';
+        $formFieldOptions['format'] = $format;
+
+        return $formFieldOptions;
+    }
+
+    /**
+     * Get model transformer for value field
+     *
+     * @param FieldInterface $field
+     *
+     * @return DataTransformerInterface
+     */
+    public function getValueModelTransformer(FieldInterface $field)
+    {
+        return new StringToDateTimeTransformer();
+    }
+
+    /**
+     * Get field's code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return 'date';
+    }
+}
