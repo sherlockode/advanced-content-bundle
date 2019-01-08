@@ -55,5 +55,8 @@
         <service id="sherlockode_acb.field_type.repeater" class="Sherlockode\AdvancedContentBundle\FieldType\Repeater">
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
+        <service id="sherlockode_acb.field_type.color" class="Sherlockode\AdvancedContentBundle\FieldType\Color">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
     </services>
 </container>
