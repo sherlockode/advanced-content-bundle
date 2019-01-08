@@ -74,4 +74,12 @@ class Repeater extends AbstractFieldType
     {
         return '';
     }
+
+    /**
+     * @return string
+     */
+    public function getFieldGroup()
+    {
+        return 'layout';
+    }
 }

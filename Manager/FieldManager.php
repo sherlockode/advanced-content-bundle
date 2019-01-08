@@ -37,7 +37,11 @@ class FieldManager
     {
         $choices = [];
         foreach ($this->fieldTypes as $code => $fieldType) {
-            $choices[$fieldType->getLabel()] = $code;
+            $fieldGroup = 'field_type.group.' . $fieldType->getFieldGroup();
+            if (!isset($choices[$fieldGroup])) {
+                $choices[$fieldGroup] = [];
+            }
+            $choices[$fieldGroup]['field_type.' . $fieldType->getCode() . '.label'] = $code;
         }
 
         return $choices;

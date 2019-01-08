@@ -12,8 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormInterface;
 
 abstract class AbstractChoice extends AbstractFieldType implements FieldValidationInterface
 {
@@ -152,6 +150,14 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
     public function getFieldOptionNames()
     {
         return ['choices'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFieldGroup()
+    {
+        return 'choice';
     }
 
     /**

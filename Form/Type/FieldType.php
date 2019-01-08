@@ -58,7 +58,7 @@ class FieldType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'label' => 'content_type.form.field.type',
                 'choices' => $options['type_choices'],
-                'choice_translation_domain' => false,
+                'choice_translation_domain' => 'AdvancedContentBundle',
                 'required' => true,
             ])
             ->add('slug', TextType::class, [
@@ -95,7 +95,8 @@ class FieldType extends AbstractType
                 if ($field) {
                     $type = $field->getType();
                 } else {
-                    $type = reset($options['type_choices']);
+                    $groupedTypes = reset($options['type_choices']);
+                    $type = reset($groupedTypes);
                 }
                 $this->fieldManager->getFieldTypeByCode($type)->addFieldOptions($form);
             }

@@ -60,4 +60,12 @@ class Flexible extends AbstractFieldType
     {
         return 'flexible';
     }
+
+    /**
+     * @return string
+     */
+    public function getFieldGroup()
+    {
+        return 'layout';
+    }
 }

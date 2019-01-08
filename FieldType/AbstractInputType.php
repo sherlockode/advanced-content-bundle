@@ -56,4 +56,12 @@ abstract class AbstractInputType extends AbstractFieldType
     {
         return ['minLength', 'maxLength'];
     }
+
+    /**
+     * @return string
+     */
+    public function getFieldGroup()
+    {
+        return 'simple';
+    }
 }

@@ -97,16 +97,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Get field's label
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return ucfirst($this->getCode());
-    }
-
-    /**
      * Render field value
      *
      * @param FieldValueInterface $fieldValue
@@ -156,6 +146,14 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet)
     {
+    }
+
+    /**
+     * @return string
+     */
+    public function getFieldGroup()
+    {
+        return 'other';
     }
 
     /**
