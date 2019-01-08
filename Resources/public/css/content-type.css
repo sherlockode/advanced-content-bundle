@@ -26,3 +26,10 @@
     border: 1px solid #ddd;
     padding: 5px;
 }
+.acb-collection-error {
+    color: #f00;
+    display: block;
+}
+.acb-field.field-error .edit-field {
+    box-shadow: 0 0 10px #f00;
+}

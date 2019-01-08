@@ -24,6 +24,7 @@
         <service id="sherlockode_advanced_content.form.field" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldType">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.repeater_field" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterFieldType">

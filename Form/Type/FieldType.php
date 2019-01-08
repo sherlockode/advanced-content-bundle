@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\FieldType\FieldValidationInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
@@ -12,10 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class FieldType extends AbstractType
 {
@@ -30,13 +33,19 @@ class FieldType extends AbstractType
     private $configurationManager;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
      */
-    public function __construct(FieldManager $fieldManager, ConfigurationManager $configurationManager)
+    public function __construct(FieldManager $fieldManager, ConfigurationManager $configurationManager, TranslatorInterface $translator)
     {
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
+        $this->translator = $translator;
     }
 
     /**
@@ -96,10 +105,19 @@ class FieldType extends AbstractType
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
-                $child = $event->getData();
+                $data = $event->getData();
 
-                if (isset($child['type'])) {
-                    $this->fieldManager->getFieldTypeByCode($child['type'])->addFieldOptions($form);
+                if (isset($data['type'])) {
+                    $fieldType = $this->fieldManager->getFieldTypeByCode($data['type']);
+                    $fieldType->addFieldOptions($form);
+                    if ($fieldType instanceof FieldValidationInterface) {
+                        $errors = $fieldType->validate($data);
+                        foreach ($errors as $error) {
+                            $form->addError(new FormError(
+                                $this->translator->trans('field_type.errors.' . $error, ['%fieldName%' => $data['name']], 'AdvancedContentBundle')
+                            ));
+                        }
+                    }
                 }
             }
         );

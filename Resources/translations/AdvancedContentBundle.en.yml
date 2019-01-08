@@ -49,5 +49,8 @@ field_type:
         layout_list: Group list
     color:
         label: Color
+    errors:
+        empty_collection: Please add at least one option
+        empty_collection_field: Please add at least one option for the field "%fieldName%"
 yes: Yes
 no: No

@@ -148,6 +148,25 @@ jQuery(function ($) {
         e.preventDefault();
         $(this).closest('.choice-row').remove();
     });
+
+    $('body').on('submit', '.edit-content-type', function(e) {
+        var validateChoiceLists = true;
+        $('.choice-list').each(function() {
+            var fieldArea = $(this).closest('.acb-field');
+            var isRequired = fieldArea.find('.acb-is-required').val();
+            fieldArea.find('.acb-collection-error').hide();
+            fieldArea.removeClass('field-error');
+            if (isRequired > 0 && $(this).children().length === 0) {
+                validateChoiceLists = false;
+                fieldArea.find('.acb-collection-error').show();
+                fieldArea.addClass('field-error');
+            }
+        });
+        if (!validateChoiceLists) {
+            e.preventDefault();
+        }
+    });
+
     function addChoiceRemoveLink(choiceLi) {
         choiceLi.append($('.field-options-remove-link').html());
     }
