@@ -66,9 +66,9 @@ jQuery(function ($) {
 
     $('.acb-fields').on('change', '.field-type', function (e) {
         var fieldRow = $(this).closest('.field-row');
-        var fieldId = fieldRow.data('field-id');
+        var fieldSlug = fieldRow.data('field-slug');
         var data = {
-            fieldId: fieldId,
+            fieldSlug: fieldSlug,
             type: $(this).val()
         };
         $.ajax({
