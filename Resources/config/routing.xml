@@ -6,7 +6,7 @@
     <route id="sherlockode_acb_content_create_by_type" path="/mycontent/create/{id}">
         <default key="_controller">sherlockode_advanced_content.controller.content:createByTypeAction</default>
     </route>
-    <route id="sherlockode_acb_content_list" path="/mycontent/list/">
+    <route id="sherlockode_acb_content_list" path="/mycontent/list">
         <default key="_controller">sherlockode_advanced_content.controller.content:listAction</default>
     </route>
     <route id="sherlockode_acb_content_edit" path="/mycontent/edit/{id}">
