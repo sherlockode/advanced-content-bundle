@@ -176,8 +176,18 @@ class FormBuilderManager
      */
     public function buildContentTypeFieldForm(FormBuilderInterface $formBuilder, FieldInterface $field)
     {
+        $this->buildNamedContentTypeFieldForm($formBuilder, $field, $field->getSlug() ?? $field->getName());
+    }
+
+    /**
+     * @param FormBuilderInterface $formBuilder
+     * @param FieldInterface       $field
+     * @param string               $formName
+     */
+    public function buildNamedContentTypeFieldForm(FormBuilderInterface $formBuilder, FieldInterface $field, $formName)
+    {
         $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
-        $formBuilder->add($field->getSlug() ?? $field->getName(), FieldType::class, [
+        $formBuilder->add($formName, FieldType::class, [
             'type_choices' => $fieldTypeChoices,
             'data_class'   => $this->configurationManager->getEntityClass('field'),
             'data'         => $field,
@@ -192,18 +202,5 @@ class FormBuilderManager
     public function buildCreateContentTypeForm(FormBuilderInterface $builder)
     {
         $builder->add('name', TextType::class, ['required' => true]);
-    }
-
-    /**
-     * Add new field on content type form
-     *
-     * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
-     */
-    public function buildSingleContentTypeFieldForm(FormBuilderInterface $builder, FieldInterface $field)
-    {
-        $fieldsBuilder = $builder->create('fields', FormType::class, ['mapped' => false]);
-        $this->buildContentTypeFieldForm($fieldsBuilder, $field);
-        $builder->add($fieldsBuilder);
     }
 }

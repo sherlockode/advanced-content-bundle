@@ -18,10 +18,6 @@
 .btn-add-field {
     margin-top: 25px;
 }
-.acb-collection-element {
-    border: 1px solid #ddd;
-    padding: 5px;
-}
 .acb-group {
     border: 1px solid #ddd;
     padding: 5px;
@@ -32,4 +28,8 @@
 }
 .acb-field.field-error .edit-field {
     box-shadow: 0 0 10px #f00;
+}
+.acb-collection .acb-field {
+    border: 1px solid #ddd;
+    padding: 5px;
 }

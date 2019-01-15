@@ -7,7 +7,7 @@
     </div>
     {% if form.parent and form.parent.vars.value.id %}
     <button type="button" class="btn btn-success acb-btn-add-field"
-            data-url="{{ path('sherlockode_acb_content_type_add_field', {contentTypeId: form.parent.vars.value.id, form_name: form.parent.vars.name}) }}">
+            data-url="{{ path('sherlockode_acb_content_type_add_field', {form_name: form.vars.full_name}) }}">
         {{ 'content_type.form.add_field'|trans }}
     </button>
     {% endif %}
@@ -25,27 +25,35 @@
     {% endif %}
     <div {{ block('widget_container_attributes') }}>
     {% for child in form %}
-        <div class="acb-collection-element">
-            {{- form_widget(child) -}}
-        </div>
+        {{- form_widget(child) -}}
     {% endfor %}
     </div>
     {% if allow_add %}
-    <button type="button" class="btn btn-success acb-add-collection-item" data-list="#{{ form.vars.id }}">{{ button_label|trans }}</button>
+        <button type="button"
+                class="btn btn-success acb-add-collection-item"
+                data-list="#{{ form.vars.id }}"
+                data-type="{{ type }}"
+                data-url="{{ path('sherlockode_acb_content_type_add_field', {form_name: prototype.vars.full_name}) }}">
+            {{ button_label|trans }}
+        </button>
     {% endif %}
 {% endblock  %}
 {% block acb_repeater_widget %}
+    {% set type = 'field' %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 {% block acb_flexible_widget %}
     {% set button_label = 'content_type.form.add_layout' %}
+    {% set type = 'group' %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 {% block acb_layout_field_collection_widget %}
+    {% set type = 'field' %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 
 {% block acb_group_collection_widget %}
+    {% set type = 'field' %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 
@@ -83,8 +91,8 @@
 {% endblock %}
 
 {% block acb_field_widget %}
-    {% set fieldId = form.vars.value ? form.vars.value.id : '__random_id__' %}
     {% set fieldSlug = form.vars.value ? form.vars.value.slug : '__random_slug__' %}
+    {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
 <div class="acb-field panel panel-primary field-row" data-field-slug="{{ fieldSlug }}">
     <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}"
          {% if form.parent is not empty and form.parent.vars.name == 'fields' %}data-parent="#acb-fields"{% endif %}>

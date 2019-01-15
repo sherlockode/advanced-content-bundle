@@ -11,6 +11,7 @@ use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -166,16 +167,18 @@ class MyContentTypeController extends Controller
      */
     public function addFieldAction(Request $request)
     {
-        $id = $request->get('contentTypeId');
-
         $fieldClass = $this->configurationManager->getEntityClass('field');
         $field = new $fieldClass;
         $fieldTypeChoices = ['Select field type' => ''];
         $fieldTypeChoices = array_merge($fieldTypeChoices, $this->fieldManager->getFieldTypeFormChoices());
 
         $formName = $request->get('form_name', 'form');
+        $actionOptions = [
+            'form_name' => $formName
+        ];
+
         $formOptions = [
-            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field', ['contentTypeId' => $id, 'form_name' => $formName]),
+            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field', $actionOptions),
             'attr' => ['class' => 'form-create-field'],
             'data_class' => $fieldClass,
             'type_choices' => $fieldTypeChoices,
@@ -186,19 +189,32 @@ class MyContentTypeController extends Controller
 
         if ($addFieldForm->isSubmitted()) {
             if ($addFieldForm->isValid()) {
-                $contentType = $this->contentTypeManager->getContentTypeById($id);
                 $field->setRequired(false);
-                $field->setSortOrder($this->contentTypeManager->getNewFieldSortOrder($contentType));
 
-                $formBuilder = $this->formFactory->createNamedBuilder($formName);
-                $this->formBuilderManager->buildSingleContentTypeFieldForm($formBuilder, $field);
-                $form = $formBuilder->getForm();
+                $formPath = $this->getFormPath($formName);
+                if (count($formPath) == 2) {
+                    $formPath[] = $field->getSlug();
+                }
+
+                // Extract first item to create named builder
+                $rootPath = array_shift($formPath);
+                // Extract last item to pass to formBuilderManager
+                $fieldName = array_pop($formPath);
+                $formChildren = $formPath;
+                $rootFormBuilder = $this->formFactory->createNamedBuilder($rootPath);
+                // Create formBuilder recursively, according to formName
+                $formBuilder = $this->createEmbeddedForm($formPath, $rootFormBuilder);
+                $this->formBuilderManager->buildNamedContentTypeFieldForm($formBuilder, $field, $fieldName);
+                $form = $rootFormBuilder->getForm();
+                foreach ($formChildren as $child) {
+                    $form = $form->get($child);
+                }
 
                 return new JsonResponse([
                     'success' => 1,
                     'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/new_field.html.twig', [
                         'form' => $form->createView(),
-                    ])
+                    ]),
                 ]);
             }
 
@@ -206,15 +222,49 @@ class MyContentTypeController extends Controller
                 'success' => 0,
                 'html' => $this->renderView('@SherlockodeAdvancedContent/ContentType/add_field_form.html.twig', [
                     'form' => $addFieldForm->createView(),
-                    'contentTypeId' => $id,
                 ])
             ]);
         }
 
         return $this->render('@SherlockodeAdvancedContent/ContentType/add_field_form.html.twig', [
             'form' => $addFieldForm->createView(),
-            'contentTypeId' => $id,
         ]);
+    }
+
+    /**
+     * @param string $formName
+     *
+     * @return array
+     */
+    private function getFormPath($formName)
+    {
+        $formPath = preg_split("/(\[|\])/", $formName);
+        foreach ($formPath as $key => $value) {
+            if ($value === '') {
+                unset($formPath[$key]);
+            }
+        }
+        return $formPath;
+    }
+
+    /**
+     * @param array                $path
+     * @param FormBuilderInterface $formBuilder
+     *
+     * @return FormBuilderInterface
+     */
+    private function createEmbeddedForm($path, $formBuilder)
+    {
+        $currentPath = array_shift($path);
+        while ($currentPath !== null) {
+            $formBuilder
+                ->add($currentPath, FormType::class);
+            $formBuilder = $formBuilder->get($currentPath);
+
+            $currentPath = array_shift($path);
+        }
+
+        return $formBuilder;
     }
 
     /**
