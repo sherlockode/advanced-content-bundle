@@ -77,10 +77,9 @@ jQuery(function ($) {
 
     $('.acb-fields').on('change', '.field-type', function (e) {
         var fieldRow = $(this).closest('.field-row');
-        var fieldSlug = fieldRow.data('field-slug');
         var data = {
-            fieldSlug: fieldSlug,
-            type: $(this).val()
+            type: $(this).val(),
+            formPath: $(this).data('form-path')
         };
         $.ajax({
             url: $(this).closest('.edit-content-type').data('change-type-url'),

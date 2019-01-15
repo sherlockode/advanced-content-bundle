@@ -268,7 +268,7 @@ class MyContentTypeController extends Controller
     }
 
     /**
-     * @param Request            $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -281,28 +281,28 @@ class MyContentTypeController extends Controller
         $type = $request->get('type');
         $fieldType = $this->fieldManager->getFieldTypeByCode($type);
 
-        $slug = $request->get('fieldSlug');
+        $formName = $request->get('formPath');
 
-        $formBuilder = $this->createFormBuilder(null, ['translation_domain' => 'AdvancedContentBundle']);
-        $formBuilder
-            ->add('fields', FormType::class);
+        $formPath = $this->getFormPath($formName);
+        // Extract first item to create named builder
+        $rootPath = array_shift($formPath);
+        $formChildren = $formPath;
+        $rootFormBuilder = $this->formFactory->createNamedBuilder($rootPath, FormType::class, null, ['translation_domain' => 'AdvancedContentBundle']);
+        // Create formBuilder recursively, according to formName
+        $formBuilder = $this->createEmbeddedForm($formPath, $rootFormBuilder);
+        $formBuilder->add('options', FormType::class);
 
-        $formBuilder
-            ->get('fields')
-            ->add($slug, FormType::class);
+        $fieldType->addFieldOptions($formBuilder);
 
-        $formBuilder
-            ->get('fields')
-            ->get($slug)
-            ->add('options', FormType::class);
-
-        $fieldType->addFieldOptions($formBuilder->get('fields')->get($slug));
+        $form = $rootFormBuilder->getForm();
+        foreach ($formChildren as $child) {
+            $form = $form->get($child);
+        }
 
         $response = [
             'success' => 1,
-            'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_options.html.twig', [
-                'form' => $formBuilder->getForm()->createView(),
-                'slug' => $slug,
+            'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig', [
+                'options' => $form->createView()['options'],
             ])
         ];
 
