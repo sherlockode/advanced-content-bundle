@@ -78,6 +78,10 @@ field_type:
         label: Liste déroulante
     color:
         label: Couleur
+    date:
+        label: Date
+        time:
+            label: Inclure l'heure ?
     group:
         other: Autres
         simple: Simple
