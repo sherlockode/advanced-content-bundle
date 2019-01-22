@@ -18,7 +18,6 @@
         {{ form_widget(form.slug, {'attr': {'class': 'form-control acb-slug', 'data-slug-source': '#' ~ form.name.vars.id}}) }}
     </div>
     <div class="col-md-3 pull-right">
-        <input type="hidden" name="contentTypeId" value="{{ contentTypeId }}">
         <button type="submit" class="btn btn-success btn-block btn-add-field">
             {{ 'content_type.form.field.add'|trans }}
         </button>

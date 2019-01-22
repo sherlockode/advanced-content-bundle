@@ -66,26 +66,6 @@ class ContentTypeManager
     }
 
     /**
-     * Get new field sort order
-     *
-     * @param ContentTypeInterface $contentType
-     *
-     * @return int
-     */
-    public function getNewFieldSortOrder(ContentTypeInterface $contentType)
-    {
-        $field = $this->om->getRepository($this->configurationManager->getEntityClass('field'))
-            ->findOneBy(['contentType' => $contentType], ['sortOrder' => 'DESC']);
-
-        $sortOrder = 0;
-        if ($field instanceof FieldInterface) {
-            $sortOrder = $field->getSortOrder();
-        }
-
-        return ++$sortOrder;
-    }
-
-    /**
      * When field type has changed, remove it and create new one
      * By cascading, will also remove associated fieldValues
      *

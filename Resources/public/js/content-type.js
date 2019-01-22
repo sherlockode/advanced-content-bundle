@@ -4,6 +4,8 @@ jQuery(function ($) {
     updateChoiceList();
     hideEmptyOptionsRow();
 
+    var fieldsList;
+
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
@@ -19,8 +21,12 @@ jQuery(function ($) {
             data: form.serialize()
         }).done(function (resp) {
             if (resp.success) {
-                $('.acb-fields').append(resp.html);
-                $('.acb-fields .panel:last-of-type .edit-field').click();
+                var newElement = resp.html;
+                newElement = newElement.replace(/__random_id__/g, (Math.random() * 1000)|0);
+                newElement = $(newElement);
+                newElement.find('[name$="[sortOrder]"]').val(fieldsList.children().length + 1);
+                fieldsList.append(newElement);
+                newElement.find('.edit-field').click();
                 hideEmptyOptionsRow();
                 var modal = form.closest('.modal');
                 if (modal.length) {
@@ -36,6 +42,11 @@ jQuery(function ($) {
 
     $('body').on('click', '.acb-btn-add-field', function () {
         var url = $(this).data('url');
+        fieldsList = $('.acb-fields');
+        openAddFieldModal(url);
+    });
+
+    function openAddFieldModal(url) {
         $.get(url, function (response) {
             $('.acb-modal-add-field .modal-body').html(response);
             $('.acb-modal-add-field').modal();
@@ -57,7 +68,7 @@ jQuery(function ($) {
                 slugSource.off('keyup.acb');
             });
         });
-    });
+    }
 
     $('.acb-fields').on('click', '.remove-field', function (e) {
         var fieldRow = $(this).closest('.field-row');
@@ -85,16 +96,29 @@ jQuery(function ($) {
 
     $('body').on('click', '.acb-add-collection-item', function (e) {
         e.preventDefault();
+
         var list = $($(this).attr('data-list'));
         var counter = list.data('widget-counter') || list.children().length;
-        var newWidget = list.data('prototype');
-        newWidget = newWidget.replace(/__name__label__/g, counter);
-        newWidget = newWidget.replace(/__name__/g, counter);
-        newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
-        counter++;
-        list.data('widget-counter', counter);
-        var newElem = $(newWidget);
-        newElem.appendTo(list);
+
+        var type = $(this).data('type');
+        if (type === 'group') {
+            var newWidget = list.data('prototype');
+            newWidget = newWidget.replace(/__name__label__/g, counter);
+            newWidget = newWidget.replace(/__name__/g, counter);
+            newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
+            counter++;
+            list.data('widget-counter', counter);
+            var newElem = $(newWidget);
+            newElem.appendTo(list);
+        } else {
+            counter++;
+            var url = $(this).data('url');
+            url = url.replace(/__name__/g, counter);
+            fieldsList = list;
+
+            openAddFieldModal(url);
+            list.data('widget-counter', counter);
+        }
     });
     $('body').on('click', '.acb-add-flexible-item', function (e) {
         e.preventDefault();

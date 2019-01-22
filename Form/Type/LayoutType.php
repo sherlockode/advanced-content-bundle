@@ -26,6 +26,7 @@ class LayoutType extends AbstractType
             ->add('name', TextType::class, ['label' => 'content_type.form.layout.name'])
             ->add('children', LayoutFieldCollectionType::class, [
                 'label' => 'content_type.form.layout.children',
+                'attr' => ['class' => 'acb-collection']
             ])
         ;
     }
