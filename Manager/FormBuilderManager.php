@@ -5,8 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldsTransformer;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldsType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldType;
-use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldValuesTransformer;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -24,11 +22,6 @@ class FormBuilderManager
     private $fieldManager;
 
     /**
-     * @var ContentManager
-     */
-    private $contentManager;
-
-    /**
      * @var ConfigurationManager
      */
     private $configurationManager;
@@ -41,54 +34,18 @@ class FormBuilderManager
     /**
      * FormBuilderManager constructor.
      *
-     * @param ContentManager       $contentManager
      * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
      * @param ContentTypeManager   $contentTypeManager
      */
     public function __construct(
-        ContentManager $contentManager,
         FieldManager $fieldManager,
         ConfigurationManager $configurationManager,
         ContentTypeManager $contentTypeManager
     ) {
-        $this->contentManager = $contentManager;
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
         $this->contentTypeManager = $contentTypeManager;
-    }
-
-    /**
-     * Build custom form for Content edit
-     *
-     * @param FormBuilderInterface $builder
-     * @param ContentTypeInterface $contentType
-     */
-    public function buildContentForm(FormBuilderInterface $builder, ContentTypeInterface $contentType)
-    {
-        $fields = $this->contentTypeManager->getOrderedFields($contentType);
-
-        $fieldsBuilder = $builder->create('fieldValues', FormType::class, [
-            'label' => 'content.form.field_values',
-            'translation_domain' => 'AdvancedContentBundle',
-        ]);
-        foreach ($fields as $field) {
-            if ($field->getLayout()) {
-                // do not add fields which are not top-level
-                continue;
-            }
-            $fieldsBuilder->add($field->getId(), FieldValueType::class, [
-                'label'      => $field->getName(),
-                'required'   => $field->isRequired(),
-                'field_type' => $this->fieldManager->getFieldType($field),
-                'field'      => $field,
-                'data_class' => $this->configurationManager->getEntityClass('field_value'),
-                'translation_domain' => false,
-            ]);
-        }
-        $builder->add($fieldsBuilder);
-        $fieldsBuilder
-            ->addViewTransformer(new FieldValuesTransformer($this->contentManager, $contentType));
     }
 
     /**

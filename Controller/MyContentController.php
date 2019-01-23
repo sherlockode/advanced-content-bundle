@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityNotFoundException;
+use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
@@ -86,13 +87,11 @@ class MyContentController extends Controller
             );
         }
 
-        $formBuilder = $this->createFormBuilder($content, [
-            'action' => $this->generateUrl('sherlockode_acb_content_edit', ['id' => $content->getId()])
+        $form = $this->createForm(ContentType::class, $content, [
+            'action' => $this->generateUrl('sherlockode_acb_content_edit', ['id' => $content->getId()]),
+            'contentType' => $content->getContentType(),
         ]);
 
-        $this->formBuilderManager->buildContentForm($formBuilder, $content->getContentType());
-
-        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -161,13 +160,10 @@ class MyContentController extends Controller
         $content = new $contentEntityClass;
         $content->setContentType($contentType);
 
-        $formBuilder = $this->createFormBuilder($content, [
-            'action' => $this->generateUrl('sherlockode_acb_content_create_by_type', ['id' => $contentType->getId()])
+        $form = $this->createForm(ContentType::class, $content, [
+            'action' => $this->generateUrl('sherlockode_acb_content_create_by_type', ['id' => $contentType->getId()]),
+            'contentType' => $content->getContentType(),
         ]);
-
-        $this->formBuilderManager->buildContentForm($formBuilder, $contentType);
-
-        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

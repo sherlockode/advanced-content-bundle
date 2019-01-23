@@ -2,7 +2,6 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="sherlockode_advanced_content.form_builder_manager" class="Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager">
-            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
@@ -25,6 +24,16 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.content" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentType">
+            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.field_values" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldValuesType">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.repeater_field" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterFieldType">
