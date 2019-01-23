@@ -1,0 +1,25 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% block acb_simple_collection %}
+    {% set button_label = button_label|default('content_type.form.add_field') %}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
+    {% endif %}
+    <div {{ block('widget_container_attributes') }}>
+        {% for child in form %}
+            {{- form_widget(child) -}}
+        {% endfor %}
+    </div>
+    {% if allow_add %}
+        {{ block('acb_add_item_button') }}
+    {% endif %}
+{% endblock  %}
+
+{% block acb_add_item_button %}
+    <button type="button"
+            class="btn btn-success acb-add-collection-item"
+            data-list="#{{ form.vars.id }}"
+            data-type="{{ type }}">
+        {{ button_label|trans }}
+    </button>
+{% endblock %}
