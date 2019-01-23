@@ -3,12 +3,12 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityNotFoundException;
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
+use Sherlockode\AdvancedContentBundle\Form\Type\ContentTypeFormType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FieldCreateType;
+use Sherlockode\AdvancedContentBundle\Form\Type\FieldType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
-use Sherlockode\AdvancedContentBundle\Manager\FormBuilderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,11 +34,6 @@ class MyContentTypeController extends Controller
     private $formFactory;
 
     /**
-     * @var FormBuilderManager
-     */
-    private $formBuilderManager;
-
-    /**
      * @var ContentTypeManager
      */
     private $contentTypeManager;
@@ -58,7 +53,6 @@ class MyContentTypeController extends Controller
      *
      * @param ObjectManager        $om
      * @param FormFactoryInterface $formFactory
-     * @param FormBuilderManager   $formBuilderManager
      * @param ContentTypeManager   $contentTypeManager
      * @param ConfigurationManager $configurationManager
      * @param FieldManager         $fieldManager
@@ -66,14 +60,12 @@ class MyContentTypeController extends Controller
     public function __construct(
         ObjectManager $om,
         FormFactoryInterface $formFactory,
-        FormBuilderManager $formBuilderManager,
         ContentTypeManager $contentTypeManager,
         ConfigurationManager $configurationManager,
         FieldManager $fieldManager
     ) {
         $this->om = $om;
         $this->formFactory = $formFactory;
-        $this->formBuilderManager = $formBuilderManager;
         $this->contentTypeManager = $contentTypeManager;
         $this->configurationManager = $configurationManager;
         $this->fieldManager = $fieldManager;
@@ -103,17 +95,15 @@ class MyContentTypeController extends Controller
             $fieldTypes[$field->getId()] = $field->getType();
         }
 
-        $formBuilder = $this->createFormBuilder($contentType, [
+        $form = $this->createForm(ContentTypeFormType::class, $contentType, [
             'action' => $this->generateUrl('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]),
             'attr' => [
                 'data-change-type-url' => $this->generateUrl('sherlockode_acb_content_type_change_field_type'),
                 'class' => 'edit-content-type'
             ],
+            'contentType' => $contentType,
         ]);
 
-        $this->formBuilderManager->buildContentTypeForm($formBuilder, $contentType);
-
-        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -138,13 +128,12 @@ class MyContentTypeController extends Controller
     {
         $contentTypeEntityClass = $this->configurationManager->getEntityClass('content_type');
         $contentType = new $contentTypeEntityClass;
-        $formBuilder = $this->createFormBuilder($contentType, [
-            'action' => $this->generateUrl('sherlockode_acb_content_type_create')
+
+        $form = $this->createForm(ContentTypeFormType::class, $contentType, [
+            'action' => $this->generateUrl('sherlockode_acb_content_type_create'),
+            'contentType' => $contentType,
         ]);
 
-        $this->formBuilderManager->buildCreateContentTypeForm($formBuilder);
-
-        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -204,7 +193,14 @@ class MyContentTypeController extends Controller
                 $rootFormBuilder = $this->formFactory->createNamedBuilder($rootPath);
                 // Create formBuilder recursively, according to formName
                 $formBuilder = $this->createEmbeddedForm($formPath, $rootFormBuilder);
-                $this->formBuilderManager->buildNamedContentTypeFieldForm($formBuilder, $field, $fieldName);
+
+                $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
+                $formBuilder->add($fieldName, FieldType::class, [
+                    'type_choices' => $fieldTypeChoices,
+                    'data_class'   => $this->configurationManager->getEntityClass('field'),
+                    'data'         => $field,
+                ]);
+
                 $form = $rootFormBuilder->getForm();
                 foreach ($formChildren as $child) {
                     $form = $form->get($child);
