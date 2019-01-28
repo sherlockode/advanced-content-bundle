@@ -91,9 +91,8 @@
 {% endblock %}
 
 {% block acb_field_widget %}
-    {% set fieldSlug = form.vars.value ? form.vars.value.slug : '__random_slug__' %}
     {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
-<div class="acb-field panel panel-primary field-row" data-field-slug="{{ fieldSlug }}">
+<div class="acb-field panel panel-primary field-row">
     <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}"
          {% if form.parent is not empty and form.parent.vars.name == 'fields' %}data-parent="#acb-fields"{% endif %}>
         <span class="panel-title">{{ form.vars.label ?? (form.vars.value.name ?? '') }}</span>
@@ -128,7 +127,7 @@
                 {{ form_label(form.type) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.type, {'attr': {'class': 'field-type form-control'}}) }}
+                {{ form_widget(form.type, {'attr': {'class': 'field-type form-control', 'data-form-path': form.vars.full_name}}) }}
             </div>
         </div>
         <div class="form-group row">
