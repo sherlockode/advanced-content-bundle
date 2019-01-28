@@ -1,0 +1,9 @@
+{% if form['children'] is defined %}
+    {% form_theme form['children'] '@SherlockodeAdvancedContent/Form/content_type.html.twig' %}
+    <div class="col-md-2">
+        {{ form_label(form['children']) }}
+    </div>
+    <div class="col-md-10">
+        {{ form_widget(form['children']) }}
+    </div>
+{% endif %}

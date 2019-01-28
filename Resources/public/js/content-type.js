@@ -3,6 +3,7 @@ jQuery(function ($) {
 
     updateChoiceList();
     hideEmptyOptionsRow();
+    hideEmptyLayoutRow();
 
     var fieldsList;
 
@@ -28,6 +29,7 @@ jQuery(function ($) {
                 fieldsList.append(newElement);
                 newElement.find('.edit-field').click();
                 hideEmptyOptionsRow();
+                hideEmptyLayoutRow();
                 var modal = form.closest('.modal');
                 if (modal.length) {
                     modal.modal('hide');
@@ -87,9 +89,11 @@ jQuery(function ($) {
             data: data,
             context: this
         }).done(function (data) {
-            $(this).closest('div.field-row').find('.options').html(data.html);
+            $(this).closest('div.field-row').find('.options').html(data.optionHtml);
+            $(this).closest('div.field-row').find('.layout-row').html(data.layoutHtml);
             updateChoiceList();
             hideEmptyOptionsRow();
+            hideEmptyLayoutRow();
         }).fail(ajaxFailCallback);
     });
 
@@ -198,6 +202,15 @@ jQuery(function ($) {
         $('.options-row').each(function() {
             $(this).show();
             if ($(this).find('.options > .no-option').length > 0) {
+                $(this).hide();
+            }
+        });
+    }
+
+    function hideEmptyLayoutRow() {
+        $('.layout-row').each(function() {
+            $(this).show();
+            if ($(this).children().length == 0) {
                 $(this).hide();
             }
         });

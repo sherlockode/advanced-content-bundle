@@ -298,11 +298,15 @@ class MyContentTypeController extends Controller
         foreach ($formChildren as $child) {
             $form = $form->get($child);
         }
+        $formView = $form->createView();
 
         $response = [
             'success' => 1,
-            'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig', [
-                'options' => $form->createView()['options'],
+            'optionHtml'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig', [
+                'options' => $formView['options'],
+            ]),
+            'layoutHtml'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_layout.html.twig', [
+                'form' => $formView,
             ])
         ];
 
