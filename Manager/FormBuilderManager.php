@@ -13,8 +13,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class FormBuilderManager
 {
@@ -39,23 +41,31 @@ class FormBuilderManager
     private $contentTypeManager;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * FormBuilderManager constructor.
      *
      * @param ContentManager       $contentManager
      * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
      * @param ContentTypeManager   $contentTypeManager
+     * @param TranslatorInterface  $translator
      */
     public function __construct(
         ContentManager $contentManager,
         FieldManager $fieldManager,
         ConfigurationManager $configurationManager,
-        ContentTypeManager $contentTypeManager
+        ContentTypeManager $contentTypeManager,
+        TranslatorInterface $translator
     ) {
         $this->contentManager = $contentManager;
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
         $this->contentTypeManager = $contentTypeManager;
+        $this->translator = $translator;
     }
 
     /**
@@ -133,6 +143,43 @@ class FormBuilderManager
         $fieldsBuilder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             $data = $event->getData() ?? [];
+
+            $duplicatedSlugs = [];
+            $slugs = [];
+            foreach ($data as $value) {
+                $slug = $value['slug'];
+                if (in_array($slug, $slugs)) {
+                    $duplicatedSlugs[] = $slug;
+                    continue;
+                }
+
+                if (isset($value['children'])) {
+                    foreach ($value['children'] as $child) {
+                        if (isset($child['children'])) {
+                            foreach ($child['children'] as $field) {
+                                $fieldSlug = $field['slug'];
+                                if (in_array($fieldSlug, $slugs)) {
+                                    $duplicatedSlugs[] = $fieldSlug;
+                                    continue;
+                                }
+                                $slugs[] = $fieldSlug;
+                            }
+                        }
+                    }
+                }
+                $slugs[] = $slug;
+            }
+
+            $duplicatedSlugs = array_unique($duplicatedSlugs);
+            if (count($duplicatedSlugs) > 0) {
+                foreach ($duplicatedSlugs as $slug) {
+                    $form->addError(new FormError(
+                        $this->translator->trans('field_type.errors.duplicated_slug_detail', ['%slug%' => $slug], 'AdvancedContentBundle')
+                    ));
+                }
+                return;
+            }
+
             foreach ($form as $child) {
                 if (!isset($data[$child->getName()])) {
                     $form->remove($child->getName());

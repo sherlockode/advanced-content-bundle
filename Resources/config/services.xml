@@ -6,6 +6,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
+            <argument type="service" id="translator"/>
         </service>
         <service id="sherlockode_advanced_content.content_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentManager">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>

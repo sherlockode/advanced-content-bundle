@@ -90,5 +90,7 @@ field_type:
     errors:
         empty_collection: Please add at least one option
         empty_collection_field: Please add at least one option for the field "%fieldName%"
+        duplicated_slug: Please use a unique slug for each of your fields
+        duplicated_slug_detail: The slug "%slug%" is used for several fields
 yes: Yes
 no: No

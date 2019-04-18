@@ -22,7 +22,7 @@
     border: 1px solid #ddd;
     padding: 5px;
 }
-.acb-collection-error {
+.acb-error {
     color: #f00;
     display: block;
 }
