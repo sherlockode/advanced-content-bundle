@@ -1,0 +1,93 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% extends '@SherlockodeAdvancedContent/Form/common.html.twig' %}
+
+{% block acb_flexible_group_collection_widget %}
+    {% set button_label = 'content.form.add_group' %}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+    {% if allow_add %}
+        <div class="acb-flexible-add-wrapper dropup"
+             data-content-type="{{ contentType.id }}"
+             data-id-prefix="{{ id }}"
+             data-name-prefix="{{ full_name }}"
+             data-url="{{ path('sherlockode_acb_content_flexible_form') }}"
+             data-list="#{{ form.vars.id }}">
+            <button type="button" class="btn btn-success dropdown-toggle acb-open-layout-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ button_label|trans }}
+            </button>
+            <ul class="dropdown-menu">
+                {% for layout in layouts %}
+                    <li><a href="#" class="acb-add-flexible-item" data-layout="{{ layout.id }}">{{ layout.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block acb_group_collection_widget %}
+    {% set type = 'group' %}
+    {{ block('acb_simple_collection') }}
+{% endblock %}
+
+{% block acb_flexible_group_widget %}
+    <div class="acb-group">
+        {% for child in form %}
+            {{ form_row(child) }}
+        {% endfor %}
+        <button class="acb-remove-group btn btn-danger" type="button">{{ 'content.form.field.remove'|trans }}</button>
+    </div>
+{% endblock %}
+
+{% block acb_message_widget %}
+    <p>{{ message|nl2br }}</p>
+{% endblock %}
+
+{% block acb_image_widget %}
+    <div class="form-group row">
+        <div class="col-md-2">
+            {{ form_label(form.file) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.file) }}
+            {{ form_errors(form.file) }}
+        </div>
+    </div>
+
+    {% set source = '' %}
+    {% if form.src.vars.data is not null %}
+        {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
+    {% endif %}
+    {% if source != '' %}
+        <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <a href="{{ asset(source) }}">
+                    <img src="{{ asset(source) }}" height="50px">
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="form-group row" {% if source == '' %} style="display: none;"{% endif %}>
+        <div class="col-md-2">
+            {{ form_label(form.delete) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.delete) }}
+            {{ form_errors(form.delete) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-2">
+            {{ form_label(form.alt) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.alt) }}
+            {{ form_errors(form.alt) }}
+        </div>
+    </div>
+{% endblock %}
