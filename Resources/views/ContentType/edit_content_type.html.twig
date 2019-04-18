@@ -19,6 +19,14 @@
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
                 <div class="row">
+                    <div class="col-md-2">
+                        {{ form_label(form.name) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.name) }}
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         {{ form_row(form.fields) }}
                     </div>
