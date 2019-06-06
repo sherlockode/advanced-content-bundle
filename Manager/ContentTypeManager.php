@@ -85,6 +85,7 @@ class ContentTypeManager
             $this->om->remove($field);
 
             $fieldClass = $this->configurationManager->getEntityClass('field');
+            /** @var FieldInterface $newField */
             $newField = new $fieldClass;
             $newField->setType($field->getType());
             $newField->setContentType($field->getContentType());

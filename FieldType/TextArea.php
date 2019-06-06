@@ -48,7 +48,10 @@ class TextArea extends AbstractInputType
     {
         parent::addFieldOptions($builder);
         $builder->get('options')
-            ->add('nbRows', IntegerType::class, ['required' => false])
+            ->add('nbRows', IntegerType::class, [
+                'label' => 'field_type.textarea.nb_rows.label',
+                'required' => false,
+            ])
         ;
     }
 

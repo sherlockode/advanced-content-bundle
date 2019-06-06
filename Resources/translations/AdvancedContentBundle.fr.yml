@@ -1,10 +1,13 @@
 content_type:
-    name: Nom
     label: Type de contenu avancé
+    edit: Editer le type de contenu
+    update: Valider
     form:
+        name: Nom
         fields: Champs
         add_field: Ajouter un champ
         add_layout: Ajouter un groupe
+        select_field_type: Choisissez un type de champ
         field:
             add: Ajouter
             edit: Modifier
@@ -54,6 +57,8 @@ field_type:
         label: Flexible
     textarea:
         label: Zone de texte
+        nb_rows:
+            label: Nb lignes
     boolean:
         label: Oui/Non
     checkbox:
