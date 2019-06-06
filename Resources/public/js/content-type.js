@@ -196,7 +196,7 @@ jQuery(function ($) {
             }
         });
 
-        $('.acb-slug').each(function() {
+        $('.acb-slug', this).each(function() {
             slug = $(this).val();
             if (!slugs[slug]) {
                 slugs[slug] = [];

@@ -26,7 +26,7 @@
     color: #f00;
     display: block;
 }
-.acb-field.field-error .edit-field {
+.acb-field.field-error > .edit-field {
     box-shadow: 0 0 10px #f00;
 }
 .acb-collection .acb-field {
