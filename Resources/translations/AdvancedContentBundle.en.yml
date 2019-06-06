@@ -1,10 +1,13 @@
 content_type:
-    name: Name
     label: Content type
+    edit: Edit content type
+    update: Update
     form:
+        name: Name
         fields: Fields
         add_field: Add field
         add_layout: Add group
+        select_field_type: Select field type
         field:
             add: Add
             edit: Edit
@@ -54,6 +57,8 @@ field_type:
         label: Flexible
     textarea:
         label: Textarea
+        nb_rows:
+            label: Nb rows
     boolean:
         label: Yes/No
     checkbox:

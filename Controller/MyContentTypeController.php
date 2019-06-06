@@ -158,7 +158,7 @@ class MyContentTypeController extends Controller
     {
         $fieldClass = $this->configurationManager->getEntityClass('field');
         $field = new $fieldClass;
-        $fieldTypeChoices = ['Select field type' => ''];
+        $fieldTypeChoices = ['content_type.form.select_field_type' => ''];
         $fieldTypeChoices = array_merge($fieldTypeChoices, $this->fieldManager->getFieldTypeFormChoices());
 
         $formName = $request->get('form_name', 'form');

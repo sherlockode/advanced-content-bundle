@@ -2,8 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-
 class ConfigurationManager
 {
     /**
@@ -28,12 +26,12 @@ class ConfigurationManager
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \RuntimeException
      */
     public function getEntityClass($type)
     {
         if (!isset($this->config['entity_class'][$type])) {
-            throw new Exception("You are trying to access a configuration that does not exists.");
+            throw new \RuntimeException('You are trying to access a configuration that does not exist.');
         }
 
         return $this->config['entity_class'][$type];

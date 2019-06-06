@@ -61,7 +61,7 @@ class ContentTypeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'content_type.name'])
+            ->add('name', TextType::class, ['label' => 'content_type.form.name'])
         ;
 
         if (!$options['contentType']->getId()) {
