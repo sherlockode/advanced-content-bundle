@@ -1,7 +1,6 @@
 content_type:
     label: Content type
     edit: Edit content type
-    update: Update
     form:
         name: Name
         fields: Fields
@@ -26,6 +25,7 @@ content:
     label: Content
     id: ID
     content_type: Content type
+    edit: Edit content
     form:
         field_values: Fields
         add_group: Add group
@@ -99,3 +99,10 @@ field_type:
         duplicated_slug_detail: The slug "%slug%" is used for several fields
 yes: Yes
 no: No
+actions: Actions
+back_to_list: Back to list
+cancel: Cancel
+delete: Delete
+edit: Edit
+save: Save
+show: Show

@@ -1,7 +1,6 @@
 content_type:
     label: Type de contenu avancé
     edit: Editer le type de contenu
-    update: Valider
     form:
         name: Nom
         fields: Champs
@@ -26,6 +25,7 @@ content:
     label: Contenu avancé
     id: Identifiant
     content_type: Type de contenu
+    edit: Modifier le contenu
     form:
         field_values: Champs
         add_group: Ajouter un groupe
@@ -99,3 +99,10 @@ field_type:
         duplicated_slug_detail: Le slug "%slug%" est utilisé pour plusieurs champs
 yes: Oui
 no: Non
+actions: Actions
+back_to_list: Retour à la liste
+cancel: Annuler
+delete: Supprimer
+edit: Modifier
+save: Valider
+show: Voir

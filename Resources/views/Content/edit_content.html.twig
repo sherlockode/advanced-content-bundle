@@ -1,5 +1,6 @@
 {% extends is_ajax is defined and is_ajax ? '@SherlockodeAdvancedContent/empty.html.twig' : '@SherlockodeAdvancedContent/layout.html.twig' %}
 
+{% trans_default_domain 'AdvancedContentBundle' %}
 {% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
 
 {% block body %}
@@ -7,8 +8,8 @@
     <div class="container edit-content">
         <div class="row page-info">
             <div class="col-md-12">
-                <h1>Edit Content</h1>
-                <a href="{{ path('sherlockode_acb_content_list') }}" class="pull-right">Back to list</a>
+                <h1>{{ 'content.edit'|trans }}</h1>
+                <a href="{{ path('sherlockode_acb_content_list') }}" class="pull-right">{{ 'back_to_list'|trans }}</a>
             </div>
         </div>
         <hr>
