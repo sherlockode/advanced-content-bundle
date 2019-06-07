@@ -1,10 +1,13 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+
+{% import '@SherlockodeAdvancedContent/Content/renderer.html.twig' as acb_renderer %}
+
 {% block body %}
     {{ parent() }}
     <div class="container edit-content">
         <div class="row page-info">
             <div class="col-md-12">
-                <h1>View Content</h1>
+                <h1>Show Content</h1>
             </div>
         </div>
         <hr>
@@ -14,7 +17,7 @@
                     {% for fieldValue in content.fieldValues %}
                         <div class="row">
                             <div class="col-md-12">
-                                {{ acb_field(content, fieldValue.field.slug) }}
+                                {{ acb_renderer.render_field(content, fieldValue) }}
                             </div>
                         </div>
                         <hr>
