@@ -1,0 +1,11 @@
+{% macro render_field(content, fieldValue) %}
+    {{ acb_field(content, fieldValue.field.slug) }}
+
+    {% for group in acb_groups(content, fieldValue.field.slug) %}
+        <div>
+            {% for groupField in acb_group_fields(group) %}
+                {{ acb_group_field(group, groupField.field.slug) }}
+            {% endfor %}
+        </div>
+         {% endfor %}
+{% endmacro %}
