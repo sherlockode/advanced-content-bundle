@@ -13,61 +13,25 @@
             </div>
         </div>
         <hr>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
         <div class="row">
             <div class="col-md-12">
-                {{ form_start(form) }}
-                {{ form_errors(form) }}
-                <div class="row">
-                    <div class="col-md-12">
-                        {% for fieldValue in form.fieldValues %}
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{ form_label(fieldValue) }}
-                                </div>
-                                <div class="col-md-10">
-                                    {% if fieldValue.value.vars.customWidget is defined %}
-                                        {{ form_widget(fieldValue.value, {'attr': {'help': ''}}) }}
-                                        {{ form_errors(fieldValue.value) }}
-                                    {% else %}
-                                        {% for option in fieldValue.value %}
-                                            <div class="form-group row">
-                                                <div class="col-md-2">
-                                                    {{ form_label(option) }}
-                                                </div>
-                                                <div class="col-md-10">
-                                                    {{ form_widget(option) }}
-                                                    {{ form_errors(option) }}
-                                                </div>
-                                            </div>
-                                        {% else %}
-                                            {{ form_widget(fieldValue.value, {'attr': {'help': ''}}) }}
-                                            {{ form_errors(fieldValue.value) }}
-                                        {% endfor %}
-                                    {% endif %}
-                                    {% if fieldValue.value.vars.attr.help is defined %}
-                                        <div class="form-group row">
-                                            <div class="col-md-12">
-                                                <em>{{ fieldValue.value.vars.attr.help|nl2br }}</em>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <a href="{{ path('sherlockode_acb_content_list') }}" class="btn btn-danger">Cancel</a>
-                    <button type="submit" class="btn btn-success">
-                        Update
-                    </button>
-                </div>
-
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
+                {% for fieldValue in form.fieldValues %}
+                    {{ form_row(fieldValue) }}
+                {% endfor %}
             </div>
         </div>
+
+        <div class="buttons">
+            <a href="{{ path('sherlockode_acb_content_list') }}" class="btn btn-danger">{{ 'cancel'|trans }}</a>
+            <button type="submit" class="btn btn-success">
+                {{ 'save'|trans }}
+            </button>
+        </div>
+
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
     </div>
 {% endblock %}
 {% block javascripts %}
