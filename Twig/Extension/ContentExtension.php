@@ -14,6 +14,9 @@ class ContentExtension extends \Twig_Extension
     */
     private $fieldManager;
 
+    /**
+     * @param FieldManager $fieldManager
+     */
     public function __construct(FieldManager $fieldManager)
     {
         $this->fieldManager = $fieldManager;
@@ -21,6 +24,8 @@ class ContentExtension extends \Twig_Extension
 
     /**
      * Add specific twig function
+     *
+     * @return \Twig_SimpleFunction[]
      */
     public function getFunctions()
     {
@@ -72,6 +77,11 @@ class ContentExtension extends \Twig_Extension
         return [];
     }
 
+    /**
+     * @param FieldGroupValueInterface|null $group
+     *
+     * @return FieldValueInterface[]
+     */
     public function getGroupFieldValues(FieldGroupValueInterface $group = null)
     {
         if (null === $group) {
@@ -98,6 +108,11 @@ class ContentExtension extends \Twig_Extension
         return '';
     }
 
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return string
+     */
     public function displayFieldValue(FieldValueInterface $fieldValue)
     {
         return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
