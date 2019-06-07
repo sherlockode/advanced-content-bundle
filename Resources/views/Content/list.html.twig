@@ -1,10 +1,12 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+{% trans_default_domain 'AdvancedContentBundle' %}
+
 {% block body %}
     {{ parent() }}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Contents</h1>
+                <h1>{{ 'content.label'|trans }}</h1>
             </div>
         </div>
         <div class="row">
@@ -13,8 +15,8 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Content Type</th>
-                        <th>Actions</th>
+                        <th>{{ 'content_type.label'|trans }}</th>
+                        <th>{{ 'actions'|trans }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,8 +25,9 @@
                             <td>{{ content.id }}</td>
                             <td>{{ content.contentType.name }}</td>
                             <td>
-                                <a href="{{ path('sherlockode_acb_content_edit', {id: content.id}) }}">Edit</a>
-                                 | <a href="{{ path('sherlockode_acb_content_delete', {id: content.id}) }}">Delete</a>
+                                <a href="{{ path('sherlockode_acb_content_show', {id: content.id}) }}">{{ 'show'|trans }}</a>
+                                | <a href="{{ path('sherlockode_acb_content_edit', {id: content.id}) }}">{{ 'edit'|trans }}</a>
+                                | <a href="{{ path('sherlockode_acb_content_delete', {id: content.id}) }}">{{ 'delete'|trans }}</a>
                             </td>
                         </tr>
                     {% endfor %}
