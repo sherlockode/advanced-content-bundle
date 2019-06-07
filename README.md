@@ -41,6 +41,16 @@ class AppKernel extends Kernel
 Configuration
 -------------
 
+### Twig
+
+You may enable the bootstrap form theme in your configuration for better-looking forms in the bundle:
+
+```yaml
+# app/config/config.yml
+twig:
+    form_themes: ['bootstrap_3_layout.html.twig']
+```
+
 ### Entities
 
 `SherlockodeAdvancedContentBundle` provides 6 entity models : ContentType, Layout, Field, Content, FieldGroupValue and FieldValue

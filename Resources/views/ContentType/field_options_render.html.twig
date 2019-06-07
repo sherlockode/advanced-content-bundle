@@ -21,7 +21,7 @@
                 </a>
                 <span class="acb-collection-error acb-error" style="display: none;">{{ 'field_type.errors.empty_collection'|trans }}</span>
             {% else %}
-                {{ form_widget(option, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(option) }}
             {% endif %}
             {{ form_errors(option) }}
         </div>

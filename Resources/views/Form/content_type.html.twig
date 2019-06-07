@@ -42,7 +42,7 @@
                 {{ form_label(form.name) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.name) }}
             </div>
         </div>
         <div class="form-group row">
@@ -50,7 +50,7 @@
                 {{ form_label(form.slug) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.slug, {'attr': {'class': 'form-control acb-slug'}}) }}
+                {{ form_widget(form.slug, {'attr': {'class': 'acb-slug'}}) }}
                 <span class="acb-slug-error acb-error" style="display: none;">{{ 'field_type.errors.duplicated_slug'|trans }}</span>
             </div>
         </div>
@@ -59,7 +59,7 @@
                 {{ form_label(form.type) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.type, {'attr': {'class': 'field-type form-control', 'data-form-path': form.vars.full_name}}) }}
+                {{ form_widget(form.type, {'attr': {'class': 'field-type', 'data-form-path': form.vars.full_name}}) }}
             </div>
         </div>
         <div class="form-group row">
@@ -67,7 +67,7 @@
                 {{ form_label(form.required) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.required, {'attr': {'class': 'form-control acb-is-required'}}) }}
+                {{ form_widget(form.required, {'attr': {'class': 'acb-is-required'}}) }}
             </div>
         </div>
         <div class="form-group row">
@@ -75,7 +75,7 @@
                 {{ form_label(form.sortOrder) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.sortOrder, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.sortOrder) }}
             </div>
         </div>
         <div class="form-group row">
@@ -83,7 +83,7 @@
                 {{ form_label(form.hint) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.hint, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.hint) }}
             </div>
         </div>
         <div class="form-group row layout-row">
