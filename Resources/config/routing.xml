@@ -15,8 +15,8 @@
     <route id="sherlockode_acb_content_delete" path="/mycontent/delete/{id}">
         <default key="_controller">sherlockode_advanced_content.controller.content:deleteAction</default>
     </route>
-    <route id="sherlockode_acb_content_view" path="/mycontent/view/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.content:viewAction</default>
+    <route id="sherlockode_acb_content_show" path="/mycontent/show/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content:showAction</default>
     </route>
     <route id="sherlockode_acb_content_flexible_form" path="/mycontent/flexible">
         <default key="_controller">sherlockode_advanced_content.controller.content:flexibleFormAction</default>

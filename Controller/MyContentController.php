@@ -206,13 +206,13 @@ class MyContentController extends Controller
     }
 
     /**
-     * @param int                  $id
+     * @param int $id
      *
      * @return Response
      *
      * @throws EntityNotFoundException
      */
-    public function viewAction($id)
+    public function showAction($id)
     {
         $content = $this->contentManager->getContentById($id);
 
@@ -223,7 +223,7 @@ class MyContentController extends Controller
             );
         }
 
-        return $this->render('@SherlockodeAdvancedContent/Content/view.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/show.html.twig', [
             'content' => $content,
         ]);
     }
