@@ -61,5 +61,10 @@
         <service id="sherlockode_acb.field_type.date" class="Sherlockode\AdvancedContentBundle\FieldType\Date">
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
+        <service id="sherlockode_acb.field_type.file" class="Sherlockode\AdvancedContentBundle\FieldType\File">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+            <argument type="service" id="assets.packages"/>
+        </service>
     </services>
 </container>

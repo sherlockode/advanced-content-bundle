@@ -46,9 +46,6 @@ field_type:
     image:
         name: Image
         alt: Texte alternatif
-        delete: Supprimer
-        file: Fichier
-        label: Image
     repeater:
         field_list: Liste des champs
         label: Répéteur
@@ -87,6 +84,12 @@ field_type:
         label: Date
         time:
             label: Inclure l'heure ?
+    file:
+        name: Fichier
+        title: Titre
+        delete: Supprimer
+        file: Fichier
+        label: Fichier
     group:
         other: Autres
         simple: Simple
