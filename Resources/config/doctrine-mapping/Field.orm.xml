@@ -6,7 +6,7 @@
         <field name="slug" type="string" column="slug"/>
         <field name="required" type="boolean" column="is_required" nullable="false">
             <options>
-                <option name="default">false</option>
+                <option name="default">0</option>
             </options>
         </field>
         <field name="options" type="string" column="options" nullable="true"/>
