@@ -77,3 +77,25 @@
 
     {{ form_row(form.alt) }}
 {% endblock %}
+
+{% block acb_file_widget %}
+    {{ form_row(form.file) }}
+
+    {% set source = '' %}
+    {% if form.src.vars.data is not null %}
+        {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
+    {% endif %}
+    {% if source != '' %}
+        <div class="form-group">
+            <a href="{{ asset(source) }}" download>
+                {{ form.src.vars.data }}
+            </a>
+        </div>
+    {% endif %}
+
+    <div {% if source == '' %} style="display: none;"{% endif %}>
+        {{ form_row(form.delete) }}
+    </div>
+
+    {{ form_row(form.title) }}
+{% endblock %}

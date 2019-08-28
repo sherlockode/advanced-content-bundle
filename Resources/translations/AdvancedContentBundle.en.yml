@@ -46,9 +46,6 @@ field_type:
     image:
         name: Image
         alt: Alt text
-        delete: Delete
-        file: File
-        label: Image
     repeater:
         field_list: Field list
         label: Repeater
@@ -87,6 +84,12 @@ field_type:
         label: Date
         time:
             label: Include time ?
+    file:
+        name: File
+        title: Title
+        delete: Delete
+        file: File
+        label: File
     group:
         other: Others
         simple: Simple
