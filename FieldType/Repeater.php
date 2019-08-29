@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupCollectionType;
 use Sherlockode\AdvancedContentBundle\Form\Type\RepeaterType;
+use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -12,6 +13,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class Repeater extends AbstractFieldType
 {
+    /**
+     * @var FieldManager
+     */
+    private $fieldManager;
+
+    public function __construct(FieldManager $fieldManager)
+    {
+        $this->fieldManager = $fieldManager;
+    }
+
     /**
      * @return string
      */
@@ -31,7 +42,7 @@ class Repeater extends AbstractFieldType
         }
         $builder
             ->add('children', RepeaterGroupCollectionType::class, [
-                'entry_options' => ['fields' => $fields, 'contentType' => $field->getContentType()]
+                'entry_options' => ['fields' => $fields, 'contentType' => $this->fieldManager->getLayoutFieldContentType($field)]
             ])
         ;
     }
