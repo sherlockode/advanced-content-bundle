@@ -21,6 +21,7 @@ class Flexible extends AbstractFieldType
     {
         $this->fieldManager = $fieldManager;
     }
+
     /**
      * @return string
      */
@@ -35,7 +36,7 @@ class Flexible extends AbstractFieldType
 
         $builder
             ->add('children', FlexibleGroupCollectionType::class, [
-                'contentType' => $field->getContentType(),
+                'contentType' => $this->fieldManager->getLayoutFieldContentType($field),
                 'layouts' => $field->getChildren(),
             ])
         ;
