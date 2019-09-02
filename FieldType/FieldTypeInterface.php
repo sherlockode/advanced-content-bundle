@@ -100,4 +100,11 @@ interface FieldTypeInterface
      * @return string
      */
     public function getFieldGroup();
+
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue);
 }
