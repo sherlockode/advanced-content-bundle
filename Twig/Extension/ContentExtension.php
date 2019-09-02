@@ -35,6 +35,8 @@ class ContentExtension extends \Twig_Extension
             new \Twig_SimpleFunction('acb_group_field', [$this, 'displayGroupValue'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('acb_groups', [$this, 'getFieldGroupValuesForContent'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('acb_group_fields', [$this, 'getGroupFieldValues'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_group_all_fields', [$this, 'getGroupAllFieldValues']),
+            new \Twig_SimpleFunction('acb_field_raw_value', [$this, 'getFieldRawValue'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -116,5 +118,34 @@ class ContentExtension extends \Twig_Extension
     public function displayFieldValue(FieldValueInterface $fieldValue)
     {
         return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
+    }
+
+    /**
+     * Get FieldGroup's children (FieldValues), indexed by Field's slug
+     *
+     * @param FieldGroupValueInterface $group
+     *
+     * @return array
+     */
+    public function getGroupAllFieldValues(FieldGroupValueInterface $group)
+    {
+        $fieldValues = [];
+        foreach ($group->getChildren() as $fieldValue) {
+            $fieldValues[$fieldValue->getField()->getSlug()] = $fieldValue;
+        }
+
+        return $fieldValues;
+    }
+
+    /**
+     * Get FieldValue raw value
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getFieldRawValue(FieldValueInterface $fieldValue)
+    {
+        return $this->fieldManager->getFieldType($fieldValue->getField())->getRawValue($fieldValue);
     }
 }

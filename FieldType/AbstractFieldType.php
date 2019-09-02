@@ -157,6 +157,16 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue)
+    {
+        return $fieldValue->getValue();
+    }
+
+    /**
      * Get form field type
      *
      * @return string

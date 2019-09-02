@@ -86,16 +86,10 @@ class File extends AbstractFieldType
         $value = $fieldValue->getValue();
         $value = unserialize($value);
 
-        if (empty($value['src'])) {
+        $fileName = $this->getFilename($value);
+        if ($fileName === '') {
             return '';
         }
-
-        $fileName = $this->uploadManager->getTargetDir() . DIRECTORY_SEPARATOR . $value['src'];
-        if (!file_exists($fileName)) {
-            return '';
-        }
-
-        $fileName = $this->assetPackages->getUrl($this->uploadManager->getWebPath() . '/' . $value['src']);
 
         return $this->renderFile($fileName, $value);
     }
@@ -111,6 +105,40 @@ class File extends AbstractFieldType
         $title = $value['title'] ?? $value['src'];
 
         return '<a href="' . $fileName . '" title="' . $title . '" download>' . $value['src'] . '</a>';
+    }
+
+    /**
+     * @param array $value
+     *
+     * @return string
+     */
+    private function getFilename($value)
+    {
+        if (empty($value['src'])) {
+            return '';
+        }
+
+        $fileName = $this->uploadManager->getTargetDir() . DIRECTORY_SEPARATOR . $value['src'];
+        if (!file_exists($fileName)) {
+            return '';
+        }
+
+        $fileName = $this->assetPackages->getUrl($this->uploadManager->getWebPath() . '/' . $value['src']);
+
+        return $fileName;
+    }
+
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue)
+    {
+        $value = unserialize($fieldValue->getValue());
+        $value['src'] = $this->getFilename($value);
+
+        return $value;
     }
 
     /**

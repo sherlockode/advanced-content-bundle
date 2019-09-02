@@ -7,6 +7,7 @@ use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupCollectionType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleType;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -68,5 +69,27 @@ class Flexible extends AbstractFieldType
     public function getFieldGroup()
     {
         return 'layout';
+    }
+
+    /**
+     * Flexible cannot be rendered directly, FieldGroupValues should be iterated through
+     *
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed|string
+     */
+    public function render(FieldValueInterface $fieldValue)
+    {
+        return '';
+    }
+
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue)
+    {
+        return '';
     }
 }

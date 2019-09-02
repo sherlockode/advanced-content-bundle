@@ -87,6 +87,16 @@ class Repeater extends AbstractFieldType
     }
 
     /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue)
+    {
+        return '';
+    }
+
+    /**
      * @return string
      */
     public function getFieldGroup()

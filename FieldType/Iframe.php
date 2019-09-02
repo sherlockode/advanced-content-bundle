@@ -110,4 +110,14 @@ class Iframe extends AbstractFieldType
 
         return '<iframe src="' . $value['href'] . '" ' . $width . ' ' . $height . '></iframe>';
     }
+
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue)
+    {
+        return unserialize($fieldValue->getValue());
+    }
 }

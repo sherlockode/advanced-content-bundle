@@ -113,4 +113,14 @@ class Link extends AbstractFieldType
 
         return '<a href="' . $value['href'] . '" target="' . $target . '">' . $value['anchor']. '</a>';
     }
+
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return mixed
+     */
+    public function getRawValue(FieldValueInterface $fieldValue)
+    {
+        return unserialize($fieldValue->getValue());
+    }
 }
