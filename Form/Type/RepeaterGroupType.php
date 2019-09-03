@@ -33,4 +33,13 @@ class RepeaterGroupType extends AbstractType
         $resolver->setDefault('data_class', $this->configurationManager->getEntityClass('field_group_value'));
         $resolver->setRequired(['fields', 'contentType']);
     }
+
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'acb_repeater_group';
+    }
 }

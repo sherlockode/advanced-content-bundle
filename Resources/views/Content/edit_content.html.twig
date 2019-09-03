@@ -17,6 +17,11 @@
         {{ form_errors(form) }}
         <div class="row">
             <div class="col-md-12">
+                {{ form_row(form.name) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 {% for fieldValue in form.fieldValues %}
                     {{ form_row(fieldValue) }}
                 {% endfor %}

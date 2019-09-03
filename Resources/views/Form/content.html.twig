@@ -42,13 +42,35 @@
     {% set type = 'group' %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
+{% block acb_repeater_group_widget %}
+    {% set fieldId = form.vars.id %}
+    <div class="acb-field panel panel-primary field-row acb-row">
+        <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
+             {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
+            <span class="panel-title">#{{ form.vars.name }}</span>
+            {{- block('acb_panel_actions') -}}
+        </div>
+        <div class="panel-body collapse" id="layout-{{ fieldId }}">
+            {% for child in form %}
+                {{ form_row(child) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
 
 {% block acb_flexible_group_widget %}
-    <div class="acb-group">
-        {% for child in form %}
-            {{ form_row(child) }}
-        {% endfor %}
-        <button class="acb-remove-group btn btn-danger" type="button">{{ 'content.form.field.remove'|trans }}</button>
+    {% set fieldId = form.vars.id %}
+    <div class="acb-field panel panel-primary field-row acb-row">
+        <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
+             {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
+            <span class="panel-title">{% if form.vars.value is not null and form.vars.value.layout is not null %}{{ form.vars.value.layout.name }}{% endif %}</span>
+            {{- block('acb_panel_actions') -}}
+        </div>
+        <div class="panel-body collapse" id="layout-{{ fieldId }}">
+            {% for child in form %}
+                {{ form_row(child) }}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 
