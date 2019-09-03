@@ -1,19 +1,13 @@
-.acb-field .remove-field {
+.acb-field .acb-remove-row {
     color: #fff;
     border: 0;
     background: none;
 }
-.acb-field .remove-field:hover {
+.acb-field .acb-remove-row:hover {
     color: #fff;
 }
 .acb-field .edit-field:hover {
     cursor: pointer;
-}
-.acb-field .actions {
-    display: none;
-}
-.acb-field .panel-heading:hover > .actions {
-    display: block;
 }
 .btn-add-field {
     margin-top: 25px;
@@ -32,4 +26,19 @@
 .acb-collection .acb-field {
     border: 1px solid #ddd;
     padding: 5px;
+}
+.acb-add-collection-item {
+    margin-top: 10px;
+}
+.expand_caret {
+    transform: scale(1.6);
+    margin-left: 8px;
+    margin-top: -4px;
+}
+.edit-field[aria-expanded='false'] > .panel-actions > .expand_caret {
+    transform: scale(1.6) rotate(-90deg);
+}
+.acb-field-value + .acb-field-value {
+    border-top: 1px solid #337ab7;
+    padding-top: 10px;
 }

@@ -13,6 +13,11 @@ abstract class Content implements ContentInterface
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var ContentTypeInterface
      */
     protected $contentType;
@@ -36,6 +41,26 @@ abstract class Content implements ContentInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**

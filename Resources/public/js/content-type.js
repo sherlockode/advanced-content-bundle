@@ -72,8 +72,8 @@ jQuery(function ($) {
         });
     }
 
-    $('.acb-fields').on('click', '.remove-field', function (e) {
-        var fieldRow = $(this).closest('.field-row');
+    $('body').on('click', '.acb-remove-row', function (e) {
+        var fieldRow = $(this).closest('.acb-row');
         fieldRow.remove();
     });
 
@@ -143,11 +143,6 @@ jQuery(function ($) {
             var newElem = $(newWidget);
             newElem.appendTo(list);
         });
-    });
-
-    $('body').on('click', '.acb-remove-group', function (e) {
-        e.preventDefault();
-        $(this).closest('.acb-group').remove();
     });
 
     function updateChoiceList() {

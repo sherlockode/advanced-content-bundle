@@ -14,6 +14,18 @@ interface ContentInterface
     public function getId();
 
     /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * Get content's content type
      *
      * @return ContentTypeInterface

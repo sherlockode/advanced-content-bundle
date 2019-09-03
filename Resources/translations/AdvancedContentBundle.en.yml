@@ -27,6 +27,7 @@ content:
     content_type: Content type
     edit: Edit content
     form:
+        name: Name
         field_values: Fields
         add_group: Add group
         field:

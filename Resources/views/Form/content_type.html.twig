@@ -23,18 +23,19 @@
 
 {% block acb_field_widget %}
     {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
-<div class="acb-field panel panel-primary field-row">
+<div class="acb-field panel panel-primary field-row acb-row">
+    {% set panelParent = '' %}
+    {% if form.parent is not empty %}
+        {% set panelParent = form.parent.vars.id %}
+        {% if form.parent.vars.name == 'fields' %}
+            {% set panelParent = 'acb-fields' %}
+        {% endif %}
+    {% endif %}
     <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}"
-         {% if form.parent is not empty and form.parent.vars.name == 'fields' %}data-parent="#acb-fields"{% endif %}>
+            {% if panelParent is not empty %}data-parent="#{{ panelParent }}"{% endif %}
+         aria-expanded="false">
         <span class="panel-title">{{ form.vars.label ?? (form.vars.value.name ?? '') }}</span>
-        <div class="pull-right actions">
-            <span>
-                <i class="glyphicon glyphicon-pencil"></i> {{ 'content_type.form.field.edit'|trans }}
-            </span>
-            <button type="button" class="remove-field">
-                <i class="glyphicon glyphicon-trash"></i> {{ 'content_type.form.field.remove'|trans }}
-            </button>
-        </div>
+        {{- block('acb_panel_actions') -}}
     </div>
     <div class="panel-body collapse" id="field-{{ fieldId }}">
         <div class="form-group row">
