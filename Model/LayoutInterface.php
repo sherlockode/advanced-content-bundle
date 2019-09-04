@@ -51,4 +51,23 @@ interface LayoutInterface
      * @return $this
      */
     public function removeChild(FieldInterface $child);
+
+    /**
+     * @return FieldGroupValueInterface[]
+     */
+    public function getFieldGroupValues();
+
+    /**
+     * @param FieldGroupValueInterface $fieldGroupValue
+     *
+     * @return $this
+     */
+    public function addFieldGroupValue(FieldGroupValueInterface $fieldGroupValue);
+
+    /**
+     * @param FieldGroupValueInterface $fieldGroupValue
+     *
+     * @return $this
+     */
+    public function removeFieldGroupValue(FieldGroupValueInterface $fieldGroupValue);
 }

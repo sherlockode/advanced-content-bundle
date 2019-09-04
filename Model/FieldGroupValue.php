@@ -42,7 +42,7 @@ abstract class FieldGroupValue implements FieldGroupValueInterface
         return $this->parent;
     }
 
-    public function setParent(FieldValueInterface $fieldValue)
+    public function setParent(FieldValueInterface $fieldValue = null)
     {
         $this->parent = $fieldValue;
 
