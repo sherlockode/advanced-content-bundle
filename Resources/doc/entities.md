@@ -41,8 +41,7 @@ class ContentType extends BaseContentType
 ```php
 <?php
 // src/AppBundle/Entity/Field.php
-
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Sherlockode\AdvancedContentBundle\Model\Field as BaseField;
 use Doctrine\ORM\Mapping as ORM;
@@ -61,24 +60,24 @@ class Field extends BaseField
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ContentType", inversedBy="fields")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ContentType", inversedBy="fields")
      * @ORM\JoinColumn(name="content_type_id", referencedColumnName="id")
      */
     protected $contentType;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldValue", mappedBy="field", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\FieldValue", mappedBy="field", cascade={"persist", "remove"})
      */
     protected $fieldValues;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Layout", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Layout", inversedBy="children")
      * @ORM\JoinColumn(name="layout_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $layout;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Layout", mappedBy="parent", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Layout", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $children;
 }
@@ -178,7 +177,7 @@ class FieldValue extends BaseFieldValue
 <?php
 // src/AppBundle/Entity/FieldGroupValue.php
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -204,21 +203,22 @@ class FieldGroupValue extends BaseFieldGroupValue
     /**
      * @var FieldValueInterface
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\FieldValue", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\FieldValue", inversedBy="children")
      */
     protected $parent;
 
     /**
      * @var FieldValueInterface[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldValue", mappedBy="group", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\FieldValue", mappedBy="group", cascade={"persist", "remove"})
      */
     protected $children;
 
     /**
      * @var LayoutInterface
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Layout")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Layout", inversedBy="fieldGroupValues")
+     * @ORM\JoinColumn(name="layout_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $layout;
 }
@@ -228,10 +228,11 @@ class FieldGroupValue extends BaseFieldGroupValue
 <?php
 // src/AppBundle/Entity/Layout.php
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\Layout as BaseLayout;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
@@ -253,15 +254,22 @@ class Layout extends BaseLayout
     /**
      * @var FieldInterface
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Field", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Field", inversedBy="children")
      */
     protected $parent;
 
     /**
      * @var FieldInterface[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Field", mappedBy="layout", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Field", mappedBy="layout", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $children;
+
+    /**
+     * @var FieldGroupValueInterface[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\FieldGroupValue", mappedBy="layout", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $fieldGroupValues;
 }
 ```

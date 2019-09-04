@@ -16,6 +16,7 @@ class FlexibleType extends AbstractType
             'label' => 'field_type.flexible.layout_list',
             'entry_type' => LayoutType::class,
             'allow_add' => true,
+            'allow_delete' => true,
             'by_reference' => false,
             'translation_domain' => 'AdvancedContentBundle',
             'block_name' => 'acb_flexible',

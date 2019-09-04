@@ -271,6 +271,7 @@ abstract class Field implements FieldInterface
     public function removeChild(LayoutInterface $child)
     {
         $this->children->removeElement($child);
+        $child->setParent(null);
 
         return $this;
     }

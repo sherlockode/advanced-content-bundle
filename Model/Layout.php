@@ -27,9 +27,15 @@ abstract class Layout implements LayoutInterface
      */
     protected $children;
 
+    /**
+     * @var FieldGroupValueInterface[]|Collection
+     */
+    protected $fieldGroupValues;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->fieldGroupValues = new ArrayCollection();
     }
 
     /**
@@ -109,6 +115,40 @@ abstract class Layout implements LayoutInterface
     public function removeChild(FieldInterface $child)
     {
         $this->children->removeElement($child);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FieldGroupValueInterface[]
+     */
+    public function getFieldGroupValues()
+    {
+        return $this->fieldGroupValues;
+    }
+
+    /**
+     * @param FieldGroupValueInterface $fieldGroupValue
+     *
+     * @return $this
+     */
+    public function addFieldGroupValue(FieldGroupValueInterface $fieldGroupValue)
+    {
+        $this->fieldGroupValues->add($fieldGroupValue);
+        $fieldGroupValue->setLayout($this);
+
+        return $this;
+    }
+
+    /**
+     * @param FieldGroupValueInterface $fieldGroupValue
+     *
+     * @return $this
+     */
+    public function removeFieldGroupValue(FieldGroupValueInterface $fieldGroupValue)
+    {
+        $this->fieldGroupValues->removeElement($fieldGroupValue);
+        $fieldGroupValue->setLayout(null);
 
         return $this;
     }
