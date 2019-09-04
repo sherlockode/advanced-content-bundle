@@ -112,16 +112,16 @@ interface FieldInterface
      *
      * @return int
      */
-    public function getSortOrder();
+    public function getPosition();
 
     /**
      * Set field's sort order
      *
-     * @param int $sortOrder
+     * @param int $position
      *
      * @return $this
      */
-    public function setSortOrder($sortOrder);
+    public function setPosition($position);
 
     /**
      * Get field's hint

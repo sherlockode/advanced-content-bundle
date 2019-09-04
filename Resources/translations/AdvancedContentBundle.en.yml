@@ -15,7 +15,7 @@ content_type:
             slug: Slug
             type: Field type
             required: Required
-            sort_order: Sort order
+            position: Sort order
             hint: Hint
             options: Options
         layout:

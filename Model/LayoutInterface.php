@@ -70,4 +70,20 @@ interface LayoutInterface
      * @return $this
      */
     public function removeFieldGroupValue(FieldGroupValueInterface $fieldGroupValue);
+
+    /**
+     * Get layout's sort order
+     *
+     * @return int
+     */
+    public function getPosition();
+
+    /**
+     * Set layout's sort order
+     *
+     * @param int $position
+     *
+     * @return $this
+     */
+    public function setPosition($position);
 }

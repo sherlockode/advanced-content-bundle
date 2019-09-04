@@ -32,6 +32,11 @@ abstract class Layout implements LayoutInterface
      */
     protected $fieldGroupValues;
 
+    /**
+     * @var int
+     */
+    protected $position;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -149,6 +154,26 @@ abstract class Layout implements LayoutInterface
     {
         $this->fieldGroupValues->removeElement($fieldGroupValue);
         $fieldGroupValue->setLayout(null);
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     *
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
 
         return $this;
     }

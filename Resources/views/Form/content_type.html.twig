@@ -3,7 +3,7 @@
 {% extends '@SherlockodeAdvancedContent/Form/common.html.twig' %}
 
 {% block acb_fields_widget %}
-    <div class="panel-group acb-fields" id="acb-fields">
+    <div class="panel-group acb-fields acb-sortable-group" id="acb-fields" data-sortable-group-id="acb-fields">
         {% for field in form %}
             {{ form_row(field) }}
         {% endfor %}
@@ -23,7 +23,6 @@
 
 {% block acb_field_widget %}
     {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
-<div class="acb-field panel panel-primary field-row acb-row">
     {% set panelParent = '' %}
     {% if form.parent is not empty %}
         {% set panelParent = form.parent.vars.id %}
@@ -31,6 +30,7 @@
             {% set panelParent = 'acb-fields' %}
         {% endif %}
     {% endif %}
+<div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ panelParent }}">
     <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}"
             {% if panelParent is not empty %}data-parent="#{{ panelParent }}"{% endif %}
          aria-expanded="false">
@@ -73,10 +73,10 @@
         </div>
         <div class="form-group row">
             <div class="col-md-2">
-                {{ form_label(form.sortOrder) }}
+                {{ form_label(form.position) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.sortOrder) }}
+                {{ form_widget(form.position) }}
             </div>
         </div>
         <div class="form-group row">

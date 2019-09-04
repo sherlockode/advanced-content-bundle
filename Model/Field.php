@@ -45,7 +45,7 @@ abstract class Field implements FieldInterface
     /**
      * @var int
      */
-    protected $sortOrder;
+    protected $position;
 
     /**
      * @var string
@@ -65,7 +65,7 @@ abstract class Field implements FieldInterface
     public function __construct()
     {
         $this->required = false;
-        $this->sortOrder = 0;
+        $this->position = 0;
         $this->options = serialize([]);
         $this->children = new ArrayCollection();
     }
@@ -201,19 +201,19 @@ abstract class Field implements FieldInterface
     /**
      * @return int
      */
-    public function getSortOrder()
+    public function getPosition()
     {
-        return $this->sortOrder;
+        return $this->position;
     }
 
     /**
-     * @param int $sortOrder
+     * @param int $position
      *
      * @return $this
      */
-    public function setSortOrder($sortOrder)
+    public function setPosition($position)
     {
-        $this->sortOrder = $sortOrder;
+        $this->position = $position;
 
         return $this;
     }

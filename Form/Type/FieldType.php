@@ -75,8 +75,8 @@ class FieldType extends AbstractType
                     'no' => false,
                 ]
             ])
-            ->add('sortOrder', IntegerType::class, [
-                'label' => 'content_type.form.field.sort_order',
+            ->add('position', IntegerType::class, [
+                'label' => 'content_type.form.field.position',
                 'required' => true,
             ])
             ->add('hint', TextareaType::class, [

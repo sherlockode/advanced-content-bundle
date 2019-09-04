@@ -15,7 +15,7 @@ content_type:
             slug: Clé
             type: Type de champ
             required: Obligatoire
-            sort_order: Ordre
+            position: Ordre
             hint: Informations
             options: Options
         layout:
