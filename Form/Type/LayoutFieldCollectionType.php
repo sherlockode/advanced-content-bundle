@@ -24,6 +24,7 @@ class LayoutFieldCollectionType extends AbstractType
         $resolver->setDefaults([
             'allow_add' => true,
             'allow_remove' => true,
+            'allow_delete' => true,
             'by_reference' => false,
             'entry_type' => FieldType::class,
             'entry_options' => [
