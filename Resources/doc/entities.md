@@ -78,6 +78,7 @@ class Field extends BaseField
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Layout", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $children;
 }
@@ -168,6 +169,7 @@ class FieldValue extends BaseFieldValue
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\FieldGroupValue", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $children;
 }

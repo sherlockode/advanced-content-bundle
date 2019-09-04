@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,6 +25,7 @@ class LayoutType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'content_type.form.layout.name'])
+            ->add('position', HiddenType::class)
             ->add('children', LayoutFieldCollectionType::class, [
                 'label' => 'content_type.form.layout.children',
                 'attr' => ['class' => 'acb-collection']

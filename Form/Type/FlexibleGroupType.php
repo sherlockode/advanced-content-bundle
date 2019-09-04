@@ -6,9 +6,12 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FlexibleGroupType extends AbstractType
@@ -37,6 +40,8 @@ class FlexibleGroupType extends AbstractType
             'choice_label' => 'name',
             'choices' => $options['layouts'],
         ]);
+
+        $builder->add('position', HiddenType::class);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
             $form = $event->getForm();
@@ -75,8 +80,14 @@ class FlexibleGroupType extends AbstractType
         $resolver->setDefaults([
             'data_class' => $this->configurationManager->getEntityClass('field_group_value'),
             'label' => false,
+            'parentFormId' => null,
         ]);
         $resolver->setRequired(['contentType', 'layouts']);
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['parentFormId'] = $options['parentFormId'];
     }
 
     public function getBlockPrefix()

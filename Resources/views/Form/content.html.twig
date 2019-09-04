@@ -16,16 +16,22 @@
 {% block acb_flexible_group_collection_widget %}
     {% set button_label = 'content.form.add_group' %}
     {% if prototype is defined %}
-        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}
+        {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
     {% endif %}
-    {{- block('form_widget') -}}
+    {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
+    <div {{ block('widget_container_attributes') }} data-sortable-group-id="{{ form.vars.id }}">
+        {% for child in form %}
+            {{- form_widget(child) -}}
+        {% endfor %}
+    </div>
     {% if allow_add %}
         <div class="acb-flexible-add-wrapper dropup"
              data-content-type="{{ contentType.id }}"
              data-id-prefix="{{ id }}"
              data-name-prefix="{{ full_name }}"
              data-url="{{ path('sherlockode_acb_content_flexible_form') }}"
-             data-list="#{{ form.vars.id }}">
+             data-list="#{{ form.vars.id }}"
+             data-form-id="{{ form.vars.id }}">
             <button type="button" class="btn btn-success dropdown-toggle acb-open-layout-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ button_label|trans }}
             </button>
@@ -44,10 +50,10 @@
 {% endblock %}
 {% block acb_repeater_group_widget %}
     {% set fieldId = form.vars.id %}
-    <div class="acb-field panel panel-primary field-row acb-row">
+    <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ form.parent.vars.id }}">
         <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
              {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
-            <span class="panel-title">#{{ form.vars.name }}</span>
+            <span class="panel-title">#<span class="panel-position">{{ form.vars.name|number_format + 1 }}</span></span>
             {{- block('acb_panel_actions') -}}
         </div>
         <div class="panel-body collapse" id="layout-{{ fieldId }}">
@@ -60,9 +66,15 @@
 
 {% block acb_flexible_group_widget %}
     {% set fieldId = form.vars.id %}
-    <div class="acb-field panel panel-primary field-row acb-row">
+    {% set parentGroupId = '' %}
+    {% if form.parent is not null %}
+        {% set parentGroupId = form.parent.vars.id %}
+    {% elseif parentFormId is defined %}
+        {% set parentGroupId = parentFormId %}
+    {% endif %}
+    <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ parentGroupId }}">
         <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
-             {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
+             data-parent="#{{ parentGroupId }}">
             <span class="panel-title">{% if form.vars.value is not null and form.vars.value.layout is not null %}{{ form.vars.value.layout.name }}{% endif %}</span>
             {{- block('acb_panel_actions') -}}
         </div>

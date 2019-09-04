@@ -52,7 +52,7 @@ class ContentTypeManager
     public function getOrderedFields(ContentTypeInterface $contentType)
     {
         return $this->om->getRepository($this->configurationManager->getEntityClass('field'))
-            ->findBy(['contentType' => $contentType], ['sortOrder' => 'ASC']);
+            ->findBy(['contentType' => $contentType], ['position' => 'ASC']);
     }
 
     /**
@@ -92,7 +92,7 @@ class ContentTypeManager
             $newField->setName($field->getName());
             $newField->setSlug($field->getSlug());
             $newField->setRequired($field->isRequired());
-            $newField->setSortOrder($field->getSortOrder());
+            $newField->setPosition($field->getPosition());
             $newField->setOptions($field->getOptions());
             $newField->setHint($field->getHint());
             $this->om->persist($newField);

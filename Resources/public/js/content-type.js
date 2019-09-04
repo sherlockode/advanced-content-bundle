@@ -4,6 +4,32 @@ jQuery(function ($) {
     updateChoiceList();
     hideEmptyOptionsRow();
     hideEmptyLayoutRow();
+    initSortables();
+
+    function initSortables() {
+        $(".acb-sortable-group").each(function(){
+            $(this).sortable({
+                containment: "parent",
+                items: '.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]',
+                cursor: "move",
+                axis: "y",
+                update: function(event, ui) {
+                    calculatePosition();
+                }
+            });
+        });
+    }
+
+    function calculatePosition() {
+        $(".acb-sortable-group").each(function(){
+            let sortables = $(this).find('.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]');
+            for (var i=0; i < sortables.length; i++) {
+                let newPosition = i+1;
+                $(sortables[i]).find('[name$="[position]"]').first().val(newPosition);
+                $(sortables[i]).find('.panel-position').first().html(newPosition);
+            }
+        });
+    }
 
     var fieldsList;
 
@@ -25,7 +51,7 @@ jQuery(function ($) {
                 var newElement = resp.html;
                 newElement = newElement.replace(/__random_id__/g, (Math.random() * 1000)|0);
                 newElement = $(newElement);
-                newElement.find('[name$="[sortOrder]"]').val(fieldsList.children().length + 1);
+                newElement.find('[name$="[position]"]').val(fieldsList.children().length + 1);
                 fieldsList.append(newElement);
                 newElement.find('.edit-field').click();
                 hideEmptyOptionsRow();
@@ -34,6 +60,7 @@ jQuery(function ($) {
                 if (modal.length) {
                     modal.modal('hide');
                 }
+                initSortables();
             } else {
                 $('.add-field-form').replaceWith(resp.html);
             }
@@ -75,6 +102,7 @@ jQuery(function ($) {
     $('body').on('click', '.acb-remove-row', function (e) {
         var fieldRow = $(this).closest('.acb-row');
         fieldRow.remove();
+        calculatePosition();
     });
 
     $('.acb-fields').on('change', '.field-type', function (e) {
@@ -113,6 +141,8 @@ jQuery(function ($) {
             list.data('widget-counter', counter);
             var newElem = $(newWidget);
             newElem.appendTo(list);
+            initSortables();
+            calculatePosition();
         } else {
             counter++;
             var url = $(this).data('url');
@@ -133,7 +163,8 @@ jQuery(function ($) {
 
         $.get(wrapper.data('url'), {
             contentTypeId: wrapper.data('content-type'),
-            layoutId: $(this).data('layout')
+            layoutId: $(this).data('layout'),
+            parentFormId: wrapper.data('form-id')
         }, function (response) {
             var newWidget = response;
             newWidget = newWidget.replace(/__flexible_name__/g, name);
@@ -142,6 +173,8 @@ jQuery(function ($) {
             list.data('widget-counter', counter);
             var newElem = $(newWidget);
             newElem.appendTo(list);
+            initSortables();
+            calculatePosition();
         });
     });
 

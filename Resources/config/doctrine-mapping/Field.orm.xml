@@ -10,7 +10,7 @@
             </options>
         </field>
         <field name="options" type="string" column="options" nullable="true"/>
-        <field name="sortOrder" type="integer" column="sort_order">
+        <field name="position" type="integer" column="position">
             <options>
                 <option name="default">0</option>
             </options>

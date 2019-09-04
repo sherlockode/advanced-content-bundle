@@ -235,6 +235,7 @@ class MyContentController extends Controller
     {
         $contentTypeId = (int) $request->query->get('contentTypeId');
         $layoutId = (int) $request->query->get('layoutId');
+        $parentFormId = $request->query->get('parentFormId');
         $contentTypeClass = $this->configurationManager->getEntityClass('content_type');
         $fieldGroupValueClass = $this->configurationManager->getEntityClass('field_group_value');
         $layoutClass = $this->configurationManager->getEntityClass('layout');
@@ -253,6 +254,7 @@ class MyContentController extends Controller
             'contentType' => $contentType,
             'csrf_protection' => false,
             'layouts' => [$layout],
+            'parentFormId' => $parentFormId,
         ]);
         $form = $formBuilder->getForm();
 

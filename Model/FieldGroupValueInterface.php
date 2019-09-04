@@ -37,4 +37,20 @@ interface FieldGroupValueInterface
      * @return $this
      */
     public function setLayout(LayoutInterface $layout = null);
+
+    /**
+     * Get field group's sort order
+     *
+     * @return int
+     */
+    public function getPosition();
+
+    /**
+     * Set field group's sort order
+     *
+     * @param int $position
+     *
+     * @return $this
+     */
+    public function setPosition($position);
 }
