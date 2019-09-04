@@ -122,7 +122,7 @@ class Content extends BaseContent
 <?php
 // src/AppBundle/Entity/FieldValue.php
 
-namespace AppBundle\Entity;
+namespace App\Entity;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldValue as BaseFieldValue;
 use Doctrine\ORM\Mapping as ORM;
@@ -145,7 +145,7 @@ class FieldValue extends BaseFieldValue
     /**
      * @var Content
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Content", inversedBy="fieldValues")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="fieldValues")
      * @ORM\JoinColumn(name="content_id", referencedColumnName="id")
      */
     protected $content;
@@ -153,7 +153,7 @@ class FieldValue extends BaseFieldValue
     /**
      * @var Field
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Field", inversedBy="fieldValues")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Field", inversedBy="fieldValues")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
     protected $field;
@@ -161,13 +161,13 @@ class FieldValue extends BaseFieldValue
     /**
      * @var FieldGroupValue
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\FieldGroupValue", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\FieldGroupValue", inversedBy="children")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $group;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FieldGroupValue", mappedBy="parent", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\FieldGroupValue", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $children;
 }

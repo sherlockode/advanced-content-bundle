@@ -159,6 +159,7 @@ abstract class FieldValue implements FieldValueInterface
     public function removeChild(FieldGroupValueInterface $child)
     {
         $this->children->removeElement($child);
+        $child->setParent(null);
 
         return $this;
     }

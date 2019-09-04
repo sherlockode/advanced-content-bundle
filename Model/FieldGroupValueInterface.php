@@ -19,7 +19,7 @@ interface FieldGroupValueInterface
      *
      * @return $this
      */
-    public function setParent(FieldValueInterface $fieldValue);
+    public function setParent(FieldValueInterface $fieldValue = null);
 
     /**
      * @return FieldValueInterface[]
