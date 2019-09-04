@@ -15,6 +15,11 @@
     {% endif %}
 {% endblock %}
 
+{% block repeater_layout_widget %}
+    {% set allowDelete = false %}
+    {{- block('layout_widget') -}}
+{% endblock %}
+
 {% block layout_widget %}
     {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
     <div class="acb-field panel panel-primary field-row acb-row">
@@ -40,9 +45,11 @@
 
 {% block acb_panel_actions %}
     <div class="pull-right panel-actions">
-        <button type="button" class="acb-remove-row">
-            <i class="glyphicon glyphicon-trash"></i>
-        </button>
+        {% if allowDelete is not defined or allowDelete == true %}
+            <button type="button" class="acb-remove-row">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        {% endif %}
         <div class="expand_caret caret"></div>
     </div>
 {% endblock %}

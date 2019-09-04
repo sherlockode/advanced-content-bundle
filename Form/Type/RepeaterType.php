@@ -36,4 +36,12 @@ class RepeaterType extends AbstractType
             'translation_domain' => 'AdvancedContentBundle',
         ]);
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'repeater_layout';
+    }
 }
