@@ -204,6 +204,10 @@ jQuery(function ($) {
         $(this).closest('.choice-row').remove();
     });
 
+    let contentTypePageTypeList = $('select.acb-contenttype-page-type');
+    let contentTypePageList = $('select.acb-contenttype-page');
+    let contentTypePageTypeValue = contentTypePageTypeList.val();
+    let contentTypePageValue = contentTypePageList.val();
     $('body').on('submit', '.edit-content-type', function(e) {
         var validateChoiceLists = true;
         var validateSlugs = true;
@@ -246,7 +250,13 @@ jQuery(function ($) {
         }
 
         if (!validateChoiceLists || !validateSlugs) {
-            e.preventDefault();
+            // e.preventDefault();
+        }
+
+        if ((contentTypePageTypeValue !== '' && contentTypePageTypeValue !== contentTypePageTypeList.val()) || (contentTypePageValue !== '' && contentTypePageValue !== contentTypePageList.val())) {
+            if (!confirm($('.acb-contenttype-change-link').html())) {
+                // e.preventDefault();
+            }
         }
     });
 
@@ -284,4 +294,49 @@ jQuery(function ($) {
         // 4) remove everything but alphanumeric characters and dashes
         return value.toLowerCase().trim().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     }
+
+    let pageTitle = $('.acb-page-title');
+    let pageSlug = $('.acb-page-slug');
+    if (pageTitle.length > 0 && pageSlug.length > 0) {
+        var timer;
+        pageTitle.on('keyup', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                pageSlug.val(generateSlug(pageTitle.val()));
+            }, 300);
+        });
+    }
+
+    displayContentTypePageList();
+    $('.acb-contenttype-link-type').on('change', function(){
+        displayContentTypePageList();
+    });
+    function displayContentTypePageList() {
+        let linkType = $('select.acb-contenttype-link-type').val();
+        contentTypePageTypeList.closest('.form-group').hide();
+        contentTypePageList.closest('.form-group').hide();
+
+        if (linkType === '0') { // No link
+            contentTypePageList.val('');
+            contentTypePageTypeList.val('');
+        }
+        if (linkType === '1') { // Page Type link
+            contentTypePageTypeList.closest('.form-group').show();
+            contentTypePageList.val('');
+        }
+        if (linkType === '2') { // Page link
+            contentTypePageList.closest('.form-group').show();
+            contentTypePageTypeList.val('');
+        }
+    }
+
+    let pageTypeList = $('select.acb-page-page-type');
+    let pageTypeValue = pageTypeList.val();
+    $('body').on('submit', '.edit-page', function(e) {
+        if (pageTypeValue !== $(this).find('select.acb-page-page-type').val()) {
+            if (!confirm($('.acb-page-change-type').html())) {
+                // e.preventDefault();
+            }
+        }
+    });
 });

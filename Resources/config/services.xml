@@ -15,6 +15,10 @@
             <argument/>
             <argument/>
         </service>
+        <service id="sherlockode_advanced_content.page_manager" class="Sherlockode\AdvancedContentBundle\Manager\PageManager">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
         <service id="sherlockode_advanced_content.form.field" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldType">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
@@ -23,6 +27,7 @@
         </service>
         <service id="sherlockode_advanced_content.form.content" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentType">
             <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.content_create" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType">
@@ -34,6 +39,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.field_values" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldValuesType">
@@ -72,6 +78,22 @@
         <service id="sherlockode_advanced_content.field_value_listener" class="Sherlockode\AdvancedContentBundle\EventListener\FieldValueListener">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
+        </service>
+        <service id="sherlockode_advanced_content.page_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageListener">
+            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
+            <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
+            <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
+            <tag name="doctrine.event_listener" event="postUpdate" lazy="1"/>
+        </service>
+        <service id="sherlockode_advanced_content.page_type_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageTypeListener">
+            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
+            <tag name="doctrine.event_listener" event="preRemove" lazy="1"/>
+            <tag name="doctrine.event_listener" event="postRemove" lazy="1"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_type_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentTypeListener">
+            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
+            <tag name="doctrine.event_listener" event="postPersist" lazy="1"/>
+            <tag name="doctrine.event_listener" event="postUpdate" lazy="1"/>
         </service>
     </services>
 </container>

@@ -21,6 +21,18 @@ content_type:
         layout:
             name: Group name
             children: Fields
+        link_types:
+            label: Link to
+            no_link: No link
+            page_type: Page type
+            page: Page
+        page_type: Page type
+        page: Page
+    errors:
+        existing_link: Another content type is already linked to this page type / page
+        missing_page_type: Please select a page type
+        missing_page: Please select a page
+        alert_change_link: Warning, changing the association can lead to content deletion. Are you sure you want to continue?
 content:
     label: Content
     id: ID
@@ -110,3 +122,27 @@ delete: Delete
 edit: Edit
 save: Save
 show: Show
+page_type:
+    label: Page Type
+    form:
+        name: Name
+page:
+    label: Page
+    form:
+        tabs:
+            label: Page
+            general: General
+            content: Content
+        title: Title
+        slug: Slug
+        meta_description: Meta Description
+        status: Status
+        statuses:
+            draft: Draft
+            published: Published
+            trash: Trash
+        content: Content
+        page_type: Page type
+    errors:
+        alert_change_type: Warning, changing the page type will lead to content deletion. Are you sure you want to continue?
+

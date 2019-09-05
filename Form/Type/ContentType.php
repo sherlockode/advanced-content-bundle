@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,11 +17,18 @@ class ContentType extends AbstractType
     private $contentTypeManager;
 
     /**
-     * @param ContentTypeManager $contentTypeManager
+     * @var ConfigurationManager
      */
-    public function __construct(ContentTypeManager $contentTypeManager)
+    private $configurationManager;
+
+    /**
+     * @param ContentTypeManager   $contentTypeManager
+     * @param ConfigurationManager $configurationManager
+     */
+    public function __construct(ContentTypeManager $contentTypeManager, ConfigurationManager $configurationManager)
     {
         $this->contentTypeManager = $contentTypeManager;
+        $this->configurationManager = $configurationManager;
     }
 
     /**
@@ -52,6 +60,7 @@ class ContentType extends AbstractType
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
         ]);
+        $resolver->setDefault('data_class', $this->configurationManager->getEntityClass('content'));
         $resolver->setRequired(['contentType']);
     }
 }

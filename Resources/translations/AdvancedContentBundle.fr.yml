@@ -21,6 +21,18 @@ content_type:
         layout:
             name: Nom du groupe
             children: Champs
+        link_types:
+            label: Associer à
+            no_link: Ne pas associer
+            page_type: Type de page
+            page: Page
+        page_type: Type de page
+        page: Page
+    errors:
+        existing_link: Un autre type de contenu est déjà lié à ce type de page / cette page
+        missing_page_type: Veuillez sélectionner un type de page
+        missing_page: Veuillez sélectionner une page
+        alert_change_link: Attention, changer l'association peut provoquer la suppression de certains contenus. Voulez-vous continuer ?
 content:
     label: Contenu avancé
     id: Identifiant
@@ -110,3 +122,26 @@ delete: Supprimer
 edit: Modifier
 save: Valider
 show: Voir
+page_type:
+    label: Type de page
+    form:
+        name: Nom
+page:
+    label: Page
+    form:
+        tabs:
+            label: Page
+            general: Général
+            content: Contenu
+        title: Titre
+        slug: Slug
+        meta_description: Méta Description
+        status: Statut
+        statuses:
+            draft: Brouillon
+            published: Publié
+            trash: Effacé
+        content: Contenu
+        page_type: Type de page
+    errors:
+        alert_change_type: Attention, changer le type de la page va provoquer la suppression du contenu. Voulez-vous continuer ?
