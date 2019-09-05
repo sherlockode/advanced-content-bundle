@@ -4,6 +4,10 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 
 interface ContentTypeInterface
 {
+    const LINK_TYPE_NO_LINK = 0;
+    const LINK_TYPE_PAGE_TYPE = 1;
+    const LINK_TYPE_PAGE = 2;
+
     /**
      * Get content type id
      *
@@ -51,4 +55,28 @@ interface ContentTypeInterface
      * @return $this
      */
     public function removeField(FieldInterface $field);
+
+    /**
+     * @return PageTypeInterface|null
+     */
+    public function getPageType();
+
+    /**
+     * @param PageTypeInterface|null $pageType
+     *
+     * @return $this
+     */
+    public function setPageType(PageTypeInterface $pageType = null);
+
+    /**
+     * @return PageInterface
+     */
+    public function getPage();
+
+    /**
+     * @param PageInterface|null $page
+     *
+     * @return $this
+     */
+    public function setPage(PageInterface $page = null);
 }

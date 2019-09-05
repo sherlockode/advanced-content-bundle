@@ -6,13 +6,20 @@ use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldsTransformer;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
+use Sherlockode\AdvancedContentBundle\Manager\PageManager;
+use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
+use Sherlockode\AdvancedContentBundle\Model\PageInterface;
+use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentTypeFormType extends AbstractType
 {
@@ -37,21 +44,29 @@ class ContentTypeFormType extends AbstractType
     private $translator;
 
     /**
+     * @var PageManager
+     */
+    private $pageManager;
+
+    /**
      * @param ContentTypeManager   $contentTypeManager
      * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
      * @param TranslatorInterface  $translator
+     * @param PageManager          $pageManager
      */
     public function __construct(
         ContentTypeManager $contentTypeManager,
         FieldManager $fieldManager,
         ConfigurationManager $configurationManager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        PageManager $pageManager
     ) {
         $this->contentTypeManager = $contentTypeManager;
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
         $this->translator = $translator;
+        $this->pageManager = $pageManager;
     }
 
     /**
@@ -62,7 +77,86 @@ class ContentTypeFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'content_type.form.name'])
+            ->add('linkType', ChoiceType::class, [
+                'label' => 'content_type.form.link_types.label',
+                'choices' => [
+                    'content_type.form.link_types.no_link' => ContentTypeInterface::LINK_TYPE_NO_LINK,
+                    'content_type.form.link_types.page_type' => ContentTypeInterface::LINK_TYPE_PAGE_TYPE,
+                    'content_type.form.link_types.page' => ContentTypeInterface::LINK_TYPE_PAGE
+                ],
+                'translation_domain' => 'AdvancedContentBundle',
+                'mapped' => false,
+                'attr' => ['class' => 'acb-contenttype-link-type'],
+            ])
+            ->add('pageType', EntityType::class, [
+                'label' => 'content_type.form.page_type',
+                'class' => $this->configurationManager->getEntityClass('page_type'),
+                'choice_label' => 'name',
+                'required' => false,
+                'attr' => ['class' => 'acb-contenttype-page-type'],
+            ])
+            ->add('page', EntityType::class, [
+                'label' => 'content_type.form.page',
+                'class' => $this->configurationManager->getEntityClass('page'),
+                'choice_label' => 'title',
+                'required' => false,
+                'attr' => ['class' => 'acb-contenttype-page'],
+            ])
         ;
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options) {
+            $form = $event->getForm();
+            /** @var ContentTypeInterface $contentType */
+            $contentType = $options['contentType'];
+            $linkType = ContentTypeInterface::LINK_TYPE_NO_LINK;
+            if ($contentType->getPage() instanceof PageInterface) {
+                $linkType = ContentTypeInterface::LINK_TYPE_PAGE;
+            } elseif ($contentType->getPageType() instanceof PageTypeInterface) {
+                $linkType = ContentTypeInterface::LINK_TYPE_PAGE_TYPE;
+            }
+            $form->get('linkType')->setData($linkType);
+        });
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData() ?? [];
+
+            /** @var ContentTypeInterface $contentType */
+            $contentType = $form->getData();
+            $linkType = $data['linkType'];
+            if ($linkType == ContentTypeInterface::LINK_TYPE_PAGE) {
+                $data['pageType'] = null;
+                if (empty($data['page'])) {
+                    $form->addError(new FormError(
+                        $this->translator->trans('content_type.errors.missing_page', [], 'AdvancedContentBundle')
+                    ));
+                    return;
+                }
+            }
+            if ($linkType == ContentTypeInterface::LINK_TYPE_PAGE_TYPE) {
+                $data['page'] = null;
+                if (empty($data['pageType'])) {
+                    $form->addError(new FormError(
+                        $this->translator->trans('content_type.errors.missing_page_type', [], 'AdvancedContentBundle')
+                    ));
+                    return;
+                }
+            }
+
+            if ($linkType == ContentTypeInterface::LINK_TYPE_NO_LINK) {
+                $data['pageType'] = null;
+                $data['page'] = null;
+            } else {
+                if (!$this->pageManager->validateContentTypeLink($contentType, $data['pageType'], $data['page'])) {
+                    $form->addError(new FormError(
+                        $this->translator->trans('content_type.errors.existing_link', [], 'AdvancedContentBundle')
+                    ));
+
+                    return;
+                }
+            }
+
+            $event->setData($data);
+        });
 
         if (!$options['contentType']->getId()) {
             return;

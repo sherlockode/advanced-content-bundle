@@ -23,6 +23,16 @@ abstract class ContentType implements ContentTypeInterface
     protected $fields;
 
     /**
+     * @var PageTypeInterface
+     */
+    protected $pageType;
+
+    /**
+     * @var PageInterface
+     */
+    protected $page;
+
+    /**
      * ContentType constructor.
      */
     public function __construct()
@@ -87,6 +97,46 @@ abstract class ContentType implements ContentTypeInterface
     public function removeField(FieldInterface $field)
     {
         $this->fields->removeElement($field);
+
+        return $this;
+    }
+
+    /**
+     * @return PageTypeInterface|null
+     */
+    public function getPageType()
+    {
+        return $this->pageType;
+    }
+
+    /**
+     * @param PageTypeInterface|null $pageType
+     *
+     * @return $this
+     */
+    public function setPageType(PageTypeInterface $pageType = null)
+    {
+        $this->pageType = $pageType;
+
+        return $this;
+    }
+
+    /**
+     * @return PageInterface
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param PageInterface|null $page
+     *
+     * @return $this
+     */
+    public function setPage(PageInterface $page = null)
+    {
+        $this->page = $page;
 
         return $this;
     }

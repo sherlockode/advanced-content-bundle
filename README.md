@@ -63,21 +63,25 @@ Next, make the bundle aware of your entities by adding the following lines to yo
 doctrine:
     orm:
         resolve_target_entities:
-            SherlockodeAdvancedContentBundle\Model\ContentTypeInterface: AppBundle\Entity\ContentType
-            SherlockodeAdvancedContentBundle\Model\ContentInterface: AppBundle\Entity\Content
-            SherlockodeAdvancedContentBundle\Model\FieldInterface: AppBundle\Entity\Field
-            SherlockodeAdvancedContentBundle\Model\FieldValueInterface: AppBundle\Entity\FieldValue
-            SherlockodeAdvancedContentBundle\Model\FieldGroupValueInterface: AppBundle\Entity\FieldGroupValue
-            SherlockodeAdvancedContentBundle\Model\LayoutInterface: AppBundle\Entity\Layout
+            SherlockodeAdvancedContentBundle\Model\ContentTypeInterface: App\Entity\ContentType
+            SherlockodeAdvancedContentBundle\Model\ContentInterface: App\Entity\Content
+            SherlockodeAdvancedContentBundle\Model\FieldInterface: App\Entity\Field
+            SherlockodeAdvancedContentBundle\Model\FieldValueInterface: App\Entity\FieldValue
+            SherlockodeAdvancedContentBundle\Model\FieldGroupValueInterface: App\Entity\FieldGroupValue
+            SherlockodeAdvancedContentBundle\Model\LayoutInterface: App\Entity\Layout
+            SherlockodeAdvancedContentBundle\Model\PageTypeInterface: App\Entity\PageType
+            SherlockodeAdvancedContentBundle\Model\PageInterface: App\Entity\Page
 
 sherlockode_advanced_content:
     entity_class:
-        content_type: AppBundle\Entity\ContentType
-        field: AppBundle\Entity\Field
-        content: AppBundle\Entity\Content
-        field_value: AppBundle\Entity\FieldValue
-        field_group_value: AppBundle\Entity\FieldGroupValue
-        layout: AppBundle\Entity\Layout
+        content_type: App\Entity\ContentType
+        field: App\Entity\Field
+        content: App\Entity\Content
+        field_value: App\Entity\FieldValue
+        field_group_value: App\Entity\FieldGroupValue
+        layout: App\Entity\Layout
+        page_type: App\Entity\PageType
+        page: App\Entity\Page
 ```
 
 
