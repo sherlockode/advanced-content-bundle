@@ -1,6 +1,10 @@
 jQuery(function ($) {
     'use strict';
 
+    ////////////
+    // Common //
+    ////////////
+
     updateChoiceList();
     hideEmptyOptionsRow();
     hideEmptyLayoutRow();
@@ -31,12 +35,87 @@ jQuery(function ($) {
         });
     }
 
-    var fieldsList;
-
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
 
+    $('body').on('click', '.acb-remove-row', function (e) {
+        var fieldRow = $(this).closest('.acb-row');
+        fieldRow.remove();
+        calculatePosition();
+    });
+
+    function generateSlug (value) {
+        // use speakingurl lib if available
+        if (typeof getSlug === 'function') {
+            return getSlug(value);
+        }
+        // simple custom slug generator for fallback
+        // 1) convert to lowercase
+        // 2) remove dashes and pluses
+        // 3) replace spaces with dashes
+        // 4) remove everything but alphanumeric characters and dashes
+        return value.toLowerCase().trim().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+
+    $('body').on('click', '.acb-add-collection-item', function (e) {
+        e.preventDefault();
+
+        var list = $($(this).attr('data-list'));
+        var counter = list.data('widget-counter') || list.children().length;
+
+        var type = $(this).data('type');
+        if (type === 'group') {
+            var newWidget = list.data('prototype');
+            newWidget = newWidget.replace(/__name__label__/g, counter);
+            newWidget = newWidget.replace(/__name__/g, counter);
+            newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
+            counter++;
+            list.data('widget-counter', counter);
+            var newElem = $(newWidget);
+            newElem.appendTo(list);
+            initSortables();
+            calculatePosition();
+        } else {
+            counter++;
+            var url = $(this).data('url');
+            url = url.replace(/__name__/g, counter);
+            fieldsList = list;
+
+            openAddFieldModal(url);
+            list.data('widget-counter', counter);
+        }
+    });
+    $('body').on('click', '.acb-add-flexible-item', function (e) {
+        e.preventDefault();
+        var wrapper = $(this).closest('.acb-flexible-add-wrapper');
+        var list = $(wrapper.attr('data-list'));
+        var counter = list.data('widget-counter') || list.children().length;
+        var name = wrapper.attr('data-name-prefix') + '[' + counter + ']';
+        var id = wrapper.attr('data-id-prefix') + '_' + counter;
+
+        $.get(wrapper.data('url'), {
+            contentTypeId: wrapper.data('content-type'),
+            layoutId: $(this).data('layout'),
+            parentFormId: wrapper.data('form-id')
+        }, function (response) {
+            var newWidget = response;
+            newWidget = newWidget.replace(/__flexible_name__/g, name);
+            newWidget = newWidget.replace(/flexible_name__/g, id);
+            counter++;
+            list.data('widget-counter', counter);
+            var newElem = $(newWidget);
+            newElem.appendTo(list);
+            initSortables();
+            calculatePosition();
+        });
+    });
+
+    //////////////////
+    // Content Type //
+    //////////////////
+
+    var fieldsList;
     $('body').on('submit', '.form-create-field', function (e) {
         e.preventDefault();
         var form = $(this);
@@ -99,12 +178,6 @@ jQuery(function ($) {
         });
     }
 
-    $('body').on('click', '.acb-remove-row', function (e) {
-        var fieldRow = $(this).closest('.acb-row');
-        fieldRow.remove();
-        calculatePosition();
-    });
-
     $('.acb-fields').on('change', '.field-type', function (e) {
         var fieldRow = $(this).closest('.field-row');
         var data = {
@@ -124,59 +197,6 @@ jQuery(function ($) {
             hideEmptyLayoutRow();
             initSortables();
         }).fail(ajaxFailCallback);
-    });
-
-    $('body').on('click', '.acb-add-collection-item', function (e) {
-        e.preventDefault();
-
-        var list = $($(this).attr('data-list'));
-        var counter = list.data('widget-counter') || list.children().length;
-
-        var type = $(this).data('type');
-        if (type === 'group') {
-            var newWidget = list.data('prototype');
-            newWidget = newWidget.replace(/__name__label__/g, counter);
-            newWidget = newWidget.replace(/__name__/g, counter);
-            newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
-            counter++;
-            list.data('widget-counter', counter);
-            var newElem = $(newWidget);
-            newElem.appendTo(list);
-            initSortables();
-            calculatePosition();
-        } else {
-            counter++;
-            var url = $(this).data('url');
-            url = url.replace(/__name__/g, counter);
-            fieldsList = list;
-
-            openAddFieldModal(url);
-            list.data('widget-counter', counter);
-        }
-    });
-    $('body').on('click', '.acb-add-flexible-item', function (e) {
-        e.preventDefault();
-        var wrapper = $(this).closest('.acb-flexible-add-wrapper');
-        var list = $(wrapper.attr('data-list'));
-        var counter = list.data('widget-counter') || list.children().length;
-        var name = wrapper.attr('data-name-prefix') + '[' + counter + ']';
-        var id = wrapper.attr('data-id-prefix') + '_' + counter;
-
-        $.get(wrapper.data('url'), {
-            contentTypeId: wrapper.data('content-type'),
-            layoutId: $(this).data('layout'),
-            parentFormId: wrapper.data('form-id')
-        }, function (response) {
-            var newWidget = response;
-            newWidget = newWidget.replace(/__flexible_name__/g, name);
-            newWidget = newWidget.replace(/flexible_name__/g, id);
-            counter++;
-            list.data('widget-counter', counter);
-            var newElem = $(newWidget);
-            newElem.appendTo(list);
-            initSortables();
-            calculatePosition();
-        });
     });
 
     function updateChoiceList() {
@@ -283,31 +303,6 @@ jQuery(function ($) {
         });
     }
 
-    function generateSlug (value) {
-        // use speakingurl lib if available
-        if (typeof getSlug === 'function') {
-            return getSlug(value);
-        }
-        // simple custom slug generator for fallback
-        // 1) convert to lowercase
-        // 2) remove dashes and pluses
-        // 3) replace spaces with dashes
-        // 4) remove everything but alphanumeric characters and dashes
-        return value.toLowerCase().trim().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    }
-
-    let pageTitle = $('.acb-page-title');
-    let pageSlug = $('.acb-page-slug');
-    if (pageTitle.length > 0 && pageSlug.length > 0) {
-        var timer;
-        pageTitle.on('keyup', function () {
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                pageSlug.val(generateSlug(pageTitle.val()));
-            }, 300);
-        });
-    }
-
     displayContentTypePageList();
     $('.acb-contenttype-link-type').on('change', function(){
         displayContentTypePageList();
@@ -331,6 +326,28 @@ jQuery(function ($) {
         }
     }
 
+    /////////////
+    // Content //
+    /////////////
+
+    initDatePicker();
+
+    function initDatePicker() {
+        $('body').find('.acb-date').each(function() {
+            var format = 'DD/MM/YYYY';
+            if ($(this).hasClass('datetimepicker')) {
+                format = format + ' HH:mm:ss';
+            }
+            $(this).datetimepicker({
+                format: format
+            });
+        });
+    }
+
+    //////////
+    // Page //
+    //////////
+
     let pageTypeList = $('select.acb-page-page-type');
     let pageTypeValue = pageTypeList.val();
     $('body').on('submit', '.edit-page', function(e) {
@@ -340,4 +357,16 @@ jQuery(function ($) {
             }
         }
     });
+
+    let pageTitle = $('.acb-page-title');
+    let pageSlug = $('.acb-page-slug');
+    if (pageTitle.length > 0 && pageSlug.length > 0) {
+        var timer;
+        pageTitle.on('keyup', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                pageSlug.val(generateSlug(pageTitle.val()));
+            }, 300);
+        });
+    }
 });
