@@ -66,6 +66,17 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('init_command')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('directory')
+                            ->defaultValue('var/acb')
+                        ->end()
+                        ->booleanNode('allow_update')
+                            ->defaultFalse()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

@@ -102,7 +102,6 @@ sherlockode_advanced_content:
         uri_prefix: /uploads/acb_images
 ```
 
-
 ### Routing
 
 ```yaml
@@ -110,6 +109,10 @@ sherlockode_advanced_content:
 sherlockode_advanced_content:
     resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.xml'
 ```
+
+## Import
+
+Learn how to use our import command here : [doc](Resources/doc/import.md)
 
 
 Usage

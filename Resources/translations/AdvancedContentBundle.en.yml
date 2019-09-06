@@ -57,6 +57,7 @@ field_type:
             full: Full
         label: Editor
     image:
+        label: Image
         name: Image
         alt: Alt text
     repeater:
@@ -145,4 +146,16 @@ page:
         page_type: Page type
     errors:
         alert_change_type: Warning, changing the page type will lead to content deletion. Are you sure you want to continue?
-
+init:
+    title: 'Start importing %entity%'
+    errors:
+        init_dir: Init directory %dir% does not exist
+        entity_dir: 'Directory %dir% does not exist : %entity% will not be processed'
+        entity_not_found: '%entity% "%name%" was not found'
+        page_no_content_type: No content type was found for page %page%. Content will not be processed
+        contact_type_missing_name: You need to define the name of the ContentType
+        field_missing_data: You need to define the name / the type of the Field
+        layout_missing_name: You need to define the name of the Layout
+        page_missing_data: You need to define the name / the slug of the Page
+        field_value_missing_slug: You need to define the slug of the FieldValue
+        field_group_value_missing_name: You need to define the name of the FieldGroupValue

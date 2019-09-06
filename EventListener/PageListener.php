@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Sherlockode\AdvancedContentBundle\Manager\PageManager;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 
 class PageListener
@@ -37,8 +38,12 @@ class PageListener
             return;
         }
 
-        $object->setStatus(PageInterface::STATUS_DRAFT);
-        $this->pageManager->createContentForPage($object);
+        if ($object->getStatus() === null) {
+            $object->setStatus(PageInterface::STATUS_DRAFT);
+        }
+        if (!$object->getContent() instanceof ContentInterface) {
+            $this->pageManager->createContentForPage($object);
+        }
     }
 
     /**
