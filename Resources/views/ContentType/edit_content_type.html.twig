@@ -3,7 +3,7 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/sherlockodeadvancedcontent/css/content-type.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/sherlockodeadvancedcontent/css/acb.css') }}">
 {% endblock %}
 {% block body %}
     {{ parent() }}
@@ -61,6 +61,6 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/sherlockodeadvancedcontent/js/content-type.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/sherlockodeadvancedcontent/js/acb.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/sherlockodeadvancedcontent/js/speakingurl.min.js') }}"></script>
 {% endblock %}
