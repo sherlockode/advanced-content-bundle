@@ -122,6 +122,7 @@ jQuery(function ($) {
             updateChoiceList();
             hideEmptyOptionsRow();
             hideEmptyLayoutRow();
+            initSortables();
         }).fail(ajaxFailCallback);
     });
 
