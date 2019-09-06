@@ -24,18 +24,14 @@ $ composer require sherlockode/advanced-content-bundle
 Register the bundle in your application's kernel:
 
 ```php
-// app/AppKernel.php
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = [
-            // ...
-            new Sherlockode\AdvancedContentBundle\SherlockodeAdvancedContentBundle(),
-            // ...
-        ];
-    }
-}
+// config/bundles.php
+<?php
+
+return [
+    /* ... */
+    Sherlockode\AdvancedContentBundle\SherlockodeAdvancedContentBundle::class => ['all' => true],
+];
+
 ```
 
 Configuration
@@ -46,7 +42,7 @@ Configuration
 You may enable the bootstrap form theme in your configuration for better-looking forms in the bundle:
 
 ```yaml
-# app/config/config.yml
+# config/packages/twig.yml
 twig:
     form_themes: ['bootstrap_3_layout.html.twig']
 ```
@@ -59,7 +55,7 @@ To be able to use them, you need to create your own entities, see examples in th
 Next, make the bundle aware of your entities by adding the following lines to your configuration:
 
 ```yaml
-# app/config/config.yml
+# config/packages/doctrine.yml
 doctrine:
     orm:
         resolve_target_entities:
@@ -71,7 +67,10 @@ doctrine:
             SherlockodeAdvancedContentBundle\Model\LayoutInterface: App\Entity\Layout
             SherlockodeAdvancedContentBundle\Model\PageTypeInterface: App\Entity\PageType
             SherlockodeAdvancedContentBundle\Model\PageInterface: App\Entity\Page
+```
 
+```yaml
+# config/packages/sherlockode_advanced_content.yml
 sherlockode_advanced_content:
     entity_class:
         content_type: App\Entity\ContentType
@@ -95,7 +94,7 @@ The `uri_prefix` is used to retrieve the image on display.
 The resulting image URL will be the URI prefix with the uploaded file name appended.
 
 ```yaml
-# app/config/config.yml
+# config/packages/sherlockode_advanced_content.yml
 sherlockode_advanced_content:
     upload:
         image_directory: '%kernel.project_dir%/uploads/acb_images'
@@ -105,7 +104,7 @@ sherlockode_advanced_content:
 ### Routing
 
 ```yaml
-# app/config/routing.yml
+# config/routes.yaml
 sherlockode_advanced_content:
     resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.xml'
 ```

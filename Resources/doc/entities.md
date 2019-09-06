@@ -33,7 +33,7 @@ Here are basic example implementations for the entity classes:
 
 ```php
 <?php
-// src/AppBundle/Entity/ContentType.php
+// src/Entity/ContentType.php
 
 namespace App\Entity;
 
@@ -79,7 +79,7 @@ class ContentType extends BaseContentType
 
 ```php
 <?php
-// src/AppBundle/Entity/Field.php
+// src/Entity/Field.php
 namespace App\Entity;
 
 use Sherlockode\AdvancedContentBundle\Model\Field as BaseField;
@@ -125,7 +125,7 @@ class Field extends BaseField
 
 ```php
 <?php
-// src/App/Entity/Content.php
+// src/Entity/Content.php
 
 namespace App\Entity;
 
@@ -160,7 +160,7 @@ class Content extends BaseContent
 
 ```php
 <?php
-// src/App/Entity/FieldValue.php
+// src/Entity/FieldValue.php
 
 namespace App\Entity;
 
@@ -216,7 +216,7 @@ class FieldValue extends BaseFieldValue
 
 ```php
 <?php
-// src/App/Entity/FieldGroupValue.php
+// src/Entity/FieldGroupValue.php
 
 namespace App\Entity;
 
@@ -267,7 +267,7 @@ class FieldGroupValue extends BaseFieldGroupValue
 
 ```php
 <?php
-// src/App/Entity/Layout.php
+// src/Entity/Layout.php
 
 namespace App\Entity;
 
@@ -317,7 +317,7 @@ class Layout extends BaseLayout
 
 ```php
 <?php
-// src/App/Entity/Page.php
+// src/Entity/Page.php
 
 namespace App\Entity;
 
@@ -358,7 +358,7 @@ class Page extends BasePage
 
 ```php
 <?php
-// src/App/Entity/PageType.php
+// src/Entity/PageType.php
 
 namespace App\Entity;
 
