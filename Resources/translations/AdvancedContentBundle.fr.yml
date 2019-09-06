@@ -57,6 +57,7 @@ field_type:
             full: Complète
         label: Editeur
     image:
+        label: Image
         name: Image
         alt: Texte alternatif
     repeater:
@@ -145,3 +146,16 @@ page:
         page_type: Type de page
     errors:
         alert_change_type: Attention, changer le type de la page va provoquer la suppression du contenu. Voulez-vous continuer ?
+init:
+    title: 'Import de %entity%'
+    errors:
+        init_dir: Le dossier %dir% n'existe pas
+        entity_dir: "Le dossier %dir% n'existe pas : l'entité %entity% ne sera pas traitée"
+        entity_not_found: "%entity% '%name%' n'existe pas"
+        page_no_content_type: "Aucun type de contenu n'a été trouvé pour la page %page%. Son contenu ne sera pas traité"
+        contact_type_missing_name: Vous devez définir le nom du type de contenu
+        field_missing_data: Vous devez définir le nom / le type du champ
+        layout_missing_name: Vous devez définir le nom du layout
+        page_missing_data: Vous devez définir le nom / le slug de la page
+        field_value_missing_slug: Vous devez définir le slug du champ du contenu
+        field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu

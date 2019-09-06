@@ -1,6 +1,33 @@
 Entities
 ========
 
+## Basics
+
+We implemented the following models : 
+- ContentType
+    - Field
+    - Layout
+- Content
+    - FieldValue
+    - FieldGroupValue
+- PageType
+- Page
+
+A ContentType allows you to create a given structure by defining fields and layouts (group of fields).
+
+List of available field type [doc](field_types.md)
+
+Once a ContentType is defined, you can link it to 
+- a PageType : all pages linked to this PageType will use the same ContentType
+- a Page : only this page will use the ContentType
+
+When you create a new Page, the ContentType to use will automatically be retrieved 
+and you will be able to fill in your Content accordingly to the structure defined by the ContentType.
+  
+Each content will define its fieldValues and its fieldGroupValues (group of FieldValues - depending of the Layouts of the ContentType)
+
+## Implementation examples
+
 Here are basic example implementations for the entity classes:
 
 

@@ -38,10 +38,34 @@ class ConfigurationManager
     }
 
     /**
+     * @return array
+     */
+    public function getEntityClasses()
+    {
+        return $this->config['entity_class'];
+    }
+
+    /**
      * @return mixed
      */
     public function getImageDirectory()
     {
         return $this->config['upload']['image_directory'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getInitDirectory()
+    {
+        return $this->config['init_command']['directory'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function initCanUpdate()
+    {
+        return $this->config['init_command']['allow_update'];
     }
 }

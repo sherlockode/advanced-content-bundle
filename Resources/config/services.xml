@@ -95,5 +95,12 @@
             <tag name="doctrine.event_listener" event="postPersist" lazy="1"/>
             <tag name="doctrine.event_listener" event="postUpdate" lazy="1"/>
         </service>
+        <service id="sherlockode_advanced_content.init_command" class="Sherlockode\AdvancedContentBundle\Command\AcbInitCommand" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument>%kernel.project_dir%</argument>
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>
