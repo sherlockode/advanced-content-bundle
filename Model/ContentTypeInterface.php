@@ -79,4 +79,14 @@ interface ContentTypeInterface
      * @return $this
      */
     public function setPage(PageInterface $page = null);
+
+    /**
+     * @return ContentInterface[]
+     */
+    public function getContents();
+
+    /**
+     * @return ContentInterface|null
+     */
+    public function getFirstContent();
 }

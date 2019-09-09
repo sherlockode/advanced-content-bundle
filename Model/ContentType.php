@@ -33,11 +33,17 @@ abstract class ContentType implements ContentTypeInterface
     protected $page;
 
     /**
+     * @var Collection|ContentInterface[]
+     */
+    protected $contents;
+
+    /**
      * ContentType constructor.
      */
     public function __construct()
     {
         $this->fields = new ArrayCollection();
+        $this->contents = new ArrayCollection();
     }
 
     /**
@@ -139,5 +145,21 @@ abstract class ContentType implements ContentTypeInterface
         $this->page = $page;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ContentInterface[]
+     */
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+    /**
+     * @return ContentInterface|null
+     */
+    public function getFirstContent()
+    {
+        return count($this->contents) ? $this->contents[0] : null;
     }
 }
