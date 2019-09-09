@@ -36,8 +36,8 @@ class Link extends AbstractFieldType
         parent::buildContentFieldValue($builder, $field);
 
         $builder->get('value')
-            ->add('href', UrlType::class)
-            ->add('anchor', TextType::class)
+            ->add('url', UrlType::class)
+            ->add('title', TextType::class)
         ;
     }
 
@@ -104,14 +104,14 @@ class Link extends AbstractFieldType
         $value = $fieldValue->getValue();
         $value = unserialize($value);
 
-        if (empty($value['href'])) {
+        if (empty($value['url'])) {
             return '';
         }
 
         $options = $this->getFieldOptions($fieldValue->getField());
         $target = $options['target'];
 
-        return '<a href="' . $value['href'] . '" target="' . $target . '">' . $value['anchor']. '</a>';
+        return '<a href="' . $value['url'] . '" target="' . $target . '">' . $value['title']. '</a>';
     }
 
     /**
