@@ -109,31 +109,13 @@ sherlockode_advanced_content:
     resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.xml'
 ```
 
-## Import
+## Advanced Documentation
 
-Learn how to use our import command here : [doc](Resources/doc/import.md)
+- [Entities](Resources/doc/entities.md)
+- [Field Types](Resources/doc/field_types.md)
+- [Import](Resources/doc/import.md)
+- [Usage](Resources/doc/usage.md)
 
-
-Usage
------
-
-The bundle provides a twig function that will render the html of a field for a given content : 
-
-```twig
-{{ acb_field(content, slug) }}
-```
-
-Note that each FieldType has a `render()` method that will output the html for a given field.
-
-
-For fields with hierarchy, like the Repeater, you will need to build a loop that will browse each
-group of FieldValue and allow you to render each field of this group.
-```twig
-{% for group in acb_groups(yourContent, 'my-repeater-field') %}
-    {{ acb_group_field(group, 'first-field') }}
-    {{ acb_group_field(group, 'other-field') }}
-{% endfor %}
-```
 
 ## License
 

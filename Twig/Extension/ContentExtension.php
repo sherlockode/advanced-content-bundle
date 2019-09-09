@@ -4,8 +4,8 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
+use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
 
 class ContentExtension extends \Twig_Extension
 {
@@ -30,13 +30,8 @@ class ContentExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('acb_field', [$this, 'displayContentField'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_field_value', [$this, 'displayFieldValue'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_group_field', [$this, 'displayGroupValue'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_groups', [$this, 'getFieldGroupValuesForContent'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_group_fields', [$this, 'getGroupFieldValues'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_group_all_fields', [$this, 'getGroupAllFieldValues']),
-            new \Twig_SimpleFunction('acb_field_raw_value', [$this, 'getFieldRawValue'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_fields', [$this, 'getAllFieldValues'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('acb_field', [$this, 'getContentFieldValue'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -44,97 +39,60 @@ class ContentExtension extends \Twig_Extension
      * @param ContentInterface $content
      * @param string           $slug
      *
-     * @return string
+     * @return null|array
      */
-    public function displayContentField(ContentInterface $content = null, $slug)
+    public function getContentFieldValue(ContentInterface $content = null, $slug)
     {
         if (null === $content) {
-            return '';
+            return null;
         }
         foreach ($content->getFieldValues() as $fieldValue) {
             if ($fieldValue->getField()->getSlug() == $slug) {
-                return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
+                return [
+                    'fieldValue' => $fieldValue,
+                    'raw' => $this->getFieldRawValue($fieldValue),
+                ];
             }
         }
-        return '';
+        return null;
     }
 
     /**
-     * @param ContentInterface|null $content
-     * @param string                $slug
-     *
-     * @return FieldGroupValueInterface[]
-     */
-    public function getFieldGroupValuesForContent(ContentInterface $content = null, $slug)
-    {
-        if (null === $content) {
-            return [];
-        }
-
-        foreach ($content->getFieldValues() as $fieldValue) {
-            if ($fieldValue->getField()->getSlug() == $slug) {
-                return $fieldValue->getChildren();
-            }
-        }
-        return [];
-    }
-
-    /**
-     * @param FieldGroupValueInterface|null $group
-     *
-     * @return FieldValueInterface[]
-     */
-    public function getGroupFieldValues(FieldGroupValueInterface $group = null)
-    {
-        if (null === $group) {
-            return [];
-        }
-
-        return $group->getChildren();
-    }
-
-    /**
-     * @param FieldGroupValueInterface $group
-     * @param string                   $slug
-     *
-     * @return string
-     */
-    public function displayGroupValue(FieldGroupValueInterface $group, $slug)
-    {
-        foreach ($group->getChildren() as $fieldValue) {
-            if ($fieldValue->getField()->getSlug() == $slug) {
-                return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
-            }
-        }
-
-        return '';
-    }
-
-    /**
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return string
-     */
-    public function displayFieldValue(FieldValueInterface $fieldValue)
-    {
-        return $this->fieldManager->getFieldType($fieldValue->getField())->render($fieldValue);
-    }
-
-    /**
-     * Get FieldGroup's children (FieldValues), indexed by Field's slug
-     *
-     * @param FieldGroupValueInterface $group
+     * @param ContentInterface $content
      *
      * @return array
      */
-    public function getGroupAllFieldValues(FieldGroupValueInterface $group)
+    public function getAllFieldValues(ContentInterface $content)
     {
-        $fieldValues = [];
-        foreach ($group->getChildren() as $fieldValue) {
-            $fieldValues[$fieldValue->getField()->getSlug()] = $fieldValue;
+        return $this->getFormattedFieldValues($content->getFieldValues());
+    }
+
+    /**
+     * @param array|FieldValueInterface[] $fieldValues
+     *
+     * @return array
+     */
+    private function getFormattedFieldValues($fieldValues)
+    {
+        $fieldValuesData = [];
+        foreach ($fieldValues as $fieldValue) {
+            $fieldValuesData[$fieldValue->getField()->getSlug()] = [
+                'fieldValue' => $fieldValue,
+                'raw' => $this->getFieldRawValue($fieldValue),
+            ];
+            if (count($fieldValue->getChildren()) > 0) {
+                $fieldValuesData[$fieldValue->getField()->getSlug()]['children'] = [];
+                foreach ($fieldValue->getChildren() as $fieldGroupValue) {
+                    $fieldValuesData[$fieldValue->getField()->getSlug()]['children'][] = [
+                        'fieldGroupValue' => $fieldGroupValue,
+                        'name' => $fieldGroupValue->getLayout() instanceof LayoutInterface ? $fieldGroupValue->getLayout()->getName() : '',
+                        'children' => $this->getFormattedFieldValues($fieldGroupValue->getChildren()),
+                    ];
+                }
+            }
         }
 
-        return $fieldValues;
+        return $fieldValuesData;
     }
 
     /**
@@ -144,7 +102,7 @@ class ContentExtension extends \Twig_Extension
      *
      * @return mixed
      */
-    public function getFieldRawValue(FieldValueInterface $fieldValue)
+    private function getFieldRawValue(FieldValueInterface $fieldValue)
     {
         return $this->fieldManager->getFieldType($fieldValue->getField())->getRawValue($fieldValue);
     }
