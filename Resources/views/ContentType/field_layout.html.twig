@@ -4,6 +4,8 @@
         {{ form_label(form['children']) }}
     </div>
     <div class="col-md-10">
-        {{ form_widget(form['children']) }}
+        <div class="acb-sortable-group" data-sortable-group-id="{{ form.vars.id }}">
+            {{ form_widget(form['children']) }}
+        </div>
     </div>
 {% endif %}

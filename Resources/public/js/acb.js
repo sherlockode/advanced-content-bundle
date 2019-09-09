@@ -196,6 +196,7 @@ jQuery(function ($) {
             hideEmptyOptionsRow();
             hideEmptyLayoutRow();
             initSortables();
+            calculatePosition();
         }).fail(ajaxFailCallback);
     });
 
