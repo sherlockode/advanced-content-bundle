@@ -84,7 +84,7 @@ If your content is not linked to any page (for example, your homepage), you can 
 The bundle provides a twig function that will returns an array containing all field values for a given content. 
 
 ```twig
-{% set fields = acb_fields(page.content) %}
+{% set fields = acb_fields(content) %}
 ```
 
 To ease the process of the field values, they are indexed by their slug.
