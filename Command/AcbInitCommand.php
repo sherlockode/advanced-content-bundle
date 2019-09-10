@@ -472,8 +472,12 @@ class AcbInitCommand extends Command
             $fieldValue->setField($field);
 
             $fieldValueValue = serialize([]);
-            if (isset($fieldValueData['value']) && !is_array($fieldValueData['value'])) {
-                $fieldValueValue = $fieldValueData['value'];
+            if (isset($fieldValueData['value'])) {
+                if (is_array($fieldValueData['value'])) {
+                    $fieldValueValue = serialize($fieldValueData['value']);
+                } else {
+                    $fieldValueValue = $fieldValueData['value'];
+                }
             }
             $fieldValue->setValue($fieldValueValue);
 
