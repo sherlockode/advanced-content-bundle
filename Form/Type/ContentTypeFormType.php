@@ -201,13 +201,14 @@ class ContentTypeFormType extends AbstractType
                     if (isset($value['children'])) {
                         foreach ($value['children'] as $child) {
                             if (isset($child['children'])) {
+                                $childrenSlugs = [];
                                 foreach ($child['children'] as $field) {
                                     $fieldSlug = $field['slug'];
-                                    if (in_array($fieldSlug, $slugs)) {
+                                    if (in_array($fieldSlug, $childrenSlugs)) {
                                         $duplicatedSlugs[] = $fieldSlug;
                                         continue;
                                     }
-                                    $slugs[] = $fieldSlug;
+                                    $childrenSlugs[] = $fieldSlug;
                                 }
                             }
                         }

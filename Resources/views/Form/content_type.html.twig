@@ -51,7 +51,7 @@
                 {{ form_label(form.slug) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.slug, {'attr': {'class': 'acb-slug'}}) }}
+                {{ form_widget(form.slug, {'attr': {'class': 'acb-slug', 'data-parent-id': panelParent }}) }}
                 <span class="acb-slug-error acb-error" style="display: none;">{{ 'field_type.errors.duplicated_slug'|trans }}</span>
             </div>
         </div>
