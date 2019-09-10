@@ -156,10 +156,7 @@ class AcbInitCommand extends Command
             $contentType->setName($contentTypeData['name']);
 
             if (isset($contentTypeData['children'])) {
-                $position = 1;
-                foreach ($contentTypeData['children'] as $child) {
-                    $this->createField($child, $position++, $contentType);
-                }
+                $this->createFields($contentTypeData['children'], $contentType);
             }
 
             if (isset($contentTypeData['pageType'])) {
@@ -188,77 +185,82 @@ class AcbInitCommand extends Command
     }
 
     /**
-     * @param array                $fieldData
-     * @param int                  $position
+     * @param array                $fields
      * @param ContentTypeInterface $contentType
      * @param LayoutInterface|null $layout
      */
-    private function createField($fieldData, $position, ContentTypeInterface $contentType, LayoutInterface $layout = null)
+    private function createFields($fields, ContentTypeInterface $contentType, LayoutInterface $layout = null)
     {
-        if (!isset($fieldData['name']) || !isset($fieldData['type'])) {
-            $this->symfonyStyle->error(
-                $this->translator->trans('init.errors.field_missing_data', [], 'AdvancedContentBundle')
-            );
-            return;
-        }
-
-        $slug = $this->slugify->slugify($fieldData['name']);
-        if (isset($fieldData['slug'])) {
-            $slug = $fieldData['slug'];
-        }
-        if ($layout !== null) {
-            $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
-                'slug' => $slug,
-                'layout' => $layout,
-            ]);
-            if (!$field instanceof FieldInterface) {
-                $field = new $this->entityClasses['field'];
-                $layout->addChild($field);
+        $slugs = [];
+        $position = 1;
+        foreach ($fields as $fieldData) {
+            if (!isset($fieldData['name']) || !isset($fieldData['type'])) {
+                $this->symfonyStyle->error(
+                    $this->translator->trans('init.errors.field_missing_data', [], 'AdvancedContentBundle')
+                );
+                continue;
             }
-        } else {
-            $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
-                'slug' => $slug,
-                'contentType' => $contentType,
-            ]);
-            if (!$field instanceof FieldInterface) {
-                $field = new $this->entityClasses['field'];
-                $contentType->addField($field);
+
+            $slug = $this->slugify->slugify($fieldData['name']);
+            if (isset($fieldData['slug'])) {
+                $slug = $fieldData['slug'];
             }
-        }
+            if (in_array($slug, $slugs)) {
+                $this->symfonyStyle->error(
+                    $this->translator->trans('field_type.errors.duplicated_slug_detail', ['%slug%' => $slug], 'AdvancedContentBundle')
+                );
+                continue;
+            }
+            $slugs[] = $slug;
 
-        $field->setName($fieldData['name']);
-        $field->setSlug($slug);
-        $field->setRequired($fieldData['required'] ?? $this->defaultRequired);
-        $field->setType($fieldData['type']);
-        $field->setPosition($position);
-
-        if (isset($fieldData['options'])) {
-            $field->setOptions($fieldData['options']);
-        }
-
-        $this->om->persist($field);
-
-        if (isset($fieldData['children'])) {
-            if ($fieldData['type'] === 'repeater') {
-                $childLayout = $this->createLayout($fieldData['name'], 1, $field);
-                $childPosition = 1;
-                foreach ($fieldData['children'] as $child) {
-                    $this->createField($child, $childPosition++, $contentType, $childLayout);
+            if ($layout !== null) {
+                $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
+                    'slug'   => $slug,
+                    'layout' => $layout,
+                ]);
+                if (!$field instanceof FieldInterface) {
+                    $field = new $this->entityClasses['field'];
+                    $layout->addChild($field);
                 }
-            } elseif ($fieldData['type'] === 'flexible') {
-                $layoutPosition = 1;
-                foreach ($fieldData['children'] as $child) {
-                    if (!isset($child['name'])) {
-                        $this->symfonyStyle->error(
-                            $this->translator->trans('init.errors.layout_missing_name', [], 'AdvancedContentBundle')
-                        );
-                        continue;
-                    }
-                    $childLayout = $this->createLayout($child['name'], $layoutPosition++, $field);
-                    if (isset($child['children'])) {
-                        $childPosition = 1;
-                        foreach ($child['children'] as $layoutChildren) {
-                            $this->createField($layoutChildren, $childPosition++, $contentType, $childLayout);
+            } else {
+                $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
+                    'slug'        => $slug,
+                    'contentType' => $contentType,
+                ]);
+                if (!$field instanceof FieldInterface) {
+                    $field = new $this->entityClasses['field'];
+                    $contentType->addField($field);
+                }
+            }
+
+            $field->setName($fieldData['name']);
+            $field->setSlug($slug);
+            $field->setRequired($fieldData['required'] ?? $this->defaultRequired);
+            $field->setType($fieldData['type']);
+            $field->setPosition($position++);
+
+            if (isset($fieldData['options'])) {
+                $field->setOptions($fieldData['options']);
+            }
+
+            $this->om->persist($field);
+
+            if (isset($fieldData['children'])) {
+                if ($fieldData['type'] === 'repeater') {
+                    $childLayout = $this->createLayout($fieldData['name'], 1, $field);
+                    $this->createFields($fieldData['children'], $contentType, $childLayout);
+                } elseif ($fieldData['type'] === 'flexible') {
+                    $layoutPosition = 1;
+                    foreach ($fieldData['children'] as $child) {
+                        if (!isset($child['name'])) {
+                            $this->symfonyStyle->error(
+                                $this->translator->trans('init.errors.layout_missing_name', [], 'AdvancedContentBundle')
+                            );
+                            continue;
+                        }
+                        $childLayout = $this->createLayout($child['name'], $layoutPosition++, $field);
+                        if (isset($child['children'])) {
+                            $this->createFields($child['children'], $contentType, $childLayout);
                         }
                     }
                 }
