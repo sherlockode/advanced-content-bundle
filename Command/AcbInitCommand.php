@@ -579,5 +579,8 @@ class AcbInitCommand extends Command
         $this->allowUpdate = $this->configurationManager->initCanUpdate();
         $this->entityClasses = $this->configurationManager->getEntityClasses();
         $this->slugify = new Slugify();
+
+        $this->om->getEventManager()->removeEventListener('postPersist', 'sherlockode_advanced_content.content_type_listener');
+        $this->om->getEventManager()->removeEventListener('postUpdate', 'sherlockode_advanced_content.content_type_listener');
     }
 }
