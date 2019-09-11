@@ -28,11 +28,13 @@ content_type:
             page: Page
         page_type: Type de page
         page: Page
+        allow_several_contents: Autoriser plusieurs contenus de ce type
     errors:
         existing_link: Un autre type de contenu est déjà lié à ce type de page / cette page
         missing_page_type: Veuillez sélectionner un type de page
         missing_page: Veuillez sélectionner une page
         alert_change_link: Attention, changer l'association peut provoquer la suppression de certains contenus. Voulez-vous continuer ?
+        unique_content: Un contenu existe déjà pour ce type de contenu
 content:
     label: Contenu avancé
     id: Identifiant

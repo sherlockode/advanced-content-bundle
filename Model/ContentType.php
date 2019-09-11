@@ -38,12 +38,18 @@ abstract class ContentType implements ContentTypeInterface
     protected $contents;
 
     /**
+     * @var bool
+     */
+    protected $allowSeveralContents;
+
+    /**
      * ContentType constructor.
      */
     public function __construct()
     {
         $this->fields = new ArrayCollection();
         $this->contents = new ArrayCollection();
+        $this->allowSeveralContents = true;
     }
 
     /**
@@ -161,5 +167,25 @@ abstract class ContentType implements ContentTypeInterface
     public function getFirstContent()
     {
         return count($this->contents) ? $this->contents[0] : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowSeveralContents()
+    {
+        return $this->allowSeveralContents;
+    }
+
+    /**
+     * @param bool $allowSeveralContents
+     *
+     * @return $this
+     */
+    public function setAllowSeveralContents($allowSeveralContents)
+    {
+        $this->allowSeveralContents = $allowSeveralContents;
+
+        return $this;
     }
 }

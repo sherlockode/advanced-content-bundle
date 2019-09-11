@@ -228,6 +228,7 @@ jQuery(function ($) {
 
     let contentTypePageTypeList = $('select.acb-contenttype-page-type');
     let contentTypePageList = $('select.acb-contenttype-page');
+    let contentTypeAllowSeveralContents = $('input.acb-contenttype-allow-several-contents');
     let contentTypePageTypeValue = contentTypePageTypeList.val();
     let contentTypePageValue = contentTypePageList.val();
     $('body').on('submit', '.edit-content-type', function(e) {
@@ -318,10 +319,12 @@ jQuery(function ($) {
         let linkType = $('select.acb-contenttype-link-type').val();
         contentTypePageTypeList.closest('.form-group').hide();
         contentTypePageList.closest('.form-group').hide();
+        contentTypeAllowSeveralContents.closest('.form-group').hide();
 
         if (linkType === '0') { // No link
             contentTypePageList.val('');
             contentTypePageTypeList.val('');
+            contentTypeAllowSeveralContents.closest('.form-group').show();
         }
         if (linkType === '1') { // Page Type link
             contentTypePageTypeList.closest('.form-group').show();
