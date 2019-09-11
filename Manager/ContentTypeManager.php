@@ -98,4 +98,32 @@ class ContentTypeManager
             $this->om->persist($newField);
         }
     }
+
+    /**
+     * @param ContentTypeInterface $contentType
+     *
+     * @return bool
+     */
+    public function canCreateContent(ContentTypeInterface $contentType)
+    {
+        if ($contentType->isAllowSeveralContents()) {
+            return true;
+        }
+
+        $contents = $this->om->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
+            'contentType' => $contentType
+        ]);
+
+        return count($contents) === 0;
+    }
+
+    /**
+     * @param string $contentTypeId
+     *
+     * @return bool
+     */
+    public function canCreateContentByContentTypeId($contentTypeId)
+    {
+        return $this->canCreateContent($this->getContentTypeById((int)$contentTypeId));
+    }
 }

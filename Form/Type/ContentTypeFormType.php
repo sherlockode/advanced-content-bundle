@@ -12,6 +12,7 @@ use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -102,6 +103,11 @@ class ContentTypeFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'acb-contenttype-page'],
             ])
+            ->add('allowSeveralContents', CheckboxType::class, [
+                'label' => 'content_type.form.allow_several_contents',
+                'required' => false,
+                'attr' => ['class' => 'acb-contenttype-allow-several-contents'],
+            ])
         ;
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options) {
@@ -142,9 +148,11 @@ class ContentTypeFormType extends AbstractType
                 }
             }
 
+            $allowSeveralContents = true;
             if ($linkType == ContentTypeInterface::LINK_TYPE_NO_LINK) {
                 $data['pageType'] = null;
                 $data['page'] = null;
+                $allowSeveralContents = isset($data['allowSeveralContents']) ? $data['allowSeveralContents'] : false;
             } else {
                 if (!$this->pageManager->validateContentTypeLink($contentType, $data['pageType'], $data['page'])) {
                     $form->addError(new FormError(
@@ -154,6 +162,7 @@ class ContentTypeFormType extends AbstractType
                     return;
                 }
             }
+            $data['allowSeveralContents'] = $allowSeveralContents;
 
             $event->setData($data);
         });
@@ -201,13 +210,14 @@ class ContentTypeFormType extends AbstractType
                     if (isset($value['children'])) {
                         foreach ($value['children'] as $child) {
                             if (isset($child['children'])) {
+                                $childrenSlugs = [];
                                 foreach ($child['children'] as $field) {
                                     $fieldSlug = $field['slug'];
-                                    if (in_array($fieldSlug, $slugs)) {
+                                    if (in_array($fieldSlug, $childrenSlugs)) {
                                         $duplicatedSlugs[] = $fieldSlug;
                                         continue;
                                     }
-                                    $slugs[] = $fieldSlug;
+                                    $childrenSlugs[] = $fieldSlug;
                                 }
                             }
                         }

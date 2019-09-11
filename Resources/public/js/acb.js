@@ -228,6 +228,7 @@ jQuery(function ($) {
 
     let contentTypePageTypeList = $('select.acb-contenttype-page-type');
     let contentTypePageList = $('select.acb-contenttype-page');
+    let contentTypeAllowSeveralContents = $('input.acb-contenttype-allow-several-contents');
     let contentTypePageTypeValue = contentTypePageTypeList.val();
     let contentTypePageValue = contentTypePageList.val();
     $('body').on('submit', '.edit-content-type', function(e) {
@@ -252,22 +253,28 @@ jQuery(function ($) {
 
         $('.acb-slug', this).each(function() {
             slug = $(this).val();
+            var parent = $(this).data('parent-id');
             if (!slugs[slug]) {
                 slugs[slug] = [];
             }
-            slugs[slug].push($(this));
+            if (!slugs[slug][parent]) {
+                slugs[slug][parent] = [];
+            }
+            slugs[slug][parent].push($(this));
         });
         for (slug in slugs) {
-            if (slugs[slug].length > 1) {
-                for (var i=0; i< slugs[slug].length; i++) {
-                    var field = slugs[slug][i];
-                    var fieldArea = field.closest('.acb-field');
+            for (var parent in slugs[slug]) {
+                if (slugs[slug][parent].length > 1) {
+                    for (var i = 0; i < slugs[slug][parent].length; i++) {
+                        var field = slugs[slug][parent][i];
+                        var fieldArea = field.closest('.acb-field');
 
-                    fieldArea.find('.acb-slug-error').show();
-                    fieldArea.addClass('field-error');
-                    fieldArea.parents('.acb-field').addClass('field-error');
+                        fieldArea.find('.acb-slug-error').show();
+                        fieldArea.addClass('field-error');
+                        fieldArea.parents('.acb-field').addClass('field-error');
+                    }
+                    validateSlugs = false;
                 }
-                validateSlugs = false;
             }
         }
 
@@ -312,10 +319,12 @@ jQuery(function ($) {
         let linkType = $('select.acb-contenttype-link-type').val();
         contentTypePageTypeList.closest('.form-group').hide();
         contentTypePageList.closest('.form-group').hide();
+        contentTypeAllowSeveralContents.closest('.form-group').hide();
 
         if (linkType === '0') { // No link
             contentTypePageList.val('');
             contentTypePageTypeList.val('');
+            contentTypeAllowSeveralContents.closest('.form-group').show();
         }
         if (linkType === '1') { // Page Type link
             contentTypePageTypeList.closest('.form-group').show();

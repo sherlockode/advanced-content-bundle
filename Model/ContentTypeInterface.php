@@ -89,4 +89,16 @@ interface ContentTypeInterface
      * @return ContentInterface|null
      */
     public function getFirstContent();
+
+    /**
+     * @return bool
+     */
+    public function isAllowSeveralContents();
+
+    /**
+     * @param bool $allowSeveralContents
+     *
+     * @return $this
+     */
+    public function setAllowSeveralContents($allowSeveralContents);
 }
