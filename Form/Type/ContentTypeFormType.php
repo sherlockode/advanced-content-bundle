@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldsTransformer;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -171,25 +170,14 @@ class ContentTypeFormType extends AbstractType
             return;
         }
 
-        $fields = $this->contentTypeManager->getOrderedFields($options['contentType']);
+        $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
         $fieldsBuilder = $builder->create('fields', FieldsType::class, [
             'label' => 'content_type.form.fields',
             'translation_domain' => 'AdvancedContentBundle',
+            'type_choices' => $fieldTypeChoices,
         ]);
 
-        $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
         $fieldClass = $this->configurationManager->getEntityClass('field');
-        foreach ($fields as $field) {
-            if ($field->getLayout()) {
-                // do not add fields which are not top-level
-                continue;
-            }
-            $fieldsBuilder->add($field->getSlug() ?? $field->getName(), FieldType::class, [
-                'type_choices' => $fieldTypeChoices,
-                'data_class'   => $fieldClass,
-                'data'         => $field,
-            ]);
-        }
         $builder->add($fieldsBuilder);
         $translator = $this->translator;
         $fieldsBuilder->addEventListener(
@@ -266,9 +254,6 @@ class ContentTypeFormType extends AbstractType
             }
             $event->setData($data);
         });
-        $fieldsBuilder
-            ->addModelTransformer(new FieldsTransformer($options['contentType']))
-        ;
     }
 
     /**

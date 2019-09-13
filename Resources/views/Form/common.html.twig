@@ -26,7 +26,7 @@
     <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ form.parent.vars.id }}">
         <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
              {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
-            <span class="panel-title">{{ form.vars.value.name ?? (form.vars.label ?? '') }}</span>
+            <span class="panel-title">{{ form.vars.value.name ?? '&nbsp;' }}</span>
             {{- block('acb_panel_actions') -}}
         </div>
         <div class="panel-body collapse" id="layout-{{ fieldId }}">

@@ -55,6 +55,7 @@ class ContentType extends BaseContentType
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Field", mappedBy="contentType", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $fields;
 

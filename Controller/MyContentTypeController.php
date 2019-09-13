@@ -4,8 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentTypeFormType;
-use Sherlockode\AdvancedContentBundle\Form\Type\FieldCreateType;
-use Sherlockode\AdvancedContentBundle\Form\Type\FieldType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -146,84 +144,6 @@ class MyContentTypeController extends Controller
         return $this->render('@SherlockodeAdvancedContent/ContentType/create_content_type.html.twig', [
             'form' => $form->createView(),
             'data' => $contentType,
-        ]);
-    }
-
-    /**
-     * @param Request              $request
-     *
-     * @return Response
-     */
-    public function addFieldAction(Request $request)
-    {
-        $fieldClass = $this->configurationManager->getEntityClass('field');
-        $field = new $fieldClass;
-        $fieldTypeChoices = ['content_type.form.select_field_type' => ''];
-        $fieldTypeChoices = array_merge($fieldTypeChoices, $this->fieldManager->getFieldTypeFormChoices());
-
-        $formName = $request->get('form_name', 'form');
-        $actionOptions = [
-            'form_name' => $formName
-        ];
-
-        $formOptions = [
-            'action' => $this->generateUrl('sherlockode_acb_content_type_add_field', $actionOptions),
-            'attr' => ['class' => 'form-create-field'],
-            'data_class' => $fieldClass,
-            'type_choices' => $fieldTypeChoices,
-        ];
-
-        $addFieldForm = $this->createForm(FieldCreateType::class, $field, $formOptions);
-        $addFieldForm->handleRequest($request);
-
-        if ($addFieldForm->isSubmitted()) {
-            if ($addFieldForm->isValid()) {
-                $field->setRequired(false);
-
-                $formPath = $this->getFormPath($formName);
-                if (count($formPath) == 2) {
-                    $formPath[] = $field->getSlug();
-                }
-
-                // Extract first item to create named builder
-                $rootPath = array_shift($formPath);
-                // Extract last item to pass to formBuilderManager
-                $fieldName = array_pop($formPath);
-                $formChildren = $formPath;
-                $rootFormBuilder = $this->formFactory->createNamedBuilder($rootPath);
-                // Create formBuilder recursively, according to formName
-                $formBuilder = $this->createEmbeddedForm($formPath, $rootFormBuilder);
-
-                $fieldTypeChoices = $this->fieldManager->getFieldTypeFormChoices();
-                $formBuilder->add($fieldName, FieldType::class, [
-                    'type_choices' => $fieldTypeChoices,
-                    'data_class'   => $this->configurationManager->getEntityClass('field'),
-                    'data'         => $field,
-                ]);
-
-                $form = $rootFormBuilder->getForm();
-                foreach ($formChildren as $child) {
-                    $form = $form->get($child);
-                }
-
-                return new JsonResponse([
-                    'success' => 1,
-                    'html'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/new_field.html.twig', [
-                        'form' => $form->createView(),
-                    ]),
-                ]);
-            }
-
-            return new JsonResponse([
-                'success' => 0,
-                'html' => $this->renderView('@SherlockodeAdvancedContent/ContentType/add_field_form.html.twig', [
-                    'form' => $addFieldForm->createView(),
-                ])
-            ]);
-        }
-
-        return $this->render('@SherlockodeAdvancedContent/ContentType/add_field_form.html.twig', [
-            'form' => $addFieldForm->createView(),
         ]);
     }
 

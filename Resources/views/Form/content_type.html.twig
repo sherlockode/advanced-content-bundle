@@ -3,17 +3,8 @@
 {% extends '@SherlockodeAdvancedContent/Form/common.html.twig' %}
 
 {% block acb_fields_widget %}
-    <div class="panel-group acb-fields acb-sortable-group" id="acb-fields" data-sortable-group-id="acb-fields">
-        {% for field in form %}
-            {{ form_row(field) }}
-        {% endfor %}
-    </div>
-    {% if form.parent and form.parent.vars.value.id %}
-    <button type="button" class="btn btn-success acb-btn-add-field"
-            data-url="{{ path('sherlockode_acb_content_type_add_field', {form_name: form.vars.full_name}) }}">
-        {{ 'content_type.form.add_field'|trans }}
-    </button>
-    {% endif %}
+    {% set type = 'field' %}
+    {{ block('acb_simple_collection') }}
 {% endblock %}
 
 {% block acb_field_row %}
@@ -22,19 +13,19 @@
 {% endblock %}
 
 {% block acb_field_widget %}
-    {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
-    {% set panelParent = '' %}
-    {% if form.parent is not empty %}
-        {% set panelParent = form.parent.vars.id %}
-        {% if form.parent.vars.name == 'fields' %}
-            {% set panelParent = 'acb-fields' %}
+    {% set fieldId = '__random_id__' %}
+    {% set panelParent = '__parent_group_id__' %}
+    {% if form.vars.value and form.vars.value.id %}
+        {% set fieldId = form.vars.value.id %}
+        {% if form.parent is not empty %}
+            {% set panelParent = form.parent.vars.id %}
         {% endif %}
     {% endif %}
 <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ panelParent }}">
     <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}"
             {% if panelParent is not empty %}data-parent="#{{ panelParent }}"{% endif %}
          aria-expanded="false">
-        <span class="panel-title">{{ form.vars.label ?? (form.vars.value.name ?? '') }}</span>
+        <span class="panel-title">{{ form.vars.value.name ?? '&nbsp;' }}</span>
         {{- block('acb_panel_actions') -}}
     </div>
     <div class="panel-body collapse" id="field-{{ fieldId }}">
@@ -43,7 +34,7 @@
                 {{ form_label(form.name) }}
             </div>
             <div class="col-md-10">
-                {{ form_widget(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'acb-name'}}) }}
             </div>
         </div>
         <div class="form-group row">
@@ -94,16 +85,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block acb_add_item_button %}
-    <button type="button"
-            class="btn btn-success acb-add-collection-item"
-            data-list="#{{ form.vars.id }}"
-            data-type="{{ type }}"
-            data-url="{{ path('sherlockode_acb_content_type_add_field', {form_name: prototype.vars.full_name}) }}">
-        {{ button_label|trans }}
-    </button>
 {% endblock %}
 
 {% block acb_repeater_widget %}
