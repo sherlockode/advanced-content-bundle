@@ -19,11 +19,32 @@ class AcbFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class, ['label' => 'field_type.file.file'])
             ->add('src', HiddenType::class)
-            ->add('delete', CheckboxType::class, ['required' => false, 'label' => 'field_type.file.delete'])
             ->add('title', TextType::class, ['label' => 'field_type.file.title'])
         ;
+
+        $builder->addEventListener(
+            FormEvents::POST_SET_DATA,
+            function (FormEvent $event) use ($options) {
+                $form = $event->getForm();
+                $isFileUploaded = $options['uploadManager']->isFileUploaded($form->get('src')->getData());
+                $form
+                    ->add('file', FileType::class, [
+                        'label' => 'field_type.file.file',
+                        'required' => !$isFileUploaded && $options['field']->isRequired(),
+                    ])
+                ;
+
+                if (!$options['field']->isRequired() && $isFileUploaded) {
+                    $form
+                        ->add('delete', CheckboxType::class, [
+                            'label' => 'field_type.file.delete',
+                            'required' => false,
+                        ])
+                    ;
+                }
+            }
+        );
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
@@ -42,7 +63,7 @@ class AcbFileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('translation_domain', 'AdvancedContentBundle');
-        $resolver->setRequired(['uploadManager']);
+        $resolver->setRequired(['uploadManager', 'field']);
     }
 
     /**

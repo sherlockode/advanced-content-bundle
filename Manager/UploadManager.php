@@ -75,6 +75,22 @@ class UploadManager
     }
 
     /**
+     * @param string $src
+     *
+     * @return bool
+     */
+    public function isFileUploaded($src)
+    {
+        if (empty($src)) {
+            return false;
+        }
+
+        $fileName = $this->getTargetDir() . DIRECTORY_SEPARATOR . $src;
+
+        return file_exists($fileName);
+    }
+
+    /**
      * Get target directory
      *
      * @return string
