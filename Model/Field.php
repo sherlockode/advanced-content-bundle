@@ -187,11 +187,11 @@ abstract class Field implements FieldInterface
     }
 
     /**
-     * @param ContentTypeInterface $contentType
+     * @param ContentTypeInterface|null $contentType
      *
      * @return $this
      */
-    public function setContentType(ContentTypeInterface $contentType)
+    public function setContentType(ContentTypeInterface $contentType = null)
     {
         $this->contentType = $contentType;
 

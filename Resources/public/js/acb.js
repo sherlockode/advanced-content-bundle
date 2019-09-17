@@ -65,26 +65,22 @@ jQuery(function ($) {
         var counter = list.data('widget-counter') || list.children().length;
 
         var type = $(this).data('type');
-        if (type === 'group') {
-            var newWidget = list.data('prototype');
-            newWidget = newWidget.replace(/__name__label__/g, counter);
-            newWidget = newWidget.replace(/__name__/g, counter);
-            newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
-            counter++;
-            list.data('widget-counter', counter);
-            var newElem = $(newWidget);
-            newElem.appendTo(list);
-            initSortables();
-            calculatePosition();
-        } else {
-            counter++;
-            var url = $(this).data('url');
-            url = url.replace(/__name__/g, counter);
-            fieldsList = list;
-
-            openAddFieldModal(url);
-            list.data('widget-counter', counter);
+        var newWidget = list.data('prototype');
+        newWidget = newWidget.replace(/__name__label__/g, counter);
+        newWidget = newWidget.replace(/__name__/g, counter);
+        newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
+        if (type === 'field') {
+            newWidget = newWidget.replace(/__parent_group_id__/g, list.data('sortable-group-id'));
         }
+        counter++;
+        list.data('widget-counter', counter);
+        var newElem = $(newWidget);
+        newElem.appendTo(list);
+        newElem.find('.edit-field').click();
+        hideEmptyOptionsRow();
+        hideEmptyLayoutRow();
+        initSortables();
+        calculatePosition();
     });
     $('body').on('click', '.acb-add-flexible-item', function (e) {
         e.preventDefault();
@@ -115,71 +111,7 @@ jQuery(function ($) {
     // Content Type //
     //////////////////
 
-    var fieldsList;
-    $('body').on('submit', '.form-create-field', function (e) {
-        e.preventDefault();
-        var form = $(this);
-        var button = form.children('.btn-add-field');
-        button.prop('disabled', true);
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: form.serialize()
-        }).done(function (resp) {
-            if (resp.success) {
-                var newElement = resp.html;
-                newElement = newElement.replace(/__random_id__/g, (Math.random() * 1000)|0);
-                newElement = $(newElement);
-                newElement.find('[name$="[position]"]').val(fieldsList.children().length + 1);
-                fieldsList.append(newElement);
-                newElement.find('.edit-field').click();
-                hideEmptyOptionsRow();
-                hideEmptyLayoutRow();
-                var modal = form.closest('.modal');
-                if (modal.length) {
-                    modal.modal('hide');
-                }
-                initSortables();
-            } else {
-                $('.add-field-form').replaceWith(resp.html);
-            }
-        }).always(function () {
-            button.prop('disabled', false);
-        }).fail(ajaxFailCallback);
-    });
-
-    $('body').on('click', '.acb-btn-add-field', function () {
-        var url = $(this).data('url');
-        fieldsList = $('.acb-fields');
-        openAddFieldModal(url);
-    });
-
-    function openAddFieldModal(url) {
-        $.get(url, function (response) {
-            $('.acb-modal-add-field .modal-body').html(response);
-            $('.acb-modal-add-field').modal();
-
-            var slugInput = $('.acb-modal-add-field').find('.acb-slug');
-            var slugSource = $(slugInput.data('slug-source'));
-            var timer;
-            slugSource.on('change.acb', function () {
-                slugInput.val(generateSlug(this.value));
-            });
-            slugSource.on('keyup.acb', function () {
-                clearTimeout(timer);
-                timer = setTimeout(function () {
-                    slugInput.val(generateSlug(slugSource.val()));
-                }, 300);
-            });
-            slugInput.on('change', function () {
-                slugSource.off('change.acb');
-                slugSource.off('keyup.acb');
-            });
-        });
-    }
-
-    $('.acb-fields').on('change', '.field-type', function (e) {
-        var fieldRow = $(this).closest('.field-row');
+    $('body').on('change', '.field-type', function (e) {
         var data = {
             type: $(this).val(),
             formPath: $(this).data('form-path')
@@ -286,6 +218,15 @@ jQuery(function ($) {
             if (!confirm($('.acb-contenttype-change-link').html())) {
                 // e.preventDefault();
             }
+        }
+    });
+
+    $('body').on('keyup', '.acb-name, .acb-layout-name', function(){
+        $(this).closest('.acb-field').find('.panel-title').first().html($(this).val());
+    });
+    $('body').on('focus', '.acb-slug', function(){
+        if ($(this).val() === '') {
+            $(this).val(generateSlug($(this).closest('.acb-field').find('.acb-name').first().val()));
         }
     });
 

@@ -109,6 +109,7 @@ abstract class ContentType implements ContentTypeInterface
     public function removeField(FieldInterface $field)
     {
         $this->fields->removeElement($field);
+        $field->setContentType(null);
 
         return $this;
     }

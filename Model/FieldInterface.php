@@ -101,11 +101,11 @@ interface FieldInterface
     /**
      * Set field's content type
      *
-     * @param ContentTypeInterface $contentType
+     * @param ContentTypeInterface|null $contentType
      *
      * @return $this
      */
-    public function setContentType(ContentTypeInterface $contentType);
+    public function setContentType(ContentTypeInterface $contentType = null);
 
     /**
      * Get field's sort order
