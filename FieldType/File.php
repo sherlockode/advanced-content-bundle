@@ -158,15 +158,17 @@ class File extends AbstractFieldType
         $oldValue = unserialize($changeSet['value'][0]);
         $newValue = unserialize($changeSet['value'][1]);
 
-        if ($newValue['src'] == '' && !$newValue['delete']) {
+        if ($newValue['src'] == '' && isset($newValue['delete']) && !$newValue['delete']) {
             $newValue['src'] = $oldValue['src'];
         }
 
-        if ($newValue['delete']) {
+        if (isset($newValue['delete']) && $newValue['delete']) {
             $this->uploadManager->remove($oldValue['src']);
         }
 
-        unset($newValue['delete']);
+        if (isset($newValue['delete'])) {
+            unset($newValue['delete']);
+        }
 
         $fieldValue->setValue(serialize($newValue));
     }

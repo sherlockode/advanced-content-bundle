@@ -7,7 +7,15 @@ The import command will create your content types, page types, pages and their c
 
 If you want to use our import command, you can configure the directory in which to find the source files.
 If not defined, the import will parse var/acb directory.
+
 By default, only creation is available. If you want to be able to update your entities, you can change the flag `allow_update`
+
+By default, if not defined at field level, fields will be created as optional. If you want your fields to be mandatory by default, you can change the flag `field_default_required`
+
+To import files to your contents, you need to configure the directory in which to find the source files. 
+If not defined, the import will parse var/acb/files directory.
+You can either use a relative path (relative from `%kernel.project_dir%`) or an absolute path (for example `/tmp/files`)
+
 
 ```yaml
 # config/packages/sherlockode_advanced_content.yml
@@ -15,6 +23,8 @@ sherlockode_advanced_content:
     init_command:
         directory: custom/dir
         allow_update: true
+        field_default_required: true
+        files_directory: custom/dir/files
 ```
 
 ## Command
@@ -63,7 +73,7 @@ type: Code of the FieldType
 # optional
 slug: custom slug - slugified name will be used by default
 options: list of options and their values
-required: true/false - default true
+required: true/false - default false
 children: defines layouts - only for Flexible / Repeater field types
 ```
 
@@ -113,3 +123,20 @@ children: list of FieldValues for each Field of the Layout
 ```
 
 You can find a Page import file example here [doc](import/Page/custom_page.yaml)
+
+
+### Contents
+
+You need to defined the name of your Content, as well as the ContentType to which it is linked : 
+
+```yaml
+# var/acb/Content/content.yml
+name: Custom Content
+contentType: Content Type
+```
+
+Then, as for the content of your Pages, you need to define your FieldValues under `children`
+
+You can find a Content import file example here [doc](import/Content/standalone_content.yaml)
+This Content is linked to the ContentType defined here [doc](import/ContentType/standalone_content_type.yaml) 
+These example files also show you how to create and populate Choice type fields as well as File and Image field types.

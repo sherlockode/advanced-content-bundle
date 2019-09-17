@@ -1,0 +1,38 @@
+name: Standalone Content Type
+children:
+    -
+        name: Select Field
+        type: select
+        options:
+            is_multiple: 1
+            choices:
+                - Choice 1
+                - Choice 2
+                - Choice 3
+    -
+        name: Radio Field
+        type: radio
+        options:
+            choices:
+                - Choice 4
+                - Choice 5
+                - Choice 6
+    -
+        name: Checkbox Field
+        type: checkbox
+        options:
+            choices:
+                - Choice 7
+                - Choice 8
+                - Choice 9
+    -
+        name: Boolean Field
+        type: boolean
+    -
+        name: Image Field
+        type: image
+        required: 0
+    -
+        name: File Field
+        type: file
+        required: 1

@@ -1,0 +1,30 @@
+name: Standalone Content
+contentType: Standalone Content Type
+children:
+    -
+        slug: select-field
+        value:
+            - Choice 2
+            - Choice 3
+    -
+        slug: radio-field
+        value:
+            - Choice 6
+    -
+        slug: checkbox-field
+        value:
+            - Choice 7
+            - Choice 9
+    -
+        slug: boolean-field
+        value: 1
+    -
+        slug: image-field
+        value:
+            file: background.png
+            alt: Content Background
+    -
+        slug: file-field
+        value:
+            file: background.png
+            title: File title

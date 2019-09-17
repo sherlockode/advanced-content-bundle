@@ -100,10 +100,32 @@
             <argument type="service" id="translator"/>
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
         </service>
+        <service id="sherlockode_advanced_content.content_type_import" class="Sherlockode\AdvancedContentBundle\Import\ContentTypeImport">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.page_import" class="Sherlockode\AdvancedContentBundle\Import\PageImport">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_import" class="Sherlockode\AdvancedContentBundle\Import\ContentImport">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+        </service>
         <service id="sherlockode_advanced_content.init_command" class="Sherlockode\AdvancedContentBundle\Command\AcbInitCommand" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.content_type_import"/>
+            <argument type="service" id="sherlockode_advanced_content.page_import"/>
+            <argument type="service" id="sherlockode_advanced_content.content_import"/>
             <argument>%kernel.project_dir%</argument>
             <tag name="console.command"/>
         </service>
