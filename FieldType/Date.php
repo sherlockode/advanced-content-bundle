@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToDateTimeTransformer;
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,6 +13,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class Date extends AbstractFieldType
 {
+    /**
+     * @var ConfigurationManager
+     */
+    private $configurationManager;
+
+    /**
+     * @param ConfigurationManager $configurationManager
+     */
+    public function __construct(ConfigurationManager $configurationManager)
+    {
+        $this->configurationManager = $configurationManager;
+    }
+
     /**
      * @return string
      */
@@ -62,7 +76,7 @@ class Date extends AbstractFieldType
         $fieldOptions = $this->getFieldOptions($field);
 
         if (!isset($fieldOptions['time'])) {
-            throw new \RuntimeException("Missing mandatory option time.");
+            $fieldOptions['time'] = $this->configurationManager->getDefaultDateIncludeTime();
         }
 
         $class = 'acb-date';

@@ -68,4 +68,30 @@ class ConfigurationManager
     {
         return $this->config['init_command']['allow_update'];
     }
+
+    /**
+     * @return string
+     */
+    public function getDefaultWysiwygToolbar()
+    {
+        return $this->getDefaultOptionValue('wysiwyg_toolbar');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDefaultDateIncludeTime()
+    {
+        return $this->getDefaultOptionValue('date_include_time');
+    }
+
+    /**
+     * @param string $option
+     *
+     * @return mixed
+     */
+    private function getDefaultOptionValue($option)
+    {
+        return $this->config['default_options'][$option];
+    }
 }
