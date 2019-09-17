@@ -34,6 +34,7 @@ Field Types
 | Number | number | <ul><li>minValue</li><li>maxValue</li></ul> | string |
 | Email | email |  | string |
 | Link | link | <ul><li>target : _blank / _self</li></ul> | array indexed by "url", "title" |
+| Relative Link | relative_link | <ul><li>target : _blank / _self</li></ul> | array indexed by "url", "title" - "url" will be automatically generated depending on your http scheme and host |
 | Iframe | iframe | <ul><li>width</li><li>height</li></ul> | array indexed by "href" |
 | Message | message | <ul><li>message : message displayed on the Content form</li></ul> | empty string |
 | Color Picker | color |  | string |

@@ -106,6 +106,8 @@ field_type:
         delete: Delete
         file: File
         label: File
+    relative_link:
+        label: Relative Link
     group:
         other: Others
         simple: Simple

@@ -36,9 +36,17 @@ class Link extends AbstractFieldType
         parent::buildContentFieldValue($builder, $field);
 
         $builder->get('value')
-            ->add('url', UrlType::class)
+            ->add('url', $this->getUrlFormType())
             ->add('title', TextType::class)
         ;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUrlFormType()
+    {
+        return UrlType::class;
     }
 
     /**
@@ -103,15 +111,16 @@ class Link extends AbstractFieldType
     {
         $value = $fieldValue->getValue();
         $value = unserialize($value);
+        $url = $this->getUrlValue($value);
 
-        if (empty($value['url'])) {
+        if (empty($url)) {
             return '';
         }
 
         $options = $this->getFieldOptions($fieldValue->getField());
         $target = $options['target'];
 
-        return '<a href="' . $value['url'] . '" target="' . $target . '">' . $value['title']. '</a>';
+        return '<a href="' . $url . '" target="' . $target . '">' . $value['title']. '</a>';
     }
 
     /**
@@ -121,6 +130,19 @@ class Link extends AbstractFieldType
      */
     public function getRawValue(FieldValueInterface $fieldValue)
     {
-        return unserialize($fieldValue->getValue());
+        $rawValue = unserialize($fieldValue->getValue());
+        $rawValue['url'] = $this->getUrlValue($rawValue);
+
+        return $rawValue;
+    }
+
+    /**
+     * @param array $value
+     *
+     * @return string
+     */
+    protected function getUrlValue($value)
+    {
+        return $value['url'] ?? '';
     }
 }
