@@ -1,0 +1,69 @@
+{% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <h3>{{ 'tools.import.title'|trans }}</h3>
+            <p>{{ 'tools.import.description'|trans }}</p>
+            <div class="acb-tools-import">
+                {{ form_start(importForm) }}
+                {{ form_errors(importForm) }}
+                {{ form_row(importForm.file) }}
+                <button class="btn btn-success" type="submit">{{ 'tools.import.btn'|trans }}</button>
+                {{ form_end(importForm) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3>{{ 'tools.export.title'|trans }}</h3>
+            <p>{{ 'tools.export.description'|trans }}</p>
+            <div class="acb-tools-export">
+                {{ form_start(exportForm) }}
+                {{ form_errors(exportForm) }}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="acb-export-entities">
+                            {{ form_row(exportForm.contentType) }}
+                            {% if exportForm.contentType.vars.choices is not empty %}
+                                {{ form_row(exportForm.contentTypeAll) }}
+                            {% else %}
+                                {{ 'tools.export.empty_list.content_type'|trans }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="acb-export-entities">
+                            {{ form_row(exportForm.page) }}
+                            {% if exportForm.page.vars.choices is not empty %}
+                                {{ form_row(exportForm.pageAll) }}
+                            {% else %}
+                                {{ 'tools.export.empty_list.page'|trans }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="acb-export-entities">
+                            {{ form_row(exportForm.content) }}
+                            {% if exportForm.content.vars.choices is not empty %}
+                                {{ form_row(exportForm.contentAll) }}
+                            {% else %}
+                                {{ 'tools.export.empty_list.content'|trans }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-success" type="submit">{{ 'tools.export.btn'|trans }}</button>
+                {{ form_widget(exportForm._token) }}
+                {{ form_end(exportForm, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/sherlockodeadvancedcontent/js/acb.js') }}"></script>
+{% endblock %}

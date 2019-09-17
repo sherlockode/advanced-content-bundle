@@ -35,6 +35,16 @@ jQuery(function ($) {
         });
     }
 
+    function applySlug(refField, slugField) {
+        var timer;
+        refField.on('keyup', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                slugField.val(generateSlug(refField.val()));
+            }, 300);
+        });
+    }
+
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
@@ -111,6 +121,12 @@ jQuery(function ($) {
     // Content Type //
     //////////////////
 
+    let contentTypeName = $('.acb-contenttype-name');
+    let contentTypeSlug = $('.acb-contenttype-slug');
+    if (contentTypeName.length > 0 && contentTypeSlug.length > 0) {
+        applySlug(contentTypeName, contentTypeSlug);
+    }
+    
     $('body').on('change', '.field-type', function (e) {
         var data = {
             type: $(this).val(),
@@ -211,12 +227,12 @@ jQuery(function ($) {
         }
 
         if (!validateChoiceLists || !validateSlugs) {
-            // e.preventDefault();
+            e.preventDefault();
         }
 
         if ((contentTypePageTypeValue !== '' && contentTypePageTypeValue !== contentTypePageTypeList.val()) || (contentTypePageValue !== '' && contentTypePageValue !== contentTypePageList.val())) {
             if (!confirm($('.acb-contenttype-change-link').html())) {
-                // e.preventDefault();
+                e.preventDefault();
             }
         }
     });
@@ -281,6 +297,12 @@ jQuery(function ($) {
     // Content //
     /////////////
 
+    let contentName = $('.acb-content-name');
+    let contentSlug = $('.acb-content-slug');
+    if (contentName.length > 0 && contentSlug.length > 0) {
+        applySlug(contentName, contentSlug);
+    }
+
     initDatePicker();
 
     function initDatePicker() {
@@ -304,7 +326,7 @@ jQuery(function ($) {
     $('body').on('submit', '.edit-page', function(e) {
         if (pageTypeValue !== $(this).find('select.acb-page-page-type').val()) {
             if (!confirm($('.acb-page-change-type').html())) {
-                // e.preventDefault();
+                e.preventDefault();
             }
         }
     });
@@ -312,12 +334,17 @@ jQuery(function ($) {
     let pageTitle = $('.acb-page-title');
     let pageSlug = $('.acb-page-slug');
     if (pageTitle.length > 0 && pageSlug.length > 0) {
-        var timer;
-        pageTitle.on('keyup', function () {
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                pageSlug.val(generateSlug(pageTitle.val()));
-            }, 300);
-        });
+        applySlug(pageTitle, pageSlug);
     }
+
+    ////////////
+    // Export //
+    ////////////
+
+    $('.acb-export-all').on('change', function () {
+        let checked = $(this).prop('checked');
+        $(this).closest('.acb-export-entities').find('.acb-export-entity input[type="checkbox"]').each(function () {
+            $(this).prop('checked', checked);
+        });
+    });
 });

@@ -37,7 +37,7 @@ class Boolean extends AbstractChoice
      *
      * @return array
      */
-    protected function getFieldOptionsArray(FieldInterface $field)
+    public function getFieldOptionsArray(FieldInterface $field)
     {
         return [
             0 => 'No',

@@ -32,6 +32,22 @@ interface ContentTypeInterface
     public function setName($name);
 
     /**
+     * Get content type's slug
+     *
+     * @return string
+     */
+    public function getSlug();
+
+    /**
+     * Set content type's slug
+     *
+     * @param string $slug
+     *
+     * @return $this
+     */
+    public function setSlug($slug);
+
+    /**
      * Get content type's list of fields
      *
      * @return Field[]

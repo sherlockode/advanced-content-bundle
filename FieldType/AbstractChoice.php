@@ -49,7 +49,7 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
      *
      * @return array
      */
-    protected function getFieldOptionsArray(FieldInterface $field)
+    public function getFieldOptionsArray(FieldInterface $field)
     {
         $choices = [];
         $fieldOptions = $this->getFieldOptions($field);

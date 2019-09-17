@@ -4,9 +4,12 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentType extends AbstractType
@@ -42,14 +45,31 @@ class ContentType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'content.form.name',
-                'required' => false,
+                'attr' => ['class' => 'acb-content-name'],
             ])
+            ->add('slug')
             ->add('fieldValues', FieldValuesType::class, [
                 'label' => 'content.form.field_values',
                 'fields' => $fields,
                 'contentType' => $options['contentType'],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options) {
+            $form = $event->getForm();
+            /** @var ContentInterface $content */
+            $content = $event->getData();
+            $slugClass = 'acb-content-slug';
+            if ($content !== null && $content->getId()) {
+                $slugClass = '';
+            }
+            $form
+                ->add('slug', TextType::class, [
+                    'label' => 'content.form.slug',
+                    'attr' => ['class' => $slugClass],
+                ])
+            ;
+        });
     }
 
     /**

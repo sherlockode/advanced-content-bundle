@@ -18,6 +18,11 @@ abstract class Content implements ContentInterface
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
      * @var ContentTypeInterface
      */
     protected $contentType;
@@ -26,6 +31,11 @@ abstract class Content implements ContentInterface
      * @var Collection
      */
     protected $fieldValues;
+
+    /**
+     * @var PageInterface
+     */
+    protected $page;
 
     /**
      * Content constructor
@@ -59,6 +69,26 @@ abstract class Content implements ContentInterface
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return $this
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
 
         return $this;
     }
@@ -114,5 +144,13 @@ abstract class Content implements ContentInterface
         $this->fieldValues->removeElement($fieldValue);
 
         return $this;
+    }
+
+    /**
+     * @return PageInterface|null
+     */
+    public function getPage()
+    {
+        return $this->page;
     }
 }

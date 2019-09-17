@@ -156,7 +156,13 @@ class Content extends BaseContent
      * @ORM\OneToMany(targetEntity="App\Entity\FieldValue", mappedBy="content", cascade={"persist", "remove"})
      */
     protected $fieldValues;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Page", mappedBy="content")
+     */
+    protected $page;
 }
+
 ```
 
 ```php
@@ -344,7 +350,7 @@ class Page extends BasePage
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Content", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Content", inversedBy="page", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $content;
@@ -355,6 +361,7 @@ class Page extends BasePage
      */
     protected $pageType;
 }
+
 ```
 
 ```php

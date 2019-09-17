@@ -113,7 +113,9 @@ sherlockode_advanced_content:
 
 - [Entities](Resources/doc/entities.md)
 - [Field Types](Resources/doc/field_types.md)
+- [Tools](Resources/doc/tools.md)
 - [Import](Resources/doc/import.md)
+- [Export](Resources/doc/export.md)
 - [Usage](Resources/doc/usage.md)
 
 

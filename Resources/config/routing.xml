@@ -36,4 +36,13 @@
     <route id="sherlockode_acb_content_type_list" path="/mycontent-type/list">
         <default key="_controller">sherlockode_advanced_content.controller.content_type:listAction</default>
     </route>
+    <route id="sherlockode_acb_tools_index" path="/acb/tools">
+        <default key="_controller">sherlockode_advanced_content.controller.tools:indexAction</default>
+    </route>
+    <route id="sherlockode_acb_tools_import" path="/acb/tools-import">
+        <default key="_controller">sherlockode_advanced_content.controller.tools:importAction</default>
+    </route>
+    <route id="sherlockode_acb_tools_export" path="/acb/tools-export">
+        <default key="_controller">sherlockode_advanced_content.controller.tools:exportAction</default>
+    </route>
 </routes>
