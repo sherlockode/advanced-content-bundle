@@ -69,5 +69,9 @@
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
             <argument type="service" id="assets.packages"/>
         </service>
+        <service id="sherlockode_acb.field_type.relative_link" class="Sherlockode\AdvancedContentBundle\FieldType\RelativeLink">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+            <argument type="service" id="request_stack"/>
+        </service>
     </services>
 </container>
