@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,19 @@ use Symfony\Component\Form\Form;
 
 class Wysiwyg extends AbstractFieldType
 {
+    /**
+     * @var ConfigurationManager
+     */
+    private $configurationManager;
+
+    /**
+     * @param ConfigurationManager $configurationManager
+     */
+    public function __construct(ConfigurationManager $configurationManager)
+    {
+        $this->configurationManager = $configurationManager;
+    }
+
     /**
      * Get options to apply on field value
      *
@@ -22,7 +36,7 @@ class Wysiwyg extends AbstractFieldType
         $fieldOptions = $this->getFieldOptions($field);
 
         if (!isset($fieldOptions['toolbar'])) {
-            throw new \RuntimeException("Missing mandatory option toolbar.");
+            $fieldOptions['toolbar'] = $this->configurationManager->getDefaultWysiwygToolbar();
         }
 
         $formFieldOptions = ['config' => ['toolbar' => $fieldOptions['toolbar']]];

@@ -17,6 +17,21 @@ sherlockode_advanced_content:
         allow_update: true
 ```
 
+Some field types require specific options:
+- Wysiwyg: type of the toolbar - basic, standard or full
+- Date: include time in the format
+
+By default, the Wysiwyg toolbar will be basic and the Date will include the time.
+To change the default values, you can update the configuration : 
+
+```yaml
+# config/packages/sherlockode_advanced_content.yml
+sherlockode_advanced_content:
+    default_options:
+        wysiwyg_toolbar: full
+        date_include_time: false
+```
+
 ## Command
 
 ```bash
