@@ -49,7 +49,7 @@ class File extends AbstractFieldType
      */
     public function getFormFieldValueOptions(FieldInterface $field)
     {
-        return ['uploadManager' => $this->uploadManager];
+        return ['uploadManager' => $this->uploadManager, 'field' => $field];
     }
 
     /**
@@ -158,15 +158,16 @@ class File extends AbstractFieldType
         $oldValue = unserialize($changeSet['value'][0]);
         $newValue = unserialize($changeSet['value'][1]);
 
-        if ($newValue['src'] == '' && !$newValue['delete']) {
+        if ($newValue['src'] == '' && (!isset($newValue['delete']) || !$newValue['delete'])) {
             $newValue['src'] = $oldValue['src'];
         }
 
-        if ($newValue['delete']) {
-            $this->uploadManager->remove($oldValue['src']);
+        if (isset($newValue['delete'])) {
+            if ($newValue['delete']) {
+                $this->uploadManager->remove($oldValue['src']);
+            }
+            unset($newValue['delete']);
         }
-
-        unset($newValue['delete']);
 
         $fieldValue->setValue(serialize($newValue));
     }

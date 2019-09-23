@@ -94,7 +94,7 @@
     {{ form_row(form.file) }}
 
     {% set source = '' %}
-    {% if form.src.vars.data is not null %}
+    {% if form.src.vars.data is not empty %}
         {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
     {% endif %}
     {% if source != '' %}
@@ -105,9 +105,9 @@
         </div>
     {% endif %}
 
-    <div {% if source == '' %} style="display: none;"{% endif %}>
+    {% if form.delete is defined %}
         {{ form_row(form.delete) }}
-    </div>
+    {% endif %}
 
     {{ form_row(form.alt) }}
 {% endblock %}
@@ -116,7 +116,7 @@
     {{ form_row(form.file) }}
 
     {% set source = '' %}
-    {% if form.src.vars.data is not null %}
+    {% if form.src.vars.data is not empty %}
         {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
     {% endif %}
     {% if source != '' %}
@@ -127,9 +127,9 @@
         </div>
     {% endif %}
 
-    <div {% if source == '' %} style="display: none;"{% endif %}>
+    {% if form.delete is defined %}
         {{ form_row(form.delete) }}
-    </div>
+    {% endif %}
 
     {{ form_row(form.title) }}
 {% endblock %}
