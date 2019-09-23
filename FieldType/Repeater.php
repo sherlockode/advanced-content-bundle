@@ -19,6 +19,9 @@ class Repeater extends AbstractFieldType
      */
     private $fieldManager;
 
+    /**
+     * @param FieldManager $fieldManager
+     */
     public function __construct(FieldManager $fieldManager)
     {
         $this->fieldManager = $fieldManager;
@@ -37,13 +40,19 @@ class Repeater extends AbstractFieldType
         parent::buildContentFieldValue($builder, $field);
 
         $fields = [];
+        $layout = null;
         $childrenLayouts = $field->getChildren();
         if (count($childrenLayouts) > 0) {
             $fields = $childrenLayouts[0]->getChildren();
+            $layout = $childrenLayouts[0];
         }
         $builder
             ->add('children', RepeaterGroupCollectionType::class, [
-                'entry_options' => ['fields' => $fields, 'contentType' => $this->fieldManager->getLayoutFieldContentType($field)]
+                'entry_options' => [
+                    'fields' => $fields,
+                    'contentType' => $this->fieldManager->getLayoutFieldContentType($field),
+                    'layout' => $layout,
+                ],
             ])
         ;
     }
