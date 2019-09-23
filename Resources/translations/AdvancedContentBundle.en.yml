@@ -175,6 +175,7 @@ init:
         field_value_file_not_found: File "%file%" not found for FieldValue with Field "%slug%"
         unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
         file_not_found: File %file% was not found in directory "%dir%"
+        field_value_entity_not_found: Entity with identifier "%value%" was not found for field with slug "%slug%"
     export_success: Files were successfully exported in "%dir%"
 tools:
     import:

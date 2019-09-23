@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Sherlockode\AdvancedContentBundle\FieldType\AbstractChoice;
+use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
 use Sherlockode\AdvancedContentBundle\FieldType\File as FileFieldType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -174,6 +175,24 @@ class ContentImport extends AbstractImport
             }
             if (isset($fieldValueData['value'])) {
                 $fieldValueValue = $fieldValueData['value'];
+                if ($fieldType instanceof AbstractEntity) {
+                    $hasError = false;
+                    if (is_array($fieldValueValue)) {
+                        foreach ($fieldValueValue as $value) {
+                            if ($fieldType->getEntityByIdentifier($value) === null) {
+                                $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%slug%' => $slug, '%value%' => $value], 'AdvancedContentBundle');
+                                $hasError = true;
+                            }
+                        }
+                    } elseif ($fieldType->getEntityByIdentifier($fieldValueValue) === null) {
+                        $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%slug%' => $slug, '%value%' => $fieldValueValue], 'AdvancedContentBundle');
+                        $hasError = true;
+                    }
+                    if ($hasError) {
+                        continue;
+                    }
+                }
+
                 if (is_array($fieldValueValue)) {
                     $invalidOptionFound = false;
                     if ($fieldType instanceof AbstractChoice) {

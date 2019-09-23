@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Export;
 
+use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
 use Sherlockode\AdvancedContentBundle\FieldType\Boolean;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -96,6 +97,16 @@ class ContentExport
                 }
             } elseif ($fieldType instanceof Boolean) {
                 $rawValue = (int) $rawValue;
+            } elseif ($fieldType instanceof AbstractEntity) {
+                if ($fieldType->getIsMultipleChoice($fieldValue->getField())) {
+                    $rawValues = [];
+                    foreach ($rawValue as $value) {
+                        $rawValues[] = $value['value'];
+                    }
+                    $rawValue = $rawValues;
+                } else {
+                    $rawValue = $rawValue['value'];
+                }
             }
 
             $fieldValueData['value'] = $rawValue;
