@@ -56,6 +56,7 @@
         </service>
         <service id="sherlockode_advanced_content.form.repeater_group" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.flexible_group" class="Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType">

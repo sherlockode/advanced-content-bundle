@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Sherlockode\AdvancedContentBundle\Form\DataTransformer\LayoutToIdTransformer;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -26,6 +27,10 @@ class FlexibleGroupType extends AbstractType
      */
     private $om;
 
+    /**
+     * @param ConfigurationManager $configurationManager
+     * @param ObjectManager        $om
+     */
     public function __construct(ConfigurationManager $configurationManager, ObjectManager $om)
     {
         $this->configurationManager = $configurationManager;
@@ -34,12 +39,9 @@ class FlexibleGroupType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $layoutClass = $this->configurationManager->getEntityClass('layout');
-        $builder->add('layout', EntityType::class, [
-            'class' => $layoutClass,
-            'choice_label' => 'name',
-            'choices' => $options['layouts'],
-        ]);
+        $layoutRepository = $this->om->getRepository($this->configurationManager->getEntityClass('layout'));
+        $builder->add('layout', HiddenType::class);
+        $builder->get('layout')->addViewTransformer(new LayoutToIdTransformer($layoutRepository));
 
         $builder->add('position', HiddenType::class);
 
@@ -56,7 +58,6 @@ class FlexibleGroupType extends AbstractType
             ]);
         });
 
-        $layoutRepository = $this->om->getRepository($layoutClass);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($options, $layoutRepository) {
             $form = $event->getForm();
             $data = $event->getData();
@@ -82,7 +83,7 @@ class FlexibleGroupType extends AbstractType
             'label' => false,
             'parentFormId' => null,
         ]);
-        $resolver->setRequired(['contentType', 'layouts']);
+        $resolver->setRequired(['contentType']);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
