@@ -136,7 +136,11 @@ class File extends AbstractFieldType
     public function getRawValue(FieldValueInterface $fieldValue)
     {
         $value = unserialize($fieldValue->getValue());
-        $value['src'] = $this->getFilename($value);
+        $value['url'] = $this->getFilename($value);
+
+        if (isset($value['delete'])) {
+            unset($value['delete']);
+        }
 
         return $value;
     }

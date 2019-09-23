@@ -26,6 +26,22 @@ interface ContentInterface
     public function setName($name);
 
     /**
+     * Get content's slug
+     *
+     * @return string
+     */
+    public function getSlug();
+
+    /**
+     * Set content's slug
+     *
+     * @param string $slug
+     *
+     * @return $this
+     */
+    public function setSlug($slug);
+
+    /**
      * Get content's content type
      *
      * @return ContentTypeInterface
@@ -65,4 +81,11 @@ interface ContentInterface
      * @return $this
      */
     public function removeFieldValue(FieldValueInterface $fieldValue);
+
+    /**
+     * Get content's content page
+     *
+     * @return PageInterface|null
+     */
+    public function getPage();
 }

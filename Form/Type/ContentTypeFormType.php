@@ -76,7 +76,10 @@ class ContentTypeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'content_type.form.name'])
+            ->add('name', TextType::class, [
+                'label' => 'content_type.form.name',
+                'attr' => ['class' => 'acb-contenttype-name'],
+            ])
             ->add('linkType', ChoiceType::class, [
                 'label' => 'content_type.form.link_types.label',
                 'choices' => [
@@ -120,6 +123,17 @@ class ContentTypeFormType extends AbstractType
                 $linkType = ContentTypeInterface::LINK_TYPE_PAGE_TYPE;
             }
             $form->get('linkType')->setData($linkType);
+
+            $slugClass = 'acb-contenttype-slug';
+            if ($contentType->getId()) {
+                $slugClass = '';
+            }
+            $form
+                ->add('slug', TextType::class, [
+                    'label' => 'content_type.form.slug',
+                    'attr' => ['class' => $slugClass],
+                ])
+            ;
         });
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
             $form = $event->getForm();

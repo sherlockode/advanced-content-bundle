@@ -34,5 +34,7 @@ class SherlockodeAdvancedContentExtension extends Extension
             $targetDir,
             $webPath,
         ]);
+
+        $container->setParameter('sherlockode_advanced_content.templates.tools', $config['templates']['tools']);
     }
 }

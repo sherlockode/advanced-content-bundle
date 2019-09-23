@@ -14,5 +14,11 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
         </service>
+        <service id="sherlockode_advanced_content.controller.tools" class="Sherlockode\AdvancedContentBundle\Controller\ToolsController" public="true">
+            <argument type="service" id="sherlockode_advanced_content.import_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.export_manager"/>
+            <argument type="service" id="translator"/>
+            <argument>%sherlockode_advanced_content.templates.tools%</argument>
+        </service>
     </services>
 </container>

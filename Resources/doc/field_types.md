@@ -39,8 +39,8 @@ Field Types
 | Message | message | <ul><li>message : message displayed on the Content form</li></ul> | empty string |
 | Color Picker | color |  | string |
 | Date Picker | date | <ul><li>time : includes time (1 => yes / 0 => no)</li></ul> | string |
-| File upload | file |  | array indexed by "src" (full url to the file resource), "title" |
-| Image upload | image |  | array indexed by "src" (full url to the image resource), "alt" |
+| File upload | file |  | array indexed by "src" (file name), "url" (full url to the file resource), "title" |
+| Image upload | image |  | array indexed by "src" (file name), "url", (full url to the image resource), "alt" |
 
 ## Custom FieldType
 

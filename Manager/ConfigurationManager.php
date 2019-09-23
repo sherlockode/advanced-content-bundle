@@ -62,11 +62,27 @@ class ConfigurationManager
     }
 
     /**
+     * @return string
+     */
+    public function getInitFilesDirectory()
+    {
+        return $this->config['init_command']['files_directory'];
+    }
+
+    /**
      * @return bool
      */
     public function initCanUpdate()
     {
         return $this->config['init_command']['allow_update'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFieldDefaultRequired()
+    {
+        return $this->config['init_command']['field_default_required'];
     }
 
     /**

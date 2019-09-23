@@ -18,6 +18,11 @@ abstract class ContentType implements ContentTypeInterface
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $slug;
+
+    /**
      * @var Collection
      */
     protected $fields;
@@ -76,6 +81,26 @@ abstract class ContentType implements ContentTypeInterface
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return $this
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
 
         return $this;
     }

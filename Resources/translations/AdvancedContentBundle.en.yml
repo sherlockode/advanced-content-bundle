@@ -3,6 +3,7 @@ content_type:
     edit: Edit content type
     form:
         name: Name
+        slug: Slug
         fields: Fields
         add_field: Add field
         add_layout: Add group
@@ -42,6 +43,7 @@ content:
     edit: Edit content
     form:
         name: Name
+        slug: Slug
         field_values: Fields
         add_group: Add group
         field:
@@ -154,12 +156,43 @@ init:
     title: 'Start importing %entity%'
     errors:
         init_dir: Init directory %dir% does not exist
-        entity_dir: 'Directory %dir% does not exist : %entity% will not be processed'
         entity_not_found: '%entity% "%name%" was not found'
         page_no_content_type: No content type was found for page %page%. Content will not be processed
-        contact_type_missing_name: You need to define the name of the ContentType
+        content_type_missing_name: You need to define the name of the ContentType
         field_missing_data: You need to define the name / the type of the Field
         layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
         field_value_missing_slug: You need to define the slug of the FieldValue
         field_group_value_missing_name: You need to define the name of the FieldGroupValue
+        content_missing_name: You need to define the name of the content
+        content_no_content_type_found: No ContentType with slug "%slug%" was found
+        content_type_already_linked: The ContentType "%name%" is already linked to a PageType or a Page.
+        page_type_too_many_matches: Only one PageType should match name "%name%"
+        field_options_not_array: Options should be an array for field "%slug%"
+        field_invalid_type: Field "%slug%" has an unknown type "%type%"
+        field_invalid_option: Field "%slug%" has an unknown option "%option%". Allowed options are %options%.
+        field_value_invalid_option: FieldValue with Field "%slug%" has an unknown option "%option%". Allowed options are %options%.
+        field_value_file_not_found: File "%file%" not found for FieldValue with Field "%slug%"
+        unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
+        file_not_found: File %file% was not found in directory "%dir%"
+    export_success: Files were successfully exported in "%dir%"
+tools:
+    import:
+        title: Import
+        description: Upload a yaml file containing ContentTypes, Pages and/or Contents
+        file: File
+        btn: Import
+        success: The file was correctly imported
+    export:
+        title: Export
+        description: Export yaml files of chosen entities
+        all: Select/Unselect all
+        content_type: Content Type
+        page: Page
+        content: Content
+        btn: Export
+        error_empty_selection: Please select at least one entity
+        empty_list:
+            content_type: There are no content types to export
+            page: There are no pages to export
+            content: There are no contents to export

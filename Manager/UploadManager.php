@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadManager
@@ -42,6 +43,21 @@ class UploadManager
     }
 
     /**
+     * Copy file into acb files directory
+     *
+     * @param File $file
+     *
+     * @return string
+     */
+    public function copy(File $file)
+    {
+        $fileName = $this->getFileName($file);
+        copy($file->getRealPath(), $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName);
+
+        return $fileName;
+    }
+
+    /**
      * Remove file
      *
      * @param string $fileName
@@ -60,15 +76,22 @@ class UploadManager
     /**
      * Get file name
      *
-     * @param UploadedFile $file
+     * @param UploadedFile|File $file
      *
      * @return string
      */
-    private function getFileName(UploadedFile $file)
+    private function getFileName(File $file)
     {
-        $extension = $file->getClientOriginalExtension();
-        $fileName = str_replace('.' . $extension, '', $file->getClientOriginalName());
+        if ($file instanceof UploadedFile) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName = $file->getClientOriginalName();
+        } else {
+            /** @var File $file */
+            $extension = $file->getExtension();
+            $fileName = $file->getFilename();
+        }
 
+        $fileName = str_replace('.' . $extension, '', $fileName);
         $fileName = $fileName . '_' . md5(uniqid()) . '.' . $extension;
 
         return $fileName;

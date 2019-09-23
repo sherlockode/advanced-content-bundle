@@ -1,34 +1,36 @@
-name: Custom Content Type
-pageType: Custom Page Type
-children:
-    -
-        name: Custom Text Field
-        type: text
-    -
-        name: Custom Flexible Field
-        type: flexible
+content_types:
+    custom-content-type:
+        name: Custom Content Type
+        pageType: Custom Page Type
         children:
             -
-                name: Custom Layout 1
-                children:
-                    -
-                        name: Custom Layout 1 - Title
-                        type: text
+                name: Custom Text Field
+                type: text
             -
-                name: Custom Layout 2
+                name: Custom Flexible Field
+                type: flexible
                 children:
                     -
-                        name: Custom Layout 2 - Title
-                        type: text
-                    -
-                        name: Custom Layout 2 - Repeater
-                        type: repeater
+                        name: Custom Layout 1
                         children:
                             -
-                                name: Repeater - Title
+                                name: Custom Layout 1 - Title
+                                type: text
+                    -
+                        name: Custom Layout 2
+                        children:
+                            -
+                                name: Custom Layout 2 - Title
                                 type: text
                             -
-                                name: Repeater - Description
-                                type: wysiwyg
-                                required: false
-                                options: { toolbar: basic }
+                                name: Custom Layout 2 - Repeater
+                                type: repeater
+                                children:
+                                    -
+                                        name: Repeater - Title
+                                        type: text
+                                    -
+                                        name: Repeater - Description
+                                        type: wysiwyg
+                                        required: false
+                                        options: { toolbar: basic }

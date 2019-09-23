@@ -3,6 +3,7 @@ content_type:
     edit: Editer le type de contenu
     form:
         name: Nom
+        slug: Slug
         fields: Champs
         add_field: Ajouter un champ
         add_layout: Ajouter un groupe
@@ -42,6 +43,7 @@ content:
     edit: Modifier le contenu
     form:
         name: Nom
+        slug: Slug
         field_values: Champs
         add_group: Ajouter un groupe
         field:
@@ -154,12 +156,43 @@ init:
     title: 'Import de %entity%'
     errors:
         init_dir: Le dossier %dir% n'existe pas
-        entity_dir: "Le dossier %dir% n'existe pas : l'entité %entity% ne sera pas traitée"
         entity_not_found: "%entity% '%name%' n'existe pas"
         page_no_content_type: "Aucun type de contenu n'a été trouvé pour la page %page%. Son contenu ne sera pas traité"
-        contact_type_missing_name: Vous devez définir le nom du type de contenu
+        content_type_missing_name: Vous devez définir le nom du type de contenu
         field_missing_data: Vous devez définir le nom / le type du champ
         layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
         field_value_missing_slug: Vous devez définir le slug du champ du contenu
         field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu
+        content_missing_name: Vous devez définir le nom du contenu
+        content_no_content_type_found: Aucun type de contenu n'a été trouvé avec le slug "%slug%"
+        content_type_already_linked: Le type de contenu "%name%" est déjà associé à un type de page ou à une page
+        page_type_too_many_matches: Un seul type de page doit correspondre au nom "%name%"
+        field_options_not_array: Les options du champ "%slug%" doivent être un tableau
+        field_invalid_type: Le champ "%slug%" a un type inconnu "%type%"
+        field_invalid_option: Le champ "%slug%" a une option inconnue "%option%". Les options autorisées sont %options%.
+        field_value_invalid_option: La valeur du champ "%slug%" a une option inconnue "%option%". Les options autorisées sont %options%.
+        field_value_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ "%slug%"
+        unknown_entity_type: Le type "%type%" est inconnu. Les types d'entité disponibles sont %list%.
+        file_not_found: Le fichier %file% n'a pas été trouvé dans le dossier "%dir%"
+    export_success: Les fichiers ont bien été exportés dans "%dir%"
+tools:
+    import:
+        title: Import
+        description: Importez un fichier au format yaml incluant des types de contenus, des pages et/ou des contenus
+        file: Fichier
+        btn: Importer
+        success: Le fichier a bien été importé
+    export:
+        title: Export
+        description: Exporter les fichiers yaml des entités sélectionnées
+        all: Cocher/Décocher tous
+        content_type: Type de contenu
+        page: Page
+        content: Contenu
+        btn: Exporter
+        error_empty_selection: Veuillez sélectionner au moins une entité
+        empty_list:
+            content_type: Il n'y a pas de types de contenu à exporter
+            page: Il n'y a pas de pages à exporter
+            content: Il n'y a pas de contenus à exporter
