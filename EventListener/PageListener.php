@@ -41,9 +41,6 @@ class PageListener
         if ($object->getStatus() === null) {
             $object->setStatus(PageInterface::STATUS_DRAFT);
         }
-        if (!$object->getContent() instanceof ContentInterface) {
-            $this->pageManager->createContentForPage($object);
-        }
     }
 
     /**
