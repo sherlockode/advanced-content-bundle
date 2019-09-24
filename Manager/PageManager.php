@@ -106,19 +106,6 @@ class PageManager
      *
      * @return bool
      */
-    public function createContentForPage(PageInterface $page)
-    {
-        $contentType = $this->getPageContentType($page);
-        if ($contentType instanceof ContentTypeInterface) {
-            $this->createPageContent($page, $contentType);
-        }
-    }
-
-    /**
-     * @param PageInterface $page
-     *
-     * @return bool
-     */
     public function updateContentForPage(PageInterface $page)
     {
         $contentType = $this->getPageContentType($page);
@@ -138,8 +125,6 @@ class PageManager
             }
             $this->om->remove($page->getContent());
         }
-
-        $this->createPageContent($page, $contentType);
 
         return true;
     }
@@ -182,20 +167,5 @@ class PageManager
         }
 
         return $shouldFlush;
-    }
-
-    /**
-     * @param PageInterface        $page
-     * @param ContentTypeInterface $contentType
-     */
-    private function createPageContent(PageInterface $page, ContentTypeInterface $contentType)
-    {
-        $contentClass = $this->configurationManager->getEntityClass('content');
-        /** @var ContentInterface $content */
-        $content = new $contentClass;
-        $content->setName($page->getTitle());
-        $content->setContentType($contentType);
-        $page->setContent($content);
-        $this->om->persist($content);
     }
 }

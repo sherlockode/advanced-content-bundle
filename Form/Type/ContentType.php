@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -70,6 +71,17 @@ class ContentType extends AbstractType
                 ])
             ;
         });
+
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) use ($options) {
+                $content = $event->getData();
+                if (!$content->getContentType() instanceof ContentTypeInterface) {
+                    $content->setContentType($options['contentType']);
+                    $event->setData($content);
+                }
+            }
+        );
     }
 
     /**
