@@ -19,6 +19,7 @@
         {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
     {% endif %}
     {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
+    {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
     <div {{ block('widget_container_attributes') }} data-sortable-group-id="{{ form.vars.id }}">
         {% for child in form %}
             {{- form_widget(child) -}}
@@ -50,6 +51,7 @@
 {% endblock %}
 {% block acb_repeater_group_widget %}
     {% set fieldId = form.vars.id %}
+    {% set allowDuplicate = false %}
     <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ form.parent.vars.id }}">
         <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
              {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
@@ -65,6 +67,7 @@
 {% endblock %}
 
 {% block acb_flexible_group_widget %}
+    {% set allowDuplicate = false %}
     {% set fieldId = form.vars.id %}
     {% set parentGroupId = '' %}
     {% if form.parent is not null %}

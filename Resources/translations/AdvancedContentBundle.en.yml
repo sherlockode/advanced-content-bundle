@@ -129,6 +129,7 @@ delete: Delete
 edit: Edit
 save: Save
 show: Show
+duplicate: Duplicate
 page_type:
     label: Page Type
     form:

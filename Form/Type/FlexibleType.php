@@ -20,6 +20,7 @@ class FlexibleType extends AbstractType
             'by_reference' => false,
             'translation_domain' => 'AdvancedContentBundle',
             'block_name' => 'acb_flexible',
+            'prototype_name' => '__layout_name__',
         ]);
     }
 

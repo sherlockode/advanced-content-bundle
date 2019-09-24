@@ -6,6 +6,7 @@
         {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
     {% endif %}
     {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
+    {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
     <div {{ block('widget_container_attributes') }} data-sortable-group-id="{{ form.vars.id }}">
         {% for child in form %}
             {{- form_widget(child) -}}
@@ -18,11 +19,12 @@
 
 {% block repeater_layout_widget %}
     {% set allowDelete = false %}
+    {% set allowDuplicate = false %}
     {{- block('layout_widget') -}}
 {% endblock %}
 
 {% block layout_widget %}
-    {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__random_id__' %}
+    {% set fieldId = form.vars.value and form.vars.value.id ? form.vars.value.id : '__layout_random_id__' %}
     <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-sortable-parent-group-id="{{ form.parent.vars.id }}">
         <div class="panel-heading edit-field" data-toggle="collapse" data-target="#layout-{{ fieldId }}" aria-expanded="false"
              {% if form.parent is not empty %}data-parent="#{{ form.parent.vars.id }}"{% endif %}>
@@ -46,8 +48,13 @@
 
 {% block acb_panel_actions %}
     <div class="pull-right panel-actions">
+        {% if allowDuplicate is not defined or allowDuplicate == true %}
+            <button type="button" class="acb-duplicate-row" title="{{ 'duplicate'|trans }}" data-form-id="{{ form.vars.id }}" data-form-name="{{ form.vars.full_name }}" data-form-index="{{ form.vars.name }}">
+                <i class="glyphicon glyphicon-duplicate"></i>
+            </button>
+        {% endif %}
         {% if allowDelete is not defined or allowDelete == true %}
-            <button type="button" class="acb-remove-row">
+            <button type="button" class="acb-remove-row" title="{{ 'delete'|trans }}">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
         {% endif %}
