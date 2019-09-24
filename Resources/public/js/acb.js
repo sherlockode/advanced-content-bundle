@@ -72,15 +72,20 @@ jQuery(function ($) {
         e.preventDefault();
 
         var list = $($(this).attr('data-list'));
-        var counter = list.data('widget-counter') || list.children().length;
+        var counter = list.data('widget-counter');
 
         var type = $(this).data('type');
         var newWidget = list.data('prototype');
-        newWidget = newWidget.replace(/__name__label__/g, counter);
-        newWidget = newWidget.replace(/__name__/g, counter);
-        newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
+
         if (type === 'field') {
             newWidget = newWidget.replace(/__parent_group_id__/g, list.data('sortable-group-id'));
+            newWidget = newWidget.replace(/__name__label__/g, counter);
+            newWidget = newWidget.replace(/__name__/g, counter);
+            newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
+        } else if (type === 'group') {
+            newWidget = newWidget.replace(/__layout_name__label__/g, counter);
+            newWidget = newWidget.replace(/__layout_name__/g, counter);
+            newWidget = newWidget.replace(/__layout_random_id__/g, (Math.random() * 1000)|0);
         }
         counter++;
         list.data('widget-counter', counter);
@@ -96,7 +101,7 @@ jQuery(function ($) {
         e.preventDefault();
         var wrapper = $(this).closest('.acb-flexible-add-wrapper');
         var list = $(wrapper.attr('data-list'));
-        var counter = list.data('widget-counter') || list.children().length;
+        var counter = list.data('widget-counter');
         var name = wrapper.attr('data-name-prefix') + '[' + counter + ']';
         var id = wrapper.attr('data-id-prefix') + '_' + counter;
 
@@ -292,6 +297,53 @@ jQuery(function ($) {
             contentTypePageTypeList.val('');
         }
     }
+
+    $('body').on('click', '.acb-duplicate-row', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        let parentList = $($(this).closest('.edit-field').data('parent'));
+        let newFormIndex = parentList.data('widget-counter');
+
+        let oldFormId = $(this).data('form-id');
+        let oldFormName = $(this).data('form-name');
+        let oldFormIndex = $(this).data('form-index');
+        let newFormId = oldFormId.substring(0, oldFormId.lastIndexOf('_' + oldFormIndex)) + '_' + newFormIndex;
+        let newFormName = oldFormName.substring(0, oldFormName.lastIndexOf('[' + oldFormIndex + ']')) + '[' + newFormIndex + ']';
+        let clonedElement = $(this).closest('.acb-row').clone();
+
+        let tmpElement = $('<div>').append(clonedElement);
+        let newContent = tmpElement.html();
+        let oldFormIdRegExp = new RegExp(oldFormId, "g");
+        newContent = newContent.replace(oldFormIdRegExp, newFormId);
+        oldFormName = oldFormName.replace(/\[/g, '\\[');
+        oldFormName = oldFormName.replace(/\]/g, '\\]');
+        let oldFormNameRegExp = new RegExp(oldFormName, "g");
+        newContent = newContent.replace(oldFormNameRegExp, newFormName);
+
+        var newElem = $(newContent);
+        let newSlugField = newElem.find('#' + newFormId + '_slug');
+        if (newSlugField.length > 0) {
+            newSlugField.val(newSlugField.val() + '-1');
+        }
+
+        newElem.find('.edit-field').each(function(){
+            let currentElement = $(this);
+            let oldPanelTarget = currentElement.data('target');
+            let newPanelTarget = oldPanelTarget + '-duplicate-' + newFormIndex;
+            currentElement.attr('data-target', newPanelTarget);
+            newPanelTarget = newPanelTarget.replace(/#/g, '');
+            currentElement.closest('.acb-field').find(oldPanelTarget).attr('id', newPanelTarget);
+        });
+        newElem.find('[data-form-name="' + newFormName + '"]').attr('data-form-index', newFormIndex);
+        newElem.appendTo(parentList);
+        newElem.find('.edit-field').first().click();
+
+        newFormIndex++;
+        parentList.data('widget-counter', newFormIndex);
+
+        initSortables();
+        calculatePosition();
+    });
 
     /////////////
     // Content //

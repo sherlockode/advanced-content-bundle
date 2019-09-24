@@ -1,9 +1,9 @@
-.acb-field .acb-remove-row {
+.acb-field .acb-remove-row, .acb-field .acb-duplicate-row {
     color: #fff;
     border: 0;
     background: none;
 }
-.acb-field .acb-remove-row:hover {
+.acb-field .acb-remove-row:hover, .acb-field .acb-duplicate-row:hover {
     color: #fff;
 }
 .acb-field .edit-field:hover {

@@ -36,8 +36,9 @@ class RepeaterGroupType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $layoutRepository = $this->om->getRepository($this->configurationManager->getEntityClass('layout'));
         $builder->add('layout', HiddenType::class);
-        $builder->get('layout')->addViewTransformer(new LayoutToIdTransformer($this->configurationManager, $this->om));
+        $builder->get('layout')->addViewTransformer(new LayoutToIdTransformer($layoutRepository));
         $builder->add('position', HiddenType::class);
         $builder->add('children', RepeaterFieldType::class, [
             'label' => false,
