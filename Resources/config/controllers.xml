@@ -20,5 +20,13 @@
             <argument type="service" id="translator"/>
             <argument>%sherlockode_advanced_content.templates.tools%</argument>
         </service>
+        <service id="sherlockode_advanced_content.controller.page_type" class="Sherlockode\AdvancedContentBundle\Controller\PageTypeController" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.controller.page" class="Sherlockode\AdvancedContentBundle\Controller\PageController" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+        </service>
     </services>
 </container>

@@ -3,9 +3,10 @@
 {% block body %}
     {{ parent() }}
     <div class="container">
-        <div class="row">
+        <div class="row page-info">
             <div class="col-md-12">
                 <h1>{{ 'content_type.label'|trans }}</h1>
+                <a href="{{ path('sherlockode_acb_content_type_create') }}" class="pull-right">{{ 'content_type.create'|trans }}</a>
             </div>
         </div>
         <div class="row">

@@ -1,24 +1,79 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+{% form_theme form '@SherlockodeAdvancedContent/Form/content_type.html.twig' %}
+{% trans_default_domain 'AdvancedContentBundle' %}
+
 {% block body %}
     {{ parent() }}
-    <div>
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
-        <div class="row">
+    <div class="container">
+        <div class="row page-info">
             <div class="col-md-12">
-                <h4>Create Content Type</h4>
-                <div class="form-group">
-                    {{ form_label(form.name) }}
-                    {{ form_widget(form.name) }}
-                </div>
+                <h1>{{ 'content_type.create'|trans }}</h1>
+                <a href="{{ path('sherlockode_acb_content_type_list') }}" class="pull-right">{{ 'back_to_list'|trans }}</a>
             </div>
         </div>
-
-        <button type="submit" class="btn btn-success">
-            Create
-        </button>
-
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.name) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.name) }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.slug) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.slug) }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.linkType) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.linkType) }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.pageType) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.pageType) }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.page) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.page) }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.allowSeveralContents) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_widget(form.allowSeveralContents) }}
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success pull-right">
+                            {{ 'save'|trans }}
+                        </button>
+                    </div>
+                </div>
+                {{ form_widget(form._token) }}
+                {{ form_end(form, {"render_rest": false}) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

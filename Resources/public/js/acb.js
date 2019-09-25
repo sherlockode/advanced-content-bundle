@@ -349,12 +349,7 @@ jQuery(function ($) {
     // Content //
     /////////////
 
-    let contentName = $('.acb-content-name');
-    let contentSlug = $('.acb-content-slug');
-    if (contentName.length > 0 && contentSlug.length > 0) {
-        applySlug(contentName, contentSlug);
-    }
-
+    initContentSlug();
     initDatePicker();
 
     function initDatePicker() {
@@ -367,6 +362,14 @@ jQuery(function ($) {
                 format: format
             });
         });
+    }
+    
+    function initContentSlug() {
+        let contentName = $('.acb-content-name');
+        let contentSlug = $('.acb-content-slug');
+        if (contentName.length > 0 && contentSlug.length > 0) {
+            applySlug(contentName, contentSlug);
+        }
     }
 
     //////////
@@ -399,4 +402,35 @@ jQuery(function ($) {
             $(this).prop('checked', checked);
         });
     });
+
+    ////////////////
+    // Standalone //
+    ////////////////
+
+    if ($('.create-from-content-type').length > 0) {
+        $('body').on('change', '.create-from-content-type', function (e) {
+            refreshContentFields();
+        });
+
+        refreshContentFields();
+    }
+
+    function refreshContentFields() {
+        var contentTypeId = $('.create-from-content-type').val();
+        if (contentTypeId == '') {
+            $('.content-fields').html('');
+            return;
+        }
+
+        var url = $('.content-fields').data('change-content-type-url').replace('__TO_REPLACE__', contentTypeId);
+        $.ajax({
+            url: url,
+            type: 'GET',
+        }).done(function (data) {
+            $('.content-fields').html(data);
+            initContentSlug();
+            initSortables();
+            calculatePosition();
+        }).fail(ajaxFailCallback);
+    }
 });

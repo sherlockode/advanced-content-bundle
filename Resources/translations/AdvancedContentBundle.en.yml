@@ -1,6 +1,7 @@
 content_type:
     label: Content type
     edit: Edit content type
+    create: Create content type
     form:
         name: Name
         slug: Slug
@@ -41,6 +42,7 @@ content:
     id: ID
     content_type: Content type
     edit: Edit content
+    create: Create content
     form:
         name: Name
         slug: Slug
@@ -132,10 +134,14 @@ show: Show
 duplicate: Duplicate
 page_type:
     label: Page Type
+    create: Create Page Type
+    edit: Edit Page Type
     form:
         name: Name
 page:
     label: Page
+    create: Create Page
+    edit: Edit Page
     form:
         tabs:
             label: Page
@@ -179,6 +185,7 @@ init:
         field_value_entity_not_found: Entity with identifier "%value%" was not found for field with slug "%slug%"
     export_success: Files were successfully exported in "%dir%"
 tools:
+    label: Tools
     import:
         title: Import
         description: Upload a yaml file containing ContentTypes, Pages and/or Contents

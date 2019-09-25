@@ -1,0 +1,70 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="row form-group">
+        <div class="col-md-2">
+            {{ form_label(form.title) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.title) }}
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">
+            {{ form_label(form.slug) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.slug) }}
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2">
+            {{ form_label(form.pageType) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.pageType) }}
+        </div>
+    </div>
+
+    {% if form.metaDescription is defined %}
+        <div class="row form-group">
+            <div class="col-md-2">
+                {{ form_label(form.metaDescription) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(form.metaDescription) }}
+            </div>
+        </div>
+    {% endif %}
+    {% if form.status is defined %}
+        <div class="row form-group">
+            <div class="col-md-2">
+                {{ form_label(form.status) }}
+            </div>
+            <div class="col-md-10">
+                {{ form_widget(form.status) }}
+            </div>
+        </div>
+    {% endif %}
+    {% if form.content is defined %}
+        <hr>
+        <div class="row form-group">
+            <div class="col-md-12">
+                {{ form_row(form.content) }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="buttons">
+        <a href="{{ path('sherlockode_acb_page_list') }}" class="btn btn-danger">{{ 'cancel'|trans }}</a>
+        <button type="submit" class="btn btn-success">
+            {{ 'save'|trans }}
+        </button>
+    </div>
+
+{{ form_rest(form) }}
+{{ form_end(form) }}
+<span class="acb-page-change-type" style="display: none;">{{ 'page.errors.alert_change_type'|trans }}</span>

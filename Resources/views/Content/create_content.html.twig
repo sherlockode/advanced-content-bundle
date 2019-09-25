@@ -1,65 +1,22 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
 {% block body %}
     {{ parent() }}
-
-    <div>
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <h4>Create Content</h4>
                 <div class="form-group">
                     {{ form_label(form.contentType) }}
-                    {{ form_widget(form.contentType, {'attr': {'class': 'content-type'}}) }}
+                    {{ form_widget(form.contentType, {'attr': {'class': 'create-from-content-type'}}) }}
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    {{ form_label(form.name) }}
-                    {{ form_widget(form.name, {'attr': {'class': 'content-type'}}) }}
-                </div>
-            </div>
-        </div>
+        <hr>
         <div class="row">
             <div class="col-md-12">
                 <div class="content-fields" data-change-content-type-url="{{ path('sherlockode_acb_content_create_by_type', {id: '__TO_REPLACE__'}) }}">
                 </div>
             </div>
         </div>
-
     </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        jQuery(function ($) {
-            'use strict';
-
-            function ajaxFailCallback(jqXhr) {
-                alert('An error occurred.');
-            }
-
-            $('body').on('change', '.content-type', function (e) {
-                refreshContentFields();
-            });
-
-            function refreshContentFields() {
-                var contentTypeId = $('.content-type').val();
-                if (contentTypeId == '') {
-                    $('.content-fields').html('');
-                    return;
-                }
-
-                var url = $('.content-fields').data('change-content-type-url').replace('__TO_REPLACE__', contentTypeId);
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                }).done(function (data) {
-                    $('.content-fields').html(data);
-                }).fail(ajaxFailCallback);
-            }
-
-            refreshContentFields();
-        });
-    </script>
 {% endblock %}
