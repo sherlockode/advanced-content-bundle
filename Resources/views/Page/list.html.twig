@@ -6,8 +6,8 @@
     <div class="container">
         <div class="row page-info">
             <div class="col-md-12">
-                <h1>{{ 'content.label'|trans }}</h1>
-                <a href="{{ path('sherlockode_acb_content_create') }}" class="pull-right">{{ 'content.create'|trans }}</a>
+                <h1>{{ 'page.label'|trans }}</h1>
+                <a href="{{ path('sherlockode_acb_page_create') }}" class="pull-right">{{ 'page.create'|trans }}</a>
             </div>
         </div>
         <div class="row">
@@ -16,19 +16,18 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{ 'content_type.label'|trans }}</th>
+                        <th>{{ 'page.label'|trans }}</th>
                         <th>{{ 'actions'|trans }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for content in contents %}
+                    {% for page in pages %}
                         <tr>
-                            <td>{{ content.id }}</td>
-                            <td>{{ content.contentType.name }}</td>
+                            <td>{{ page.id }}</td>
+                            <td>{{ page.title }}</td>
                             <td>
-                                <a href="{{ path('sherlockode_acb_content_show', {id: content.id}) }}">{{ 'show'|trans }}</a>
-                                | <a href="{{ path('sherlockode_acb_content_edit', {id: content.id}) }}">{{ 'edit'|trans }}</a>
-                                | <a href="{{ path('sherlockode_acb_content_delete', {id: content.id}) }}">{{ 'delete'|trans }}</a>
+                                <a href="{{ path('sherlockode_acb_page_edit', {id: page.id}) }}">{{ 'edit'|trans }}</a>
+                                | <a href="{{ path('sherlockode_acb_page_delete', {id: page.id}) }}">{{ 'delete'|trans }}</a>
                             </td>
                         </tr>
                     {% endfor %}

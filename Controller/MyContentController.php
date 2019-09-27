@@ -163,9 +163,8 @@ class MyContentController extends Controller
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
 
-        return $this->render('@SherlockodeAdvancedContent/Content/edit_content.html.twig', [
+        return $this->render('@SherlockodeAdvancedContent/Content/_form.html.twig', [
             'form' => $form->createView(),
-            'is_ajax' => $request->isXmlHttpRequest(),
         ]);
     }
 

@@ -45,4 +45,29 @@
     <route id="sherlockode_acb_tools_export" path="/acb/tools-export">
         <default key="_controller">sherlockode_advanced_content.controller.tools:exportAction</default>
     </route>
+    <route id="sherlockode_acb_page_type_edit" path="/page-type/edit/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.page_type:editAction</default>
+    </route>
+    <route id="sherlockode_acb_page_type_create" path="/page-type/create">
+        <default key="_controller">sherlockode_advanced_content.controller.page_type:createAction</default>
+    </route>
+    <route id="sherlockode_acb_page_type_delete" path="/page-type/delete/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.page_type:deleteAction</default>
+    </route>
+    <route id="sherlockode_acb_page_type_list" path="/page-type/list">
+        <default key="_controller">sherlockode_advanced_content.controller.page_type:listAction</default>
+    </route>
+
+    <route id="sherlockode_acb_page_edit" path="/page/edit/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.page:editAction</default>
+    </route>
+    <route id="sherlockode_acb_page_create" path="/page/create">
+        <default key="_controller">sherlockode_advanced_content.controller.page:createAction</default>
+    </route>
+    <route id="sherlockode_acb_page_delete" path="/page/delete/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.page:deleteAction</default>
+    </route>
+    <route id="sherlockode_acb_page_list" path="/page/list">
+        <default key="_controller">sherlockode_advanced_content.controller.page:listAction</default>
+    </route>
 </routes>

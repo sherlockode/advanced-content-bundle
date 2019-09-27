@@ -1,0 +1,22 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="row form-group">
+        <div class="col-md-2">
+            {{ form_label(form.name) }}
+        </div>
+        <div class="col-md-10">
+            {{ form_widget(form.name) }}
+        </div>
+    </div>
+
+    <div class="buttons">
+        <a href="{{ path('sherlockode_acb_page_type_list') }}" class="btn btn-danger">{{ 'cancel'|trans }}</a>
+        <button type="submit" class="btn btn-success">
+            {{ 'save'|trans }}
+        </button>
+    </div>
+
+{{ form_rest(form) }}
+{{ form_end(form) }}

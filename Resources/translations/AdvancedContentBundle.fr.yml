@@ -1,6 +1,7 @@
 content_type:
     label: Type de contenu avancé
     edit: Editer le type de contenu
+    create: Créer un type de contenu
     form:
         name: Nom
         slug: Slug
@@ -41,6 +42,7 @@ content:
     id: Identifiant
     content_type: Type de contenu
     edit: Modifier le contenu
+    create: Créer un contenu
     form:
         name: Nom
         slug: Slug
@@ -132,10 +134,14 @@ show: Voir
 duplicate: Dupliquer
 page_type:
     label: Type de page
+    create: Créer un type de page
+    edit: Modifier le type de page
     form:
         name: Nom
 page:
     label: Page
+    create: Créer une page
+    edit: Modifier la page
     form:
         tabs:
             label: Page
@@ -179,6 +185,7 @@ init:
         field_value_entity_not_found: Aucune entité avec identifiant "%value%" n'a été trouvée pour le champ "%slug%"
     export_success: Les fichiers ont bien été exportés dans "%dir%"
 tools:
+    label: Outils
     import:
         title: Import
         description: Importez un fichier au format yaml incluant des types de contenus, des pages et/ou des contenus
