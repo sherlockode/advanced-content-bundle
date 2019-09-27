@@ -29,3 +29,16 @@ On this page, you will be able to :
 As long as you respect the [format](import.md), you can include as many entities in the file as you want
 - export your entities : you will be able to select which entity/entities you want to export. 
 This will result in a zip file being downloaded in your browser.
+
+## Security
+
+To access this page, you will need to add the role ROLE_SHERLOCKODE_ADVANCED_CONTENT_TOOLS to your hierarchy
+
+For example, if you want to grant access to this page for ROLE_ADMIN, you can add : 
+```yaml
+# config/packages/security.yaml
+security:
+    role_hierarchy:
+        ROLE_ADMIN:
+            - ROLE_SHERLOCKODE_ADVANCED_CONTENT_TOOLS
+```

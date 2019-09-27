@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ToolsController extends AbstractController
@@ -53,8 +54,17 @@ class ToolsController extends AbstractController
         $this->template = $template;
     }
 
+    /**
+     * @return Response
+     *
+     * @throws AccessDeniedException
+     */
     public function indexAction()
     {
+        if (!$this->isGranted('ROLE_SHERLOCKODE_ADVANCED_CONTENT_TOOLS')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $importForm = $this->createForm(ImportType::class, null, [
             'action' => $this->generateUrl('sherlockode_acb_tools_import'),
         ]);
@@ -73,9 +83,15 @@ class ToolsController extends AbstractController
      * @param Request $request
      *
      * @return Response
+     *
+     * @throws AccessDeniedException
      */
     public function importAction(Request $request)
     {
+        if (!$this->isGranted('ROLE_SHERLOCKODE_ADVANCED_CONTENT_TOOLS')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(ImportType::class);
 
         $form->handleRequest($request);
@@ -103,9 +119,15 @@ class ToolsController extends AbstractController
      * @param Request $request
      *
      * @return Response
+     *
+     * @throws AccessDeniedException
      */
     public function exportAction(Request $request)
     {
+        if (!$this->isGranted('ROLE_SHERLOCKODE_ADVANCED_CONTENT_TOOLS')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(ExportType::class);
 
         $form->handleRequest($request);

@@ -107,6 +107,7 @@ sherlockode_advanced_content:
 # config/routes.yaml
 sherlockode_advanced_content:
     resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.xml'
+    prefix: admin # optional
 ```
 
 ## Advanced Documentation
