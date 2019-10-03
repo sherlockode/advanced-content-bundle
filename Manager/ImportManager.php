@@ -168,4 +168,12 @@ class ImportManager
     {
         $this->symfonyStyle = $symfonyStyle;
     }
+
+    /**
+     * @param string $dir
+     */
+    public function setFilesDirectory($dir)
+    {
+        $this->contentImport->setFilesDirectory($dir);
+    }
 }
