@@ -102,6 +102,12 @@ class AcbImportCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Directory in which the files to import are located'
             )
+            ->addOption(
+                'files-dir',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Directory in which the resource files to import are located (for file and image field types)'
+            )
         ;
     }
 
@@ -161,17 +167,14 @@ class AcbImportCommand extends Command
         if ($initDir === null) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
-        if (substr($initDir, 0, 1) !== '/') {
-            $initDir = $this->rootDir . '/' . $initDir;
-        }
-        $initDir .= '/';
-
-        if (!file_exists($initDir)) {
-            throw new \Exception(
-                $this->translator->trans('init.errors.init_dir', ['%dir%' => $initDir], 'AdvancedContentBundle')
-            );
-        }
+        $initDir = $this->getDirFullPath($initDir);
         $this->sourceDirectory = $initDir;
+
+        $filesDir = $input->getOption('files-dir');
+        if ($filesDir !== null) {
+            $filesDir = $this->getDirFullPath($filesDir);
+            $this->importManager->setFilesDirectory($filesDir);
+        }
 
         $this->importManager->setAllowUpdate($this->configurationManager->initCanUpdate());
 
@@ -186,5 +189,28 @@ class AcbImportCommand extends Command
         $this->importTypes = $importTypes;
 
         $this->filename = $input->getOption('file');
+    }
+
+    /**
+     * @param string $dir
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function getDirFullPath($dir)
+    {
+        if (strpos($dir, '/') !== 0) {
+            $dir = $this->rootDir . '/' . $dir;
+        }
+        $dir .= '/';
+
+        if (!file_exists($dir)) {
+            throw new \Exception(
+                $this->translator->trans('init.errors.init_dir', ['%dir%' => $dir], 'AdvancedContentBundle')
+            );
+        }
+
+        return $dir;
     }
 }

@@ -155,7 +155,7 @@ class AcbExportCommand extends Command
         if ($initDir === null) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
-        if (substr($initDir, 0, 1) !== '/') {
+        if (strpos($initDir, '/') !== 0) {
             $initDir = $this->rootDir . '/' . $initDir;
         }
         $initDir .= '/';

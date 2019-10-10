@@ -52,6 +52,7 @@ The command has several options:
 - type: type of entity to import. Allowed types are ContentType, Page and Content
 - file: file name / file pattern to import
 - dir: directory in which the command can find the files to import (will override your configuration) - You can either use a relative path (relative from `%kernel.project_dir%`) or an absolute path (for example `/tmp/files`)
+- files-dir: directory in which the command can find the resource files (for File / Image FieldTypes) to import (will override your configuration) - You can either use a relative path (relative from `%kernel.project_dir%`) or an absolute path (for example `/tmp/files`)
 
 ```bash
 $ php bin/console sherlockode:acb:import #import all types / all files in custom/dir
@@ -174,3 +175,46 @@ Then, as for the content of your Pages, you need to define your FieldValues unde
 You can find a Content import file example here [doc](import/Content/standalone_content.yaml)
 This Content is linked to the ContentType defined here [doc](import/ContentType/standalone_content_type.yaml) 
 These example files also show you how to create and populate Choice type fields as well as File and Image field types.
+
+
+### Specific field types
+
+#### File / Image FieldType
+
+When you export the content of File / Image FieldType for which you have already imported a resource,
+you will obtain the following structure.
+
+```yaml
+slug: file-slug
+value:
+    src: file.pdf
+    title: File Title
+    
+slug: image-slug
+value:
+    src: image.jpg
+    alt: Image Alt
+```
+
+If you want to upload a new file for this field values, you need to add a `file` entry under `value`.
+The file to import must be located in the `files-dir` directory (either in your configuration or in the option of the import command)
+
+For example, if the new files are located in /tmp/new-files, you can launch the command:
+ 
+```bash
+$ php bin/console sherlockode:acb:import --files-dir=/tmp/new-files
+```
+
+And the field values must contain the following info : 
+
+```yaml
+slug: file-slug
+value:
+    file: new-file.pdf # file located in /tmp/new-files/new-file.pdf
+    title: File Title
+    
+slug: image-slug
+value:
+    file: new-image.jpg # file located in /tmp/new-files/new-image.png
+    alt: Image Alt
+```

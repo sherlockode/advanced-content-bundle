@@ -56,6 +56,7 @@ class ContentImport extends AbstractImport
         parent::__construct($om, $configurationManager, $translator, $fieldManager);
 
         $this->uploadManager = $uploadManager;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -220,7 +221,7 @@ class ContentImport extends AbstractImport
                     } elseif ($fieldType instanceof FileFieldType) {
                         if (isset($fieldValueValue['file'])) {
                             try {
-                                $fileName = $this->getFilesDirectory() . '/' . $fieldValueValue['file'];
+                                $fileName = $this->getFilesDirectory() . $fieldValueValue['file'];
                                 if (!file_exists($fileName)) {
                                     $this->errors[] = $this->translator->trans('init.errors.field_value_file_not_found', ['%slug%' => $slug, '%file%' => $fileName], 'AdvancedContentBundle');
                                     continue;
@@ -292,7 +293,7 @@ class ContentImport extends AbstractImport
     {
         if ($this->filesDirectory === null) {
             $filesDirectory = $this->configurationManager->getInitFilesDirectory();
-            if (substr($filesDirectory, 0, 1) !== '/') {
+            if (strpos($filesDirectory, '/') !== 0) {
                 $filesDirectory = $this->rootDir . '/' . $filesDirectory;
             }
             if (!file_exists($filesDirectory)) {
@@ -300,9 +301,17 @@ class ContentImport extends AbstractImport
                     $this->translator->trans('init.errors.init_dir', ['%dir%' => $filesDirectory], 'AdvancedContentBundle')
                 );
             }
-            $this->filesDirectory = $filesDirectory;
+            $this->filesDirectory = $filesDirectory . '/';
         }
 
         return $this->filesDirectory;
+    }
+
+    /**
+     * @param string $dir
+     */
+    public function setFilesDirectory($dir)
+    {
+        $this->filesDirectory = $dir;
     }
 }
