@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Command;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ImportManager;
 use Symfony\Component\Console\Command\Command;
