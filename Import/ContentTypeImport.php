@@ -172,11 +172,12 @@ class ContentTypeImport extends AbstractImport
                 } elseif ($fieldData['type'] === 'flexible') {
                     $layoutPosition = 1;
                     foreach ($fieldData['children'] as $child) {
-                        if (!isset($child['name'])) {
+                        if (!isset($child['name']) && !isset($child['layout_name'])) {
                             $this->errors[] = $this->translator->trans('init.errors.layout_missing_name', [], 'AdvancedContentBundle');
                             continue;
                         }
-                        $childLayout = $this->createLayout($child['name'], $layoutPosition++, $field);
+                        $layoutName = $child['layout_name'] ?? $child['name'];
+                        $childLayout = $this->createLayout($layoutName, $layoutPosition++, $field);
                         if (isset($child['children'])) {
                             $this->createFields($child['children'], $contentType, $childLayout);
                         }

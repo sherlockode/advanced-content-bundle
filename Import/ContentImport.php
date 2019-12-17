@@ -126,7 +126,7 @@ class ContentImport extends AbstractImport
     {
         foreach ($fieldValuesData as $fieldValueData) {
             if (!isset($fieldValueData['slug'])) {
-                $this->errors[] = $this->translator->trans('init.errors.field_value_missing_slug', [], 'AdvancedContentBundle');
+                $this->errors[] = $this->translator->trans('init.errors.field_value_missing_slug', ['%contentName%' => $content->getName()], 'AdvancedContentBundle');
                 continue;
             }
 
@@ -243,15 +243,17 @@ class ContentImport extends AbstractImport
 
             $this->om->persist($fieldValue);
 
+            // look for children groups
             if (isset($fieldValueData['children'])) {
                 $childFieldGroupPosition = 0;
                 foreach ($fieldValueData['children'] as $fieldChildValues) {
                     $childFieldGroupPosition++;
-                    if (!isset($fieldChildValues['name'])) {
+                    if (!isset($fieldChildValues['name']) && !isset($fieldChildValues['layout_name'])) {
                         $this->errors[] = $this->translator->trans('init.errors.field_group_value_missing_name', [], 'AdvancedContentBundle');
                         continue;
                     }
-                    $fieldChildName = $fieldChildValues['name'];
+                    // compatibility with old key "name"
+                    $fieldChildName = $fieldChildValues['layout_name'] ?? $fieldChildValues['name'];
 
                     $childLayout = $this->om->getRepository($this->entityClasses['layout'])->findOneBy([
                         'parent' => $field,

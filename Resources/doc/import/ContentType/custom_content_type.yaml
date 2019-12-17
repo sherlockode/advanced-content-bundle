@@ -11,13 +11,13 @@ content_types:
                 type: flexible
                 children:
                     -
-                        name: Custom Layout 1
+                        layout_name: Custom Layout 1
                         children:
                             -
                                 name: Custom Layout 1 - Title
                                 type: text
                     -
-                        name: Custom Layout 2
+                        layout_name: Custom Layout 2
                         children:
                             -
                                 name: Custom Layout 2 - Title

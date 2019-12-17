@@ -169,7 +169,7 @@ init:
         field_missing_data: You need to define the name / the type of the Field
         layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
-        field_value_missing_slug: You need to define the slug of the FieldValue
+        field_value_missing_slug: You need to define the slug of the FieldValue in "%contentName%"
         field_group_value_missing_name: You need to define the name of the FieldGroupValue
         content_missing_name: You need to define the name of the content
         content_no_content_type_found: No ContentType with slug "%slug%" was found

@@ -113,7 +113,7 @@ Each Layout will have the following structure:
 
 ```yaml
 # var/acb/ContentType/custom_content_type.yaml
-name: Custom Layout
+layout_name: Custom Layout
 children: list of Fields of the layout
 ```
 
@@ -151,7 +151,7 @@ Each FieldGroupValue will have the following structure:
 
 ```yaml
 # var/acb/Page/custom_page.yaml
-name: Name of the Layout
+layout_name: Name of the Layout
 children: list of FieldValues for each Field of the Layout
 ```
 

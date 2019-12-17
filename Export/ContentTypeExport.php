@@ -74,11 +74,11 @@ class ContentTypeExport
                 $fieldData = array_merge($fieldData, $this->exportFields($children[0]->getChildren()));
             } else {
                 $fieldData['children'] = [];
-                foreach ($children as $child) {
-                    $childData = [];
-                    $childData['name'] = $child->getName();
-                    $childData = array_merge($childData, $this->exportFields($child->getChildren()));
-                    $fieldData['children'][] = $childData;
+                foreach ($children as $childLayout) {
+                    $childLayoutData = [];
+                    $childLayoutData['layout_name'] = $childLayout->getName();
+                    $childLayoutData = array_merge($childLayoutData, $this->exportFields($childLayout->getChildren()));
+                    $fieldData['children'][] = $childLayoutData;
                 }
             }
         }

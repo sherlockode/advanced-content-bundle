@@ -169,7 +169,7 @@ init:
         field_missing_data: Vous devez définir le nom / le type du champ
         layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
-        field_value_missing_slug: Vous devez définir le slug du champ du contenu
+        field_value_missing_slug: Vous devez définir le slug du champ du contenu dans "%contentName%"
         field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu
         content_missing_name: Vous devez définir le nom du contenu
         content_no_content_type_found: Aucun type de contenu n'a été trouvé avec le slug "%slug%"
