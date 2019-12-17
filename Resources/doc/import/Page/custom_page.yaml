@@ -12,13 +12,13 @@ pages:
                 slug: custom-flexible-field
                 children:
                     -
-                        name: Custom Layout 1
+                        layout_name: Custom Layout 1
                         children:
                             -
                                 slug: custom-layout-1-title
                                 value: Title value
                     -
-                        name: Custom Layout 2
+                        layout_name: Custom Layout 2
                         children:
                             -
                                 slug: custom-layout-2-title
@@ -27,7 +27,7 @@ pages:
                                 slug: custom-layout-2-repeater
                                 children:
                                     -
-                                        name: Custom Layout 2 - Repeater
+                                        layout_name: Custom Layout 2 - Repeater
                                         children:
                                             -
                                                 slug: repeater-title
@@ -36,7 +36,7 @@ pages:
                                                 slug: repeater-description
                                                 value: '<strong>First</strong> group of repeater - description'
                                     -
-                                        name: Custom Layout 2 - Repeater
+                                        layout_name: Custom Layout 2 - Repeater
                                         children:
                                             -
                                                 slug: repeater-title

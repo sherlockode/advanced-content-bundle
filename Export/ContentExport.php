@@ -83,7 +83,7 @@ class ContentExport
             foreach ($children as $child) {
                 /** @var FieldGroupValueInterface $child */
                 $childData = [];
-                $childData['name'] = $child->getLayout()->getName();
+                $childData['layout_name'] = $child->getLayout()->getName();
                 $childData = array_merge($childData, $this->exportFieldValues($child->getChildren()));
                 $fieldValueData['children'][] = $childData;
             }
