@@ -14,10 +14,11 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sherlockode_advanced_content');
+        $tb = new TreeBuilder('sherlockode_advanced_content');
+        // BC layer for symfony/config < 4.2
+        $root = \method_exists($tb, 'getRootNode') ? $tb->getRootNode() : $tb->root('sherlockode_advanced_content');
 
-        $rootNode
+        $root
             ->children()
                 ->arrayNode('entity_class')
                     ->isRequired()
@@ -110,6 +111,6 @@ class Configuration implements ConfigurationInterface
             ->end()
         ;
 
-        return $treeBuilder;
+        return $tb;
     }
 }
