@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
@@ -21,9 +21,9 @@ use Symfony\Component\HttpFoundation\Response;
 class MyContentController extends Controller
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var ContentManager
@@ -43,18 +43,18 @@ class MyContentController extends Controller
     /**
      * MyContentController constructor.
      *
-     * @param ObjectManager        $om
-     * @param ContentManager       $contentManager
-     * @param ContentTypeManager   $contentTypeManager
-     * @param ConfigurationManager $configurationManager
+     * @param EntityManagerInterface $em
+     * @param ContentManager         $contentManager
+     * @param ContentTypeManager     $contentTypeManager
+     * @param ConfigurationManager   $configurationManager
      */
     public function __construct(
-        ObjectManager $om,
+        EntityManagerInterface $em,
         ContentManager $contentManager,
         ContentTypeManager $contentTypeManager,
         ConfigurationManager $configurationManager
     ) {
-        $this->om = $om;
+        $this->em = $em;
         $this->contentManager = $contentManager;
         $this->contentTypeManager = $contentTypeManager;
         $this->configurationManager = $configurationManager;
@@ -87,7 +87,7 @@ class MyContentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
@@ -115,8 +115,8 @@ class MyContentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->persist($content);
-            $this->om->flush();
+            $this->em->persist($content);
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
@@ -157,8 +157,8 @@ class MyContentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->persist($content);
-            $this->om->flush();
+            $this->em->persist($content);
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
         }
@@ -198,8 +198,8 @@ class MyContentController extends Controller
             );
         }
 
-        $this->om->remove($content);
-        $this->om->flush();
+        $this->em->remove($content);
+        $this->em->flush();
 
         return $this->redirectToRoute('sherlockode_acb_content_list');
     }

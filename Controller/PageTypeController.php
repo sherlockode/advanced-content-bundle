@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\PageTypeType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 class PageTypeController extends AbstractController
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var ConfigurationManager
@@ -24,20 +24,20 @@ class PageTypeController extends AbstractController
     private $configurationManager;
 
     /**
-     * @param ObjectManager        $om
-     * @param ConfigurationManager $configurationManager
+     * @param EntityManagerInterface $em
+     * @param ConfigurationManager   $configurationManager
      */
     public function __construct(
-        ObjectManager $om,
+        EntityManagerInterface $em,
         ConfigurationManager $configurationManager
     ) {
-        $this->om = $om;
+        $this->em = $em;
         $this->configurationManager = $configurationManager;
     }
 
     /**
-     * @param int                  $id
-     * @param Request              $request
+     * @param int     $id
+     * @param Request $request
      *
      * @return Response
      *
@@ -45,7 +45,7 @@ class PageTypeController extends AbstractController
      */
     public function editAction($id, Request $request)
     {
-        $pageType = $this->om->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
+        $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 
         if (!$pageType instanceof PageTypeInterface) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
@@ -61,7 +61,7 @@ class PageTypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_page_type_edit', ['id' => $pageType->getId()]);
         }
@@ -88,8 +88,8 @@ class PageTypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->persist($pageType);
-            $this->om->flush();
+            $this->em->persist($pageType);
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_page_type_edit', ['id' => $pageType->getId()]);
         }
@@ -104,7 +104,7 @@ class PageTypeController extends AbstractController
      */
     public function listAction()
     {
-        $pageTypes = $this->om->getRepository($this->configurationManager->getEntityClass('page_type'))->findAll();
+        $pageTypes = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->findAll();
 
         return $this->render('@SherlockodeAdvancedContent/PageType/list.html.twig', [
             'pageTypes' => $pageTypes,
@@ -120,7 +120,7 @@ class PageTypeController extends AbstractController
      */
     public function deleteAction($id)
     {
-        $pageType = $this->om->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
+        $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 
         if (!$pageType instanceof PageTypeInterface) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
@@ -129,8 +129,8 @@ class PageTypeController extends AbstractController
             );
         }
 
-        $this->om->remove($pageType);
-        $this->om->flush();
+        $this->em->remove($pageType);
+        $this->em->flush();
 
         return $this->redirectToRoute('sherlockode_acb_page_type_list');
     }

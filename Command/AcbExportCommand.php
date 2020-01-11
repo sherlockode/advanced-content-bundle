@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Command;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ExportManager;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
@@ -18,9 +18,9 @@ class AcbExportCommand extends Command
     const AVAILABLE_ENTITIES = ['ContentType', 'Page', 'Content'];
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var ConfigurationManager
@@ -58,15 +58,15 @@ class AcbExportCommand extends Command
     private $exportTypes = [];
 
     /**
-     * @param ObjectManager        $om
-     * @param ConfigurationManager $configurationManager
-     * @param TranslatorInterface  $translator
-     * @param ExportManager        $exportManager
-     * @param string               $rootDir
-     * @param null|string          $name
+     * @param EntityManagerInterface $em
+     * @param ConfigurationManager   $configurationManager
+     * @param TranslatorInterface    $translator
+     * @param ExportManager          $exportManager
+     * @param string                 $rootDir
+     * @param null|string            $name
      */
     public function __construct(
-        ObjectManager $om,
+        EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         ExportManager $exportManager,
@@ -74,7 +74,7 @@ class AcbExportCommand extends Command
         $name = null
     ) {
         parent::__construct($name);
-        $this->om = $om;
+        $this->em = $em;
         $this->configurationManager = $configurationManager;
         $this->exportManager = $exportManager;
         $this->translator = $translator;
@@ -115,15 +115,15 @@ class AcbExportCommand extends Command
             $this->init($input);
 
             if (in_array('ContentType', $this->exportTypes)) {
-                $contentTypes = $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
+                $contentTypes = $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
                 $this->exportManager->generateContentTypesData($contentTypes);
             }
             if (in_array('Page', $this->exportTypes)) {
-                $pages = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
+                $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
                 $this->exportManager->generatePagesData($pages);
             }
             if (in_array('Content', $this->exportTypes)) {
-                $contents = $this->om->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
+                $contents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
                 $contentsToExport = [];
                 foreach ($contents as $content) {
                     if ($content->getPage() instanceof PageInterface) {

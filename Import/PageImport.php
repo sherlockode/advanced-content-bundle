@@ -18,8 +18,8 @@ class PageImport extends AbstractImport
     {
         parent::init();
 
-        $this->om->getEventManager()->removeEventListener('postPersist', 'sherlockode_advanced_content.content_type_listener');
-        $this->om->getEventManager()->removeEventListener('postUpdate', 'sherlockode_advanced_content.content_type_listener');
+        $this->em->getEventManager()->removeEventListener('postPersist', 'sherlockode_advanced_content.content_type_listener');
+        $this->em->getEventManager()->removeEventListener('postUpdate', 'sherlockode_advanced_content.content_type_listener');
     }
 
     /**
@@ -40,7 +40,7 @@ class PageImport extends AbstractImport
             $title = $slug;
         }
 
-        $page = $this->om->getRepository($this->entityClasses['page'])->findOneBy([
+        $page = $this->em->getRepository($this->entityClasses['page'])->findOneBy([
             'slug' => $slug,
         ]);
         if (!$page instanceof PageInterface) {
@@ -57,7 +57,7 @@ class PageImport extends AbstractImport
 
         $pageType = null;
         if (isset($pageData['pageType'])) {
-            $pageTypes = $this->om->getRepository($this->entityClasses['page_type'])->findBy([
+            $pageTypes = $this->em->getRepository($this->entityClasses['page_type'])->findBy([
                 'name' => $pageData['pageType']
             ]);
             if (count($pageTypes) > 1) {
@@ -74,14 +74,14 @@ class PageImport extends AbstractImport
                 /** @var PageTypeInterface $pageType */
                 $pageType = new $this->entityClasses['page_type'];
                 $pageType->setName($pageData['pageType']);
-                $this->om->persist($pageType);
+                $this->em->persist($pageType);
             }
         }
         $page->setPageType($pageType);
 
         $contentType = null;
         if (isset($pageData['contentType'])) {
-            $contentType = $this->om->getRepository($this->entityClasses['content_type'])->findOneBy([
+            $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
                 'slug' => $pageData['contentType']
             ]);
             if (!$contentType instanceof ContentTypeInterface) {
@@ -93,14 +93,14 @@ class PageImport extends AbstractImport
             $contentType->setPage($page);
             $contentType->setPageType(null);
         } elseif ($pageType instanceof PageTypeInterface) {
-            $contentType = $this->om->getRepository($this->entityClasses['content_type'])->findOneBy([
+            $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
                 'pageType' => $pageType,
             ]);
         }
 
         if (!$contentType instanceof ContentTypeInterface) {
             if ($page->getContent() instanceof ContentInterface) {
-                $this->om->remove($page->getContent());
+                $this->em->remove($page->getContent());
                 $page->setContent(null);
             }
             if (isset($pageData['children'])) {
@@ -109,7 +109,7 @@ class PageImport extends AbstractImport
         } else {
             if (!$page->getContent() instanceof ContentInterface || $contentType->getId() !== $page->getContent()->getContentType()->getId()) {
                 if ($page->getContent() instanceof ContentInterface) {
-                    $this->om->remove($page->getContent());
+                    $this->em->remove($page->getContent());
                 }
 
                 /** @var ContentInterface $content */
@@ -118,7 +118,7 @@ class PageImport extends AbstractImport
                 $content->setName($page->getTitle());
                 $content->setSlug($page->getSlug());
                 $page->setContent($content);
-                $this->om->persist($content);
+                $this->em->persist($content);
             }
             if (isset($pageData['children'])) {
                 $this->contentImport
@@ -131,8 +131,8 @@ class PageImport extends AbstractImport
             }
         }
 
-        $this->om->persist($page);
-        $this->om->flush();
+        $this->em->persist($page);
+        $this->em->flush();
     }
 
     /**

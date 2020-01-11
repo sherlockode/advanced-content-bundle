@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
@@ -16,18 +16,18 @@ class PageManager
     private $configurationManager;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
-     * @param ConfigurationManager $configurationManager
-     * @param ObjectManager        $om
+     * @param ConfigurationManager   $configurationManager
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ConfigurationManager $configurationManager, ObjectManager $om)
+    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
     {
         $this->configurationManager = $configurationManager;
-        $this->om = $om;
+        $this->em = $em;
     }
 
     /**
@@ -37,7 +37,7 @@ class PageManager
      */
     public function getPageContentType(PageInterface $page)
     {
-        $contentTypeByPage = $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findOneBy([
+        $contentTypeByPage = $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findOneBy([
             'page' => $page
         ]);
 
@@ -50,7 +50,7 @@ class PageManager
             return null;
         }
 
-        $contentTypeByPageType = $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findOneBy([
+        $contentTypeByPageType = $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findOneBy([
             'pageType' => $pageType
         ]);
 
@@ -72,20 +72,20 @@ class PageManager
     {
         $contentTypes = [];
         if ($pageTypeId !== null) {
-            $pageType = $this->om->getRepository($this->configurationManager->getEntityClass('page_type'))->find($pageTypeId);
+            $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($pageTypeId);
             if (!$pageType instanceof PageTypeInterface) {
                 return false;
             }
-            $contentTypes = $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findBy([
+            $contentTypes = $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findBy([
                 'pageType' => $pageType,
             ]);
         }
         if ($pageId !== null) {
-            $page = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->find($pageId);
+            $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($pageId);
             if (!$page instanceof PageInterface) {
                 return false;
             }
-            $contentTypes = $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findBy([
+            $contentTypes = $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findBy([
                 'page' => $page,
             ]);
         }
@@ -111,7 +111,7 @@ class PageManager
         $contentType = $this->getPageContentType($page);
         if (!$contentType instanceof ContentTypeInterface) {
             if ($page->getContent() instanceof ContentInterface) {
-                $this->om->remove($page->getContent());
+                $this->em->remove($page->getContent());
 
                 return true;
             }
@@ -123,7 +123,7 @@ class PageManager
             if ($page->getContent()->getContentType()->getId() === $contentType->getId()) {
                 return false;
             }
-            $this->om->remove($page->getContent());
+            $this->em->remove($page->getContent());
         }
 
         return true;
@@ -136,7 +136,7 @@ class PageManager
      */
     public function updatePagesAfterPageTypeRemove(PageTypeInterface $pageType)
     {
-        $pages = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->findBy([
+        $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findBy([
             'pageType' => $pageType,
         ]);
 
@@ -157,7 +157,7 @@ class PageManager
      */
     public function updatePages()
     {
-        $pages = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
+        $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
 
         $shouldFlush = false;
         foreach ($pages as $page) {

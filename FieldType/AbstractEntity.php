@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\SerializedStringToEntities;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToEntity;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
@@ -16,16 +16,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 abstract class AbstractEntity extends AbstractFieldType
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    protected $om;
+    protected $em;
 
     /**
-     * @param ObjectManager $om
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ObjectManager $om)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->om = $om;
+        $this->em = $em;
     }
 
     /**
@@ -108,10 +108,10 @@ abstract class AbstractEntity extends AbstractFieldType
     public function getValueModelTransformer(FieldInterface $field)
     {
         if ($this->getIsMultipleChoice($field)) {
-            return new SerializedStringToEntities($this->om, $this->getEntityClass(), $this->getUniqueFieldIdentifier());
+            return new SerializedStringToEntities($this->em, $this->getEntityClass(), $this->getUniqueFieldIdentifier());
         }
 
-        return new StringToEntity($this->om, $this->getEntityClass(), $this->getUniqueFieldIdentifier());
+        return new StringToEntity($this->em, $this->getEntityClass(), $this->getUniqueFieldIdentifier());
     }
 
     /**
@@ -177,7 +177,7 @@ abstract class AbstractEntity extends AbstractFieldType
      */
     public function getEntityByIdentifier($entityValue)
     {
-        return $this->om->getRepository($this->getEntityClass())->findOneBy([
+        return $this->em->getRepository($this->getEntityClass())->findOneBy([
             $this->getUniqueFieldIdentifier() => $entityValue,
         ]);
     }
