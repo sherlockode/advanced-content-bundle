@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Import;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\FieldType\AbstractChoice;
 use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
 use Sherlockode\AdvancedContentBundle\FieldType\File as FileFieldType;
@@ -38,22 +38,22 @@ class ContentImport extends AbstractImport
     private $rootDir;
 
     /**
-     * @param ObjectManager        $om
-     * @param ConfigurationManager $configurationManager
-     * @param TranslatorInterface  $translator
-     * @param FieldManager         $fieldManager
-     * @param UploadManager        $uploadManager
-     * @param string               $rootDir
+     * @param EntityManagerInterface $em
+     * @param ConfigurationManager   $configurationManager
+     * @param TranslatorInterface    $translator
+     * @param FieldManager           $fieldManager
+     * @param UploadManager          $uploadManager
+     * @param string                 $rootDir
      */
     public function __construct(
-        ObjectManager $om,
+        EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         FieldManager $fieldManager,
         UploadManager $uploadManager,
         $rootDir
     ) {
-        parent::__construct($om, $configurationManager, $translator, $fieldManager);
+        parent::__construct($em, $configurationManager, $translator, $fieldManager);
 
         $this->uploadManager = $uploadManager;
         $this->rootDir = $rootDir;
@@ -78,7 +78,7 @@ class ContentImport extends AbstractImport
         }
 
         /** @var ContentTypeInterface $contentType */
-        $contentType = $this->om->getRepository($this->entityClasses['content_type'])->findOneBy([
+        $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
             'slug' => $contentData['contentType']
         ]);
 
@@ -94,7 +94,7 @@ class ContentImport extends AbstractImport
             return;
         }
 
-        $content = $this->om->getRepository($this->entityClasses['content'])->findOneBy([
+        $content = $this->em->getRepository($this->entityClasses['content'])->findOneBy([
             'slug' => $slug,
         ]);
 
@@ -112,8 +112,8 @@ class ContentImport extends AbstractImport
             $this->createFieldValues($contentData['children'], $content);
         }
 
-        $this->om->persist($content);
-        $this->om->flush();
+        $this->em->persist($content);
+        $this->em->flush();
     }
 
     /**
@@ -133,12 +133,12 @@ class ContentImport extends AbstractImport
             $slug = $fieldValueData['slug'];
 
             if ($layout instanceof LayoutInterface) {
-                $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
+                $field = $this->em->getRepository($this->entityClasses['field'])->findOneBy([
                     'slug'   => $slug,
                     'layout' => $layout,
                 ]);
             } else {
-                $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
+                $field = $this->em->getRepository($this->entityClasses['field'])->findOneBy([
                     'slug'        => $slug,
                     'contentType' => $content->getContentType(),
                 ]);
@@ -149,12 +149,12 @@ class ContentImport extends AbstractImport
             }
 
             if ($fieldGroupValue instanceof FieldGroupValueInterface) {
-                $fieldValue = $this->om->getRepository($this->entityClasses['field_value'])->findOneBy([
+                $fieldValue = $this->em->getRepository($this->entityClasses['field_value'])->findOneBy([
                     'group' => $fieldGroupValue,
                     'field' => $field,
                 ]);
             } else {
-                $fieldValue = $this->om->getRepository($this->entityClasses['field_value'])->findOneBy([
+                $fieldValue = $this->em->getRepository($this->entityClasses['field_value'])->findOneBy([
                     'content' => $content,
                     'field'   => $field,
                 ]);
@@ -241,7 +241,7 @@ class ContentImport extends AbstractImport
             }
             $fieldValue->setValue($fieldValueValue);
 
-            $this->om->persist($fieldValue);
+            $this->em->persist($fieldValue);
 
             // look for children groups
             if (isset($fieldValueData['children'])) {
@@ -255,7 +255,7 @@ class ContentImport extends AbstractImport
                     // compatibility with old key "name"
                     $fieldChildName = $fieldChildValues['layout_name'] ?? $fieldChildValues['name'];
 
-                    $childLayout = $this->om->getRepository($this->entityClasses['layout'])->findOneBy([
+                    $childLayout = $this->em->getRepository($this->entityClasses['layout'])->findOneBy([
                         'parent' => $field,
                         'name' => $fieldChildName,
                     ]);
@@ -264,7 +264,7 @@ class ContentImport extends AbstractImport
                         continue;
                     }
 
-                    $childFieldGroupValue = $this->om->getRepository($this->entityClasses['field_group_value'])->findOneBy([
+                    $childFieldGroupValue = $this->em->getRepository($this->entityClasses['field_group_value'])->findOneBy([
                         'parent' => $fieldValue,
                         'layout' => $childLayout,
                         'position' => $childFieldGroupPosition,
@@ -274,7 +274,7 @@ class ContentImport extends AbstractImport
                         $childFieldGroupValue = new $this->entityClasses['field_group_value'];
                         $childFieldGroupValue->setParent($fieldValue);
                         $childFieldGroupValue->setLayout($childLayout);
-                        $this->om->persist($childFieldGroupValue);
+                        $this->em->persist($childFieldGroupValue);
                     }
                     $childFieldGroupValue->setPosition($childFieldGroupPosition);
 

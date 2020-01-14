@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentTypeFormType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -13,7 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,9 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
 class MyContentTypeController extends Controller
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var FormFactoryInterface
@@ -49,20 +49,20 @@ class MyContentTypeController extends Controller
     /**
      * MyContentTypeController constructor.
      *
-     * @param ObjectManager        $om
-     * @param FormFactoryInterface $formFactory
-     * @param ContentTypeManager   $contentTypeManager
-     * @param ConfigurationManager $configurationManager
-     * @param FieldManager         $fieldManager
+     * @param EntityManagerInterface $em
+     * @param FormFactoryInterface   $formFactory
+     * @param ContentTypeManager     $contentTypeManager
+     * @param ConfigurationManager   $configurationManager
+     * @param FieldManager           $fieldManager
      */
     public function __construct(
-        ObjectManager $om,
+        EntityManagerInterface $em,
         FormFactoryInterface $formFactory,
         ContentTypeManager $contentTypeManager,
         ConfigurationManager $configurationManager,
         FieldManager $fieldManager
     ) {
-        $this->om = $om;
+        $this->em = $em;
         $this->formFactory = $formFactory;
         $this->contentTypeManager = $contentTypeManager;
         $this->configurationManager = $configurationManager;
@@ -106,7 +106,7 @@ class MyContentTypeController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->contentTypeManager->processFieldsChangeType($contentType, $fieldTypes);
-            $this->om->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);
         }
@@ -135,8 +135,8 @@ class MyContentTypeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->persist($contentType);
-            $this->om->flush();
+            $this->em->persist($contentType);
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_content_type_edit', ['id' => $contentType->getId()]);
         }
@@ -259,8 +259,8 @@ class MyContentTypeController extends Controller
             );
         }
 
-        $this->om->remove($contentType);
-        $this->om->flush();
+        $this->em->remove($contentType);
+        $this->em->flush();
 
         return $this->redirectToRoute('sherlockode_acb_content_type_list');
     }

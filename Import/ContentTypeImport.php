@@ -31,7 +31,7 @@ class ContentTypeImport extends AbstractImport
             return;
         }
 
-        $contentType = $this->om->getRepository($this->entityClasses['content_type'])->findOneBy([
+        $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
             'slug' => $slug
         ]);
 
@@ -49,7 +49,7 @@ class ContentTypeImport extends AbstractImport
         }
 
         if (isset($contentTypeData['pageType'])) {
-            $pageTypes = $this->om->getRepository($this->entityClasses['page_type'])->findBy([
+            $pageTypes = $this->em->getRepository($this->entityClasses['page_type'])->findBy([
                 'name' => $contentTypeData['pageType']
             ]);
             if (count($pageTypes) > 1) {
@@ -66,14 +66,14 @@ class ContentTypeImport extends AbstractImport
                 /** @var PageTypeInterface $pageType */
                 $pageType = new $this->entityClasses['page_type'];
                 $pageType->setName($contentTypeData['pageType']);
-                $this->om->persist($pageType);
+                $this->em->persist($pageType);
             }
             $contentType->setPageType($pageType);
             $contentType->setPage(null);
         }
 
-        $this->om->persist($contentType);
-        $this->om->flush();
+        $this->em->persist($contentType);
+        $this->em->flush();
     }
 
     /**
@@ -135,7 +135,7 @@ class ContentTypeImport extends AbstractImport
             }
 
             if ($layout !== null) {
-                $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
+                $field = $this->em->getRepository($this->entityClasses['field'])->findOneBy([
                     'slug'   => $slug,
                     'layout' => $layout,
                 ]);
@@ -144,7 +144,7 @@ class ContentTypeImport extends AbstractImport
                     $layout->addChild($field);
                 }
             } else {
-                $field = $this->om->getRepository($this->entityClasses['field'])->findOneBy([
+                $field = $this->em->getRepository($this->entityClasses['field'])->findOneBy([
                     'slug'        => $slug,
                     'contentType' => $contentType,
                 ]);
@@ -163,7 +163,7 @@ class ContentTypeImport extends AbstractImport
                 $field->setOptions($fieldData['options']);
             }
 
-            $this->om->persist($field);
+            $this->em->persist($field);
 
             if (isset($fieldData['children'])) {
                 if ($fieldData['type'] === 'repeater') {
@@ -196,7 +196,7 @@ class ContentTypeImport extends AbstractImport
      */
     private function createLayout($name, $position, FieldInterface $field)
     {
-        $layout = $this->om->getRepository($this->entityClasses['layout'])->findOneBy([
+        $layout = $this->em->getRepository($this->entityClasses['layout'])->findOneBy([
             'name' => $name,
             'parent' => $field,
         ]);
@@ -206,7 +206,7 @@ class ContentTypeImport extends AbstractImport
         $layout->setName($name);
         $layout->setParent($field);
         $layout->setPosition($position);
-        $this->om->persist($layout);
+        $this->em->persist($layout);
 
         return $layout;
     }

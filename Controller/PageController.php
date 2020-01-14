@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\PageType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 class PageController extends AbstractController
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var ConfigurationManager
@@ -24,20 +24,18 @@ class PageController extends AbstractController
     private $configurationManager;
 
     /**
-     * @param ObjectManager        $om
-     * @param ConfigurationManager $configurationManager
+     * @param EntityManagerInterface $em
+     * @param ConfigurationManager   $configurationManager
      */
-    public function __construct(
-        ObjectManager $om,
-        ConfigurationManager $configurationManager
-    ) {
-        $this->om = $om;
+    public function __construct(EntityManagerInterface $em, ConfigurationManager $configurationManager)
+    {
+        $this->em = $em;
         $this->configurationManager = $configurationManager;
     }
 
     /**
-     * @param int                  $id
-     * @param Request              $request
+     * @param int     $id
+     * @param Request $request
      *
      * @return Response
      *
@@ -45,7 +43,7 @@ class PageController extends AbstractController
      */
     public function editAction($id, Request $request)
     {
-        $page = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
+        $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
         if (!$page instanceof PageInterface) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
@@ -61,7 +59,7 @@ class PageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_page_edit', ['id' => $page->getId()]);
         }
@@ -72,7 +70,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param Request              $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -88,8 +86,8 @@ class PageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->om->persist($page);
-            $this->om->flush();
+            $this->em->persist($page);
+            $this->em->flush();
 
             return $this->redirectToRoute('sherlockode_acb_page_edit', ['id' => $page->getId()]);
         }
@@ -104,7 +102,7 @@ class PageController extends AbstractController
      */
     public function listAction()
     {
-        $pages = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
+        $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
 
         return $this->render('@SherlockodeAdvancedContent/Page/list.html.twig', [
             'pages' => $pages,
@@ -120,7 +118,7 @@ class PageController extends AbstractController
      */
     public function deleteAction($id)
     {
-        $page = $this->om->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
+        $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
         if (!$page instanceof PageInterface) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(
@@ -129,8 +127,8 @@ class PageController extends AbstractController
             );
         }
 
-        $this->om->remove($page);
-        $this->om->flush();
+        $this->em->remove($page);
+        $this->em->flush();
 
         return $this->redirectToRoute('sherlockode_acb_page_list');
     }

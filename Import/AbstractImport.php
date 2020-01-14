@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Cocur\Slugify\Slugify;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -11,9 +11,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class AbstractImport
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    protected $om;
+    protected $em;
 
     /**
      * @var ConfigurationManager
@@ -51,18 +51,18 @@ abstract class AbstractImport
     protected $errors = [];
 
     /**
-     * @param ObjectManager        $om
-     * @param ConfigurationManager $configurationManager
-     * @param TranslatorInterface  $translator
-     * @param FieldManager         $fieldManager
+     * @param EntityManagerInterface $em
+     * @param ConfigurationManager   $configurationManager
+     * @param TranslatorInterface    $translator
+     * @param FieldManager           $fieldManager
      */
     public function __construct(
-        ObjectManager $om,
+        EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         FieldManager $fieldManager
     ) {
-        $this->om = $om;
+        $this->em = $em;
         $this->configurationManager = $configurationManager;
         $this->translator = $translator;
         $this->fieldManager = $fieldManager;

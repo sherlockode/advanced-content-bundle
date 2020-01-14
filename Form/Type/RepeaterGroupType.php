@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\LayoutToIdTransformer;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Symfony\Component\Form\AbstractType;
@@ -20,23 +20,23 @@ class RepeaterGroupType extends AbstractType
     private $configurationManager;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
-     * @param ConfigurationManager $configurationManager
-     * @param ObjectManager        $om
+     * @param ConfigurationManager   $configurationManager
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ConfigurationManager $configurationManager, ObjectManager $om)
+    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
     {
         $this->configurationManager = $configurationManager;
-        $this->om = $om;
+        $this->em = $em;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $layoutRepository = $this->om->getRepository($this->configurationManager->getEntityClass('layout'));
+        $layoutRepository = $this->em->getRepository($this->configurationManager->getEntityClass('layout'));
         $builder->add('layout', HiddenType::class);
         $builder->get('layout')->addViewTransformer(new LayoutToIdTransformer($layoutRepository));
         $builder->add('position', HiddenType::class);

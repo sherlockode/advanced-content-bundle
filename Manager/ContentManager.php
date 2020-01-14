@@ -2,10 +2,10 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 
 class ContentManager
 {
@@ -15,20 +15,20 @@ class ContentManager
     private $configurationManager;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * ContentManager constructor.
      *
-     * @param ConfigurationManager $configurationManager
-     * @param ObjectManager        $om
+     * @param ConfigurationManager   $configurationManager
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ConfigurationManager $configurationManager, ObjectManager $om)
+    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
     {
         $this->configurationManager = $configurationManager;
-        $this->om = $om;
+        $this->em = $em;
     }
 
     /**
@@ -41,7 +41,7 @@ class ContentManager
      */
     public function getFieldById(ContentTypeInterface $contentType, $fieldId)
     {
-        $field = $this->om->getRepository($this->configurationManager->getEntityClass('field'))->find($fieldId);
+        $field = $this->em->getRepository($this->configurationManager->getEntityClass('field'))->find($fieldId);
 
 
         if (!$field instanceof FieldInterface) {
@@ -72,7 +72,7 @@ class ContentManager
      */
     public function getContentById($id)
     {
-        return $this->om->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
+        return $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
     }
 
     /**
@@ -82,6 +82,6 @@ class ContentManager
      */
     public function getContents()
     {
-        return $this->om->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
+        return $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
     }
 }

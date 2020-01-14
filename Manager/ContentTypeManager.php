@@ -2,8 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 
 class ContentTypeManager
@@ -14,20 +14,20 @@ class ContentTypeManager
     private $configurationManager;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * ContentManager constructor.
      *
-     * @param ConfigurationManager $configurationManager
-     * @param ObjectManager        $om
+     * @param ConfigurationManager   $configurationManager
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ConfigurationManager $configurationManager, ObjectManager $om)
+    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
     {
         $this->configurationManager = $configurationManager;
-        $this->om = $om;
+        $this->em = $em;
     }
 
     /**
@@ -39,7 +39,7 @@ class ContentTypeManager
      */
     public function getContentTypeById($id)
     {
-        return $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->find($id);
+        return $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->find($id);
     }
 
     /**
@@ -51,7 +51,7 @@ class ContentTypeManager
      */
     public function getOrderedFields(ContentTypeInterface $contentType)
     {
-        return $this->om->getRepository($this->configurationManager->getEntityClass('field'))
+        return $this->em->getRepository($this->configurationManager->getEntityClass('field'))
             ->findBy(['contentType' => $contentType], ['position' => 'ASC']);
     }
 
@@ -62,7 +62,7 @@ class ContentTypeManager
      */
     public function getContentTypes()
     {
-        return $this->om->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
+        return $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
     }
 
     /**
@@ -82,7 +82,7 @@ class ContentTypeManager
                 continue;
             }
 
-            $this->om->remove($field);
+            $this->em->remove($field);
 
             $fieldClass = $this->configurationManager->getEntityClass('field');
             /** @var FieldInterface $newField */
@@ -95,7 +95,7 @@ class ContentTypeManager
             $newField->setPosition($field->getPosition());
             $newField->setOptions($field->getOptions());
             $newField->setHint($field->getHint());
-            $this->om->persist($newField);
+            $this->em->persist($newField);
         }
     }
 
@@ -110,7 +110,7 @@ class ContentTypeManager
             return true;
         }
 
-        $contents = $this->om->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
+        $contents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
             'contentType' => $contentType
         ]);
 

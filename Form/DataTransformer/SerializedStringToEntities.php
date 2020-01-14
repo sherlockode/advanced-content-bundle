@@ -2,16 +2,16 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\DataTransformer;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class SerializedStringToEntities implements DataTransformerInterface
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var string
@@ -24,13 +24,13 @@ class SerializedStringToEntities implements DataTransformerInterface
     private $identifierField;
 
     /**
-     * @param ObjectManager $om
-     * @param string        $entityClass
-     * @param string        $identifierField
+     * @param EntityManagerInterface $em
+     * @param string                 $entityClass
+     * @param string                 $identifierField
      */
-    public function __construct(ObjectManager $om, $entityClass, $identifierField)
+    public function __construct(EntityManagerInterface $em, $entityClass, $identifierField)
     {
-        $this->om = $om;
+        $this->em = $em;
         $this->entityClass = $entityClass;
         $this->identifierField = $identifierField;
     }
@@ -56,7 +56,7 @@ class SerializedStringToEntities implements DataTransformerInterface
 
         $entities = [];
         foreach ($entityValues as $entityValue) {
-            $entity = $this->om->getRepository($this->entityClass)->findOneBy([
+            $entity = $this->em->getRepository($this->entityClass)->findOneBy([
                 $this->identifierField => $entityValue,
             ]);
             if ($entity instanceof $this->entityClass) {
