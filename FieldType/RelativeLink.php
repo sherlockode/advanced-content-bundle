@@ -45,6 +45,11 @@ class RelativeLink extends Link
      */
     protected function getUrlValue($value)
     {
-        return $this->requestStack->getMasterRequest()->getSchemeAndHttpHost() . '/' . $value['url'] ?? '';
+        $url = $value['url'] ?? '';
+        if (substr($url, 0, 1) === '#') {
+            return $url;
+        }
+
+        return $this->requestStack->getMasterRequest()->getSchemeAndHttpHost() . '/' . $url;
     }
 }
