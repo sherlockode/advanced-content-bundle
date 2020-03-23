@@ -52,6 +52,12 @@ class UploadManager
     public function copy(File $file)
     {
         $fileName = $this->getFileName($file);
+        if (!$file->isReadable()) {
+            throw new \Exception(sprintf('Source file %s does not exist', $file->getRealPath()));
+        }
+        if (!is_writeable($this->getTargetDir())) {
+            throw new \Exception(sprintf('Target directory %s is not writeable', $this->getTargetDir()));
+        }
         copy($file->getRealPath(), $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName);
 
         return $fileName;
