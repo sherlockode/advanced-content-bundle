@@ -166,10 +166,7 @@ class ContentTypeImport extends AbstractImport
             $this->em->persist($field);
 
             if (isset($fieldData['children'])) {
-                if ($fieldData['type'] === 'repeater') {
-                    $childLayout = $this->createLayout($fieldData['name'], 1, $field);
-                    $this->createFields($fieldData['children'], $contentType, $childLayout);
-                } elseif ($fieldData['type'] === 'flexible') {
+                if ($fieldData['type'] === 'flexible' || $fieldData['type'] === 'repeater') {
                     $layoutPosition = 1;
                     foreach ($fieldData['children'] as $child) {
                         if (!isset($child['name']) && !isset($child['layout_name'])) {
@@ -180,6 +177,10 @@ class ContentTypeImport extends AbstractImport
                         $childLayout = $this->createLayout($layoutName, $layoutPosition++, $field);
                         if (isset($child['children'])) {
                             $this->createFields($child['children'], $contentType, $childLayout);
+                        }
+                        if ($fieldData['type'] === 'repeater') {
+                            // Create only one layout for the repeater field
+                            break;
                         }
                     }
                 }

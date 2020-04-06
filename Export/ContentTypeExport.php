@@ -70,16 +70,12 @@ class ContentTypeExport
 
         $children = $field->getChildren();
         if (count($children) > 0) {
-            if ($field->getType() === 'repeater') {
-                $fieldData = array_merge($fieldData, $this->exportFields($children[0]->getChildren()));
-            } else {
-                $fieldData['children'] = [];
-                foreach ($children as $childLayout) {
-                    $childLayoutData = [];
-                    $childLayoutData['layout_name'] = $childLayout->getName();
-                    $childLayoutData = array_merge($childLayoutData, $this->exportFields($childLayout->getChildren()));
-                    $fieldData['children'][] = $childLayoutData;
-                }
+            $fieldData['children'] = [];
+            foreach ($children as $childLayout) {
+                $childLayoutData = [];
+                $childLayoutData['layout_name'] = $childLayout->getName();
+                $childLayoutData = array_merge($childLayoutData, $this->exportFields($childLayout->getChildren()));
+                $fieldData['children'][] = $childLayoutData;
             }
         }
 

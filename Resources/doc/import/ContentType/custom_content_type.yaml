@@ -27,10 +27,13 @@ content_types:
                                 type: repeater
                                 children:
                                     -
-                                        name: Repeater - Title
-                                        type: text
-                                    -
-                                        name: Repeater - Description
-                                        type: wysiwyg
-                                        required: false
-                                        options: { toolbar: basic }
+                                        layout_name: Repeater layout name
+                                        children:
+                                            -
+                                                name: Repeater - Title
+                                                type: text
+                                            -
+                                                name: Repeater - Description
+                                                type: wysiwyg
+                                                required: false
+                                                options: { toolbar: basic }
