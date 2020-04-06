@@ -310,6 +310,7 @@ class Layout extends BaseLayout
      * @var FieldInterface[]|Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Field", mappedBy="layout", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})                                 
      */
     protected $children;
 
@@ -317,6 +318,7 @@ class Layout extends BaseLayout
      * @var FieldGroupValueInterface[]|Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\FieldGroupValue", mappedBy="layout", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $fieldGroupValues;
 }
