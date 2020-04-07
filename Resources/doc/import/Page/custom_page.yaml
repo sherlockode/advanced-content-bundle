@@ -27,7 +27,7 @@ pages:
                                 slug: custom-layout-2-repeater
                                 children:
                                     -
-                                        layout_name: Custom Layout 2 - Repeater
+                                        layout_name: Repeater layout name
                                         children:
                                             -
                                                 slug: repeater-title
@@ -36,7 +36,7 @@ pages:
                                                 slug: repeater-description
                                                 value: '<strong>First</strong> group of repeater - description'
                                     -
-                                        layout_name: Custom Layout 2 - Repeater
+                                        layout_name: Repeater layout name
                                         children:
                                             -
                                                 slug: repeater-title
