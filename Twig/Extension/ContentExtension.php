@@ -6,8 +6,10 @@ use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ContentExtension extends \Twig_Extension
+class ContentExtension extends AbstractExtension
 {
     /**
      * @var FieldManager
@@ -25,13 +27,13 @@ class ContentExtension extends \Twig_Extension
     /**
      * Add specific twig function
      *
-     * @return \Twig_SimpleFunction[]
+     * @return TwigFunction[]
      */
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('acb_fields', [$this, 'getAllFieldValues'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('acb_field', [$this, 'getContentFieldValue'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_fields', [$this, 'getAllFieldValues'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_field', [$this, 'getContentFieldValue'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -41,11 +43,8 @@ class ContentExtension extends \Twig_Extension
      *
      * @return null|array
      */
-    public function getContentFieldValue(ContentInterface $content = null, $slug)
+    public function getContentFieldValue(ContentInterface $content, $slug)
     {
-        if (null === $content) {
-            return null;
-        }
         foreach ($content->getFieldValues() as $fieldValue) {
             if ($fieldValue->getField()->getSlug() == $slug) {
                 return [
