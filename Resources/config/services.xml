@@ -30,6 +30,11 @@
             <argument type="service" id="sherlockode_advanced_content.page_export"/>
             <argument type="service" id="sherlockode_advanced_content.content_export"/>
         </service>
+        <service id="sherlockode_advanced_content.form.fields" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldsType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <tag name="form.type"/>
+        </service>
         <service id="sherlockode_advanced_content.form.field" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldType">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
