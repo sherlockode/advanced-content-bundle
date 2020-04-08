@@ -1,3 +1,15 @@
+(function() {
+'use strict';
+let jQuery;
+let getSlug;
+if (typeof module === "object" && module.exports) {
+    jQuery = require("jquery");
+    getSlug = require("speakingurl");
+} else {
+    jQuery = window.jQuery;
+    getSlug = window.getSlug;
+}
+
 jQuery(function ($) {
     'use strict';
 
@@ -434,3 +446,4 @@ jQuery(function ($) {
         }).fail(ajaxFailCallback);
     }
 });
+})();
