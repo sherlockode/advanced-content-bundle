@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <route id="sherlockode_acb_content_create" path="/mycontent/create">
+        <default key="_controller">sherlockode_advanced_content.controller.content_crud:createAction</default>
+    </route>
+    <route id="sherlockode_acb_content_create_by_type" path="/mycontent/create/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content_crud:createByTypeAction</default>
+    </route>
+    <route id="sherlockode_acb_content_list" path="/mycontent/list">
+        <default key="_controller">sherlockode_advanced_content.controller.content_crud:listAction</default>
+    </route>
+    <route id="sherlockode_acb_content_edit" path="/mycontent/edit/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content_crud:editAction</default>
+    </route>
+    <route id="sherlockode_acb_content_delete" path="/mycontent/delete/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content_crud:deleteAction</default>
+    </route>
+    <route id="sherlockode_acb_content_show" path="/mycontent/show/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content_crud:showAction</default>
+    </route>
+
+    <route id="sherlockode_acb_content_type_edit" path="/mycontent-type/edit/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:editAction</default>
+    </route>
+    <route id="sherlockode_acb_content_type_create" path="/mycontent-type/create">
+        <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:createAction</default>
+    </route>
+    <route id="sherlockode_acb_content_type_delete" path="/mycontent-type/delete/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:deleteAction</default>
+    </route>
+    <route id="sherlockode_acb_content_type_change_field_type" path="/mycontent-type/change-field-type">
+        <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:changeFieldTypeAction</default>
+    </route>
+    <route id="sherlockode_acb_content_type_list" path="/mycontent-type/list">
+        <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:listAction</default>
+    </route>
+</routes>

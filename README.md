@@ -103,10 +103,25 @@ sherlockode_advanced_content:
 
 ### Routing
 
+The routing is split into several files for better import rules.
+
+* tools.xml : Routes for tooling pages, like import/export
+* content.xml : Utility routes for editing contents
+* page.xml : basic CRUD routes for Pages (demo purpose)
+* content_crud.xml : basic CRUD routes for Content and ContentTypes (demo purpose)
+* all.xml : includes all of the above
+* base.xml : includes tools.xml and content.xml
+
+The base.xml file is sufficient if you plan to manage all your CRUD operations in custom controllers
+(like if you use an external admin system).
+
 ```yaml
 # config/routes.yaml
 sherlockode_advanced_content:
-    resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing.xml'
+    prefix: '/acb'
+    resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing/base.xml'
+    # or include all routes directly
+    # resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing/all.xml'
 ```
 
 ## Advanced Documentation
