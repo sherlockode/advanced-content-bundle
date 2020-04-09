@@ -7,12 +7,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentTypeFormType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
-use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,11 +22,6 @@ class MyContentTypeController extends AbstractController
     private $em;
 
     /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
      * @var ContentTypeManager
      */
     private $contentTypeManager;
@@ -42,31 +32,20 @@ class MyContentTypeController extends AbstractController
     private $configurationManager;
 
     /**
-     * @var FieldManager
-     */
-    private $fieldManager;
-
-    /**
      * MyContentTypeController constructor.
      *
      * @param EntityManagerInterface $em
-     * @param FormFactoryInterface   $formFactory
      * @param ContentTypeManager     $contentTypeManager
      * @param ConfigurationManager   $configurationManager
-     * @param FieldManager           $fieldManager
      */
     public function __construct(
         EntityManagerInterface $em,
-        FormFactoryInterface $formFactory,
         ContentTypeManager $contentTypeManager,
-        ConfigurationManager $configurationManager,
-        FieldManager $fieldManager
+        ConfigurationManager $configurationManager
     ) {
         $this->em = $em;
-        $this->formFactory = $formFactory;
         $this->contentTypeManager = $contentTypeManager;
         $this->configurationManager = $configurationManager;
-        $this->fieldManager = $fieldManager;
     }
 
     /**
@@ -145,88 +124,6 @@ class MyContentTypeController extends AbstractController
             'form' => $form->createView(),
             'data' => $contentType,
         ]);
-    }
-
-    /**
-     * @param string $formName
-     *
-     * @return array
-     */
-    private function getFormPath($formName)
-    {
-        $formPath = preg_split("/(\[|\])/", $formName);
-        foreach ($formPath as $key => $value) {
-            if ($value === '') {
-                unset($formPath[$key]);
-            }
-        }
-        return $formPath;
-    }
-
-    /**
-     * @param array                $path
-     * @param FormBuilderInterface $formBuilder
-     *
-     * @return FormBuilderInterface
-     */
-    private function createEmbeddedForm($path, $formBuilder)
-    {
-        $currentPath = array_shift($path);
-        while ($currentPath !== null) {
-            $formBuilder
-                ->add($currentPath, FormType::class);
-            $formBuilder = $formBuilder->get($currentPath);
-
-            $currentPath = array_shift($path);
-        }
-
-        return $formBuilder;
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function changeFieldTypeAction(Request $request)
-    {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $type = $request->get('type');
-        $fieldType = $this->fieldManager->getFieldTypeByCode($type);
-
-        $formName = $request->get('formPath');
-
-        $formPath = $this->getFormPath($formName);
-        // Extract first item to create named builder
-        $rootPath = array_shift($formPath);
-        $formChildren = $formPath;
-        $rootFormBuilder = $this->formFactory->createNamedBuilder($rootPath, FormType::class, null, ['translation_domain' => 'AdvancedContentBundle']);
-        // Create formBuilder recursively, according to formName
-        $formBuilder = $this->createEmbeddedForm($formPath, $rootFormBuilder);
-        $formBuilder->add('options', FormType::class);
-
-        $fieldType->addFieldOptions($formBuilder);
-
-        $form = $rootFormBuilder->getForm();
-        foreach ($formChildren as $child) {
-            $form = $form->get($child);
-        }
-        $formView = $form->createView();
-
-        $response = [
-            'success' => 1,
-            'optionHtml'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_options_render.html.twig', [
-                'options' => $formView['options'],
-            ]),
-            'layoutHtml'    => $this->renderView('@SherlockodeAdvancedContent/ContentType/field_layout.html.twig', [
-                'form' => $formView,
-            ])
-        ];
-
-        return new JsonResponse($response);
     }
 
     /**

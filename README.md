@@ -107,10 +107,11 @@ The routing is split into several files for better import rules.
 
 * tools.xml : Routes for tooling pages, like import/export
 * content.xml : Utility routes for editing contents
+* content_type.xml : Utility routes for editing content types
 * page.xml : basic CRUD routes for Pages (demo purpose)
 * content_crud.xml : basic CRUD routes for Content and ContentTypes (demo purpose)
 * all.xml : includes all of the above
-* base.xml : includes tools.xml and content.xml
+* base.xml : includes tools.xml, content.xml and content_type.xml
 
 The base.xml file is sufficient if you plan to manage all your CRUD operations in custom controllers
 (like if you use an external admin system).
