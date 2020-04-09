@@ -150,7 +150,7 @@
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
             <argument>%kernel.project_dir%</argument>
         </service>
-        <service id="sherlockode_advanced_content.import_command" class="Sherlockode\AdvancedContentBundle\Command\AcbImportCommand" public="true">
+        <service id="sherlockode_advanced_content.import_command" class="Sherlockode\AdvancedContentBundle\Command\ImportCommand" public="true">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="sherlockode_advanced_content.import_manager"/>
@@ -162,7 +162,7 @@
         <service id="sherlockode_advanced_content.content_export" class="Sherlockode\AdvancedContentBundle\Export\ContentExport">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
         </service>
-        <service id="sherlockode_advanced_content.export_command" class="Sherlockode\AdvancedContentBundle\Command\AcbExportCommand" public="true">
+        <service id="sherlockode_advanced_content.export_command" class="Sherlockode\AdvancedContentBundle\Command\ExportCommand" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
