@@ -8,6 +8,7 @@ use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,14 +23,22 @@ class ContentController extends AbstractController
     private $configurationManager;
 
     /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
      * ContentController constructor.
      *
      * @param ConfigurationManager   $configurationManager
+     * @param FormFactoryInterface   $formFactory
      */
     public function __construct(
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
+        FormFactoryInterface $formFactory
     ) {
         $this->configurationManager = $configurationManager;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -54,7 +63,7 @@ class ContentController extends AbstractController
         $group = new $fieldGroupValueClass();
         $group->setLayout($layout);
 
-        $formBuilder = $this->get('form.factory')->createNamedBuilder($name, FlexibleGroupType::class, $group, [
+        $formBuilder = $this->formFactory->createNamedBuilder($name, FlexibleGroupType::class, $group, [
             'contentType' => $contentType,
             'csrf_protection' => false,
             'parentFormId' => $parentFormId,

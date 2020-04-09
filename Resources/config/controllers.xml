@@ -15,6 +15,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
         </service>
         <service id="sherlockode_advanced_content.controller.content" class="Sherlockode\AdvancedContentBundle\Controller\ContentController" public="true">
+            <argument type="service" id="form.factory"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
         </service>
         <service id="sherlockode_advanced_content.controller.tools" class="Sherlockode\AdvancedContentBundle\Controller\ToolsController" public="true">
