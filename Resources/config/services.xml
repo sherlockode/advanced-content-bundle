@@ -105,31 +105,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <tag name="twig.extension"/>
         </service>
-        <service id="sherlockode_advanced_content.field_value_listener" class="Sherlockode\AdvancedContentBundle\EventListener\FieldValueListener">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
-        </service>
-        <service id="sherlockode_advanced_content.page_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageListener">
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
-            <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
-            <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
-            <tag name="doctrine.event_listener" event="postUpdate" lazy="1"/>
-        </service>
-        <service id="sherlockode_advanced_content.page_type_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageTypeListener">
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
-            <tag name="doctrine.event_listener" event="preRemove" lazy="1"/>
-            <tag name="doctrine.event_listener" event="postRemove" lazy="1"/>
-        </service>
-        <service id="sherlockode_advanced_content.content_type_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentTypeListener">
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
-            <tag name="doctrine.event_listener" event="postPersist" lazy="1"/>
-            <tag name="doctrine.event_listener" event="postUpdate" lazy="1"/>
-        </service>
-        <service id="sherlockode_advanced_content.content_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentListener">
-            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
-            <argument type="service" id="translator"/>
-            <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
-        </service>
+
         <service id="sherlockode_advanced_content.content_type_import" class="Sherlockode\AdvancedContentBundle\Import\ContentTypeImport">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
