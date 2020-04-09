@@ -108,6 +108,17 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('locales')
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function ($v) {
+                            return preg_split('/\s*,\s*/', $v);
+                        })
+                    ->end()
+                    ->defaultValue(['en'])
+                    ->cannotBeEmpty()
+                    ->prototype('scalar')->end()
+                ->end()
             ->end()
         ;
 

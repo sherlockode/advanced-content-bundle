@@ -39,5 +39,14 @@
             <argument>%kernel.project_dir%</argument>
             <tag name="console.command"/>
         </service>
+
+        <service id="sherlockode_advanced_content.locale_provider" class="Sherlockode\AdvancedContentBundle\Locale\LocaleProvider"/>
+        <service id="Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface" alias="sherlockode_advanced_content.locale_provider"/>
+
+        <service id="sherlockode_advanced_content.translation_listener" class="Sherlockode\AdvancedContentBundle\EventListener\TranslationListener">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
+            <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
+        </service>
     </services>
 </container>

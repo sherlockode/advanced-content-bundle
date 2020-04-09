@@ -62,16 +62,43 @@ interface PageInterface
     public function setStatus($status);
 
     /**
+     * Get a linked content with the requested locale
+     * If none match, the first content from the $contents property is returned
+     *
+     * @param string|null $locale
+     *
      * @return ContentInterface
      */
-    public function getContent();
+    public function getContent($locale = null);
 
     /**
+     * Replace all existing linked contents with a single one
+     * Used in form when only one content is expected (multilang disabled)
+     *
      * @param ContentInterface|null $content
      *
      * @return $this
      */
     public function setContent(ContentInterface $content = null);
+
+    /**
+     * @return ContentInterface[]
+     */
+    public function getContents();
+
+    /**
+     * @param ContentInterface $content
+     *
+     * @return $this
+     */
+    public function addContent(ContentInterface $content);
+
+    /**
+     * @param ContentInterface $content
+     *
+     * @return $this
+     */
+    public function removeContent(ContentInterface $content);
 
     /**
      * @return PageTypeInterface|null
@@ -84,4 +111,11 @@ interface PageInterface
      * @return $this
      */
     public function setPageType(PageTypeInterface $pageType = null);
+
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setCurrentLocale($locale);
 }

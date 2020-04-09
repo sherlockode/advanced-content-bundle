@@ -48,7 +48,10 @@ class ContentType extends AbstractType
                 'label' => 'content.form.name',
                 'attr' => ['class' => 'acb-content-name'],
             ])
-            ->add('slug')
+            ->add('slug', TextType::class)
+            ->add('locale', TextType::class, [
+                'label' => 'content.form.locale',
+            ])
             ->add('fieldValues', FieldValuesType::class, [
                 'label' => 'content.form.field_values',
                 'fields' => $fields,
@@ -70,6 +73,9 @@ class ContentType extends AbstractType
                     'attr' => ['class' => $slugClass],
                 ])
             ;
+            if ($form->getParent()) {
+                $form->remove('locale');
+            }
         });
 
         $builder->addEventListener(

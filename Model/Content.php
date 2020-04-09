@@ -38,11 +38,26 @@ abstract class Content implements ContentInterface
     protected $page;
 
     /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
      * Content constructor
      */
     public function __construct()
     {
         $this->fieldValues = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+        $fieldValues = $this->fieldValues;
+        $this->fieldValues = new ArrayCollection();
+        foreach ($fieldValues as $fieldValue) {
+            $this->addFieldValue(clone $fieldValue);
+        }
     }
 
     /**
@@ -152,5 +167,37 @@ abstract class Content implements ContentInterface
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * @param PageInterface $page
+     *
+     * @return $this
+     */
+    public function setPage(PageInterface $page = null)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }

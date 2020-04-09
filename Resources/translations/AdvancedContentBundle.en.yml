@@ -46,10 +46,14 @@ content:
     form:
         name: Name
         slug: Slug
+        locale: Locale
         field_values: Fields
         add_group: Add group
         field:
             remove: Remove
+    duplicate:
+        select_language: Choose a locale to duplicate from
+        validate: Validate
 field_type:
     text:
         label: Text

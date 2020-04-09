@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\PageManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
@@ -29,12 +30,19 @@ class PageType extends AbstractType
     private $pageManager;
 
     /**
-     * @param ConfigurationManager $configurationManager
-     * @param PageManager          $pageManager
+     * @var LocaleProviderInterface
      */
-    public function __construct(ConfigurationManager $configurationManager, PageManager $pageManager)
+    private $localeProvider;
+
+    /**
+     * @param ConfigurationManager    $configurationManager
+     * @param PageManager             $pageManager
+     * @param LocaleProviderInterface $localeProvider
+     */
+    public function __construct(ConfigurationManager $configurationManager, PageManager $pageManager, LocaleProviderInterface $localeProvider)
     {
         $this->configurationManager = $configurationManager;
+        $this->localeProvider = $localeProvider;
         $this->pageManager = $pageManager;
     }
 
@@ -89,12 +97,21 @@ class PageType extends AbstractType
 
                 $contentType = $this->pageManager->getPageContentType($page);
                 if ($contentType instanceof ContentTypeInterface) {
-                    $form
-                        ->add('content', ContentType::class, [
-                            'label'       => 'page.form.content',
-                            'contentType' => $contentType,
-                        ])
-                    ;
+                    if ($this->localeProvider->isMultilangEnabled()) {
+                        $form
+                            ->add('contents', ContentTranslationType::class, [
+                                'label' => 'page.form.content',
+                                'contentType' => $contentType,
+                            ]);
+                    } else {
+                        $form
+                            ->add('content', ContentType::class, [
+                                'label'       => 'page.form.content',
+                                'contentType' => $contentType,
+                            ])
+                        ;
+                    }
+
                 }
             }
         });

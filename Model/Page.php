@@ -2,6 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 abstract class Page implements PageInterface
 {
     /**
@@ -35,9 +38,26 @@ abstract class Page implements PageInterface
     protected $content;
 
     /**
+     * @var Collection|ContentInterface[]
+     */
+    protected $contents;
+
+    /**
      * @var PageTypeInterface
      */
     protected $pageType;
+
+    /**
+     * Non-mapped property, stores the current locale to use when displaying the content
+     *
+     * @var string
+     */
+    protected $currentLocale;
+
+    public function __construct()
+    {
+        $this->contents = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -128,21 +148,59 @@ abstract class Page implements PageInterface
     }
 
     /**
+     * @param string|null $locale
+     *
      * @return ContentInterface|null
      */
-    public function getContent()
+    public function getContent($locale = null)
     {
-        return $this->content;
+        $locale = $locale ?: $this->currentLocale;
+        foreach ($this->contents as $content) {
+            if ($content->getLocale() === $locale) {
+                return $content;
+            }
+        }
+
+        return $this->contents[0] ?? null;
     }
 
     /**
      * @param ContentInterface|null $content
      *
-     * @return $this
+     * @return PageInterface|void
      */
     public function setContent(ContentInterface $content = null)
     {
-        $this->content = $content;
+        $this->contents->clear();
+        $this->contents->add($content);
+    }
+
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+    /**
+     * @param ContentInterface $content
+     *
+     * @return $this
+     */
+    public function addContent(ContentInterface $content)
+    {
+        $this->contents[] = $content;
+        $content->setPage($this);
+
+        return $this;
+    }
+
+    /**
+     * @param ContentInterface $content
+     *
+     * @return $this
+     */
+    public function removeContent(ContentInterface $content)
+    {
+        $this->contents->removeElement($content);
 
         return $this;
     }
@@ -163,6 +221,18 @@ abstract class Page implements PageInterface
     public function setPageType(PageTypeInterface $pageType = null)
     {
         $this->pageType = $pageType;
+
+        return $this;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setCurrentLocale($locale)
+    {
+        $this->currentLocale = $locale;
 
         return $this;
     }
