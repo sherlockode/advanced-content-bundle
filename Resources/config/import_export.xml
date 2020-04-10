@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sherlockode_advanced_content.import_manager" class="Sherlockode\AdvancedContentBundle\Manager\ImportManager">
+            <argument type="service" id="sherlockode_advanced_content.content_type_import"/>
+            <argument type="service" id="sherlockode_advanced_content.page_import"/>
+            <argument type="service" id="sherlockode_advanced_content.content_import"/>
+            <argument type="service" id="translator"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_type_import" class="Sherlockode\AdvancedContentBundle\Import\ContentTypeImport">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.page_import" class="Sherlockode\AdvancedContentBundle\Import\PageImport">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_import" class="Sherlockode\AdvancedContentBundle\Import\ContentImport">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <service id="sherlockode_advanced_content.export_manager" class="Sherlockode\AdvancedContentBundle\Manager\ExportManager">
+            <argument type="service" id="sherlockode_advanced_content.content_type_export"/>
+            <argument type="service" id="sherlockode_advanced_content.page_export"/>
+            <argument type="service" id="sherlockode_advanced_content.content_export"/>
+        </service>
+        <service id="sherlockode_advanced_content.content_type_export" class="Sherlockode\AdvancedContentBundle\Export\ContentTypeExport"/>
+        <service id="sherlockode_advanced_content.page_export" class="Sherlockode\AdvancedContentBundle\Export\PageExport"/>
+        <service id="sherlockode_advanced_content.content_export" class="Sherlockode\AdvancedContentBundle\Export\ContentExport">
+            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        </service>
+    </services>
+</container>
