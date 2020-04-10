@@ -28,9 +28,6 @@
     <route id="sherlockode_acb_content_type_delete" path="/mycontent-type/delete/{id}">
         <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:deleteAction</default>
     </route>
-    <route id="sherlockode_acb_content_type_change_field_type" path="/mycontent-type/change-field-type">
-        <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:changeFieldTypeAction</default>
-    </route>
     <route id="sherlockode_acb_content_type_list" path="/mycontent-type/list">
         <default key="_controller">sherlockode_advanced_content.controller.content_type_crud:listAction</default>
     </route>
