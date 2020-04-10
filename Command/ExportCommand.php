@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AcbExportCommand extends Command
+class ExportCommand extends Command
 {
     const AVAILABLE_ENTITIES = ['ContentType', 'Page', 'Content'];
 

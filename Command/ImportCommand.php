@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AcbImportCommand extends Command
+class ImportCommand extends Command
 {
     const AVAILABLE_ENTITIES = ['ContentType', 'Page', 'Content'];
 
