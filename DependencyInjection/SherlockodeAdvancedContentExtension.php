@@ -18,6 +18,8 @@ class SherlockodeAdvancedContentExtension extends Extension
         $loader->load('services.xml');
         $loader->load('controllers.xml');
         $loader->load('field_types.xml');
+        $loader->load('form.xml');
+        $loader->load('import_export.xml');
         $loader->load('listeners.xml');
 
         $configuration = new Configuration();

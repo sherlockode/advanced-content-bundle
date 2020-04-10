@@ -19,124 +19,17 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
-        <service id="sherlockode_advanced_content.import_manager" class="Sherlockode\AdvancedContentBundle\Manager\ImportManager">
-            <argument type="service" id="sherlockode_advanced_content.content_type_import"/>
-            <argument type="service" id="sherlockode_advanced_content.page_import"/>
-            <argument type="service" id="sherlockode_advanced_content.content_import"/>
-            <argument type="service" id="translator"/>
-        </service>
-        <service id="sherlockode_advanced_content.export_manager" class="Sherlockode\AdvancedContentBundle\Manager\ExportManager">
-            <argument type="service" id="sherlockode_advanced_content.content_type_export"/>
-            <argument type="service" id="sherlockode_advanced_content.page_export"/>
-            <argument type="service" id="sherlockode_advanced_content.content_export"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.fields" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldsType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.field" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.content" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentType">
-            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.content_create" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.content_type" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentTypeFormType">
-            <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.field_values" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldValuesType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.repeater_field" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterFieldType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.repeater_group" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.flexible_group" class="Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.layout" class="Sherlockode\AdvancedContentBundle\Form\Type\LayoutType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.layout_field_collection" class="Sherlockode\AdvancedContentBundle\Form\Type\LayoutFieldCollectionType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.export" class="Sherlockode\AdvancedContentBundle\Form\Type\ExportType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.page_type" class="Sherlockode\AdvancedContentBundle\Form\Type\PageTypeType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <tag name="form.type"/>
-        </service>
-        <service id="sherlockode_advanced_content.form.page" class="Sherlockode\AdvancedContentBundle\Form\Type\PageType">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
-            <tag name="form.type"/>
-        </service>
         <service id="sherlockode_advanced_content.content_extension" class="Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <tag name="twig.extension"/>
         </service>
 
-        <service id="sherlockode_advanced_content.content_type_import" class="Sherlockode\AdvancedContentBundle\Import\ContentTypeImport">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-        </service>
-        <service id="sherlockode_advanced_content.page_import" class="Sherlockode\AdvancedContentBundle\Import\PageImport">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-        </service>
-        <service id="sherlockode_advanced_content.content_import" class="Sherlockode\AdvancedContentBundle\Import\ContentImport">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
-            <argument>%kernel.project_dir%</argument>
-        </service>
         <service id="sherlockode_advanced_content.import_command" class="Sherlockode\AdvancedContentBundle\Command\ImportCommand" public="true">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="sherlockode_advanced_content.import_manager"/>
             <argument>%kernel.project_dir%</argument>
             <tag name="console.command"/>
-        </service>
-        <service id="sherlockode_advanced_content.content_type_export" class="Sherlockode\AdvancedContentBundle\Export\ContentTypeExport"/>
-        <service id="sherlockode_advanced_content.page_export" class="Sherlockode\AdvancedContentBundle\Export\PageExport"/>
-        <service id="sherlockode_advanced_content.content_export" class="Sherlockode\AdvancedContentBundle\Export\ContentExport">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
         </service>
         <service id="sherlockode_advanced_content.export_command" class="Sherlockode\AdvancedContentBundle\Command\ExportCommand" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
