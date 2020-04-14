@@ -16,59 +16,13 @@
             <div class="col-md-12">
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        {{ form_label(form.name) }}
-                    </div>
-                    <div class="col-md-10">
-                        {{ form_widget(form.name) }}
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        {{ form_label(form.slug) }}
-                    </div>
-                    <div class="col-md-10">
-                        {{ form_widget(form.slug) }}
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        {{ form_label(form.linkType) }}
-                    </div>
-                    <div class="col-md-10">
-                        {{ form_widget(form.linkType) }}
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        {{ form_label(form.pageType) }}
-                    </div>
-                    <div class="col-md-10">
-                        {{ form_widget(form.pageType) }}
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        {{ form_label(form.page) }}
-                    </div>
-                    <div class="col-md-10">
-                        {{ form_widget(form.page) }}
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        {{ form_label(form.allowSeveralContents) }}
-                    </div>
-                    <div class="col-md-10">
-                        {{ form_widget(form.allowSeveralContents) }}
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-12">
-                        {{ form_row(form.fields) }}
-                    </div>
-                </div>
+                {{ form_row(form.name) }}
+                {{ form_row(form.slug) }}
+                {{ form_row(form.linkType) }}
+                {{ form_row(form.pageType) }}
+                {{ form_row(form.page) }}
+                {{ form_row(form.allowSeveralContents) }}
+                {{ form_row(form.fields) }}
                 <div class="row form-group">
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success pull-right">
