@@ -1,24 +1,14 @@
 {% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
 
+{% trans_default_domain 'AdvancedContentBundle' %}
+
 {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_row(form.name) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_row(form.slug) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            {% for fieldValue in form.fieldValues %}
-                {{ form_row(fieldValue) }}
-            {% endfor %}
-        </div>
-    </div>
+    {{ form_row(form.name) }}
+    {{ form_row(form.slug) }}
+    {% for fieldValue in form.fieldValues %}
+        {{ form_row(fieldValue) }}
+    {% endfor %}
 
     <div class="buttons">
         <a href="{{ path('sherlockode_acb_content_list') }}" class="btn btn-danger">{{ 'cancel'|trans }}</a>
