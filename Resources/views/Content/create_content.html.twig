@@ -1,10 +1,13 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+
+{% trans_default_domain 'AdvancedContentBundle' %}
+
 {% block body %}
     {{ parent() }}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h4>Create Content</h4>
+                <h4>{{ 'content.create'|trans }}</h4>
                 <div class="form-group">
                     {{ form_label(form.contentType) }}
                     {{ form_widget(form.contentType, {'attr': {'class': 'create-from-content-type'}}) }}

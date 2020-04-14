@@ -4,58 +4,19 @@
 
 {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row form-group">
-        <div class="col-md-2">
-            {{ form_label(form.title) }}
-        </div>
-        <div class="col-md-10">
-            {{ form_widget(form.title) }}
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-2">
-            {{ form_label(form.slug) }}
-        </div>
-        <div class="col-md-10">
-            {{ form_widget(form.slug) }}
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-md-2">
-            {{ form_label(form.pageType) }}
-        </div>
-        <div class="col-md-10">
-            {{ form_widget(form.pageType) }}
-        </div>
-    </div>
+    {{ form_row(form.title) }}
+    {{ form_row(form.slug) }}
+    {{ form_row(form.pageType) }}
 
     {% if form.metaDescription is defined %}
-        <div class="row form-group">
-            <div class="col-md-2">
-                {{ form_label(form.metaDescription) }}
-            </div>
-            <div class="col-md-10">
-                {{ form_widget(form.metaDescription) }}
-            </div>
-        </div>
+        {{ form_row(form.metaDescription) }}
     {% endif %}
     {% if form.status is defined %}
-        <div class="row form-group">
-            <div class="col-md-2">
-                {{ form_label(form.status) }}
-            </div>
-            <div class="col-md-10">
-                {{ form_widget(form.status) }}
-            </div>
-        </div>
+        {{ form_row(form.status) }}
     {% endif %}
     {% if form.content is defined %}
         <hr>
-        <div class="row form-group">
-            <div class="col-md-12">
-                {{ form_row(form.content) }}
-            </div>
-        </div>
+        {{ form_row(form.content) }}
     {% endif %}
 
     <div class="buttons">
