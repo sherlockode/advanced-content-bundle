@@ -6,6 +6,7 @@ use Sherlockode\AdvancedContentBundle\Form\DataTransformer\FieldValuesTransforme
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
+use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -48,6 +49,7 @@ class FieldValuesType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var FieldInterface $field */
         foreach ($options['fields'] as $field) {
             if ($field->getLayout()) {
                 // do not add fields which are not top-level
@@ -62,8 +64,8 @@ class FieldValuesType extends AbstractType
                 'translation_domain' => false,
             ]);
         }
-        $builder
-            ->addViewTransformer(new FieldValuesTransformer($this->contentManager, $options['contentType']));
+
+        $builder->addViewTransformer(new FieldValuesTransformer($this->contentManager, $options['contentType']));
     }
 
     /**

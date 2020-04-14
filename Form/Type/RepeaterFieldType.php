@@ -9,7 +9,6 @@ use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -19,14 +18,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class RepeaterFieldType extends AbstractType
 {
+    /**
+     * @var FieldManager
+     */
     private $fieldManager;
 
+    /**
+     * @var ConfigurationManager
+     */
     private $configurationManager;
 
+    /**
+     * @var ContentManager
+     */
     private $contentManager;
 
-    public function __construct(FieldManager $fieldManager, ConfigurationManager $configurationManager, ContentManager $contentManager)
-    {
+    /**
+     * @param FieldManager         $fieldManager
+     * @param ConfigurationManager $configurationManager
+     * @param ContentManager       $contentManager
+     */
+    public function __construct(
+        FieldManager $fieldManager,
+        ConfigurationManager $configurationManager,
+        ContentManager $contentManager
+    ) {
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
         $this->contentManager = $contentManager;
