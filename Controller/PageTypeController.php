@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\PageTypeType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
@@ -40,17 +39,14 @@ class PageTypeController extends AbstractController
      * @param Request $request
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function editAction($id, Request $request)
     {
         $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 
         if (!$pageType instanceof PageTypeInterface) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('page_type'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id)
             );
         }
 
@@ -72,7 +68,7 @@ class PageTypeController extends AbstractController
     }
 
     /**
-     * @param Request              $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -115,17 +111,14 @@ class PageTypeController extends AbstractController
      * @param int $id
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function deleteAction($id)
     {
         $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 
         if (!$pageType instanceof PageTypeInterface) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('page_type'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id)
             );
         }
 

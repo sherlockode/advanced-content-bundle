@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\PageType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
@@ -38,17 +37,14 @@ class PageController extends AbstractController
      * @param Request $request
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function editAction($id, Request $request)
     {
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
         if (!$page instanceof PageInterface) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('page'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
             );
         }
 
@@ -113,17 +109,14 @@ class PageController extends AbstractController
      * @param int $id
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function deleteAction($id)
     {
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
         if (!$page instanceof PageInterface) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('page'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
             );
         }
 
