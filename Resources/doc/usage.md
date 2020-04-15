@@ -22,8 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class PageController extends AbstractController
 {
     /**
-     * @Route("/{slug}", name="page_view") 
-     * 
+     * @Route("/{slug}", name="page_view")
+     *
      * @param Page $page
      *
      * @return Response
@@ -45,39 +45,39 @@ class PageController extends AbstractController
 
 If your content is not linked to any page (for example, your homepage), you can retrieve it by using its content type :
  
- ```php
- <?php
- // App/Controller/DefaultController
- namespace App\Controller;
- 
- use App\Entity\ContentType;
- use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
- use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
- use Symfony\Component\HttpFoundation\Response;
- use Symfony\Component\Routing\Annotation\Route;
- 
- class DefaultController extends AbstractController
- {
-     /**
-      * @Route("/", name="homepage") 
-      * 
-      * @return Response
-      */
-     public function indexAction()
-     {
-         $contentType = $this->getDoctrine()->getRepository(ContentType::class)->findOneBy(['name' => 'HomePage']);
-         $content = $contentType->getFirstContent();
-         
-         if (!$content instanceof ContentInterface) {
-             throw $this->createNotFoundException();
-         }
-         
-         return $this->render('content.html.twig', [
-             'content' => $content,
-         ]);
-     }
- }
- ```
+```php
+<?php
+// App/Controller/DefaultController
+namespace App\Controller;
+
+use App\Entity\ContentType;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class DefaultController extends AbstractController
+{
+    /**
+     * @Route("/", name="homepage")
+     *
+     * @return Response
+     */
+    public function indexAction()
+    {
+        $contentType = $this->getDoctrine()->getRepository(ContentType::class)->findOneBy(['name' => 'HomePage']);
+        $content = $contentType->getFirstContent();
+
+        if (!$content instanceof ContentInterface) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('content.html.twig', [
+            'content' => $content,
+        ]);
+    }
+}
+```
 
 ## Twig
 
