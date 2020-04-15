@@ -44,12 +44,12 @@ You may enable the bootstrap form theme in your configuration for better-looking
 ```yaml
 # config/packages/twig.yml
 twig:
-    form_themes: ['bootstrap_3_layout.html.twig']
+    form_themes: ['bootstrap_4_layout.html.twig']
 ```
 
 ### Entities
 
-`SherlockodeAdvancedContentBundle` provides 6 entity models : ContentType, Layout, Field, Content, FieldGroupValue and FieldValue
+`SherlockodeAdvancedContentBundle` provides 8 entity models : ContentType, Layout, Field, Content, PageType, Page, FieldGroupValue and FieldValue
 To be able to use them, you need to create your own entities, see examples in the [doc](Resources/doc/entities.md).
 
 Next, make the bundle aware of your entities by adding the following lines to your configuration:
