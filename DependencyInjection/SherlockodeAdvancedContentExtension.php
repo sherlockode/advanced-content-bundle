@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
+use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -21,6 +22,9 @@ class SherlockodeAdvancedContentExtension extends Extension
         $loader->load('form.xml');
         $loader->load('import_export.xml');
         $loader->load('listeners.xml');
+
+        $container->registerForAutoconfiguration(FieldTypeInterface::class)
+            ->addTag('sherlockode_advanced_content.fieldtype');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
