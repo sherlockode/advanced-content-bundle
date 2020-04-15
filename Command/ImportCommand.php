@@ -135,7 +135,6 @@ class ImportCommand extends Command
     {
         $finder = new Finder();
         $finder->files()->in($this->sourceDirectory);
-        $finder->name(['*.yaml', '*.yml']);
 
         if ($this->filename !== null) {
             $finder->name($this->filename);
@@ -146,6 +145,8 @@ class ImportCommand extends Command
 
                 return;
             }
+        } else {
+            $finder->name(['*.yaml', '*.yml']);
         }
         foreach ($finder as $file) {
             try {
