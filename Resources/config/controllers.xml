@@ -6,33 +6,61 @@
             <argument type="service" id="sherlockode_advanced_content.content_manager"/>
             <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
         <service id="sherlockode_advanced_content.controller.content_type_crud" class="Sherlockode\AdvancedContentBundle\Controller\MyContentTypeController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.content_type_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
         <service id="sherlockode_advanced_content.controller.content" class="Sherlockode\AdvancedContentBundle\Controller\ContentController" public="true">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="form.factory"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
         <service id="sherlockode_advanced_content.controller.content_type" class="Sherlockode\AdvancedContentBundle\Controller\ContentTypeController" public="true">
             <argument type="service" id="form.factory"/>
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
         <service id="sherlockode_advanced_content.controller.tools" class="Sherlockode\AdvancedContentBundle\Controller\ToolsController" public="true">
             <argument type="service" id="sherlockode_advanced_content.import_manager"/>
             <argument type="service" id="sherlockode_advanced_content.export_manager"/>
             <argument type="service" id="translator"/>
             <argument>%sherlockode_advanced_content.templates.tools%</argument>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
         <service id="sherlockode_advanced_content.controller.page_type" class="Sherlockode\AdvancedContentBundle\Controller\PageTypeController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
         <service id="sherlockode_advanced_content.controller.page" class="Sherlockode\AdvancedContentBundle\Controller\PageController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
         </service>
     </services>
 </container>
