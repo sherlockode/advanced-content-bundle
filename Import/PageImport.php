@@ -85,7 +85,7 @@ class PageImport extends AbstractImport
                 'slug' => $pageData['contentType']
             ]);
             if (!$contentType instanceof ContentTypeInterface) {
-                $this->errors[] = $this->translator->trans('init.errors.content_no_content_type_found', ['%name%' => $pageData['contentType']], 'AdvancedContentBundle');
+                $this->errors[] = $this->translator->trans('init.errors.content_no_content_type_found', ['%slug%' => $pageData['contentType']], 'AdvancedContentBundle');
 
                 return;
             }
