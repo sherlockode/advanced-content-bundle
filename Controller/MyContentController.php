@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -59,21 +58,18 @@ class MyContentController extends AbstractController
     }
 
     /**
-     * @param int                  $id
-     * @param Request              $request
+     * @param int     $id
+     * @param Request $request
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function editAction($id, Request $request)
     {
         $content = $this->contentManager->getContentById($id);
 
         if ($content === null) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('content'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
             );
         }
 
@@ -97,7 +93,7 @@ class MyContentController extends AbstractController
     }
 
     /**
-     * @param Request              $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -126,21 +122,18 @@ class MyContentController extends AbstractController
     }
 
     /**
-     * @param int                  $id
-     * @param Request              $request
+     * @param int     $id
+     * @param Request $request
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function createByTypeAction($id, Request $request)
     {
         $contentType = $this->contentTypeManager->getContentTypeById($id);
 
         if ($contentType === null) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('content_type'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content_type'), $id)
             );
         }
 
@@ -182,17 +175,14 @@ class MyContentController extends AbstractController
      * @param int $id
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function deleteAction($id)
     {
         $content = $this->contentManager->getContentById($id);
 
         if ($content === null) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('content'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
             );
         }
 
@@ -206,17 +196,14 @@ class MyContentController extends AbstractController
      * @param int $id
      *
      * @return Response
-     *
-     * @throws EntityNotFoundException
      */
     public function showAction($id)
     {
         $content = $this->contentManager->getContentById($id);
 
         if ($content === null) {
-            throw EntityNotFoundException::fromClassNameAndIdentifier(
-                $this->configurationManager->getEntityClass('content'),
-                [$id]
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
             );
         }
 
