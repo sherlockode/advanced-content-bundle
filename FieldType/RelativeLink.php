@@ -50,6 +50,9 @@ class RelativeLink extends Link
             return $url;
         }
 
+        if (!$this->requestStack->getMasterRequest()) {
+            return $url;
+        }
         return $this->requestStack->getMasterRequest()->getSchemeAndHttpHost() . '/' . $url;
     }
 }
