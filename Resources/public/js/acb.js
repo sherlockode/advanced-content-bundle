@@ -24,6 +24,7 @@ jQuery(function ($) {
 
     function initSortables() {
         $(".acb-sortable-group").each(function(){
+            let ckeditorConfigs = {};
             $(this).sortable({
                 containment: "parent",
                 items: '.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]',
@@ -31,6 +32,29 @@ jQuery(function ($) {
                 axis: "y",
                 update: function(event, ui) {
                     calculatePosition();
+                },
+                start: function (event, ui) {
+                    if (typeof CKEDITOR === 'undefined') {
+                        return;
+                    }
+                    // look for ckeditor instances in order to be able to rebuild them after drag
+                    ui.item.find('textarea').each(function () {
+                        if (typeof CKEDITOR.instances[this.id] === 'undefined') {
+                            return;
+                        }
+                        ckeditorConfigs[this.id] = CKEDITOR.instances[this.id].config;
+                        CKEDITOR.instances[this.id].destroy();
+                    })
+                },
+                stop: function (event, ui) {
+                    // rebuild destroyed ckeditor instances
+                    if (typeof CKEDITOR !== 'undefined') {
+                        return;
+                    }
+                    for (let id of Object.keys(ckeditorConfigs)) {
+                        CKEDITOR.replace(id, ckeditorConfigs[id]);
+                        delete ckeditorConfigs[id];
+                    }
                 }
             });
         });
