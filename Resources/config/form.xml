@@ -36,12 +36,6 @@
             <argument type="service" id="sherlockode_advanced_content.content_manager"/>
             <tag name="form.type"/>
         </service>
-        <service id="sherlockode_advanced_content.form.repeater_field" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterFieldType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.content_manager"/>
-            <tag name="form.type"/>
-        </service>
         <service id="sherlockode_advanced_content.form.repeater_group" class="Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
