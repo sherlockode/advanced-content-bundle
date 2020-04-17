@@ -52,7 +52,12 @@ class ContentTypeManager
     public function getOrderedFields(ContentTypeInterface $contentType)
     {
         return $this->em->getRepository($this->configurationManager->getEntityClass('field'))
-            ->findBy(['contentType' => $contentType], ['position' => 'ASC']);
+            ->findBy([
+                'contentType' => $contentType,
+                'layout' => null,
+            ], [
+                'position' => 'ASC'
+            ]);
     }
 
     /**

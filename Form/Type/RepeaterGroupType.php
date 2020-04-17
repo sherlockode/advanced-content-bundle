@@ -40,7 +40,7 @@ class RepeaterGroupType extends AbstractType
         $builder->add('layout', HiddenType::class);
         $builder->get('layout')->addViewTransformer(new LayoutToIdTransformer($layoutRepository));
         $builder->add('position', HiddenType::class);
-        $builder->add('children', RepeaterFieldType::class, [
+        $builder->add('children', FieldValuesType::class, [
             'label' => false,
             'fields' => $options['fields'],
             'contentType' => $options['contentType'],

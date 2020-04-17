@@ -51,7 +51,7 @@ class FlexibleGroupType extends AbstractType
             if (!$data) {
                 return;
             }
-            $form->add('children', RepeaterFieldType::class, [
+            $form->add('children', FieldValuesType::class, [
                 'label' => false,
                 'fields' => $data->getLayout() ? $data->getLayout()->getChildren() : [],
                 'contentType' => $options['contentType'],
@@ -67,7 +67,7 @@ class FlexibleGroupType extends AbstractType
             $layoutId = $data['layout'];
             $layout = $layoutRepository->find($layoutId);
             if ($layout) {
-                $form->add('children', RepeaterFieldType::class, [
+                $form->add('children', FieldValuesType::class, [
                     'label' => false,
                     'fields' => $layout->getChildren(),
                     'contentType' => $options['contentType'],

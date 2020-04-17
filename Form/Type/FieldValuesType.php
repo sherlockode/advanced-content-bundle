@@ -51,10 +51,6 @@ class FieldValuesType extends AbstractType
     {
         /** @var FieldInterface $field */
         foreach ($options['fields'] as $field) {
-            if ($field->getLayout()) {
-                // do not add fields which are not top-level
-                continue;
-            }
             $builder->add($field->getId(), FieldValueType::class, [
                 'label'      => $field->getName(),
                 'required'   => $field->isRequired(),
