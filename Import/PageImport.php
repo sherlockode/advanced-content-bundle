@@ -115,8 +115,11 @@ class PageImport extends AbstractImport
             }
 
             if (!empty($pageData['contents'])) {
+                $existingContents = [];
+                foreach ($page->getContents() as $content) {
+                    $existingContents[$content->getLocale()] = $content;
+                }
                 foreach ($pageData['contents'] as $locale => $contentData) {
-                    $existingContents = $page->getContents();
                     if (isset($existingContents[$locale])) {
                         $content = $existingContents[$locale];
                     } else {
@@ -132,7 +135,7 @@ class PageImport extends AbstractImport
 
                     $this->contentImport
                         ->resetErrors()
-                        ->createFieldValues($contentData['children'], $content);
+                        ->createFieldValues($contentData, $content);
                     $errors = $this->contentImport->getErrors();
                     foreach ($errors as $error) {
                         $this->errors[] = $error;

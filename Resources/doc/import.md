@@ -133,11 +133,21 @@ pages:
 You can also define other optional information: 
 ```yaml
 # var/acb/Page/custom_page.yaml
-meta: 'Page Meta Description'
-status: 10 (0: Draft (default) / 10: Published / 20: Trash)
-pageType: Custom Page Type (if defined, will automatically retrieve the ContentType linked to the PageType)
-contentType: slug of the Content Type (if you want a specific ContentType for this page)
-children: list of FieldValues of the Content linked to this Page
+pages:
+    page-slug:
+        title: Custom Page
+        meta: 'Page Meta Description'
+        status: 10 # (0: Draft (default) / 10: Published / 20: Trash)
+        pageType: Custom Page Type (if defined, will automatically retrieve the ContentType linked to the PageType)
+        contentType: slug of the Content Type (if you want a specific ContentType for this page)
+        contents:
+            en: # locale of the content
+                #list of FieldValues of the Content linked to this Page
+                - slug: my_text
+                  value: hello
+            fr:
+                - slug: my_text
+                  value: bonjour
 ```
 
 Each FieldValue will have the following structure:
@@ -185,15 +195,17 @@ When you export the content of File / Image FieldType for which you have already
 you will obtain the following structure.
 
 ```yaml
-slug: file-slug
-value:
-    src: file.pdf
-    title: File Title
-    
-slug: image-slug
-value:
-    src: image.jpg
-    alt: Image Alt
+# exported fields
+-
+    slug: file-slug
+    value:
+        src: file.pdf
+        title: File Title
+-
+    slug: image-slug
+    value:
+        src: image.jpg
+        alt: Image Alt
 ```
 
 If you want to upload a new file for this field values, you need to add a `file` entry under `value`.
@@ -208,13 +220,15 @@ $ php bin/console sherlockode:acb:import --files-dir=/tmp/new-files
 And the field values must contain the following info : 
 
 ```yaml
-slug: file-slug
-value:
-    file: new-file.pdf # file located in /tmp/new-files/new-file.pdf
-    title: File Title
-    
-slug: image-slug
-value:
-    file: new-image.jpg # file located in /tmp/new-files/new-image.png
-    alt: Image Alt
+# fields to import
+-
+    slug: file-slug
+    value:
+        file: new-file.pdf # file located in /tmp/new-files/new-file.pdf
+        title: File Title
+-
+    slug: image-slug
+    value:
+        file: new-image.jpg # file located in /tmp/new-files/new-image.png
+        alt: Image Alt
 ```

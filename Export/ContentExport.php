@@ -37,7 +37,7 @@ class ContentExport
         $data['contentType'] = $content->getContentType()->getSlug();
 
         $fieldValues = $content->getFieldValues();
-        $data = array_merge($data, $this->exportFieldValues($fieldValues));
+        $data['children'] = $this->exportFieldValues($fieldValues);
 
         $data = [
             'contents' => [
@@ -59,9 +59,9 @@ class ContentExport
             return [];
         }
 
-        $data = ['children' => []];
+        $data = [];
         foreach ($fieldValues as $fieldValue) {
-            $data['children'][] = $this->exportFieldValue($fieldValue);
+            $data[] = $this->exportFieldValue($fieldValue);
         }
 
         return $data;
@@ -84,7 +84,7 @@ class ContentExport
                 /** @var FieldGroupValueInterface $child */
                 $childData = [];
                 $childData['layout_name'] = $child->getLayout()->getName();
-                $childData = array_merge($childData, $this->exportFieldValues($child->getChildren()));
+                $childData['children'] = $this->exportFieldValues($child->getChildren());
                 $fieldValueData['children'][] = $childData;
             }
         } else {
