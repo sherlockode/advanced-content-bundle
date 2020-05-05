@@ -2,13 +2,17 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
+use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,6 +21,16 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ContentController extends AbstractController
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
+     * @var ContentManager
+     */
+    private $contentManager;
+
     /**
      * @var ConfigurationManager
      */
@@ -30,18 +44,26 @@ class ContentController extends AbstractController
     /**
      * ContentController constructor.
      *
+     * @param EntityManagerInterface $em
+     * @param ContentManager         $contentManager
      * @param ConfigurationManager   $configurationManager
      * @param FormFactoryInterface   $formFactory
      */
     public function __construct(
+        EntityManagerInterface $em,
+        ContentManager $contentManager,
         ConfigurationManager $configurationManager,
         FormFactoryInterface $formFactory
     ) {
+        $this->em = $em;
+        $this->contentManager = $contentManager;
         $this->configurationManager = $configurationManager;
         $this->formFactory = $formFactory;
     }
 
     /**
+     * @param Request $request
+     *
      * @return Response
      */
     public function flexibleFormAction(Request $request)
@@ -73,5 +95,52 @@ class ContentController extends AbstractController
         return $this->render('@SherlockodeAdvancedContent/Content/flexible_field_value.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function duplicateLocaleAction(Request $request)
+    {
+        $id = $request->get('id');
+        $content = $this->contentManager->getContentById($id);
+
+        if ($content === null) {
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
+            );
+        }
+
+        $newContent = clone $content;
+        $newContent->setLocale($request->get('locale'));
+
+        $this->em->persist($newContent);
+        $this->em->flush();
+
+        return new RedirectResponse($request->server->get('HTTP_REFERER', '/'));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function deleteLocaleAction(Request $request)
+    {
+        $id = $request->get('id');
+        $content = $this->contentManager->getContentById($id);
+
+        if ($content === null) {
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
+            );
+        }
+
+        $this->em->remove($content);
+        $this->em->flush();
+
+        return new RedirectResponse($request->server->get('HTTP_REFERER', '/'));
     }
 }

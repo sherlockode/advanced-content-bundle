@@ -42,6 +42,9 @@ class SherlockodeAdvancedContentExtension extends Extension
             $webPath,
         ]);
 
+        $localeProvider = $container->getDefinition('sherlockode_advanced_content.locale_provider');
+        $localeProvider->setArgument(0, $config['locales']);
+
         $container->setParameter('sherlockode_advanced_content.templates.tools', $config['templates']['tools']);
     }
 }

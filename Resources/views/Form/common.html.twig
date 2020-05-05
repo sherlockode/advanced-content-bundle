@@ -61,3 +61,59 @@
         <div class="expand_caret caret"></div>
     </div>
 {% endblock %}
+
+{# TODO bootstrap 3 => 4 #}
+{% block acb_content_translations_widget %}
+    {{ form_errors(form) }}
+
+    <div class="acb_translations">
+        <ul class="acb_translationsLocales nav nav-tabs" role="tablist">
+            {% for translationsFields in form %}
+                {% set locale = translationsFields.vars.name %}
+
+                <li{% if app.request.locale == locale %} class="active"{% endif %}>
+                    <a href="#{{ translationsFields.vars.id }}_acb_translations-fields" data-toggle="tab" role="tab">
+                        {{ translationsFields.vars.label|default(locale|humanize)|trans }}
+                        {% if translationsFields.vars.data %}
+                        <i class="acb-delete-locale-content" title="{{ 'delete'|trans }}"
+                           data-content-id="{{ translationsFields.vars.data.id }}"
+                           data-url="{{ path('sherlockode_acb_content_delete_locale') }}"
+                        ></i>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+            <li>
+                <div class="dropdown acb-duplicate-dropdown">
+                    {% for locale in missingLocales %}
+                    <a class="acb-duplicate-locale-content" data-toggle="dropdown" data-locale="{{ locale }}" href="#">
+                        {{ locale|humanize }} <i class="acb-duplicate-locale-content-icon"></i>
+                    </a>
+                    {% endfor %}
+                    <div class="dropdown-menu">
+                        <div class="form-group">
+                            <label>{{ 'content.duplicate.select_language'|trans }}</label>
+                            <select class="form-control">
+                                {% for lang, data in value %}
+                                    <option value="{{ data.id }}">{{ lang }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button data-url="{{ path('sherlockode_acb_content_duplicate_locale') }}" class="btn btn-success" type="button">{{ 'content.duplicate.validate'|trans }}</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="acb_translationFields tab-content">
+            {% for translationsFields in form %}
+                {% set locale = translationsFields.vars.name %}
+
+                <div id="{{ translationsFields.vars.id }}_acb_translations-fields" class="tab-pane {% if app.request.locale == locale %}active{% endif %} {% if not form.vars.valid %}field-error{% endif %}" role="tabpanel">
+                    {{ form_errors(translationsFields) }}
+                    {{ form_widget(translationsFields) }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -3,4 +3,10 @@
     <route id="sherlockode_acb_content_flexible_form" path="/content/flexible">
         <default key="_controller">sherlockode_advanced_content.controller.content:flexibleFormAction</default>
     </route>
+    <route id="sherlockode_acb_content_duplicate_locale" path="/content/duplicate-locale">
+        <default key="_controller">sherlockode_advanced_content.controller.content:duplicateLocaleAction</default>
+    </route>
+    <route id="sherlockode_acb_content_delete_locale" path="/content/delete-locale">
+        <default key="_controller">sherlockode_advanced_content.controller.content:deleteLocaleAction</default>
+    </route>
 </routes>

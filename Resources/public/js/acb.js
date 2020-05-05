@@ -428,6 +428,39 @@ jQuery(function ($) {
         applySlug(pageTitle, pageSlug);
     }
 
+    $('.acb_translations .acb-duplicate-locale-content').on('click', function () {
+        $('.acb_translations .acb-duplicate-dropdown button').data('locale', $(this).data('locale'));
+    });
+    $('.acb_translations .acb-duplicate-dropdown .dropdown-menu').on('click', function (e) {
+        // prevent dropdown from closing if clicked inside
+        e.stopPropagation();
+    });
+    $('.acb_translations .acb-duplicate-dropdown button').on('click', function () {
+        let button = $(this);
+
+        let data = {
+            id: button.closest('.dropdown-menu').find('select').val(),
+            locale: button.data('locale')
+        };
+
+        $.ajax(button.data('url'), {
+            method: 'POST',
+            data: data
+        }).done(function () {
+            window.location.reload();
+        });
+    });
+    $('.acb_translations .acb-delete-locale-content').on('click', function () {
+        if (confirm('Delete this content ?')) {
+            $.ajax($(this).data('url'), {
+                method: 'POST',
+                data: {id: $(this).data('contentId')},
+            }).done(function () {
+                window.location.reload();
+            });
+        }
+    });
+
     ////////////
     // Export //
     ////////////

@@ -88,4 +88,23 @@ interface ContentInterface
      * @return PageInterface|null
      */
     public function getPage();
+
+    /**
+     * @param PageInterface|null $page
+     *
+     * @return $this
+     */
+    public function setPage(PageInterface $page = null);
+
+    /**
+     * @return string|null
+     */
+    public function getLocale();
+
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale($locale);
 }

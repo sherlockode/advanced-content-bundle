@@ -17,6 +17,9 @@
     {% if form.content is defined %}
         <hr>
         {{ form_row(form.content) }}
+    {% elseif form.contents is defined %}
+        <hr>
+        {{ form_row(form.contents) }}
     {% endif %}
 
     <div class="buttons">

@@ -27,15 +27,18 @@ class PageExport
         if ($page->getPageType() instanceof PageTypeInterface) {
             $data['pageType'] = $page->getPageType()->getName();
         }
-        if ($page->getContent() instanceof ContentInterface) {
-            $content = $page->getContent();
+        $contentData = [];
+        foreach ($page->getContents() as $content) {
             $contentType = $content->getContentType();
             if ($contentType->getPage() instanceof PageInterface && $contentType->getPage()->getId() === $page->getId()) {
                 $data['contentType'] = $contentType->getSlug();
             }
 
             $fieldValues = $content->getFieldValues();
-            $data = array_merge($data, $this->contentExport->exportFieldValues($fieldValues));
+            $contentData[$content->getLocale()] = $this->contentExport->exportFieldValues($fieldValues);
+        }
+        if (count($contentData) > 0) {
+            $data['contents'] = $contentData;
         }
 
         $data = [

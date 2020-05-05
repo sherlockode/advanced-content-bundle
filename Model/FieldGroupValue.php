@@ -37,6 +37,17 @@ abstract class FieldGroupValue implements FieldGroupValueInterface
         $this->children = new ArrayCollection();
     }
 
+    public function __clone()
+    {
+        $this->id = null;
+
+        $children = $this->children;
+        $this->children = new ArrayCollection();
+        foreach ($children as $fieldValue) {
+            $this->addChild(clone $fieldValue);
+        }
+    }
+
     public function getId()
     {
         return $this->id;

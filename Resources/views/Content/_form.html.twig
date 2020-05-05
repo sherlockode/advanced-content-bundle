@@ -6,6 +6,9 @@
     {{ form_errors(form) }}
     {{ form_row(form.name) }}
     {{ form_row(form.slug) }}
+    {% if form.locale is defined %}
+        {{ form_row(form.locale) }}
+    {% endif %}
     {% for fieldValue in form.fieldValues %}
         {{ form_row(fieldValue) }}
     {% endfor %}

@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
@@ -110,23 +109,23 @@ class PageManager
     {
         $contentType = $this->getPageContentType($page);
         if (!$contentType instanceof ContentTypeInterface) {
-            if ($page->getContent() instanceof ContentInterface) {
-                $this->em->remove($page->getContent());
-
-                return true;
+            $hasRemovedContent = false;
+            foreach ($page->getContents() as $content) {
+                $this->em->remove($content);
+                $hasRemovedContent = true;
             }
-
-            return false;
+            return $hasRemovedContent;
         }
 
-        if ($page->getContent() instanceof ContentInterface) {
-            if ($page->getContent()->getContentType()->getId() === $contentType->getId()) {
-                return false;
+        $hasRemovedContent = false;
+        foreach ($page->getContents() as $content) {
+            if ($content->getContentType()->getId() !== $contentType->getId()) {
+                $this->em->remove($content);
+                $hasRemovedContent = true;
             }
-            $this->em->remove($page->getContent());
         }
 
-        return true;
+        return $hasRemovedContent;
     }
 
     /**
@@ -136,6 +135,7 @@ class PageManager
      */
     public function updatePagesAfterPageTypeRemove(PageTypeInterface $pageType)
     {
+        /** @var PageInterface[] $pages */
         $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findBy([
             'pageType' => $pageType,
         ]);
@@ -157,6 +157,7 @@ class PageManager
      */
     public function updatePages()
     {
+        /** @var PageInterface[] $pages */
         $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
 
         $shouldFlush = false;
