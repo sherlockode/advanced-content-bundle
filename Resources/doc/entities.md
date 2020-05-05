@@ -158,7 +158,8 @@ class Content extends BaseContent
     protected $fieldValues;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Page", mappedBy="content")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="contents")
+     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $page;
 }
@@ -193,7 +194,7 @@ class FieldValue extends BaseFieldValue
      * @var Content
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="fieldValues")
-     * @ORM\JoinColumn(name="content_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $content;
 
@@ -201,7 +202,7 @@ class FieldValue extends BaseFieldValue
      * @var Field
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Field", inversedBy="fieldValues")
-     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $field;
 
@@ -252,6 +253,7 @@ class FieldGroupValue extends BaseFieldGroupValue
      * @var FieldValueInterface
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\FieldValue", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $parent;
 
@@ -352,10 +354,9 @@ class Page extends BasePage
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Content", inversedBy="page", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\OneToMany(targetEntity="App\Entity\Content", mappedBy="page", cascade={"persist", "remove"})
      */
-    protected $content;
+    protected $contents;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PageType")
