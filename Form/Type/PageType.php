@@ -57,6 +57,7 @@ class PageType extends AbstractType
                 'label' => 'page.form.page_type',
                 'class' => $this->configurationManager->getEntityClass('page_type'),
                 'choice_label' => 'name',
+                'choice_translation_domain' => false,
                 'required' => false,
                 'attr' => ['class' => 'acb-page-page-type'],
             ])

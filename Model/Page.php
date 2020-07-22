@@ -172,6 +172,7 @@ abstract class Page implements PageInterface
     public function setContent(ContentInterface $content = null)
     {
         $this->contents->clear();
+        $content->setPage($this);
         $this->contents->add($content);
     }
 
