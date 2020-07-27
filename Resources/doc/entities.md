@@ -363,8 +363,12 @@ class Page extends BasePage
      * @ORM\JoinColumn(name="page_type_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $pageType;
-}
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PageMeta", mappedBy="page", cascade={"persist", "remove"})
+     */
+    protected $pageMetas;
+}
 ```
 
 ```php
@@ -388,5 +392,35 @@ class PageType extends BasePageType
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+}
+```
+
+```php
+<?php
+// src/Entity/PageMeta.php
+
+namespace App\Entity;
+
+use Sherlockode\AdvancedContentBundle\Model\PageMeta as BasePageMeta;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="page_meta")
+ */
+class PageMeta extends BasePageMeta
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="pageMetas")
+     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $page;
 }
 ```

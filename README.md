@@ -67,6 +67,7 @@ doctrine:
             SherlockodeAdvancedContentBundle\Model\LayoutInterface: App\Entity\Layout
             SherlockodeAdvancedContentBundle\Model\PageTypeInterface: App\Entity\PageType
             SherlockodeAdvancedContentBundle\Model\PageInterface: App\Entity\Page
+            SherlockodeAdvancedContentBundle\Model\PageMetaInterface: App\Entity\PageMeta
 ```
 
 ```yaml
@@ -81,6 +82,7 @@ sherlockode_advanced_content:
         layout: App\Entity\Layout
         page_type: App\Entity\PageType
         page: App\Entity\Page
+        page_meta: App\Entity\PageMeta
 ```
 
 

@@ -54,6 +54,8 @@ content:
     duplicate:
         select_language: Choisissez une langue à copier
         validate: Valider
+    delete:
+        validate: Supprimer ce contenu ?
 field_type:
     text:
         label: Texte
@@ -151,8 +153,10 @@ page:
             label: Page
             general: Général
             content: Contenu
+            meta: Méta
         title: Titre
         slug: Slug
+        meta_title: Méta Titre
         meta_description: Méta Description
         status: Statut
         statuses:
@@ -161,8 +165,14 @@ page:
             trash: Effacé
         content: Contenu
         page_type: Type de page
+        page_identifier: Identifiant
+        page_meta: Méta
     errors:
         alert_change_type: Attention, changer le type de la page va provoquer la suppression du contenu. Voulez-vous continuer ?
+    duplicate:
+        validate: Valider
+    delete:
+        validate: Supprimer ce méta ?
 init:
     title: 'Import de %entity%'
     errors:
@@ -173,6 +183,7 @@ init:
         field_missing_data: Vous devez définir le nom / le type du champ
         layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
+        page_missing_metas: Vous devez définir les métas de la page
         field_value_missing_slug: Vous devez définir le slug du champ du contenu dans "%contentName%"
         field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu
         content_missing_name: Vous devez définir le nom du contenu

@@ -4,15 +4,18 @@
 
 {{ form_start(form) }}
     {{ form_errors(form) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.slug) }}
+    {{ form_row(form.pageIdentifier) }}
     {{ form_row(form.pageType) }}
 
-    {% if form.metaDescription is defined %}
-        {{ form_row(form.metaDescription) }}
-    {% endif %}
     {% if form.status is defined %}
         {{ form_row(form.status) }}
+    {% endif %}
+    {% if form.pageMeta is defined %}
+        <hr>
+        {{ form_row(form.pageMeta) }}
+    {% elseif form.pageMetas is defined %}
+        <hr>
+        {{ form_row(form.pageMetas) }}
     {% endif %}
     {% if form.content is defined %}
         <hr>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <route id="sherlockode_acb_page_duplicate_locale" path="/page/duplicate-locale">
+        <default key="_controller">sherlockode_advanced_content.controller.page:duplicateLocaleAction</default>
+    </route>
+    <route id="sherlockode_acb_page_delete_locale" path="/page/delete-locale">
+        <default key="_controller">sherlockode_advanced_content.controller.page:deleteLocaleAction</default>
+    </route>
+</routes>

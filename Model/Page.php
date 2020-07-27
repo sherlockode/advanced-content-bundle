@@ -15,17 +15,7 @@ abstract class Page implements PageInterface
     /**
      * @var string
      */
-    protected $title;
-
-    /**
-     * @var string
-     */
-    protected $slug;
-
-    /**
-     * @var string
-     */
-    protected $metaDescription;
+    protected $pageIdentifier;
 
     /**
      * @var integer
@@ -54,9 +44,20 @@ abstract class Page implements PageInterface
      */
     protected $currentLocale;
 
+    /**
+     * @var Collection|PageMetaInterface[]
+     */
+    protected $pageMetas;
+
+    /**
+     * @var PageMetaInterface
+     */
+    protected $pageMeta;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
+        $this->pageMetas = new ArrayCollection();
     }
 
     /**
@@ -70,59 +71,19 @@ abstract class Page implements PageInterface
     /**
      * @return string
      */
-    public function getTitle()
+    public function getPageIdentifier()
     {
-        return $this->title;
+        return $this->pageIdentifier;
     }
 
     /**
-     * @param string $title
+     * @param string $pageIdentifier
      *
      * @return $this
      */
-    public function setTitle($title)
+    public function setPageIdentifier($pageIdentifier)
     {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * @param string $slug
-     *
-     * @return $this
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->metaDescription;
-    }
-
-    /**
-     * @param string $metaDescription
-     *
-     * @return $this
-     */
-    public function setMetaDescription($metaDescription)
-    {
-        $this->metaDescription = $metaDescription;
+        $this->pageIdentifier = $pageIdentifier;
 
         return $this;
     }
@@ -236,5 +197,69 @@ abstract class Page implements PageInterface
         $this->currentLocale = $locale;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|PageMetaInterface[]
+     */
+    public function getPageMetas()
+    {
+        return $this->pageMetas;
+    }
+
+    /**
+     * @param PageMetaInterface $pageMeta
+     *
+     * @return $this
+     */
+    public function addPageMeta(PageMetaInterface $pageMeta)
+    {
+        $this->pageMetas[] = $pageMeta;
+        $pageMeta->setPage($this);
+
+        return $this;
+    }
+
+    /**
+     * @param PageMetaInterface $pageMeta
+     *
+     * @return $this
+     */
+    public function removePageMeta(PageMetaInterface $pageMeta)
+    {
+        $this->pageMetas->removeElement($pageMeta);
+
+        return $this;
+    }
+
+    /**
+     * @param string|null $locale
+     *
+     * @return PageMetaInterface|null
+     */
+    public function getPageMeta($locale = null)
+    {
+        $locale = $locale ?: $this->currentLocale;
+        foreach ($this->pageMetas as $pageMeta) {
+            if ($pageMeta->getLocale() === $locale) {
+                return $pageMeta;
+            }
+        }
+
+        return $this->pageMetas[0] ?? null;
+    }
+
+    /**
+     * @param PageMetaInterface|null $pageMeta
+     *
+     * @return PageInterface|void
+     */
+    public function setPageMeta(PageMetaInterface $pageMeta = null)
+    {
+        $this->pageMetas->clear();
+        if ($pageMeta !== null) {
+            $pageMeta->setPage($this);
+        }
+        $this->pageMetas->add($pageMeta);
     }
 }

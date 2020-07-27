@@ -68,7 +68,7 @@ class ExportManager
         foreach ($pages as $page) {
             /** @var PageInterface $page */
             $data = $this->pageExport->exportData($page);
-            $this->addToFilesData($data, 'page_' . $page->getSlug());
+            $this->addToFilesData($data, 'page_' . $page->getPageIdentifier());
         }
     }
 

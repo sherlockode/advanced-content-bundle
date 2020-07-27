@@ -12,7 +12,7 @@ To display content linked to a given page, you can have the following controller
 // App/Controller/PageController
 namespace App\Controller;
 
-use App\Entity\Page;
+use App\Entity\PageMeta;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,12 +24,13 @@ class PageController extends AbstractController
     /**
      * @Route("/{slug}", name="page_view")
      *
-     * @param Page $page
+     * @param PageMeta $pageMeta
      *
      * @return Response
      */
-    public function indexAction(Page $page)
+    public function indexAction(PageMeta $pageMeta)
     {
+        $page = $pageMeta->getPage();
         if ($page->getStatus() !== PageInterface::STATUS_PUBLISHED || !$page->getContent() instanceof ContentInterface) {
             throw $this->createNotFoundException();
         }

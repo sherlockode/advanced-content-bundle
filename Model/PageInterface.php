@@ -16,38 +16,14 @@ interface PageInterface
     /**
      * @return string
      */
-    public function getTitle();
+    public function getPageIdentifier();
 
     /**
-     * @param string $title
+     * @param string $pageIdentifier
      *
      * @return $this
      */
-    public function setTitle($title);
-
-    /**
-     * @return string
-     */
-    public function getSlug();
-
-    /**
-     * @param string $slug
-     *
-     * @return $this
-     */
-    public function setSlug($slug);
-
-    /**
-     * @return string
-     */
-    public function getMetaDescription();
-
-    /**
-     * @param string $metaDescription
-     *
-     * @return $this
-     */
-    public function setMetaDescription($metaDescription);
+    public function setPageIdentifier($pageIdentifier);
 
     /**
      * @return int
@@ -118,4 +94,43 @@ interface PageInterface
      * @return $this
      */
     public function setCurrentLocale($locale);
+
+    /**
+     * @return PageMetaInterface[]
+     */
+    public function getPageMetas();
+
+    /**
+     * @param PageMetaInterface $pageMeta
+     *
+     * @return $this
+     */
+    public function addPageMeta(PageMetaInterface $pageMeta);
+
+    /**
+     * @param PageMetaInterface $pageMeta
+     *
+     * @return $this
+     */
+    public function removePageMeta(PageMetaInterface $pageMeta);
+
+    /**
+     * Get a linked page meta with the requested locale
+     * If none match, the first page meta from the $pageMetas property is returned
+     *
+     * @param string|null $locale
+     *
+     * @return PageMetaInterface
+     */
+    public function getPageMeta($locale = null);
+
+    /**
+     * Replace all existing linked page metas with a single one
+     * Used in form when only one page meta is expected (multilang disabled)
+     *
+     * @param PageMetaInterface|null $pageMeta
+     *
+     * @return $this
+     */
+    public function setPageMeta(PageMetaInterface $pageMeta = null);
 }
