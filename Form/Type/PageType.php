@@ -49,9 +49,8 @@ class PageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, [
-                'label' => 'page.form.title',
-                'attr' => ['class' => 'acb-page-title']
+            ->add('pageIdentifier', TextType::class, [
+                'label' => 'page.form.page_identifier',
             ])
             ->add('pageType', EntityType::class, [
                 'label' => 'page.form.page_type',
@@ -68,23 +67,21 @@ class PageType extends AbstractType
             /** @var PageInterface $page */
             $page = $event->getData();
 
-            $slugClass = 'acb-page-slug';
-            if ($page instanceof PageInterface && $page->getId()) {
-                $slugClass = '';
+            if ($this->localeProvider->isMultilangEnabled()) {
+                $form
+                    ->add('pageMetas', PageMetaTranslationType::class, [
+                        'label' => 'page.form.page_meta',
+                    ]);
+            } else {
+                $form
+                    ->add('pageMeta', PageMetaType::class, [
+                        'label'       => 'page.form.page_meta',
+                    ])
+                ;
             }
-            $form
-                ->add('slug', TextType::class, [
-                    'label' => 'page.form.slug',
-                    'attr' => ['class' => $slugClass],
-                ])
-            ;
 
             if ($page instanceof PageInterface && $page->getId()) {
                 $form
-                    ->add('metaDescription', TextareaType::class, [
-                        'label' => 'page.form.meta_description',
-                        'required' => false,
-                    ])
                     ->add('status', ChoiceType::class, [
                         'label' => 'page.form.status',
                         'choices' => [
@@ -112,7 +109,6 @@ class PageType extends AbstractType
                             ])
                         ;
                     }
-
                 }
             }
         });

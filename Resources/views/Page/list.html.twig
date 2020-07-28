@@ -24,7 +24,7 @@
                     {% for page in pages %}
                         <tr>
                             <td>{{ page.id }}</td>
-                            <td>{{ page.title }}</td>
+                            <td>{{ page.pageMeta.title }}</td>
                             <td>
                                 <a href="{{ path('sherlockode_acb_page_edit', {id: page.id}) }}">{{ 'edit'|trans }}</a>
                                 | <a href="{{ path('sherlockode_acb_page_delete', {id: page.id}) }}">{{ 'delete'|trans }}</a>

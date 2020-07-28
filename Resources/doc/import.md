@@ -121,22 +121,25 @@ You can find a ContentType import file example here [doc](import/ContentType/cus
 
 ### Pages
 
-You need to define a title and / or a slug for your Page
+You need to define an identifier for your Page and metas for at least one language
 
 ```yaml
 # var/acb/Page/custom_page.yaml
 pages:
-    page-slug:
-        title: Custom Page
+    page-identifier:
+        metas:
+            en:
+                title: Custom Page
+                slug: custom-page
+                meta_title: 'Meta Title' # optional
+                meta_description: 'Meta Description' # optional
 ```
 
 You can also define other optional information: 
 ```yaml
 # var/acb/Page/custom_page.yaml
 pages:
-    page-slug:
-        title: Custom Page
-        meta: 'Page Meta Description'
+    page-identifier:
         status: 10 # (0: Draft (default) / 10: Published / 20: Trash)
         pageType: Custom Page Type (if defined, will automatically retrieve the ContentType linked to the PageType)
         contentType: slug of the Content Type (if you want a specific ContentType for this page)
@@ -148,6 +151,17 @@ pages:
             fr:
                 - slug: my_text
                   value: bonjour
+        metas:
+            en:
+                title: Custom Page
+                slug: custom-page-en
+                meta_title: 'Meta Title'
+                meta_description: 'Meta Description'
+            fr:
+                title: Page personnalisée
+                slug: page-personnalisee
+                meta_title: 'Méta Titre'
+                meta_description: 'Méta Description'
 ```
 
 Each FieldValue will have the following structure:
@@ -178,6 +192,7 @@ contents:
     content-slug:
         name: Custom Content
         contentType: slug of the Content Type
+        locale: en
 ```
 
 Then, as for the content of your Pages, you need to define your FieldValues under `children`

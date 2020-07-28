@@ -59,6 +59,7 @@
         <service id="sherlockode_advanced_content.controller.page" class="Sherlockode\AdvancedContentBundle\Controller\PageController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
                 <argument type="service" id="Psr\Container\ContainerInterface" />

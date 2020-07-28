@@ -402,10 +402,12 @@ jQuery(function ($) {
     
     function initContentSlug() {
         let contentName = $('.acb-content-name');
-        let contentSlug = $('.acb-content-slug');
-        if (contentName.length > 0 && contentSlug.length > 0) {
-            applySlug(contentName, contentSlug);
-        }
+        contentName.each(function(){
+            let contentSlug = $('.acb-content-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
+            if (contentSlug.length > 0) {
+                applySlug($(this), contentSlug);
+            }
+        });
     }
 
     //////////
@@ -422,10 +424,14 @@ jQuery(function ($) {
         }
     });
 
-    let pageTitle = $('.acb-page-title');
-    let pageSlug = $('.acb-page-slug');
-    if (pageTitle.length > 0 && pageSlug.length > 0) {
-        applySlug(pageTitle, pageSlug);
+    let pageTitle = $('.acb-pagemeta-title');
+    if (pageTitle.length > 0) {
+        pageTitle.each(function(){
+            let pageSlug = $('.acb-pagemeta-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
+            if (pageSlug.length > 0) {
+                applySlug($(this), pageSlug);
+            }
+        });
     }
 
     $('.acb_translations .acb-duplicate-locale-content').on('click', function () {
@@ -451,10 +457,10 @@ jQuery(function ($) {
         });
     });
     $('.acb_translations .acb-delete-locale-content').on('click', function () {
-        if (confirm('Delete this content ?')) {
+        if (confirm($(this).data('confirm'))) {
             $.ajax($(this).data('url'), {
                 method: 'POST',
-                data: {id: $(this).data('contentId')},
+                data: {id: $(this).data('entityId')},
             }).done(function () {
                 window.location.reload();
             });

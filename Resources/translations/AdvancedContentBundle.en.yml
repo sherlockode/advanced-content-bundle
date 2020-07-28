@@ -54,6 +54,8 @@ content:
     duplicate:
         select_language: Choose a locale to duplicate from
         validate: Validate
+    delete:
+        validate: Delete this content?
 field_type:
     text:
         label: Text
@@ -151,8 +153,10 @@ page:
             label: Page
             general: General
             content: Content
+            meta: Meta
         title: Title
         slug: Slug
+        meta_title: Meta Title
         meta_description: Meta Description
         status: Status
         statuses:
@@ -161,8 +165,14 @@ page:
             trash: Trash
         content: Content
         page_type: Page type
+        page_identifier: Identifier
+        page_meta: Meta
     errors:
         alert_change_type: Warning, changing the page type will lead to content deletion. Are you sure you want to continue?
+    duplicate:
+        validate: Validate
+    delete:
+        validate: Delete this meta?
 init:
     title: 'Start importing %entity%'
     errors:
@@ -173,6 +183,7 @@ init:
         field_missing_data: You need to define the name / the type of the Field
         layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
+        page_missing_metas: You need to define the page metas
         field_value_missing_slug: You need to define the slug of the FieldValue in "%contentName%"
         field_group_value_missing_name: You need to define the name of the FieldGroupValue
         content_missing_name: You need to define the name of the content

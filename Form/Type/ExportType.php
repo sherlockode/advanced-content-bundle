@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
+use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -45,7 +46,9 @@ class ExportType extends AbstractType
             ->add('page', EntityType::class, [
                 'label' => 'tools.export.page',
                 'class' => $this->configurationManager->getEntityClass('page'),
-                'choice_label' => 'title',
+                'choice_label' => function(PageInterface $page) {
+                    return $page->getPageMeta()->getTitle();
+                },
                 'expanded' => true,
                 'multiple' => true,
                 'attr' => ['class' => 'acb-export-entity'],

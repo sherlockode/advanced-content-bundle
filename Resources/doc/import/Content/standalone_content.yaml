@@ -2,6 +2,7 @@ contents:
     standalone-content:
         name: Standalone Content
         contentType: standalone-content-type
+        locale: en
         children:
             -
                 slug: select-field

@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
+use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 
 class PageManager
@@ -168,5 +169,17 @@ class PageManager
         }
 
         return $shouldFlush;
+    }
+
+    /**
+     * Get page meta by its id
+     *
+     * @param int $id
+     *
+     * @return null|PageMetaInterface
+     */
+    public function getPageMetaById($id)
+    {
+        return $this->em->getRepository($this->configurationManager->getEntityClass('page_meta'))->find($id);
     }
 }

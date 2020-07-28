@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
+use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 
 class PageImport extends AbstractImport
@@ -23,25 +24,19 @@ class PageImport extends AbstractImport
     }
 
     /**
-     * @param string $slug
+     * @param string $pageIdentifier
      * @param array  $pageData
      */
-    protected function importEntity($slug, $pageData)
+    protected function importEntity($pageIdentifier, $pageData)
     {
-        if (!isset($pageData['title'])) {
-            $this->errors[] = $this->translator->trans('init.errors.page_missing_data', [], 'AdvancedContentBundle');
+        if (empty($pageData['metas'])) {
+            $this->errors[] = $this->translator->trans('init.errors.page_missing_metas', [], 'AdvancedContentBundle');
 
             return;
         }
 
-        if (isset($pageData['title'])) {
-            $title = $pageData['title'];
-        } else {
-            $title = $slug;
-        }
-
         $page = $this->em->getRepository($this->entityClasses['page'])->findOneBy([
-            'slug' => $slug,
+            'pageIdentifier' => $pageIdentifier,
         ]);
         if (!$page instanceof PageInterface) {
             $page = new $this->entityClasses['page'];
@@ -50,10 +45,8 @@ class PageImport extends AbstractImport
             return;
         }
 
-        $page->setTitle($title);
-        $page->setSlug($slug);
+        $page->setPageIdentifier($pageIdentifier);
         $page->setStatus($pageData['status'] ?? PageInterface::STATUS_DRAFT);
-        $page->setMetaDescription($pageData['meta'] ?? '');
 
         $pageType = null;
         if (isset($pageData['pageType'])) {
@@ -126,8 +119,8 @@ class PageImport extends AbstractImport
                         /** @var ContentInterface $content */
                         $content = new $this->entityClasses['content'];
                         $content->setContentType($contentType);
-                        $content->setName($page->getTitle());
-                        $content->setSlug($page->getSlug());
+                        $content->setName($page->getPageIdentifier());
+                        $content->setSlug($page->getPageIdentifier());
                         $content->setLocale($locale);
                         $page->addContent($content);
                         $this->em->persist($content);
@@ -142,6 +135,34 @@ class PageImport extends AbstractImport
                     }
                 }
             }
+        }
+
+        $existingPageMetas = [];
+        foreach ($page->getPageMetas() as $pageMeta) {
+            $existingPageMetas[$pageMeta->getLocale()] = $pageMeta;
+        }
+        foreach ($pageData['metas'] as $locale => $metaData) {
+            if (!isset($metaData['title']) || !isset($metaData['slug'])) {
+                $this->errors[] = $this->translator->trans('init.errors.page_missing_data', [], 'AdvancedContentBundle');
+
+                continue;
+            }
+
+            $title = $metaData['title'];
+            $slug = $metaData['slug'];
+
+            if (isset($existingPageMetas[$locale])) {
+                $pageMeta = $existingPageMetas[$locale];
+            } else {
+                /** @var PageMetaInterface $pageMeta */
+                $pageMeta = new $this->entityClasses['page_meta'];
+                $pageMeta->setLocale($locale);
+                $page->addPageMeta($pageMeta);
+            }
+            $pageMeta->setTitle($title);
+            $pageMeta->setSlug($slug);
+            $pageMeta->setMetaTitle($metaData['meta_title'] ?? null);
+            $pageMeta->setMetaDescription($metaData['meta_description'] ?? null);
         }
 
         $this->em->persist($page);

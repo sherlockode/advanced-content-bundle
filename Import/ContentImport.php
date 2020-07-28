@@ -108,6 +108,7 @@ class ContentImport extends AbstractImport
         $content->setSlug($slug);
         $content->setName($contentData['name']);
         $content->setContentType($contentType);
+        $content->setLocale($contentData['locale'] ?? null);
         if (isset($contentData['children'])) {
             $this->createFieldValues($contentData['children'], $content);
         }

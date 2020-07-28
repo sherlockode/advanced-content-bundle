@@ -41,12 +41,13 @@ class ContentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $token = uniqid('content_');
         $fields = $this->contentTypeManager->getOrderedFields($options['contentType']);
 
         $builder
             ->add('name', TextType::class, [
                 'label' => 'content.form.name',
-                'attr' => ['class' => 'acb-content-name'],
+                'attr' => ['class' => 'acb-content-name', 'data-slug-token' => $token],
             ])
             ->add('slug', TextType::class)
             ->add('locale', TextType::class, [
@@ -59,7 +60,7 @@ class ContentType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
             $form = $event->getForm();
             /** @var ContentInterface $content */
             $content = $event->getData();
@@ -70,7 +71,7 @@ class ContentType extends AbstractType
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'content.form.slug',
-                    'attr' => ['class' => $slugClass],
+                    'attr' => ['class' => $slugClass, 'data-slug-token' => $token],
                 ])
             ;
             if ($form->getParent()) {

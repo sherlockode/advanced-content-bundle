@@ -21,8 +21,6 @@ class PageExport
     public function exportData(PageInterface $page)
     {
         $data = [];
-        $data['title'] = $page->getTitle();
-        $data['meta'] = $page->getMetaDescription();
         $data['status'] = $page->getStatus();
         if ($page->getPageType() instanceof PageTypeInterface) {
             $data['pageType'] = $page->getPageType()->getName();
@@ -41,9 +39,23 @@ class PageExport
             $data['contents'] = $contentData;
         }
 
+        $metaData = [];
+        foreach ($page->getPageMetas() as $pageMeta) {
+            $localeMeta = [];
+            $localeMeta['title'] = $pageMeta->getTitle();
+            $localeMeta['slug'] = $pageMeta->getSlug();
+            $localeMeta['meta_title'] = $pageMeta->getMetaTitle();
+            $localeMeta['meta_description'] = $pageMeta->getMetaDescription();
+
+            $metaData[$pageMeta->getLocale()] = $localeMeta;
+        }
+        if (count($metaData) > 0) {
+            $data['metas'] = $metaData;
+        }
+
         $data = [
             'pages' => [
-                $page->getSlug() => $data,
+                $page->getPageIdentifier() => $data,
             ],
         ];
 
