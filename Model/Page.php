@@ -49,11 +49,6 @@ abstract class Page implements PageInterface
      */
     protected $pageMetas;
 
-    /**
-     * @var PageMetaInterface
-     */
-    protected $pageMeta;
-
     public function __construct()
     {
         $this->contents = new ArrayCollection();

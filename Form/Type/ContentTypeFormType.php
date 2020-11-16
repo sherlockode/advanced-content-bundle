@@ -101,7 +101,7 @@ class ContentTypeFormType extends AbstractType
             ->add('page', EntityType::class, [
                 'label' => 'content_type.form.page',
                 'class' => $this->configurationManager->getEntityClass('page'),
-                'choice_label' => 'title',
+                'choice_label' => 'pageMeta.title',
                 'required' => false,
                 'attr' => ['class' => 'acb-contenttype-page'],
             ])
