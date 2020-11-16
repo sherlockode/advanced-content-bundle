@@ -122,7 +122,7 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
         $values = [];
         foreach ($value as $valueId) {
             if (!empty($options[$valueId])) {
-                $values[] = $options[$valueId];
+                $values[$valueId] = $options[$valueId];
             }
         }
 
