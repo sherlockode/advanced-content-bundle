@@ -45,14 +45,14 @@ Field Types
 
 ## Custom FieldType
 
-You can create your own FieldType
+You can create your own FieldType class matching your needs.
 
 ### FieldType Class
 
-Your class must implement \Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface
+Your class must implement `\Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface`
 
-It can inherit \Sherlockode\AdvancedContentBundle\FieldType\AbstractFieldType 
-which already define some of the interface methods for standard behavior.
+It can inherit `\Sherlockode\AdvancedContentBundle\FieldType\AbstractFieldType`
+which already defines some of the interface methods for standard behavior.
 
 You will need to define a unique code for your field.
 
@@ -73,11 +73,11 @@ An abstract Entity FieldType is available. By extending it, you can create your 
 
 ### Entity FieldType Class
 
-Your class must extend Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity
+Your class must extend `Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity`
 At least 3 methods must be defined:
-- getCode() - unique code for your field type
-- getEntityClass() - class of your entity
-- getEntityChoiceLabel() - property used for display in the Content form
+- `getCode()` - unique code for your field type
+- `getEntityClass()` - class of your entity
+- `getEntityChoiceLabel()` - property used for display in the Content form
 
 By default, to store selected choice, we will use the property `id`. 
 If you want to use another unique identifier for your entity, you can override `getUniqueFieldIdentifier()`.
