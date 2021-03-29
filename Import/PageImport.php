@@ -97,7 +97,7 @@ class PageImport extends AbstractImport
                 $this->em->remove($content);
             }
             if (!empty($pageData['contents'])) {
-                $this->errors[] = $this->translator->trans('init.errors.page_no_content_type', ['%page%' => $pageData['title']], 'AdvancedContentBundle');
+                $this->errors[] = $this->translator->trans('init.errors.page_no_content_type', ['%page%' => $pageIdentifier], 'AdvancedContentBundle');
             }
         } else {
             foreach ($page->getContents() as $content) {
