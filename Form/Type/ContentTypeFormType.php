@@ -112,7 +112,7 @@ class ContentTypeFormType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options) {
             $form = $event->getForm();
             /** @var ContentTypeInterface $contentType */
             $contentType = $options['contentType'];
@@ -135,7 +135,7 @@ class ContentTypeFormType extends AbstractType
                 ])
             ;
         });
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             $data = $event->getData() ?? [];
 
