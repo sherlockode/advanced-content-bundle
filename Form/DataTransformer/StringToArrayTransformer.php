@@ -18,7 +18,11 @@ class StringToArrayTransformer implements DataTransformerInterface
         if (empty($valueAsString)) {
             return [];
         }
-        return unserialize($valueAsString);
+        try {
+            return unserialize($valueAsString);
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
     /**
