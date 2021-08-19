@@ -139,6 +139,16 @@ class ExportCommand extends Command
             $this->symfonyStyle->success($this->translator->trans('init.export_success', ['%dir%' => $this->sourceDirectory], 'AdvancedContentBundle'));
         } catch (\Exception $e) {
             $this->symfonyStyle->error($e->getMessage());
+
+            if (defined(sprintf('%s::FAILURE', get_class($this)))) {
+                return self::FAILURE;
+            }
+
+            return;
+        }
+
+        if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
+            return self::SUCCESS;
         }
     }
 
