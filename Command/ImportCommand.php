@@ -128,6 +128,16 @@ class ImportCommand extends Command
 
         } catch (\Exception $e) {
             $this->symfonyStyle->error($e->getMessage());
+
+            if (defined(sprintf('%s::FAILURE', get_class($this)))) {
+                return self::FAILURE;
+            }
+
+            return;
+        }
+
+        if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
+            return self::SUCCESS;
         }
     }
 
