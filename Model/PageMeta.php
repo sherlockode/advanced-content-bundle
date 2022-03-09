@@ -2,7 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-abstract class PageMeta implements PageMetaInterface
+use Sherlockode\AdvancedContentBundle\Locale\TranslatableInterface;
+
+abstract class PageMeta implements PageMetaInterface, TranslatableInterface
 {
     /**
      * @var int

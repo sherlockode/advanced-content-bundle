@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface;
+use Sherlockode\AdvancedContentBundle\Locale\TranslatableInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -29,6 +30,23 @@ class TranslationListener
     {
         $this->requestStack = $requestStack;
         $this->localeProvider = $localeProvider;
+    }
+
+    public function prePersist(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        if (!$entity instanceof TranslatableInterface) {
+            return;
+        }
+
+        if ($this->localeProvider->isMultilangEnabled()) {
+            return;
+        }
+
+        if (!$entity->getLocale()) {
+            $entity->setLocale($this->localeProvider->getDefaultLocale());
+        }
     }
 
     public function postLoad(LifecycleEventArgs $args)
