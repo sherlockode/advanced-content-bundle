@@ -46,6 +46,7 @@
         <service id="sherlockode_advanced_content.translation_listener" class="Sherlockode\AdvancedContentBundle\EventListener\TranslationListener">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
+            <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
             <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
         </service>
     </services>
