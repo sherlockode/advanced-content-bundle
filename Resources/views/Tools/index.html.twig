@@ -57,7 +57,9 @@
                         </div>
                     </div>
                     <button class="btn btn-success" type="submit">{{ 'tools.export.btn'|trans }}</button>
-                    {{ form_widget(exportForm._token) }}
+                    {% if exportForm._token is defined %}
+                        {{ form_widget(exportForm._token) }}
+                    {% endif %}
                     {{ form_end(exportForm, {'render_rest': false}) }}
                 </div>
             </div>
