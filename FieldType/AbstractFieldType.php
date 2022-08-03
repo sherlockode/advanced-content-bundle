@@ -167,6 +167,14 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
+     * @return bool
+     */
+    public function canHaveChildren()
+    {
+        return false;
+    }
+
+    /**
      * Get form field type
      *
      * @return string

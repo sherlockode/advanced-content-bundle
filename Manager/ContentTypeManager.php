@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
+use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
 
 class ContentTypeManager
 {
@@ -19,15 +20,25 @@ class ContentTypeManager
     private $em;
 
     /**
-     * ContentManager constructor.
+     * @var FieldManager
+     */
+    private $fieldManager;
+
+    /**
+     * ContentTypeManager constructor.
      *
      * @param ConfigurationManager   $configurationManager
      * @param EntityManagerInterface $em
+     * @param FieldManager           $fieldManager
      */
-    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
-    {
+    public function __construct(
+        ConfigurationManager $configurationManager,
+        EntityManagerInterface $em,
+        FieldManager $fieldManager
+    ) {
         $this->configurationManager = $configurationManager;
         $this->em = $em;
+        $this->fieldManager = $fieldManager;
     }
 
     /**
@@ -86,22 +97,49 @@ class ContentTypeManager
             if ($fieldTypes[$field->getId()] == $field->getType()) {
                 continue;
             }
-
+            $contentType->removeField($field);
             $this->em->remove($field);
 
-            $fieldClass = $this->configurationManager->getEntityClass('field');
-            /** @var FieldInterface $newField */
-            $newField = new $fieldClass;
-            $newField->setType($field->getType());
-            $newField->setContentType($field->getContentType());
-            $newField->setName($field->getName());
-            $newField->setSlug($field->getSlug());
-            $newField->setRequired($field->isRequired());
-            $newField->setPosition($field->getPosition());
-            $newField->setOptions($field->getOptions());
-            $newField->setHint($field->getHint());
+            $layoutClass = $this->configurationManager->getEntityClass('layout');
+            $newField = $this->duplicateField($field);
+            $contentType->addField($newField);
+            foreach ($field->getChildren() as $layout) {
+                if ($this->fieldManager->getFieldTypeByCode($field->getType())->canHaveChildren()) {
+                    /** @var LayoutInterface $newLayout */
+                    $newLayout = new $layoutClass;
+                    $newLayout->setName($layout->getName());
+                    $newLayout->setPosition($layout->getPosition());
+                    $newField->addChild($newLayout);
+                }
+                $field->removeChild($layout);
+
+                foreach ($layout->getChildren() as $childField) {
+                    $newChildField = $this->duplicateField($childField);
+                    $newLayout->addChild($newChildField);
+                }
+            }
             $this->em->persist($newField);
         }
+    }
+
+    /**
+     * @param FieldInterface $field
+     *
+     * @return FieldInterface
+     */
+    private function duplicateField(FieldInterface $field)
+    {
+        $fieldClass = $this->configurationManager->getEntityClass('field');
+        $newField = new $fieldClass;
+        $newField->setType($field->getType());
+        $newField->setName($field->getName());
+        $newField->setSlug($field->getSlug());
+        $newField->setRequired($field->isRequired());
+        $newField->setPosition($field->getPosition());
+        $newField->setOptions($field->getOptions());
+        $newField->setHint($field->getHint());
+
+        return $newField;
     }
 
     /**

@@ -107,4 +107,9 @@ interface FieldTypeInterface
      * @return mixed
      */
     public function getRawValue(FieldValueInterface $fieldValue);
+
+    /**
+     * @return bool
+     */
+    public function canHaveChildren();
 }

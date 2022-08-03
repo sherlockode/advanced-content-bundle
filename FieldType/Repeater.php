@@ -113,4 +113,12 @@ class Repeater extends AbstractFieldType
     {
         return 'layout';
     }
+
+    /**
+     * @return bool
+     */
+    public function canHaveChildren()
+    {
+        return true;
+    }
 }

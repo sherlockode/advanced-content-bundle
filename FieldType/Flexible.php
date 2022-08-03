@@ -92,4 +92,12 @@ class Flexible extends AbstractFieldType
     {
         return '';
     }
+
+    /**
+     * @return bool
+     */
+    public function canHaveChildren()
+    {
+        return true;
+    }
 }
