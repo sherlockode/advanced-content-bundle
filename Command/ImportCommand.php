@@ -107,6 +107,12 @@ class ImportCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Directory in which the resource files to import are located (for file and image field types)'
             )
+            ->addOption(
+                'update',
+                'u',
+                InputOption::VALUE_NONE,
+                'Use this option to force update (similar to init_command.allow_update configuration)'
+            )
         ;
     }
 
@@ -187,7 +193,12 @@ class ImportCommand extends Command
             $this->importManager->setFilesDirectory($filesDir);
         }
 
-        $this->importManager->setAllowUpdate($this->configurationManager->initCanUpdate());
+        $allowUpdate = $this->configurationManager->initCanUpdate();
+        if ($input->getOption('update') === true) {
+            $allowUpdate = true;
+        }
+
+        $this->importManager->setAllowUpdate($allowUpdate);
 
         $importTypes = $input->getOption('type');
         foreach ($importTypes as $importType) {
