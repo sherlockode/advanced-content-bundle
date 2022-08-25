@@ -23,41 +23,45 @@ jQuery(function ($) {
     initSortables();
 
     function initSortables() {
-        $(".acb-sortable-group").each(function(){
-            let ckeditorConfigs = {};
-            $(this).sortable({
-                containment: "parent",
-                items: '.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]',
-                cursor: "move",
-                axis: "y",
-                update: function(event, ui) {
-                    calculatePosition();
-                },
-                start: function (event, ui) {
-                    if (typeof CKEDITOR === 'undefined') {
-                        return;
-                    }
-                    // look for ckeditor instances in order to be able to rebuild them after drag
-                    ui.item.find('textarea').each(function () {
-                        if (typeof CKEDITOR.instances[this.id] === 'undefined') {
+        if (typeof $(this).sortable !== 'undefined') {
+            $(".acb-sortable-group").each(function () {
+                let ckeditorConfigs = {};
+                $(this).sortable({
+                    containment: "parent",
+                    items: '.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]',
+                    cursor: "move",
+                    axis: "y",
+                    update: function (event, ui) {
+                        calculatePosition();
+                    },
+                    start: function (event, ui) {
+                        if (typeof CKEDITOR === 'undefined') {
                             return;
                         }
-                        ckeditorConfigs[this.id] = CKEDITOR.instances[this.id].config;
-                        CKEDITOR.instances[this.id].destroy();
-                    })
-                },
-                stop: function (event, ui) {
-                    // rebuild destroyed ckeditor instances
-                    if (typeof CKEDITOR !== 'undefined') {
-                        return;
+                        // look for ckeditor instances in order to be able to rebuild them after drag
+                        ui.item.find('textarea').each(function () {
+                            if (typeof CKEDITOR.instances[this.id] === 'undefined') {
+                                return;
+                            }
+                            ckeditorConfigs[this.id] = CKEDITOR.instances[this.id].config;
+                            CKEDITOR.instances[this.id].destroy();
+                        })
+                    },
+                    stop: function (event, ui) {
+                        // rebuild destroyed ckeditor instances
+                        if (typeof CKEDITOR !== 'undefined') {
+                            return;
+                        }
+                        for (let id of Object.keys(ckeditorConfigs)) {
+                            CKEDITOR.replace(id, ckeditorConfigs[id]);
+                            delete ckeditorConfigs[id];
+                        }
                     }
-                    for (let id of Object.keys(ckeditorConfigs)) {
-                        CKEDITOR.replace(id, ckeditorConfigs[id]);
-                        delete ckeditorConfigs[id];
-                    }
-                }
+                });
             });
-        });
+        } else {
+            $('.element-position').show();
+        }
     }
 
     function calculatePosition() {
