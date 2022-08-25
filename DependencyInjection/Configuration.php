@@ -15,8 +15,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $tb = new TreeBuilder('sherlockode_advanced_content');
-        // BC layer for symfony/config < 4.2
-        $root = \method_exists($tb, 'getRootNode') ? $tb->getRootNode() : $tb->root('sherlockode_advanced_content');
+        $root = $tb->getRootNode();
 
         $root
             ->children()
