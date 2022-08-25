@@ -93,3 +93,6 @@
 .acb_translationFields {
     padding-top: 10px;
 }
+.element-position {
+    display: none;
+}

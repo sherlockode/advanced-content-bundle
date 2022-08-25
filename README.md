@@ -136,6 +136,11 @@ sherlockode_advanced_content:
 - [Export](Resources/doc/export.md)
 - [Usage](Resources/doc/usage.md)
 
+## Dependencies
+
+This bundle is compatible with webpack.
+jQuery library is mandatory.
+jQuery ui sortable is advised but not required.
 
 ## License
 

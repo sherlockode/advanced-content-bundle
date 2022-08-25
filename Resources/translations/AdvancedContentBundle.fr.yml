@@ -49,6 +49,7 @@ content:
         locale: Locale
         field_values: Champs
         add_group: Ajouter un groupe
+        position: Ordre
         field:
             remove: Supprimer
     duplicate:

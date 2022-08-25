@@ -82,6 +82,9 @@
             {{- block('acb_panel_actions') -}}
         </div>
         <div class="panel-body collapse" id="layout-{{ fieldId }}">
+            <div class="element-position">
+                {{ form_row(form.position) }}
+            </div>
             {% for child in form %}
                 {{ form_row(child) }}
             {% endfor %}

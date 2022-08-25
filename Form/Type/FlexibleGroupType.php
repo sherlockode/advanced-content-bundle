@@ -8,6 +8,7 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -43,7 +44,10 @@ class FlexibleGroupType extends AbstractType
         $builder->add('layout', HiddenType::class);
         $builder->get('layout')->addViewTransformer(new LayoutToIdTransformer($layoutRepository));
 
-        $builder->add('position', HiddenType::class);
+        $builder->add('position', NumberType::class, [
+            'label' => 'content.form.position',
+            'required' => true,
+        ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($options) {
             $form = $event->getForm();
@@ -82,6 +86,7 @@ class FlexibleGroupType extends AbstractType
             'data_class' => $this->configurationManager->getEntityClass('field_group_value'),
             'label' => false,
             'parentFormId' => null,
+            'translation_domain' => 'AdvancedContentBundle',
         ]);
         $resolver->setRequired(['contentType']);
     }
