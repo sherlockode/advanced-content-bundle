@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\IntToBooleanTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Form;
@@ -59,11 +58,9 @@ class Boolean extends AbstractChoice
     /**
      * Get model transformer for value field
      *
-     * @param FieldInterface $field
-     *
      * @return null
      */
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
         return null;
     }

@@ -2,8 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Sherlockode\AdvancedContentBundle\FieldType\Text;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +14,7 @@ class FieldValueType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $options['field_type']->buildContentFieldValue($builder, $options['field']);
+        $options['field_type']->buildContentFieldValue($builder);
     }
 
     /**
@@ -24,7 +22,7 @@ class FieldValueType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['field_type' => Text::class, 'field' => FieldInterface::class]);
+        $resolver->setRequired(['field_type']);
     }
 
     public function getBlockPrefix()

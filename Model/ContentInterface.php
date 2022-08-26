@@ -42,22 +42,6 @@ interface ContentInterface
     public function setSlug($slug);
 
     /**
-     * Get content's content type
-     *
-     * @return ContentTypeInterface
-     */
-    public function getContentType();
-
-    /**
-     * Set content's content type
-     *
-     * @param ContentTypeInterface $contentType
-     *
-     * @return $this
-     */
-    public function setContentType(ContentTypeInterface $contentType);
-
-    /**
      * Get content's field values
      *
      * @return Collection|FieldValueInterface[]

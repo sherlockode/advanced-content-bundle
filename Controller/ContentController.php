@@ -4,9 +4,11 @@ namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
+use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
@@ -32,6 +34,11 @@ class ContentController extends AbstractController
     private $contentManager;
 
     /**
+     * @var FieldManager
+     */
+    private $fieldManager;
+
+    /**
      * @var ConfigurationManager
      */
     private $configurationManager;
@@ -46,19 +53,37 @@ class ContentController extends AbstractController
      *
      * @param EntityManagerInterface $em
      * @param ContentManager         $contentManager
+     * @param FieldManager           $fieldManager
      * @param ConfigurationManager   $configurationManager
      * @param FormFactoryInterface   $formFactory
      */
     public function __construct(
         EntityManagerInterface $em,
         ContentManager $contentManager,
+        FieldManager $fieldManager,
         ConfigurationManager $configurationManager,
         FormFactoryInterface $formFactory
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
+        $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
         $this->formFactory = $formFactory;
+    }
+
+    public function fieldFormAction(Request $request)
+    {
+        $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
+        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, ['fieldType' => $fieldType->getCode()], [
+            'label' => $fieldType->getFormFieldLabel(),
+            'field_type' => $fieldType,
+            'csrf_protection' => false,
+        ]);
+        $form = $formBuilder->getForm();
+
+        return $this->render('@SherlockodeAdvancedContent/Content/_field_value.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

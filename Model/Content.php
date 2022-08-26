@@ -23,11 +23,6 @@ abstract class Content implements ContentInterface
     protected $slug;
 
     /**
-     * @var ContentTypeInterface
-     */
-    protected $contentType;
-
-    /**
      * @var Collection
      */
     protected $fieldValues;
@@ -104,26 +99,6 @@ abstract class Content implements ContentInterface
     public function setSlug($slug)
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return ContentTypeInterface
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
-    }
-
-    /**
-     * @param ContentTypeInterface $contentType
-     *
-     * @return $this
-     */
-    public function setContentType(ContentTypeInterface $contentType)
-    {
-        $this->contentType = $contentType;
 
         return $this;
     }

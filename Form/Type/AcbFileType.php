@@ -31,11 +31,11 @@ class AcbFileType extends AbstractType
                 $form
                     ->add('file', FileType::class, [
                         'label' => 'field_type.file.file',
-                        'required' => !$isFileUploaded && $options['field']->isRequired(),
+                        'required' => !$isFileUploaded,
                     ])
                 ;
 
-                if (!$options['field']->isRequired() && $isFileUploaded) {
+                if ($isFileUploaded) {
                     $form
                         ->add('delete', CheckboxType::class, [
                             'label' => 'field_type.file.delete',
@@ -63,7 +63,7 @@ class AcbFileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefault('translation_domain', 'AdvancedContentBundle');
-        $resolver->setRequired(['uploadManager', 'field']);
+        $resolver->setRequired(['uploadManager']);
     }
 
     /**

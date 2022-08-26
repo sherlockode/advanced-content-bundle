@@ -18,9 +18,9 @@ abstract class FieldValue implements FieldValueInterface
     protected $content;
 
     /**
-     * @var FieldInterface
+     * @var string
      */
-    protected $field;
+    protected $fieldType;
 
     /**
      * @var string
@@ -82,21 +82,21 @@ abstract class FieldValue implements FieldValueInterface
     }
 
     /**
-     * @return FieldInterface
+     * @return string
      */
-    public function getField()
+    public function getFieldType()
     {
-        return $this->field;
+        return $this->fieldType;
     }
 
     /**
-     * @param FieldInterface $field
+     * @param string $fieldType
      *
      * @return $this
      */
-    public function setField(FieldInterface $field)
+    public function setFieldType(string $fieldType)
     {
-        $this->field = $field;
+        $this->fieldType = $fieldType;
 
         return $this;
     }

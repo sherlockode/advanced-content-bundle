@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,15 +12,13 @@ class TextArea extends AbstractInputType
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        $fieldOptions = $this->getFieldOptions($field);
+        $fieldOptions = [];
 
-        $formFieldOptions = parent::getFormFieldValueOptions($field);
+        $formFieldOptions = parent::getFormFieldValueOptions();
         if (isset($fieldOptions['nbRows'])) {
             $formFieldOptions['attr'] = ['rows' => $fieldOptions['nbRows']];
         }

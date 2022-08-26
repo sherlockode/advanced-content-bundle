@@ -75,7 +75,6 @@ class MyContentController extends AbstractController
 
         $form = $this->createForm(ContentType::class, $content, [
             'action' => $this->generateUrl('sherlockode_acb_content_edit', ['id' => $content->getId()]),
-            'contentType' => $content->getContentType(),
         ]);
 
         $form->handleRequest($request);
@@ -102,7 +101,7 @@ class MyContentController extends AbstractController
         $contentEntityClass = $this->configurationManager->getEntityClass('content');
         $content = new $contentEntityClass;
 
-        $form = $this->createForm(ContentCreateType::class, $content, [
+        $form = $this->createForm(ContentType::class, $content, [
             'action' => $this->generateUrl('sherlockode_acb_content_create'),
         ]);
 
@@ -118,44 +117,6 @@ class MyContentController extends AbstractController
         return $this->render('@SherlockodeAdvancedContent/Content/create_content.html.twig', [
             'form' => $form->createView(),
             'data' => $content,
-        ]);
-    }
-
-    /**
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function createByTypeAction($id, Request $request)
-    {
-        $contentType = $this->contentTypeManager->getContentTypeById($id);
-
-        if ($contentType === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content_type'), $id)
-            );
-        }
-
-        $contentEntityClass = $this->configurationManager->getEntityClass('content');
-        $content = new $contentEntityClass;
-        $content->setContentType($contentType);
-
-        $form = $this->createForm(ContentType::class, $content, [
-            'action' => $this->generateUrl('sherlockode_acb_content_create_by_type', ['id' => $contentType->getId()]),
-            'contentType' => $content->getContentType(),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($content);
-            $this->em->flush();
-
-            return $this->redirectToRoute('sherlockode_acb_content_edit', ['id' => $content->getId()]);
-        }
-
-        return $this->render('@SherlockodeAdvancedContent/Content/_form.html.twig', [
-            'form' => $form->createView(),
         ]);
     }
 

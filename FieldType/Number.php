@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Form;
@@ -15,13 +14,11 @@ class Number extends AbstractFieldType
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        $fieldOptions = $this->getFieldOptions($field);
+        $fieldOptions = [];
 
         $formFieldOptions = [];
         if (isset($fieldOptions['minValue'])) {

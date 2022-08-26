@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\MessageType;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -57,13 +56,11 @@ class Message extends AbstractFieldType
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        $options = $field->getOptions();
+        $options = [];
 
         $message = '';
         if (isset($options['message'])) {

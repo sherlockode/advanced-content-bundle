@@ -6,6 +6,7 @@ use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -15,13 +16,15 @@ class ContentExtension extends AbstractExtension
      * @var FieldManager
     */
     private $fieldManager;
+    private $twig;
 
     /**
      * @param FieldManager $fieldManager
      */
-    public function __construct(FieldManager $fieldManager)
+    public function __construct(FieldManager $fieldManager, Environment $twig)
     {
         $this->fieldManager = $fieldManager;
+        $this->twig = $twig;
     }
 
     /**
@@ -34,7 +37,15 @@ class ContentExtension extends AbstractExtension
         return [
             new TwigFunction('acb_fields', [$this, 'getAllFieldValues'], ['is_safe' => ['html']]),
             new TwigFunction('acb_field', [$this, 'getContentFieldValue'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_render_field', [$this, 'renderFieldValue'], ['is_safe' => ['html']]),
         ];
+    }
+
+    public function renderFieldValue(FieldValueInterface $fieldValue)
+    {
+        $template = '@SherlockodeAdvancedContent/Content/text.html.twig';
+
+        return $this->twig->render($template, ['value' => $this->getFieldRawValue($fieldValue)]);
     }
 
     /**
@@ -103,6 +114,6 @@ class ContentExtension extends AbstractExtension
      */
     private function getFieldRawValue(FieldValueInterface $fieldValue)
     {
-        return $this->fieldManager->getFieldType($fieldValue->getField())->getRawValue($fieldValue);
+        return $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType())->getRawValue($fieldValue);
     }
 }

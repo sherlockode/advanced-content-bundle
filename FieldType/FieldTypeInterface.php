@@ -11,13 +11,16 @@ use Symfony\Component\Form\Form;
 interface FieldTypeInterface
 {
     /**
+     * @return string
+     */
+    public function getFormFieldLabel();
+
+    /**
      * Get options to apply on field value
-     *
-     * @param FieldInterface $field
      *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field);
+    public function getFormFieldValueOptions();
 
     /**
      * Get field's options
@@ -32,11 +35,10 @@ interface FieldTypeInterface
      * Add field value's field(s) to content form
      *
      * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
      *
      * @return void
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field);
+    public function buildContentFieldValue(FormBuilderInterface $builder);
 
     /**
      * Add field's options
@@ -80,21 +82,14 @@ interface FieldTypeInterface
     /**
      * Get model transformer for value field
      *
-     * @param FieldInterface $field
-     *
      * @return DataTransformerInterface|null
      */
-    public function getValueModelTransformer(FieldInterface $field);
+    public function getValueModelTransformer();
 
     /**
-     * Update fieldValue value before saving it
-     *
-     * @param FieldValueInterface $fieldValue
-     * @param array               $changeSet
-     *
-     * @return void
+     * @return string
      */
-    public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet);
+    public function getHint();
 
     /**
      * @return string

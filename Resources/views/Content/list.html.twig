@@ -16,7 +16,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{ 'content_type.label'|trans }}</th>
+                        <th>{{ 'content.form.name'|trans }}</th>
                         <th>{{ 'actions'|trans }}</th>
                     </tr>
                     </thead>
@@ -24,7 +24,7 @@
                     {% for content in contents %}
                         <tr>
                             <td>{{ content.id }}</td>
-                            <td>{{ content.contentType.name }}</td>
+                            <td>{{ content.name }}</td>
                             <td>
                                 <a href="{{ path('sherlockode_acb_content_show', {id: content.id}) }}">{{ 'show'|trans }}</a>
                                 | <a href="{{ path('sherlockode_acb_content_edit', {id: content.id}) }}">{{ 'edit'|trans }}</a>

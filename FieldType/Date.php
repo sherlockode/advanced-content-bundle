@@ -4,7 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToDateTimeTransformer;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -67,13 +66,11 @@ class Date extends AbstractFieldType
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        $fieldOptions = $this->getFieldOptions($field);
+        $fieldOptions = [];
 
         if (!isset($fieldOptions['time'])) {
             $fieldOptions['time'] = $this->configurationManager->getDefaultDateIncludeTime();
@@ -90,6 +87,7 @@ class Date extends AbstractFieldType
         $formFieldOptions['attr'] = ['class' => $class];
         $formFieldOptions['widget'] = 'single_text';
         $formFieldOptions['format'] = $format;
+        $formFieldOptions['html5'] = false;
 
         return $formFieldOptions;
     }
@@ -97,11 +95,9 @@ class Date extends AbstractFieldType
     /**
      * Get model transformer for value field
      *
-     * @param FieldInterface $field
-     *
      * @return DataTransformerInterface
      */
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
         return new StringToDateTimeTransformer();
     }

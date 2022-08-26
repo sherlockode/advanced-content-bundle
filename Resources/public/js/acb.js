@@ -512,5 +512,24 @@ jQuery(function ($) {
             calculatePosition();
         }).fail(ajaxFailCallback);
     }
+
+    $('.acb-add-field-container').find('button').on('click', function () {
+        let form = $(this).closest('form');
+        let counter = form.data('widget-counter') || form.children('fieldset').length;
+
+        $.ajax({
+            url: $(this).data('form-field-url'),
+            data: {'type': $('.acb-add-field-container').find('select').val()},
+            type: 'GET'
+        }).done(function (data) {
+            let html = data.replace(/__field_name__/g, 'content[fieldValues][__name__]');
+            html = html.replace(/__name__/g, counter++);
+            form.data('widget-counter', counter);
+            $('.acb-add-field-container').before(html);
+        }).fail(ajaxFailCallback);
+    });
+    $('body').on('click', '.acb-field-value-remove', function () {
+        $(this).parent().remove();
+    });
 });
 })();

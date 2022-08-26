@@ -5,7 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -43,23 +42,19 @@ class File extends AbstractFieldType
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        return ['uploadManager' => $this->uploadManager, 'field' => $field];
+        return ['uploadManager' => $this->uploadManager];
     }
 
     /**
      * Get model transformer for value field
      *
-     * @param FieldInterface $field
-     *
      * @return DataTransformerInterface
      */
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
         return new StringToArrayTransformer();
     }
@@ -143,36 +138,5 @@ class File extends AbstractFieldType
         }
 
         return $value;
-    }
-
-    /**
-     * Update fieldValue value before saving it
-     *
-     * @param FieldValueInterface $fieldValue
-     * @param array               $changeSet
-     *
-     * @return void
-     */
-    public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet)
-    {
-        if (!isset($changeSet['value'])) {
-            return;
-        }
-
-        $oldValue = unserialize($changeSet['value'][0]);
-        $newValue = unserialize($changeSet['value'][1]);
-
-        if ($newValue['src'] == '' && (!isset($newValue['delete']) || !$newValue['delete'])) {
-            $newValue['src'] = $oldValue['src'];
-        }
-
-        if (isset($newValue['delete'])) {
-            if ($newValue['delete']) {
-                $this->uploadManager->remove($oldValue['src']);
-            }
-            unset($newValue['delete']);
-        }
-
-        $fieldValue->setValue(serialize($newValue));
     }
 }

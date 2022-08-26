@@ -4,11 +4,20 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 
 abstract class AbstractFieldType implements FieldTypeInterface
 {
+    /**
+     * @return string
+     */
+    public function getFormFieldLabel()
+    {
+        return 'field_type.' . $this->getCode() . '.label';
+    }
+
     /**
      * Get field's options
      *
@@ -25,18 +34,18 @@ abstract class AbstractFieldType implements FieldTypeInterface
      * Add field value's field(s) to content form
      *
      * @param FormBuilderInterface $builder
-     * @param FieldInterface       $field
      *
      * @return void
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field)
+    public function buildContentFieldValue(FormBuilderInterface $builder)
     {
+        $builder->add('fieldType', HiddenType::class);
         $builder->add('value', $this->getFormFieldType(), array_merge(
-            $this->getDefaultFormFieldValueOptions($field),
-            $this->getFormFieldValueOptions($field)
+            $this->getDefaultFormFieldValueOptions(),
+            $this->getFormFieldValueOptions()
         ));
 
-        $modelTransformer = $this->getValueModelTransformer($field);
+        $modelTransformer = $this->getValueModelTransformer();
         if ($modelTransformer !== null) {
             $builder->get('value')
                 ->addModelTransformer($modelTransformer);
@@ -87,11 +96,9 @@ abstract class AbstractFieldType implements FieldTypeInterface
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
         return [];
     }
@@ -111,11 +118,9 @@ abstract class AbstractFieldType implements FieldTypeInterface
     /**
      * Get model transformer for value field
      *
-     * @param FieldInterface $field
-     *
      * @return null
      */
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
         return null;
     }
@@ -123,29 +128,20 @@ abstract class AbstractFieldType implements FieldTypeInterface
     /**
      * Add field hint to field value form
      *
-     * @param $field
-     *
      * @return array
      */
-    public function getDefaultFormFieldValueOptions(FieldInterface $field)
+    public function getDefaultFormFieldValueOptions()
     {
         $defaultOptions = ['label' => false];
-        if ($field->getHint()) {
-            $defaultOptions['attr']['help'] = $field->getHint();
+        if ($this->getHint()) {
+            $defaultOptions['attr']['help'] = $this->getHint();
         }
         return $defaultOptions;
     }
 
-    /**
-     * Update fieldValue value before saving it
-     *
-     * @param FieldValueInterface $fieldValue
-     * @param array               $changeSet
-     *
-     * @return void
-     */
-    public function updateFieldValueValue(FieldValueInterface $fieldValue, $changeSet)
+    public function getHint()
     {
+        return null;
     }
 
     /**

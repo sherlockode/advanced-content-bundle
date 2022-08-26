@@ -6,7 +6,6 @@ use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransfor
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupCollectionType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleType;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,9 +30,9 @@ class Flexible extends AbstractFieldType
         return FormType::class;
     }
 
-    public function buildContentFieldValue(FormBuilderInterface $builder, FieldInterface $field)
+    public function buildContentFieldValue(FormBuilderInterface $builder)
     {
-        parent::buildContentFieldValue($builder, $field);
+        parent::buildContentFieldValue($builder);
 
         $builder
             ->add('children', FlexibleGroupCollectionType::class, [
@@ -43,7 +42,7 @@ class Flexible extends AbstractFieldType
         ;
     }
 
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
         return new StringToArrayTransformer();
     }

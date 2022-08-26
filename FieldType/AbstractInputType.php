@@ -17,9 +17,9 @@ abstract class AbstractInputType extends AbstractFieldType
      *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        $fieldOptions = $this->getFieldOptions($field);
+        $fieldOptions = [];
 
         $formFieldOptions = [];
         if (isset($fieldOptions['minLength'])) {

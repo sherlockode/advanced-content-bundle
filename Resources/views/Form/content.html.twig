@@ -3,6 +3,7 @@
 {% extends '@SherlockodeAdvancedContent/Form/common.html.twig' %}
 
 {% block acb_field_value_widget %}
+    <button type="button" class="acb-field-value-remove">{{ 'content.form.field.remove'|trans }}</button>
     {% for child in form %}
         {{ form_row(child) }}
     {% endfor %}

@@ -8,16 +8,13 @@
         <div class="row">
             <div class="col-md-12">
                 <h4>{{ 'content.create'|trans }}</h4>
-                <div class="form-group">
-                    {{ form_label(form.contentType) }}
-                    {{ form_widget(form.contentType, {'attr': {'class': 'create-from-content-type'}}) }}
-                </div>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-md-12">
-                <div class="content-fields" data-change-content-type-url="{{ path('sherlockode_acb_content_create_by_type', {id: '__TO_REPLACE__'}) }}">
+                <div class="content-fields">
+                    {{ include('@SherlockodeAdvancedContent/Content/_form.html.twig') }}
                 </div>
             </div>
         </div>

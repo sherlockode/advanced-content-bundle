@@ -28,20 +28,16 @@ interface FieldValueInterface
     public function setContent(ContentInterface $content);
 
     /**
-     * Get field value's field
-     *
-     * @return FieldInterface
+     * @return string
      */
-    public function getField();
+    public function getFieldType();
 
     /**
-     * Set field value's field
-     *
-     * @param FieldInterface $field
+     * @param string $fieldType
      *
      * @return $this
      */
-    public function setField(FieldInterface $field);
+    public function setFieldType(string $fieldType);
 
     /**
      * Get field value's value

@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\SerializedStringToStringTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
@@ -28,11 +27,9 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
         $formFieldOptions = [];
         $formFieldOptions['choices'] = array_flip($this->getFieldOptionsArray($field));
@@ -136,11 +133,11 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
      *
      * @return DataTransformerInterface
      */
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
-        if ($this->getIsMultipleChoice($field)) {
+        /*if ($this->getIsMultipleChoice($field)) {
             return new StringToArrayTransformer();
-        }
+        }*/
 
         return new SerializedStringToStringTransformer();
     }

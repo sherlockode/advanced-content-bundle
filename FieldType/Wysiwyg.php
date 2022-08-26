@@ -4,7 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
@@ -27,13 +26,11 @@ class Wysiwyg extends AbstractFieldType
     /**
      * Get options to apply on field value
      *
-     * @param FieldInterface $field
-     *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
-        $fieldOptions = $this->getFieldOptions($field);
+        $fieldOptions = [];
 
         if (!isset($fieldOptions['toolbar'])) {
             $fieldOptions['toolbar'] = $this->configurationManager->getDefaultWysiwygToolbar();

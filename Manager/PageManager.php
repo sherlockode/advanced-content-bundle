@@ -102,34 +102,6 @@ class PageManager
     }
 
     /**
-     * @param PageInterface $page
-     *
-     * @return bool
-     */
-    public function updateContentForPage(PageInterface $page)
-    {
-        $contentType = $this->getPageContentType($page);
-        if (!$contentType instanceof ContentTypeInterface) {
-            $hasRemovedContent = false;
-            foreach ($page->getContents() as $content) {
-                $this->em->remove($content);
-                $hasRemovedContent = true;
-            }
-            return $hasRemovedContent;
-        }
-
-        $hasRemovedContent = false;
-        foreach ($page->getContents() as $content) {
-            if ($content->getContentType()->getId() !== $contentType->getId()) {
-                $this->em->remove($content);
-                $hasRemovedContent = true;
-            }
-        }
-
-        return $hasRemovedContent;
-    }
-
-    /**
      * @param PageTypeInterface $pageType
      *
      * @return bool
@@ -147,28 +119,9 @@ class PageManager
 
         foreach ($pages as $page) {
             $page->setPageType(null);
-            $this->updateContentForPage($page);
         }
 
         return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function updatePages()
-    {
-        /** @var PageInterface[] $pages */
-        $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
-
-        $shouldFlush = false;
-        foreach ($pages as $page) {
-            if ($this->updateContentForPage($page)) {
-                $shouldFlush = true;
-            }
-        }
-
-        return $shouldFlush;
     }
 
     /**

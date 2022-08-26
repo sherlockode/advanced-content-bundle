@@ -3,22 +3,23 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
+use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentType extends AbstractType
 {
     /**
-     * @var ContentTypeManager
+     * @var FieldManager
      */
-    private $contentTypeManager;
+    private $fieldManager;
 
     /**
      * @var ConfigurationManager
@@ -26,12 +27,12 @@ class ContentType extends AbstractType
     private $configurationManager;
 
     /**
-     * @param ContentTypeManager   $contentTypeManager
+     * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
      */
-    public function __construct(ContentTypeManager $contentTypeManager, ConfigurationManager $configurationManager)
+    public function __construct(FieldManager $fieldManager, ConfigurationManager $configurationManager)
     {
-        $this->contentTypeManager = $contentTypeManager;
+        $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
     }
 
@@ -42,7 +43,6 @@ class ContentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $token = uniqid('content_');
-        $fields = $this->contentTypeManager->getOrderedFields($options['contentType']);
 
         $builder
             ->add('name', TextType::class, [
@@ -55,9 +55,7 @@ class ContentType extends AbstractType
             ])
             ->add('fieldValues', FieldValuesType::class, [
                 'label' => 'content.form.field_values',
-                'fields' => $fields,
-                'contentType' => $options['contentType'],
-            ])
+            ]);
         ;
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
@@ -78,17 +76,11 @@ class ContentType extends AbstractType
                 $form->remove('locale');
             }
         });
+    }
 
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) use ($options) {
-                $content = $event->getData();
-                if (!$content->getContentType() instanceof ContentTypeInterface) {
-                    $content->setContentType($options['contentType']);
-                    $event->setData($content);
-                }
-            }
-        );
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['field_type_choices'] = $options['field_type_choices'];
     }
 
     /**
@@ -98,8 +90,8 @@ class ContentType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
+            'field_type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
         ]);
         $resolver->setDefault('data_class', $this->configurationManager->getEntityClass('content'));
-        $resolver->setRequired(['contentType']);
     }
 }
