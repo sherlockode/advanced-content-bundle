@@ -71,18 +71,6 @@ class Flexible extends AbstractFieldType
     }
 
     /**
-     * Flexible cannot be rendered directly, FieldGroupValues should be iterated through
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed|string
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        return '';
-    }
-
-    /**
      * @param FieldValueInterface $fieldValue
      *
      * @return mixed

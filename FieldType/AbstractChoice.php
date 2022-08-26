@@ -85,28 +85,6 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
     }
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        $options = $this->getFieldOptionsArray($fieldValue->getField());
-        $value = unserialize($fieldValue->getValue());
-
-        $values = [];
-        foreach ($value as $valueId) {
-            if (!empty($options[$valueId])) {
-                $values[] = $options[$valueId];
-            }
-        }
-
-        return implode(',', $values);
-    }
-
-    /**
      * @param FieldValueInterface $fieldValue
      *
      * @return mixed

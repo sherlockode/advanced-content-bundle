@@ -112,18 +112,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        return $fieldValue->getValue();
-    }
-
-    /**
      * Get model transformer for value field
      *
      * @return null

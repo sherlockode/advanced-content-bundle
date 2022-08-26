@@ -66,18 +66,6 @@ class Boolean extends AbstractChoice
     }
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        return (bool) $fieldValue->getValue() ? 'Yes' : 'No';
-    }
-
-    /**
      * @param FieldValueInterface $fieldValue
      *
      * @return mixed

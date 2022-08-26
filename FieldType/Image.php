@@ -28,17 +28,4 @@ class Image extends File
     {
         return 'image';
     }
-
-    /**
-     * @param string $fileName
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function renderFile($fileName, $value)
-    {
-        $alt = $value['alt'] ?? '';
-
-        return '<img src="' . $fileName . '" alt="' . $alt . '" />';
-    }
 }

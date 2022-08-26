@@ -102,29 +102,6 @@ class Link extends AbstractFieldType
     }
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        $value = $fieldValue->getValue();
-        $value = unserialize($value);
-        $url = $this->getUrlValue($value);
-
-        if (empty($url)) {
-            return '';
-        }
-
-        $options = $this->getFieldOptions($fieldValue->getField());
-        $target = $options['target'];
-
-        return '<a href="' . $url . '" target="' . $target . '">' . $value['title']. '</a>';
-    }
-
-    /**
      * @param FieldValueInterface $fieldValue
      *
      * @return mixed

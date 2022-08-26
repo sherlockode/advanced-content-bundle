@@ -70,39 +70,6 @@ class File extends AbstractFieldType
     }
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        $value = $fieldValue->getValue();
-        $value = unserialize($value);
-
-        $fileName = $this->getFilename($value);
-        if ($fileName === '') {
-            return '';
-        }
-
-        return $this->renderFile($fileName, $value);
-    }
-
-    /**
-     * @param string $fileName
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function renderFile($fileName, $value)
-    {
-        $title = $value['title'] ?? $value['src'];
-
-        return '<a href="' . $fileName . '" title="' . $title . '" download>' . $value['src'] . '</a>';
-    }
-
-    /**
      * @param array $value
      *
      * @return string

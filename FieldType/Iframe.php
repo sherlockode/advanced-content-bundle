@@ -78,36 +78,6 @@ class Iframe extends AbstractFieldType
     }
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue)
-    {
-        $value = $fieldValue->getValue();
-        $value = unserialize($value);
-
-        if (empty($value['href'])) {
-            return '';
-        }
-
-        $options = $this->getFieldOptions($fieldValue->getField());
-
-        $width = '';
-        $height = '';
-        if (!empty($options['width'])) {
-            $width = 'width="' . $options['width'] . '"';
-        }
-        if (!empty($options['height'])) {
-            $height = 'height="' . $options['height'] . '"';
-        }
-
-        return '<iframe src="' . $value['href'] . '" ' . $width . ' ' . $height . '></iframe>';
-    }
-
-    /**
      * @param FieldValueInterface $fieldValue
      *
      * @return mixed

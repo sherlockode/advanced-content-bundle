@@ -62,15 +62,6 @@ interface FieldTypeInterface
     public function getCode();
 
     /**
-     * Render field value
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function render(FieldValueInterface $fieldValue);
-
-    /**
      * Cleanup field options (in case of field type change)
      *
      * @param FieldInterface $field
