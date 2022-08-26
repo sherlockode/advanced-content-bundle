@@ -19,7 +19,6 @@ class AcbFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('src', HiddenType::class)
             ->add('title', TextType::class, ['label' => 'field_type.file.title'])
         ;
 
@@ -27,7 +26,9 @@ class AcbFileType extends AbstractType
             FormEvents::POST_SET_DATA,
             function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
-                $isFileUploaded = $options['uploadManager']->isFileUploaded($form->get('src')->getData());
+                $data = $event->getData();
+                $src = @unserialize($data)['src'] ?? '';
+                $isFileUploaded = $options['uploadManager']->isFileUploaded($src);
                 $form
                     ->add('file', FileType::class, [
                         'label' => 'field_type.file.file',
@@ -50,9 +51,11 @@ class AcbFileType extends AbstractType
             FormEvents::SUBMIT,
             function (FormEvent $event) use ($options) {
                 $data = $event->getData();
-                $data['src'] = $options['uploadManager']->upload($data['file']);
-                unset($data['file']);
-                $event->setData($data);
+                if ($data['file']) {
+                    $data['src'] = $options['uploadManager']->upload($data['file']);
+                    unset($data['file']);
+                    $event->setData($data);
+                }
             }
         );
     }
@@ -76,6 +79,7 @@ class AcbFileType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['uploadManager'] = $options['uploadManager'];
+        $view->vars['src'] = @unserialize($form->getData())['src'] ?? '';
     }
 
     /**

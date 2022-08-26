@@ -99,7 +99,7 @@ The resulting image URL will be the URI prefix with the uploaded file name appen
 # config/packages/sherlockode_advanced_content.yml
 sherlockode_advanced_content:
     upload:
-        image_directory: '%kernel.project_dir%/uploads/acb_images'
+        image_directory: '%kernel.project_dir%/public/uploads/acb_images'
         uri_prefix: /uploads/acb_images
 ```
 

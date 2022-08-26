@@ -101,8 +101,8 @@
     {{ form_row(form.file) }}
 
     {% set source = '' %}
-    {% if form.src.vars.data is not empty %}
-        {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
+    {% if form.vars.src is not empty %}
+        {% set source = uploadManager.webPath ~ '/' ~ form.vars.src %}
     {% endif %}
     {% if source != '' %}
         <div class="form-group">
@@ -123,13 +123,13 @@
     {{ form_row(form.file) }}
 
     {% set source = '' %}
-    {% if form.src.vars.data is not empty %}
-        {% set source = uploadManager.webPath ~ '/' ~ form.src.vars.data %}
+    {% if form.vars.src is not empty %}
+        {% set source = uploadManager.webPath ~ '/' ~ form.vars.src %}
     {% endif %}
     {% if source != '' %}
         <div class="form-group">
             <a href="{{ asset(source) }}" download>
-                {{ form.src.vars.data }}
+                {{ form.vars.src }}
             </a>
         </div>
     {% endif %}
