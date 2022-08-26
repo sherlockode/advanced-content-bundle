@@ -43,9 +43,9 @@ class ContentExtension extends AbstractExtension
 
     public function renderFieldValue(FieldValueInterface $fieldValue)
     {
-        $template = '@SherlockodeAdvancedContent/Content/text.html.twig';
+        $field = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
 
-        return $this->twig->render($template, ['value' => $this->getFieldRawValue($fieldValue)]);
+        return $this->twig->render($field->getFrontTemplate(), ['value' => $this->getFieldRawValue($fieldValue)]);
     }
 
     /**

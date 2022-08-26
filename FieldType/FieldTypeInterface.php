@@ -32,6 +32,11 @@ interface FieldTypeInterface
     public function getFieldOptions(FieldInterface $field);
 
     /**
+     * @return string
+     */
+    public function getFrontTemplate();
+
+    /**
      * Add field value's field(s) to content form
      *
      * @param FormBuilderInterface $builder

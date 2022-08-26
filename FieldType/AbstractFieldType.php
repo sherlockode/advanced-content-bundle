@@ -19,6 +19,14 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
+     * @return string
+     */
+    public function getFrontTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/text.html.twig';
+    }
+
+    /**
      * Get field's options
      *
      * @param FieldInterface $field

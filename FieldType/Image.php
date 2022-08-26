@@ -14,6 +14,11 @@ class Image extends File
         return ImageType::class;
     }
 
+    public function getFrontTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/image.html.twig';
+    }
+
     /**
      * Get field's code
      *

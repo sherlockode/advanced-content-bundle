@@ -22,6 +22,11 @@ class Link extends AbstractFieldType
         return FormType::class;
     }
 
+    public function getFrontTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/link.html.twig';
+    }
+
     /**
      * Add field value's field(s) to content form
      *

@@ -69,7 +69,7 @@ class FieldValuesType extends AbstractType
             foreach ($data as $name => $value) {
                 if (!$form->has($name)) {
                     $form->add($name, FieldValueType::class, [
-                        'field_type' => $this->fieldManager->getFieldTypeByCode($value['type'] ?? 'text'),
+                        'field_type' => $this->fieldManager->getFieldTypeByCode($value['fieldType'] ?? 'text'),
                         'data_class' => $this->configurationManager->getEntityClass('field_value'),
                         'property_path' => '['.$name.']',
                     ]);
