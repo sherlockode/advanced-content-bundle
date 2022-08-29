@@ -13,15 +13,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ImportManager
 {
     const ENTITY_MAPPING = [
-        'content_types' => 'ContentType',
         'pages' => 'Page',
         'contents' => 'Content',
     ];
-
-    /**
-     * @var ContentTypeImport
-     */
-    private $contentTypeImport;
 
     /**
      * @var ContentImport
@@ -49,28 +43,21 @@ class ImportManager
     private $symfonyStyle;
 
     /**
-     * @param ContentTypeImport   $contentTypeImport
      * @param PageImport          $pageImport
      * @param ContentImport       $contentImport
      * @param TranslatorInterface $translator
      */
     public function __construct(
-        ContentTypeImport $contentTypeImport,
         PageImport $pageImport,
         ContentImport $contentImport,
         TranslatorInterface $translator
     ) {
-        $this->contentTypeImport = $contentTypeImport;
         $this->pageImport = $pageImport;
         $this->contentImport = $contentImport;
         $this->pageImport->setContentImport($this->contentImport);
         $this->translator = $translator;
 
         $this->dataToProcess = [
-            'ContentType' => [
-                'service' => $this->contentTypeImport,
-                'data' => [],
-            ],
             'Page' => [
                 'service' => $this->pageImport,
                 'data' => [],
@@ -156,7 +143,6 @@ class ImportManager
      */
     public function setAllowUpdate($allowUpdate)
     {
-        $this->contentTypeImport->setAllowUpdate($allowUpdate);
         $this->pageImport->setAllowUpdate($allowUpdate);
         $this->contentImport->setAllowUpdate($allowUpdate);
     }

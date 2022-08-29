@@ -118,7 +118,6 @@ class PageImport extends AbstractImport
                     } else {
                         /** @var ContentInterface $content */
                         $content = new $this->entityClasses['content'];
-                        $content->setContentType($contentType);
                         $content->setName($page->getPageIdentifier());
                         $content->setSlug($page->getPageIdentifier());
                         $content->setLocale($locale);

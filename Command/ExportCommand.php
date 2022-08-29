@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExportCommand extends Command
 {
-    const AVAILABLE_ENTITIES = ['ContentType', 'Page', 'Content'];
+    const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
     /**
      * @var EntityManagerInterface
@@ -85,7 +85,7 @@ class ExportCommand extends Command
     {
         $this
             ->setName('sherlockode:acb:export')
-            ->setDescription('Export ACB content types, contents and pages')
+            ->setDescription('Export ACB contents and pages')
             ->addOption(
                 'type',
                 't',
@@ -114,10 +114,6 @@ class ExportCommand extends Command
         try {
             $this->init($input);
 
-            if (in_array('ContentType', $this->exportTypes)) {
-                $contentTypes = $this->em->getRepository($this->configurationManager->getEntityClass('content_type'))->findAll();
-                $this->exportManager->generateContentTypesData($contentTypes);
-            }
             if (in_array('Page', $this->exportTypes)) {
                 $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
                 $this->exportManager->generatePagesData($pages);

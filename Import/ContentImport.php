@@ -10,13 +10,9 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
-use Sherlockode\AdvancedContentBundle\Model\PageInterface;
-use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -71,29 +67,6 @@ class ContentImport extends AbstractImport
             return;
         }
 
-        if (!isset($contentData['contentType'])) {
-            $this->errors[] = $this->translator->trans('init.errors.content_type_missing_name', [], 'AdvancedContentBundle');
-
-            return;
-        }
-
-        /** @var ContentTypeInterface $contentType */
-        $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
-            'slug' => $contentData['contentType']
-        ]);
-
-        if (!$contentType instanceof ContentTypeInterface) {
-            $this->errors[] = $this->translator->trans('init.errors.content_no_content_type_found', ['%slug%' => $contentData['contentType']], 'AdvancedContentBundle');
-
-            return;
-        }
-
-        if ($contentType->getPageType() instanceof PageTypeInterface || $contentType->getPage() instanceof PageInterface) {
-            $this->errors[] = $this->translator->trans('init.errors.content_type_already_linked', ['%name%' => $contentData['contentType']], 'AdvancedContentBundle');
-
-            return;
-        }
-
         $content = $this->em->getRepository($this->entityClasses['content'])->findOneBy([
             'slug' => $slug,
         ]);
@@ -107,7 +80,6 @@ class ContentImport extends AbstractImport
 
         $content->setSlug($slug);
         $content->setName($contentData['name']);
-        $content->setContentType($contentType);
         $content->setLocale($contentData['locale'] ?? null);
         if (isset($contentData['children'])) {
             $this->createFieldValues($contentData['children'], $content);
@@ -120,59 +92,24 @@ class ContentImport extends AbstractImport
     /**
      * @param array                         $fieldValuesData
      * @param ContentInterface              $content
-     * @param LayoutInterface|null          $layout
-     * @param FieldGroupValueInterface|null $fieldGroupValue
      */
-    public function createFieldValues($fieldValuesData, ContentInterface $content, LayoutInterface $layout = null, FieldGroupValueInterface $fieldGroupValue = null)
+    public function createFieldValues(array $fieldValuesData, ContentInterface $content)
     {
         foreach ($fieldValuesData as $fieldValueData) {
-            if (!isset($fieldValueData['slug'])) {
-                $this->errors[] = $this->translator->trans('init.errors.field_value_missing_slug', ['%contentName%' => $content->getName()], 'AdvancedContentBundle');
+            if (!isset($fieldValueData['type'])) {
+                $this->errors[] = $this->translator->trans('init.errors.field_value_missing_type', ['%contentName%' => $content->getName()], 'AdvancedContentBundle');
                 continue;
             }
 
-            $slug = $fieldValueData['slug'];
+            $fieldType = $this->fieldManager->getFieldTypeByCode($fieldValueData['type']);
 
-            if ($layout instanceof LayoutInterface) {
-                $field = $this->em->getRepository($this->entityClasses['field'])->findOneBy([
-                    'slug'   => $slug,
-                    'layout' => $layout,
-                ]);
-            } else {
-                $field = $this->em->getRepository($this->entityClasses['field'])->findOneBy([
-                    'slug'        => $slug,
-                    'contentType' => $content->getContentType(),
-                ]);
-            }
-            if (!$field instanceof FieldInterface) {
-                $this->errors[] = $this->translator->trans('init.errors.entity_not_found', ['%entity%' => 'Field', '%name%' => $slug], 'AdvancedContentBundle');
-                continue;
-            }
+            /** @var FieldValueInterface $fieldValue */
+            $fieldValue = new $this->entityClasses['field_value'];
+            $fieldValue->setContent($content);
+            $fieldValue->setFieldType($fieldType->getCode());
 
-            if ($fieldGroupValue instanceof FieldGroupValueInterface) {
-                $fieldValue = $this->em->getRepository($this->entityClasses['field_value'])->findOneBy([
-                    'group' => $fieldGroupValue,
-                    'field' => $field,
-                ]);
-            } else {
-                $fieldValue = $this->em->getRepository($this->entityClasses['field_value'])->findOneBy([
-                    'content' => $content,
-                    'field'   => $field,
-                ]);
-            }
-            if (!$fieldValue instanceof FieldValueInterface) {
-                $fieldValue = new $this->entityClasses['field_value'];
-            }
-            if ($fieldGroupValue instanceof FieldGroupValueInterface) {
-                $fieldValue->setGroup($fieldGroupValue);
-            } else {
-                $fieldValue->setContent($content);
-            }
-            $fieldValue->setField($field);
-
-            $fieldType = $this->fieldManager->getFieldType($field);
             $fieldValueValue = '';
-            if ($fieldType->getValueModelTransformer($field) !== null) {
+            if ($fieldType->getValueModelTransformer() !== null) {
                 $fieldValueValue = serialize([]);
             }
             if (isset($fieldValueData['value'])) {
@@ -182,12 +119,12 @@ class ContentImport extends AbstractImport
                     if (is_array($fieldValueValue)) {
                         foreach ($fieldValueValue as $value) {
                             if ($fieldType->getEntityByIdentifier($value) === null) {
-                                $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%slug%' => $slug, '%value%' => $value], 'AdvancedContentBundle');
+                                $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%value%' => $value], 'AdvancedContentBundle');
                                 $hasError = true;
                             }
                         }
                     } elseif ($fieldType->getEntityByIdentifier($fieldValueValue) === null) {
-                        $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%slug%' => $slug, '%value%' => $fieldValueValue], 'AdvancedContentBundle');
+                        $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%value%' => $fieldValueValue], 'AdvancedContentBundle');
                         $hasError = true;
                     }
                     if ($hasError) {
@@ -211,7 +148,7 @@ class ContentImport extends AbstractImport
                             if (false !== $key = array_search($value, $allowedOptions)) {
                                 $selectedOptionIndexes[] = $key;
                             } else {
-                                $this->errors[] = $this->translator->trans('init.errors.field_value_invalid_option', ['%slug%' => $slug, '%option%' => $value, '%options%' => $allowedOptionsAsString], 'AdvancedContentBundle');
+                                $this->errors[] = $this->translator->trans('init.errors.field_value_invalid_option', ['%option%' => $value, '%options%' => $allowedOptionsAsString], 'AdvancedContentBundle');
                                 $invalidOptionFound = true;
                             }
                         }
@@ -224,7 +161,7 @@ class ContentImport extends AbstractImport
                             try {
                                 $fileName = $this->getFilesDirectory() . $fieldValueValue['file'];
                                 if (!file_exists($fileName)) {
-                                    $this->errors[] = $this->translator->trans('init.errors.field_value_file_not_found', ['%slug%' => $slug, '%file%' => $fileName], 'AdvancedContentBundle');
+                                    $this->errors[] = $this->translator->trans('init.errors.field_value_file_not_found', ['%file%' => $fileName], 'AdvancedContentBundle');
                                     continue;
                                 }
                                 $file = new File($fileName);
@@ -280,7 +217,7 @@ class ContentImport extends AbstractImport
                     $childFieldGroupValue->setPosition($childFieldGroupPosition);
 
                     if (isset($fieldChildValues['children'])) {
-                        $this->createFieldValues($fieldChildValues['children'], $content, $childLayout, $childFieldGroupValue);
+                        $this->createFieldValues($fieldChildValues['children'], $content);
                     }
                 }
             }

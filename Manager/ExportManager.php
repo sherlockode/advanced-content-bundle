@@ -3,20 +3,13 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Export\ContentExport;
-use Sherlockode\AdvancedContentBundle\Export\ContentTypeExport;
 use Sherlockode\AdvancedContentBundle\Export\PageExport;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ExportManager
 {
-    /**
-     * @var ContentTypeExport
-     */
-    private $contentTypeExport;
-
     /**
      * @var PageExport
      */
@@ -33,31 +26,16 @@ class ExportManager
     private $filesData = [];
 
     /**
-     * @param ContentTypeExport $contentTypeExport
      * @param PageExport        $pageExport
      * @param ContentExport     $contentExport
      */
     public function __construct(
-        ContentTypeExport $contentTypeExport,
         PageExport $pageExport,
         ContentExport $contentExport
     ) {
-        $this->contentTypeExport = $contentTypeExport;
         $this->pageExport = $pageExport;
         $this->contentExport = $contentExport;
         $this->pageExport->setContentExport($this->contentExport);
-    }
-
-    /**
-     * @param array|ContentTypeInterface[] $contentTypes
-     */
-    public function generateContentTypesData($contentTypes)
-    {
-        foreach ($contentTypes as $contentType) {
-            /** @var ContentTypeInterface $contentType */
-            $data = $this->contentTypeExport->exportData($contentType);
-            $this->addToFilesData($data, 'content-type_' . $contentType->getSlug());
-        }
     }
 
     /**

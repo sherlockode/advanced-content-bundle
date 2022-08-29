@@ -34,7 +34,6 @@ class ContentExport
     {
         $data = [];
         $data['name'] = $content->getName();
-        $data['contentType'] = $content->getContentType()->getSlug();
 
         $fieldValues = $content->getFieldValues();
         $data['children'] = $this->exportFieldValues($fieldValues);
@@ -75,7 +74,7 @@ class ContentExport
     private function exportFieldValue(FieldValueInterface $fieldValue)
     {
         $fieldValueData = [];
-        $fieldValueData['slug'] = $fieldValue->getField()->getSlug();
+        $fieldValueData['type'] = $fieldValue->getFieldType();
 
         $children = $fieldValue->getChildren();
         if (count($children) > 0) {
@@ -88,7 +87,7 @@ class ContentExport
                 $fieldValueData['children'][] = $childData;
             }
         } else {
-            $fieldType = $this->fieldManager->getFieldType($fieldValue->getField());
+            $fieldType = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
             $rawValue = $fieldType->getRawValue($fieldValue);
 
             if ($fieldType instanceof File) {

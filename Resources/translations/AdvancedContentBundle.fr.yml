@@ -186,6 +186,7 @@ init:
         page_missing_data: Vous devez définir le nom / le slug de la page
         page_missing_metas: Vous devez définir les métas de la page
         field_value_missing_slug: Vous devez définir le slug du champ du contenu dans "%contentName%"
+        field_value_missing_type: Vous devez définir le type du champ du contenu dans "%contentName%"
         field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu
         content_missing_name: Vous devez définir le nom du contenu
         content_no_content_type_found: Aucun type de contenu n'a été trouvé avec le slug "%slug%"
@@ -194,8 +195,8 @@ init:
         field_options_not_array: Les options du champ "%slug%" doivent être un tableau
         field_invalid_type: Le champ "%slug%" a un type inconnu "%type%"
         field_invalid_option: Le champ "%slug%" a une option inconnue "%option%". Les options autorisées sont %options%.
-        field_value_invalid_option: La valeur du champ "%slug%" a une option inconnue "%option%". Les options autorisées sont %options%.
-        field_value_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ "%slug%"
+        field_value_invalid_option: La valeur du champ a une option inconnue "%option%". Les options autorisées sont %options%.
+        field_value_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ
         unknown_entity_type: Le type "%type%" est inconnu. Les types d'entité disponibles sont %list%.
         file_not_found: Le fichier %file% n'a pas été trouvé dans le dossier "%dir%"
         field_value_entity_not_found: Aucune entité avec identifiant "%value%" n'a été trouvée pour le champ "%slug%"
