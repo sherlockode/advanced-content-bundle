@@ -60,7 +60,9 @@
                 </optgroup>
             {% endfor %}
         </select>
-        <button type="button" class="btn btn-primary" data-form-field-url="{{ path('sherlockode_acb_content_field_form') }}">{{ 'content_type.form.add_field'|trans }}</button>
+        <button type="button" class="btn btn-primary" data-form-field-url="{{ path('sherlockode_acb_content_field_form') }}" data-base-name="{{ form.vars['full_name'] }}">
+            {{ 'content_type.form.add_field'|trans }}
+        </button>
     </div>
 {% endblock %}
 

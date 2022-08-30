@@ -93,22 +93,17 @@ class PageType extends AbstractType
                     ])
                 ;
 
-                $contentType = $this->pageManager->getPageContentType($page);
-                if ($contentType instanceof ContentTypeInterface) {
-                    if ($this->localeProvider->isMultilangEnabled()) {
-                        $form
-                            ->add('contents', ContentTranslationType::class, [
-                                'label' => 'page.form.content',
-                                'contentType' => $contentType,
-                            ]);
-                    } else {
-                        $form
-                            ->add('content', ContentType::class, [
-                                'label'       => 'page.form.content',
-                                'contentType' => $contentType,
-                            ])
-                        ;
-                    }
+                if ($this->localeProvider->isMultilangEnabled()) {
+                    $form
+                        ->add('contents', ContentTranslationType::class, [
+                            'label' => 'page.form.content',
+                        ]);
+                } else {
+                    $form
+                        ->add('content', ContentType::class, [
+                            'label' => 'page.form.content',
+                        ])
+                    ;
                 }
             }
         });

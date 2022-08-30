@@ -517,13 +517,14 @@ jQuery(function ($) {
         let form = $(this).closest('form');
         let container = $(this).closest('.form-group').children('.acb-sortable-group');
         let counter = form.data('widget-counter') || form.children('fieldset').length;
+        let baseName = $(this).data('base-name');
 
         $.ajax({
             url: $(this).data('form-field-url'),
             data: {'type': $('.acb-add-field-container').find('select').val()},
             type: 'GET'
         }).done(function (data) {
-            let html = data.replace(/__field_name__/g, 'content[fieldValues][__name__]');
+            let html = data.replace(/__field_name__/g, baseName + '[__name__]');
             html = html.replace(/__name__/g, counter++);
             form.data('widget-counter', counter);
             container.append(html);

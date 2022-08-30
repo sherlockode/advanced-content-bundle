@@ -45,6 +45,9 @@ class FieldValuesType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($options) {
             $data = $event->getData();
             $form = $event->getForm();
+            if (!$data) {
+                $data = [];
+            }
 
             $i = 0;
             foreach ($data as $name => $fieldValue) {
