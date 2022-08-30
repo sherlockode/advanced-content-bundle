@@ -48,6 +48,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function buildContentFieldValue(FormBuilderInterface $builder)
     {
         $builder->add('fieldType', HiddenType::class);
+        $builder->add('position', HiddenType::class);
         $builder->add('value', $this->getFormFieldType(), array_merge(
             $this->getDefaultFormFieldValueOptions(),
             $this->getFormFieldValueOptions()

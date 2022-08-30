@@ -56,6 +56,18 @@ interface FieldValueInterface
     public function setValue($value);
 
     /**
+     * @return int
+     */
+    public function getPosition();
+
+    /**
+     * @param int $position
+     *
+     * @return $this
+     */
+    public function setPosition($position);
+
+    /**
      * @return FieldValueInterface
      */
     public function getGroup();

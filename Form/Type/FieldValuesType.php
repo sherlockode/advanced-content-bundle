@@ -8,6 +8,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FieldValuesType extends AbstractType
@@ -59,6 +61,9 @@ class FieldValuesType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($options) {
             $form = $event->getForm();
             $data = $event->getData();
+            if (!is_array($data)) {
+                $data = [];
+            }
 
             foreach ($form as $child) {
                 if (!isset($data[$child->getName()])) {
@@ -97,14 +102,25 @@ class FieldValuesType extends AbstractType
         });
     }
 
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['field_type_choices'] = $options['field_type_choices'];
+    }
+
     /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'field_type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
             'translation_domain' => 'AdvancedContentBundle',
             'by_reference' => false,
         ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'acb_field_values';
     }
 }

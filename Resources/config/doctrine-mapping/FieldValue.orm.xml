@@ -3,5 +3,6 @@
     <mapped-superclass name="Sherlockode\AdvancedContentBundle\Model\FieldValue">
         <field name="fieldType" type="text" column="field_type" nullable="false"/>
         <field name="value" type="text" column="value" nullable="true"/>
+        <field name="position" type="integer" column="position" nullable="true"/>
     </mapped-superclass>
 </doctrine-mapping>

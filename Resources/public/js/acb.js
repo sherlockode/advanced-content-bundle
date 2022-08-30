@@ -66,7 +66,7 @@ jQuery(function ($) {
 
     function calculatePosition() {
         $(".acb-sortable-group").each(function(){
-            let sortables = $(this).find('.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]');
+            let sortables = $(this).children('.acb-sortable');
             for (var i=0; i < sortables.length; i++) {
                 let newPosition = i+1;
                 $(sortables[i]).find('[name$="[position]"]').first().val(newPosition);
@@ -515,6 +515,7 @@ jQuery(function ($) {
 
     $('.acb-add-field-container').find('button').on('click', function () {
         let form = $(this).closest('form');
+        let container = $(this).closest('.form-group').children('.acb-sortable-group');
         let counter = form.data('widget-counter') || form.children('fieldset').length;
 
         $.ajax({
@@ -525,7 +526,8 @@ jQuery(function ($) {
             let html = data.replace(/__field_name__/g, 'content[fieldValues][__name__]');
             html = html.replace(/__name__/g, counter++);
             form.data('widget-counter', counter);
-            $('.acb-add-field-container').before(html);
+            container.append(html);
+            calculatePosition();
         }).fail(ajaxFailCallback);
     });
     $('body').on('click', '.acb-field-value-remove', function () {

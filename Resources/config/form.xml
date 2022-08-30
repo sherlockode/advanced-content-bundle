@@ -14,7 +14,6 @@
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.content" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="form.type"/>

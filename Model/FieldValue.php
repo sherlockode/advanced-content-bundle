@@ -28,6 +28,11 @@ abstract class FieldValue implements FieldValueInterface
     protected $value;
 
     /**
+     * @var int
+     */
+    protected $position;
+
+    /**
      * @var FieldGroupValueInterface
      */
     protected $group;
@@ -117,6 +122,26 @@ abstract class FieldValue implements FieldValueInterface
     public function setValue($value)
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     *
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
 
         return $this;
     }

@@ -2,19 +2,41 @@
 
 {% block acb_simple_collection %}
     {% set button_label = button_label|default('content_type.form.add_field') %}
+    {%- set attr = attr|default([]) -%}
     {% if prototype is defined %}
-        {%- set attr = attr|merge({'data-prototype': form_widget(prototype) }) -%}
+        {% set entryForm = prototype %}
+        {%- set attr = attr|merge({'data-prototype': block('acb_collection_entry') }) -%}
     {% endif %}
     {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
     {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
     <div {{ block('widget_container_attributes') }} data-sortable-group-id="{{ form.vars.id }}">
         {% for child in form %}
-            {{- form_widget(child) -}}
+            {% set entryForm = child %}
+            {{ block('acb_collection_entry') }}
         {% endfor %}
     </div>
-    {% if allow_add %}
+    {% if allow_add|default(false) %}
         {{ block('acb_add_item_button') }}
     {% endif %}
+{% endblock %}
+
+{% macro acb_collection_entry(form) %}
+    {% set entryForm = form %}
+    {{ block('acb_collection_entry') }}
+{% endmacro %}
+
+{% block acb_collection_entry %}
+    {% set fieldId = entryForm.vars.id ? entryForm.vars.id : '__random_id__' %}
+    <div class="acb-field panel panel-primary field-row acb-row acb-sortable" {% if entryForm.parent is not empty %}data-sortable-parent-group-id="{{ entryForm.parent.vars.id }}"{% endif %}>
+        <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false"
+             {% if entryForm.parent is not empty %}data-parent="#{{ entryForm.parent.vars.id }}"{% endif %}>
+            <span class="panel-title">#<span class="panel-position">{{ entryForm.vars.name|number_format + 1 }}</span></span>
+            {{- block('acb_panel_actions') -}}
+        </div>
+        <div class="panel-body collapse" id="field-{{ fieldId }}">
+            {{- form_widget(entryForm) -}}
+        </div>
+    </div>
 {% endblock %}
 
 {% block repeater_layout_widget %}

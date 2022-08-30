@@ -3,36 +3,26 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentType extends AbstractType
 {
-    /**
-     * @var FieldManager
-     */
-    private $fieldManager;
-
     /**
      * @var ConfigurationManager
      */
     private $configurationManager;
 
     /**
-     * @param FieldManager         $fieldManager
      * @param ConfigurationManager $configurationManager
      */
-    public function __construct(FieldManager $fieldManager, ConfigurationManager $configurationManager)
+    public function __construct(ConfigurationManager $configurationManager)
     {
-        $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
     }
 
@@ -78,11 +68,6 @@ class ContentType extends AbstractType
         });
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['field_type_choices'] = $options['field_type_choices'];
-    }
-
     /**
      * @param OptionsResolver $resolver
      */
@@ -90,7 +75,6 @@ class ContentType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
-            'field_type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
         ]);
         $resolver->setDefault('data_class', $this->configurationManager->getEntityClass('content'));
     }
