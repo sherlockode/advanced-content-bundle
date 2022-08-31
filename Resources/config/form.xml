@@ -81,5 +81,10 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
+
+        <service id="sherlockode_advanced_content.form.wysiwyg" class="Sherlockode\AdvancedContentBundle\Form\Type\WysiwygType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <tag name="form.type"/>
+        </service>
     </services>
 </container>

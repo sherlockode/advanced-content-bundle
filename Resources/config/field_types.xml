@@ -9,7 +9,6 @@
         </service>
         <service id="sherlockode_acb.field_type.wysiwyg" class="Sherlockode\AdvancedContentBundle\FieldType\Wysiwyg">
             <tag name="sherlockode_advanced_content.fieldtype"/>
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
         </service>
         <service id="sherlockode_acb.field_type.number" class="Sherlockode\AdvancedContentBundle\FieldType\Number">
             <tag name="sherlockode_advanced_content.fieldtype"/>
