@@ -133,47 +133,8 @@ class ContentImport extends AbstractImport
                 }
 
                 if (is_array($fieldValueValue)) {
-                    $invalidOptionFound = false;
-                    if ($fieldType instanceof AbstractChoice) {
-                        $allowedOptions = $fieldType->getFieldOptionsArray($field);
-                        $allowedOptionsAsString = '';
-                        foreach ($allowedOptions as $allowedOption) {
-                            if (!empty($allowedOptionsAsString)) {
-                                $allowedOptionsAsString .= ', ';
-                            }
-                            $allowedOptionsAsString .= '"' . $allowedOption . '"';
-                        }
-                        $selectedOptionIndexes = [];
-                        foreach ($fieldValueValue as $value) {
-                            if (false !== $key = array_search($value, $allowedOptions)) {
-                                $selectedOptionIndexes[] = $key;
-                            } else {
-                                $this->errors[] = $this->translator->trans('init.errors.field_value_invalid_option', ['%option%' => $value, '%options%' => $allowedOptionsAsString], 'AdvancedContentBundle');
-                                $invalidOptionFound = true;
-                            }
-                        }
-                        if ($invalidOptionFound) {
-                            continue;
-                        }
-                        $fieldValueValue = $selectedOptionIndexes;
-                    } elseif ($fieldType instanceof FileFieldType) {
-                        if (isset($fieldValueValue['file'])) {
-                            try {
-                                $fileName = $this->getFilesDirectory() . $fieldValueValue['file'];
-                                if (!file_exists($fileName)) {
-                                    $this->errors[] = $this->translator->trans('init.errors.field_value_file_not_found', ['%file%' => $fileName], 'AdvancedContentBundle');
-                                    continue;
-                                }
-                                $file = new File($fileName);
-                                $fileName = $this->uploadManager->copy($file);
-                                $fieldValueValue['src'] = $fileName;
-                                unset($fieldValueValue['file']);
-                            } catch (\Exception $e) {
-                                $this->errors[] = $e->getMessage();
-                                continue;
-                            }
-                        }
-                    }
+                    $fieldValueValue = $this->processValueArray($fieldValueValue);
+
                     $fieldValueValue = serialize($fieldValueValue);
                 }
             }
@@ -222,6 +183,49 @@ class ContentImport extends AbstractImport
                 }
             }
         }
+    }
+
+    private function processValueArray(array $data)
+    {
+        if (isset($data['_file'])) {
+            // handle file
+            $result = $this->processFileUpload($data);
+            if ($result !== false) {
+                $data = $result;
+            }
+        }
+
+        // browse array
+        $newData = [];
+        foreach ($data as $key => $valueEntry) {
+            if (is_array($valueEntry)) {
+                $newData[$key] = $this->processValueArray($valueEntry);
+            } else {
+                $newData[$key] = $valueEntry;
+            }
+        }
+
+        return $newData;
+    }
+
+    private function processFileUpload(array $data)
+    {
+        try {
+            $fileName = $this->getFilesDirectory() . $data['_file'];
+            if (!file_exists($fileName)) {
+                $this->errors[] = $this->translator->trans('init.errors.field_value_file_not_found', ['%file%' => $fileName], 'AdvancedContentBundle');
+                return false;
+            }
+            $file = new File($fileName);
+            $fileName = $this->uploadManager->copy($file);
+            $data['src'] = $fileName;
+            unset($data['_file']);
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
+            return false;
+        }
+
+        return $data;
     }
 
     /**

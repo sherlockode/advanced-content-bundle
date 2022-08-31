@@ -72,66 +72,36 @@ class PageImport extends AbstractImport
         }
         $page->setPageType($pageType);
 
-        $contentType = null;
-        if (isset($pageData['contentType'])) {
-            $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
-                'slug' => $pageData['contentType']
-            ]);
-            if (!$contentType instanceof ContentTypeInterface) {
-                $this->errors[] = $this->translator->trans('init.errors.content_no_content_type_found', ['%slug%' => $pageData['contentType']], 'AdvancedContentBundle');
-
-                return;
-            }
-            /** @var ContentTypeInterface $contentType */
-            $contentType->setPage($page);
-            $contentType->setPageType(null);
-        } elseif ($pageType instanceof PageTypeInterface) {
-            $contentType = $this->em->getRepository($this->entityClasses['content_type'])->findOneBy([
-                'pageType' => $pageType,
-            ]);
+        foreach ($page->getContents() as $content) {
+            $page->removeContent($content);
+            $this->em->remove($content);
+            $this->em->flush();
         }
 
-        if (!$contentType instanceof ContentTypeInterface) {
+        if (!empty($pageData['contents'])) {
+            $existingContents = [];
             foreach ($page->getContents() as $content) {
-                $page->removeContent($content);
-                $this->em->remove($content);
+                $existingContents[$content->getLocale()] = $content;
             }
-            if (!empty($pageData['contents'])) {
-                $this->errors[] = $this->translator->trans('init.errors.page_no_content_type', ['%page%' => $pageIdentifier], 'AdvancedContentBundle');
-            }
-        } else {
-            foreach ($page->getContents() as $content) {
-                if ($contentType->getId() !== $content->getContentType()->getId()) {
-                    $page->removeContent($content);
-                    $this->em->remove($content);
+            foreach ($pageData['contents'] as $locale => $contentData) {
+                if (isset($existingContents[$locale])) {
+                    $content = $existingContents[$locale];
+                } else {
+                    /** @var ContentInterface $content */
+                    $content = new $this->entityClasses['content'];
+                    $content->setName($page->getPageIdentifier());
+                    $content->setSlug($page->getPageIdentifier());
+                    $content->setLocale($locale);
+                    $page->addContent($content);
+                    $this->em->persist($content);
                 }
-            }
 
-            if (!empty($pageData['contents'])) {
-                $existingContents = [];
-                foreach ($page->getContents() as $content) {
-                    $existingContents[$content->getLocale()] = $content;
-                }
-                foreach ($pageData['contents'] as $locale => $contentData) {
-                    if (isset($existingContents[$locale])) {
-                        $content = $existingContents[$locale];
-                    } else {
-                        /** @var ContentInterface $content */
-                        $content = new $this->entityClasses['content'];
-                        $content->setName($page->getPageIdentifier());
-                        $content->setSlug($page->getPageIdentifier());
-                        $content->setLocale($locale);
-                        $page->addContent($content);
-                        $this->em->persist($content);
-                    }
-
-                    $this->contentImport
-                        ->resetErrors()
-                        ->createFieldValues($contentData, $content);
-                    $errors = $this->contentImport->getErrors();
-                    foreach ($errors as $error) {
-                        $this->errors[] = $error;
-                    }
+                $this->contentImport
+                    ->resetErrors()
+                    ->createFieldValues($contentData, $content);
+                $errors = $this->contentImport->getErrors();
+                foreach ($errors as $error) {
+                    $this->errors[] = $error;
                 }
             }
         }
