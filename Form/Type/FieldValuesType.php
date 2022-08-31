@@ -119,6 +119,7 @@ class FieldValuesType extends AbstractType
             'field_type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
             'translation_domain' => 'AdvancedContentBundle',
             'by_reference' => false,
+            'row_attr' => ['class' => 'acb-field-values-container'],
         ]);
     }
 

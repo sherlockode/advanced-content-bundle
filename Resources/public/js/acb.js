@@ -515,8 +515,8 @@ jQuery(function ($) {
 
     $('.acb-add-field-container').find('button').on('click', function () {
         let form = $(this).closest('form');
-        let container = $(this).closest('.form-group').children('.acb-sortable-group');
-        let counter = form.data('widget-counter') || form.children('fieldset').length;
+        let container = $(this).closest('.acb-field-values-container').children('.acb-sortable-group');
+        let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
         let baseName = $(this).data('base-name');
 
         $.ajax({
@@ -530,9 +530,6 @@ jQuery(function ($) {
             container.append(html);
             calculatePosition();
         }).fail(ajaxFailCallback);
-    });
-    $('body').on('click', '.acb-field-value-remove', function () {
-        $(this).parent().remove();
     });
 });
 })();
