@@ -42,7 +42,7 @@ interface FieldValueInterface
     /**
      * Get field value's value
      *
-     * @return string
+     * @return mixed
      */
     public function getValue();
 

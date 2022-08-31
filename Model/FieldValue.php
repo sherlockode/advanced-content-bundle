@@ -107,21 +107,24 @@ abstract class FieldValue implements FieldValueInterface
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getValue()
     {
-        return $this->value;
+        if ($this->value === null) {
+            return null;
+        }
+        return unserialize($this->value);
     }
 
     /**
-     * @param string $value
+     * @param mixed $value
      *
      * @return $this
      */
     public function setValue($value)
     {
-        $this->value = $value;
+        $this->value = serialize($value);
 
         return $this;
     }

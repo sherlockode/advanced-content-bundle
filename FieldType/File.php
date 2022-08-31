@@ -2,12 +2,10 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Asset\Packages;
-use Symfony\Component\Form\DataTransformerInterface;
 
 class File extends AbstractFieldType
 {
@@ -50,16 +48,6 @@ class File extends AbstractFieldType
     }
 
     /**
-     * Get model transformer for value field
-     *
-     * @return DataTransformerInterface
-     */
-    public function getValueModelTransformer()
-    {
-        return new StringToArrayTransformer();
-    }
-
-    /**
      * Get field's code
      *
      * @return string
@@ -97,7 +85,7 @@ class File extends AbstractFieldType
      */
     public function getRawValue(FieldValueInterface $fieldValue)
     {
-        $value = unserialize($fieldValue->getValue());
+        $value = $fieldValue->getValue();
         $value['url'] = $this->getFilename($value);
 
         if (isset($value['delete'])) {

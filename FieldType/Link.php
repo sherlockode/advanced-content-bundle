@@ -2,9 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -53,16 +51,6 @@ class Link extends AbstractFieldType
     }
 
     /**
-     * Get model transformer for value field
-     *
-     * @return DataTransformerInterface
-     */
-    public function getValueModelTransformer()
-    {
-        return new StringToArrayTransformer();
-    }
-
-    /**
      * Add field's options
      *
      * @param Form|FormBuilderInterface $builder
@@ -108,8 +96,7 @@ class Link extends AbstractFieldType
      */
     public function getRawValue(FieldValueInterface $fieldValue)
     {
-        $rawValue = unserialize($fieldValue->getValue());
-        $url = $this->getUrlValue($rawValue);
+        $url = $this->getUrlValue($fieldValue->getValue());
 
         if (!$url) {
             return null;

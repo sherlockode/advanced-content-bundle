@@ -105,22 +105,6 @@ abstract class AbstractChoice extends AbstractFieldType implements FieldValidati
     }
 
     /**
-     * Get model transformer for value field
-     *
-     * @param FieldInterface $field
-     *
-     * @return DataTransformerInterface
-     */
-    public function getValueModelTransformer()
-    {
-        /*if ($this->getIsMultipleChoice($field)) {
-            return new StringToArrayTransformer();
-        }*/
-
-        return new SerializedStringToStringTransformer();
-    }
-
-    /**
      * Check if field accept several choices
      *
      * @param FieldInterface $field

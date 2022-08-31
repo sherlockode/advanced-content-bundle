@@ -80,7 +80,7 @@ abstract class AbstractEntity extends AbstractFieldType
      *
      * @return array
      */
-    public function getFormFieldValueOptions(FieldInterface $field)
+    public function getFormFieldValueOptions()
     {
         $fieldOptions = $this->getFieldOptions($field);
 
@@ -105,7 +105,7 @@ abstract class AbstractEntity extends AbstractFieldType
      *
      * @return DataTransformerInterface
      */
-    public function getValueModelTransformer(FieldInterface $field)
+    public function getValueModelTransformer()
     {
         if ($this->getIsMultipleChoice($field)) {
             return new SerializedStringToEntities($this->em, $this->getEntityClass(), $this->getUniqueFieldIdentifier());

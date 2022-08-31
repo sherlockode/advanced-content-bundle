@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Form\Type\RepeaterGroupCollectionType;
 use Sherlockode\AdvancedContentBundle\Form\Type\RepeaterType;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -54,11 +53,6 @@ class Repeater extends AbstractFieldType
                 ],
             ])
         ;
-    }
-
-    public function getValueModelTransformer()
-    {
-        return new StringToArrayTransformer();
     }
 
     /**

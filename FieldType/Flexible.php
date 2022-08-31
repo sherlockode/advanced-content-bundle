@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleGroupCollectionType;
 use Sherlockode\AdvancedContentBundle\Form\Type\FlexibleType;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -40,11 +39,6 @@ class Flexible extends AbstractFieldType
                 'layouts' => $field->getChildren(),
             ])
         ;
-    }
-
-    public function getValueModelTransformer()
-    {
-        return new StringToArrayTransformer();
     }
 
     public function addFieldOptions($builder)

@@ -27,7 +27,11 @@ class AcbFileType extends AbstractType
             function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
                 $data = $event->getData();
-                $src = @unserialize($data)['src'] ?? '';
+                if ($data === null || !is_array($data)) {
+                    $data = [];
+                }
+
+                $src = $data['src'] ?? '';
                 $isFileUploaded = $options['uploadManager']->isFileUploaded($src);
                 $form
                     ->add('file', FileType::class, [
@@ -79,7 +83,7 @@ class AcbFileType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['uploadManager'] = $options['uploadManager'];
-        $view->vars['src'] = @unserialize($form->getData())['src'] ?? '';
+        $view->vars['src'] = $form->getData()['src'] ?? '';
     }
 
     /**

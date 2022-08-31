@@ -56,6 +56,6 @@ class FieldValueListener
         unset($newValue['delete']);
         unset($newValue['src']);
 
-        $object->setValue(serialize($newValue));
+        $object->setValue($newValue);
     }
 }

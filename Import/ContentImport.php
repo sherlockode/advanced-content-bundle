@@ -110,7 +110,7 @@ class ContentImport extends AbstractImport
 
             $fieldValueValue = '';
             if ($fieldType->getValueModelTransformer() !== null) {
-                $fieldValueValue = serialize([]);
+                $fieldValueValue = [];
             }
             if (isset($fieldValueData['value'])) {
                 $fieldValueValue = $fieldValueData['value'];
@@ -134,8 +134,6 @@ class ContentImport extends AbstractImport
 
                 if (is_array($fieldValueValue)) {
                     $fieldValueValue = $this->processValueArray($fieldValueValue);
-
-                    $fieldValueValue = serialize($fieldValueValue);
                 }
             }
             $fieldValue->setValue($fieldValueValue);

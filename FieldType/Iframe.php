@@ -2,9 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToArrayTransformer;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -35,16 +33,6 @@ class Iframe extends AbstractFieldType
         $builder->get('value')
             ->add('href', UrlType::class)
         ;
-    }
-
-    /**
-     * Get model transformer for value field
-     *
-     * @return DataTransformerInterface
-     */
-    public function getValueModelTransformer()
-    {
-        return new StringToArrayTransformer();
     }
 
     /**
