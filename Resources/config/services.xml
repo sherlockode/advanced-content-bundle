@@ -50,5 +50,7 @@
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
             <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
         </service>
+
+        <service id="Sherlockode\AdvancedContentBundle\Manager\UploadManager" alias="sherlockode_advanced_content.upload_manager"/>
     </services>
 </container>

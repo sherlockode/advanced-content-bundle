@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -16,6 +17,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AcbFileType extends AbstractType
 {
+    /**
+     * @var UploadManager
+     */
+    private $uploadManager;
+
+    /**
+     * @param UploadManager $uploadManager
+     */
+    public function __construct(UploadManager $uploadManager)
+    {
+        $this->uploadManager = $uploadManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -69,8 +83,10 @@ class AcbFileType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('translation_domain', 'AdvancedContentBundle');
-        $resolver->setRequired(['uploadManager']);
+        $resolver->setDefaults([
+            'translation_domain' => 'AdvancedContentBundle',
+            'uploadManager' => $this->uploadManager,
+        ]);
     }
 
     /**

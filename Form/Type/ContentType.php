@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentType extends AbstractType
@@ -66,6 +68,12 @@ class ContentType extends AbstractType
                 $form->remove('locale');
             }
         });
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        // ensure the form is working on the first added image (multipart would not be set in this case)
+        $view->vars['multipart'] = true;
     }
 
     /**
