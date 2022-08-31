@@ -45,7 +45,14 @@ class ContentExtension extends AbstractExtension
     {
         $field = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
 
-        return $this->twig->render($field->getFrontTemplate(), ['value' => $this->getFieldRawValue($fieldValue)]);
+        $raw = $this->getFieldRawValue($fieldValue);
+        if (is_array($raw)) {
+            $params = $raw;
+        } else {
+            $params = ['value' => $raw];
+        }
+
+        return $this->twig->render($field->getFrontTemplate(), $params);
     }
 
     /**
