@@ -7,7 +7,6 @@ use Sherlockode\AdvancedContentBundle\Form\Type\ImportType;
 use Sherlockode\AdvancedContentBundle\Manager\ExportManager;
 use Sherlockode\AdvancedContentBundle\Manager\ImportManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -111,8 +110,6 @@ class ToolsController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $contentTypes = $form->get('contentType')->getData();
-                $this->exportManager->generateContentTypesData($contentTypes);
                 $pages = $form->get('page')->getData();
                 $this->exportManager->generatePagesData($pages);
                 $contents = $form->get('content')->getData();

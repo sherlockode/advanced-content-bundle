@@ -3,7 +3,6 @@
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/page.xml"/>
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/page_meta.xml"/>
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/content.xml"/>
-    <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/content_type.xml"/>
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/tools.xml"/>
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/content_crud.xml"/>
 </routes>

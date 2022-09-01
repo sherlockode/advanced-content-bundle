@@ -5,10 +5,6 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
-        <service id="sherlockode_advanced_content.content_type_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-        </service>
         <service id="sherlockode_advanced_content.configuration_manager" class="Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager" />
         <service id="sherlockode_advanced_content.field_manager" class="Sherlockode\AdvancedContentBundle\Manager\FieldManager" />
         <service id="sherlockode_advanced_content.upload_manager" class="Sherlockode\AdvancedContentBundle\Manager\UploadManager">

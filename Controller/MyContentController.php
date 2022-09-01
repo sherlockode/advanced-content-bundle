@@ -3,11 +3,9 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
-use Sherlockode\AdvancedContentBundle\Manager\ContentTypeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,11 +26,6 @@ class MyContentController extends AbstractController
     private $contentManager;
 
     /**
-     * @var ContentTypeManager
-     */
-    private $contentTypeManager;
-
-    /**
      * @var ConfigurationManager
      */
     private $configurationManager;
@@ -42,18 +35,15 @@ class MyContentController extends AbstractController
      *
      * @param EntityManagerInterface $em
      * @param ContentManager         $contentManager
-     * @param ContentTypeManager     $contentTypeManager
      * @param ConfigurationManager   $configurationManager
      */
     public function __construct(
         EntityManagerInterface $em,
         ContentManager $contentManager,
-        ContentTypeManager $contentTypeManager,
         ConfigurationManager $configurationManager
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
-        $this->contentTypeManager = $contentTypeManager;
         $this->configurationManager = $configurationManager;
     }
 

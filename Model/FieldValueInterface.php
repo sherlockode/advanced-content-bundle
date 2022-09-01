@@ -66,21 +66,4 @@ interface FieldValueInterface
      * @return $this
      */
     public function setPosition($position);
-
-    /**
-     * @return FieldValueInterface
-     */
-    public function getGroup();
-
-    /**
-     * @param FieldGroupValueInterface|null $parent
-     *
-     * @return $this
-     */
-    public function setGroup(FieldGroupValueInterface $parent = null);
-
-    /**
-     * @return FieldGroupValueInterface[]
-     */
-    public function getChildren();
 }

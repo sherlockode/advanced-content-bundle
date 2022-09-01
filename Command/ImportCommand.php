@@ -14,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCommand extends Command
 {
-    const AVAILABLE_ENTITIES = ['ContentType', 'Page', 'Content'];
+    const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
     /**
      * @var ConfigurationManager
@@ -81,7 +81,7 @@ class ImportCommand extends Command
     {
         $this
             ->setName('sherlockode:acb:import')
-            ->setDescription('Create and update ACB content types, contents and pages')
+            ->setDescription('Create and update ACB contents and pages')
             ->addOption(
                 'type',
                 't',

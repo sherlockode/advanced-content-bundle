@@ -4,9 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
-use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -46,8 +44,6 @@ class ContentExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('acb_fields', [$this, 'getAllFieldValues'], ['is_safe' => ['html']]),
-            new TwigFunction('acb_field', [$this, 'getContentFieldValue'], ['is_safe' => ['html']]),
             new TwigFunction('acb_render_field', [$this, 'renderFieldValue'], ['is_safe' => ['html']]),
             new TwigFunction('acb_find_entity', [$this, 'findEntity']),
         ];
@@ -70,63 +66,6 @@ class ContentExtension extends AbstractExtension
     public function findEntity($identifier, $class)
     {
         return $this->em->getRepository($class)->find($identifier);
-    }
-
-    /**
-     * @param ContentInterface $content
-     * @param string           $slug
-     *
-     * @return null|array
-     */
-    public function getContentFieldValue(ContentInterface $content, $slug)
-    {
-        foreach ($content->getFieldValues() as $fieldValue) {
-            if ($fieldValue->getField()->getSlug() == $slug) {
-                return [
-                    'fieldValue' => $fieldValue,
-                    'raw' => $this->getFieldRawValue($fieldValue),
-                ];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param ContentInterface $content
-     *
-     * @return array
-     */
-    public function getAllFieldValues(ContentInterface $content)
-    {
-        return $this->getFormattedFieldValues($content->getFieldValues());
-    }
-
-    /**
-     * @param array|FieldValueInterface[] $fieldValues
-     *
-     * @return array
-     */
-    private function getFormattedFieldValues($fieldValues)
-    {
-        $fieldValuesData = [];
-        foreach ($fieldValues as $fieldValue) {
-            $fieldValuesData[$fieldValue->getField()->getSlug()] = [
-                'fieldValue' => $fieldValue,
-                'raw' => $this->getFieldRawValue($fieldValue),
-            ];
-            if (count($fieldValue->getChildren()) > 0) {
-                $fieldValuesData[$fieldValue->getField()->getSlug()]['children'] = [];
-                foreach ($fieldValue->getChildren() as $fieldGroupValue) {
-                    $fieldValuesData[$fieldValue->getField()->getSlug()]['children'][] = [
-                        'fieldGroupValue' => $fieldGroupValue,
-                        'name' => $fieldGroupValue->getLayout() instanceof LayoutInterface ? $fieldGroupValue->getLayout()->getName() : '',
-                        'children' => $this->getFormattedFieldValues($fieldGroupValue->getChildren()),
-                    ];
-                }
-            }
-        }
-
-        return $fieldValuesData;
     }
 
     /**

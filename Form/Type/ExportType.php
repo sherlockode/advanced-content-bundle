@@ -29,20 +29,6 @@ class ExportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('contentType', EntityType::class, [
-                'label' => 'tools.export.content_type',
-                'class' => $this->configurationManager->getEntityClass('content_type'),
-                'choice_label' => 'name',
-                'expanded' => true,
-                'multiple' => true,
-                'attr' => ['class' => 'acb-export-entity'],
-                'required' => false,
-            ])
-            ->add('contentTypeAll', CheckboxType::class, [
-                'label' => 'tools.export.all',
-                'attr' => ['class' => 'acb-export-all'],
-                'required' => false,
-            ])
             ->add('page', EntityType::class, [
                 'label' => 'tools.export.page',
                 'class' => $this->configurationManager->getEntityClass('page'),
