@@ -18,7 +18,9 @@ class RepeaterType extends AbstractType
         if ($builder->hasAttribute('prototype')) {
             /** @var FormInterface $prototype */
             $prototype = $builder->getAttribute('prototype');
-            $prototype->add('position', HiddenType::class);
+            if ($prototype->getConfig()->getCompound()) {
+                $prototype->add('position', HiddenType::class);
+            }
         }
 
         // add the position field to all collection children
@@ -26,7 +28,9 @@ class RepeaterType extends AbstractType
             $form = $event->getForm();
 
             foreach ($form->all() as $child) {
-                $child->add('position', HiddenType::class);
+                if ($child->getConfig()->getCompound()) {
+                    $child->add('position', HiddenType::class);
+                }
             }
         };
         $builder->addEventListener(FormEvents::PRE_SET_DATA, $positionCallback, -10);
@@ -38,6 +42,9 @@ class RepeaterType extends AbstractType
 
             $orderedData = [];
             foreach ($data as $item) {
+                if (!is_array($item)) {
+                    return;
+                }
                 if (!isset($item['position'])) {
                     $item['position'] = 0;
                 }
