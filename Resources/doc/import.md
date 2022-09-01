@@ -56,11 +56,11 @@ The command has several options:
 
 ```bash
 $ php bin/console sherlockode:acb:import #import all types / all files in custom/dir
-$ php bin/console sherlockode:acb:import --type=ContentType #import ContentType only / all files in custom/dir
-$ php bin/console sherlockode:acb:import --type=ContentType --type=Content #import ContentType and Content / all files in custom/dir
+$ php bin/console sherlockode:acb:import --type=Content #import Content only / all files in custom/dir
+$ php bin/console sherlockode:acb:import --type=Content --type=Page #import Content and Page / all files in custom/dir
 $ php bin/console sherlockode:acb:import --file=custom.yaml #import all types / file named custom.yaml in custom/dir
 $ php bin/console sherlockode:acb:import --file=*custom* #import all types / all files containing custom within their name in custom/dir
-$ php bin/console sherlockode:acb:import --type=ContentType --type=Page --file=*custom* #import ContentType and Page / all files containing custom within their name in custom/dir
+$ php bin/console sherlockode:acb:import --type=Content --type=Page --file=*custom* #import Content and Page / all files containing custom within their name in custom/dir
 $ php bin/console sherlockode:acb:import --dir=specific/dir #import all types / all files in specific/dir
 ```
 
@@ -71,53 +71,6 @@ $ php bin/console sherlockode:acb:import --dir=specific/dir #import all types / 
 Source files must be in yaml format.
 There must be one file per content type / per page.
 There is no restriction on the file naming. All files of the source directories will be parsed.
-
-### Content types
-
-You need to define a name for your ContentType
-
-```yaml
-# var/acb/ContentType/custom_content_type.yaml
-content_types:
-    content-type-slug:
-        name: Custom Content Type
-```
-
-You can link your ContentType to a PageType (which will be created on the fly if it does not already exist)
-
-```yaml
-# var/acb/ContentType/custom_content_type.yaml
-content_types:
-    content-type-slug:
-        name: Custom Content Type
-        pageType: Custom Page Type
-        children: list of Fields of the ContentType
-```
-
-You can then define the Fields of your ContentType
-
-Each Field will have the following structure: 
-
-```yaml
-# var/acb/ContentType/custom_content_type.yaml
-name: Custom Field
-type: Code of the FieldType
-# optional
-slug: custom slug - slugified name will be used by default
-options: list of options and their values
-required: true/false - default false
-children: defines layouts - only for Flexible / Repeater field types
-```
-
-Each Layout will have the following structure: 
-
-```yaml
-# var/acb/ContentType/custom_content_type.yaml
-layout_name: Custom Layout
-children: list of Fields of the layout
-```
-
-You can find a ContentType import file example here [doc](import/ContentType/custom_content_type.yaml)
 
 ### Pages
 
@@ -146,10 +99,10 @@ pages:
         contents:
             en: # locale of the content
                 #list of FieldValues of the Content linked to this Page
-                - slug: my_text
+                - type: text
                   value: hello
             fr:
-                - slug: my_text
+                - type: text
                   value: bonjour
         metas:
             en:
@@ -184,22 +137,20 @@ You can find a Page import file example here [doc](import/Page/custom_page.yaml)
 
 ### Contents
 
-You need to defined the name of your Content, as well as the ContentType to which it is linked : 
+You need to define the name of your Content, slug and locale: 
 
 ```yaml
 # var/acb/Content/content.yaml
 contents:
     content-slug:
         name: Custom Content
-        contentType: slug of the Content Type
         locale: en
 ```
 
 Then, as for the content of your Pages, you need to define your FieldValues under `children`
 
 You can find a Content import file example here [doc](import/Content/standalone_content.yaml)
-This Content is linked to the ContentType defined here [doc](import/ContentType/standalone_content_type.yaml) 
-These example files also show you how to create and populate Choice type fields as well as File and Image field types.
+These example files also show you how to create and populate File and Image field types.
 
 
 ### Specific field types
@@ -211,19 +162,15 @@ you will obtain the following structure.
 
 ```yaml
 # exported fields
--
-    slug: file-slug
-    value:
+    file_slug:
         src: file.pdf
         title: File Title
--
-    slug: image-slug
-    value:
+    image_slug:
         src: image.jpg
         alt: Image Alt
 ```
 
-If you want to upload a new file for this field values, you need to add a `file` entry under `value`.
+If you want to upload a new file for this field values, you need to add a `_file` entry under `value`.
 The file to import must be located in the `files-dir` directory (either in your configuration or in the option of the import command)
 
 For example, if the new files are located in /tmp/new-files, you can launch the command:
@@ -236,14 +183,10 @@ And the field values must contain the following info :
 
 ```yaml
 # fields to import
--
-    slug: file-slug
-    value:
-        file: new-file.pdf # file located in /tmp/new-files/new-file.pdf
+    file_slug:
+        _file: new-file.pdf # file located in /tmp/new-files/new-file.pdf
         title: File Title
--
-    slug: image-slug
-    value:
-        file: new-image.jpg # file located in /tmp/new-files/new-image.png
+    image_slug:
+        _file: new-image.jpg # file located in /tmp/new-files/new-image.png
         alt: Image Alt
 ```

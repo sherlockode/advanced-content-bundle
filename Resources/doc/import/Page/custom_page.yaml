@@ -5,44 +5,22 @@ pages:
         contents:
             en:
                 -
-                    slug: custom-text-field
+                    type: text
                     value: Text value
                 -
-                    slug: custom-flexible-field
-                    children:
-                        -
-                            layout_name: Custom Layout 1
-                            children:
+                    type: my-custom-field
+                    value:
+                        block1:
+                            title: Title value
+                        block2:
+                            title: Title layout value
+                            elements:
                                 -
-                                    slug: custom-layout-1-title
-                                    value: Title value
-                        -
-                            layout_name: Custom Layout 2
-                            children:
+                                    name: First group of repeater - title
+                                    description: '<strong>First</strong> group of repeater - description'
                                 -
-                                    slug: custom-layout-2-title
-                                    value: Title layout value
-                                -
-                                    slug: custom-layout-2-repeater
-                                    children:
-                                        -
-                                            layout_name: Repeater layout name
-                                            children:
-                                                -
-                                                    slug: repeater-title
-                                                    value: First group of repeater - title
-                                                -
-                                                    slug: repeater-description
-                                                    value: '<strong>First</strong> group of repeater - description'
-                                        -
-                                            layout_name: Repeater layout name
-                                            children:
-                                                -
-                                                    slug: repeater-title
-                                                    value: Second group of repeater - title
-                                                -
-                                                    slug: repeater-description
-                                                    value: 'Second group of repeater <br/> description'
+                                    name: Second group of repeater - title
+                                    description: 'Second group of repeater <br/> description'
         metas:
             en:
                 title: Custom Title

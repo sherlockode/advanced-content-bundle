@@ -2,8 +2,8 @@
 
 This bundle provides advanced CMS features inspired by the Wordpress ACF plugin.
 
-Users are able to define content types as a list of fields.
-These models are used by back-office contributors to create actual contents based on the previously defined structure.
+Users are able to create pages with base and custom building block.
+These models are used by back-office contributors to create actual contents without coding after the setup is done.
 
 [![Total Downloads](https://poser.pugx.org/sherlockode/advanced-content-bundle/downloads)](https://packagist.org/packages/sherlockode/advanced-content-bundle)
 [![Latest Stable Version](https://poser.pugx.org/sherlockode/advanced-content-bundle/v/stable)](https://packagist.org/packages/sherlockode/advanced-content-bundle)
@@ -49,7 +49,7 @@ twig:
 
 ### Entities
 
-`SherlockodeAdvancedContentBundle` provides 8 entity models : ContentType, Layout, Field, Content, PageType, Page, FieldGroupValue and FieldValue
+`SherlockodeAdvancedContentBundle` provides 5 entity models : Content, FieldValue, PageType, Page, PageMeta
 To be able to use them, you need to create your own entities, see examples in the [doc](Resources/doc/entities.md).
 
 Next, make the bundle aware of your entities by adding the following lines to your configuration:
@@ -59,12 +59,8 @@ Next, make the bundle aware of your entities by adding the following lines to yo
 doctrine:
     orm:
         resolve_target_entities:
-            SherlockodeAdvancedContentBundle\Model\ContentTypeInterface: App\Entity\ContentType
             SherlockodeAdvancedContentBundle\Model\ContentInterface: App\Entity\Content
-            SherlockodeAdvancedContentBundle\Model\FieldInterface: App\Entity\Field
             SherlockodeAdvancedContentBundle\Model\FieldValueInterface: App\Entity\FieldValue
-            SherlockodeAdvancedContentBundle\Model\FieldGroupValueInterface: App\Entity\FieldGroupValue
-            SherlockodeAdvancedContentBundle\Model\LayoutInterface: App\Entity\Layout
             SherlockodeAdvancedContentBundle\Model\PageTypeInterface: App\Entity\PageType
             SherlockodeAdvancedContentBundle\Model\PageInterface: App\Entity\Page
             SherlockodeAdvancedContentBundle\Model\PageMetaInterface: App\Entity\PageMeta
@@ -74,12 +70,8 @@ doctrine:
 # config/packages/sherlockode_advanced_content.yml
 sherlockode_advanced_content:
     entity_class:
-        content_type: App\Entity\ContentType
-        field: App\Entity\Field
         content: App\Entity\Content
         field_value: App\Entity\FieldValue
-        field_group_value: App\Entity\FieldGroupValue
-        layout: App\Entity\Layout
         page_type: App\Entity\PageType
         page: App\Entity\Page
         page_meta: App\Entity\PageMeta
@@ -88,7 +80,7 @@ sherlockode_advanced_content:
 
 ### Upload configuration
 
-If you want to use the `Image` field type, you need to configure the directory in which the images will be saved.
+If you want to use the `Image` or `File` field type, you need to configure the directory in which the images will be saved.
 
 If not defined, all images will be saved in the system's temporary directory.
 
@@ -109,9 +101,8 @@ The routing is split into several files for better import rules.
 
 * tools.xml : Routes for tooling pages, like import/export
 * content.xml : Utility routes for editing contents
-* content_type.xml : Utility routes for editing content types
 * page.xml : basic CRUD routes for Pages (demo purpose)
-* content_crud.xml : basic CRUD routes for Content and ContentTypes (demo purpose)
+* content_crud.xml : basic CRUD routes for Content (demo purpose)
 * all.xml : includes all of the above
 * base.xml : includes tools.xml, content.xml and content_type.xml
 

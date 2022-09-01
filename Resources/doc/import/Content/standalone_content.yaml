@@ -1,33 +1,21 @@
 contents:
     standalone-content:
         name: Standalone Content
-        contentType: standalone-content-type
         locale: en
         children:
             -
-                slug: select-field
-                value:
-                    - Choice 2
-                    - Choice 3
+                type: text
+                value: Hello world
             -
-                slug: radio-field
-                value:
-                    - Choice 6
-            -
-                slug: checkbox-field
-                value:
-                    - Choice 7
-                    - Choice 9
-            -
-                slug: boolean-field
+                type: boolean
                 value: 1
             -
-                slug: image-field
+                type: image
                 value:
-                    file: background.png
+                    _file: background.png
                     alt: Content Background
             -
-                slug: file-field
+                type: file
                 value:
-                    file: background.png
+                    _file: document.pdf
                     title: File title

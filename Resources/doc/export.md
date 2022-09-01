@@ -22,13 +22,13 @@ $ php bin/console sherlockode:acb:export
 ```
 
 The command has several options:
-- type: type of entity to export. Allowed types are ContentType, Page and Content
+- type: type of entity to export. Allowed types are Page and Content
 - dir: directory into which the command can write the files to export (will override your configuration)
 You can either use a relative path (relative from `%kernel.project_dir%`) or an absolute path (for example `/tmp/files`)
 
 ```bash
 $ php bin/console sherlockode:acb:export #export all types in custom/dir
-$ php bin/console sherlockode:acb:export --type=ContentType #export ContentType only in custom/dir
-$ php bin/console sherlockode:acb:export --type=ContentType --type=Content #export ContentType and Content in custom/dir
+$ php bin/console sherlockode:acb:export --type=Content #export Content only in custom/dir
+$ php bin/console sherlockode:acb:export --type=Content --type=Page #export Content and Page in custom/dir
 $ php bin/console sherlockode:acb:export --dir=specific/dir #export all types in specific/dir
 ```
