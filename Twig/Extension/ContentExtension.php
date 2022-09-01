@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
+use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
@@ -16,15 +17,25 @@ class ContentExtension extends AbstractExtension
      * @var FieldManager
     */
     private $fieldManager;
+
+    /**
+     * @var Environment
+     */
     private $twig;
+
+    /**
+     * @var EntityManager
+     */
+    private $em;
 
     /**
      * @param FieldManager $fieldManager
      */
-    public function __construct(FieldManager $fieldManager, Environment $twig)
+    public function __construct(FieldManager $fieldManager, Environment $twig, EntityManager $em)
     {
         $this->fieldManager = $fieldManager;
         $this->twig = $twig;
+        $this->em = $em;
     }
 
     /**
@@ -38,6 +49,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_fields', [$this, 'getAllFieldValues'], ['is_safe' => ['html']]),
             new TwigFunction('acb_field', [$this, 'getContentFieldValue'], ['is_safe' => ['html']]),
             new TwigFunction('acb_render_field', [$this, 'renderFieldValue'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_find_entity', [$this, 'findEntity']),
         ];
     }
 
@@ -53,6 +65,11 @@ class ContentExtension extends AbstractExtension
         }
 
         return $this->twig->render($field->getFrontTemplate(), $params);
+    }
+
+    public function findEntity($identifier, $class)
+    {
+        return $this->em->getRepository($class)->find($identifier);
     }
 
     /**

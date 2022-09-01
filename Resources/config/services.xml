@@ -22,6 +22,7 @@
         <service id="sherlockode_advanced_content.content_extension" class="Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="twig"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
             <tag name="twig.extension"/>
         </service>
 
