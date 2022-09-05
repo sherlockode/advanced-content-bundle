@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,18 +23,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/text.html.twig';
-    }
-
-    /**
-     * Get field's options
-     *
-     * @param FieldInterface $field
-     *
-     * @return array
-     */
-    public function getFieldOptions(FieldInterface $field)
-    {
-        return $field->getOptions();
     }
 
     /**
@@ -70,26 +57,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function addFieldOptions($builder)
     {
-    }
-
-    /**
-     * Cleanup field options (in case of field type change)
-     *
-     * @param FieldInterface $field
-     */
-    public function clearOptions(FieldInterface $field)
-    {
-        $options = $field->getOptions();
-
-        $optionNames = $this->getFieldOptionNames();
-        foreach ($options as $key => $value) {
-            if (in_array($key, $optionNames)) {
-                continue;
-            }
-            unset($options[$key]);
-        }
-
-        $field->setOptions($options);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,8 +11,6 @@ abstract class AbstractInputType extends AbstractFieldType
 {
     /**
      * Get options to apply on field value
-     *
-     * @param FieldInterface $field
      *
      * @return array
      */

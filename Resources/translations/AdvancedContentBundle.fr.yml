@@ -3,44 +3,10 @@ content_type:
     edit: Editer le type de contenu
     create: Créer un type de contenu
     form:
-        name: Nom
-        slug: Slug
-        fields: Champs
         add_field: Ajouter un champ
-        add_layout: Ajouter un groupe
-        select_field_type: Choisissez un type de champ
-        field:
-            add: Ajouter
-            edit: Modifier
-            remove: Supprimer
-            name: Nom
-            slug: Clé
-            type: Type de champ
-            required: Obligatoire
-            position: Ordre
-            hint: Informations
-            options: Options
-        layout:
-            name: Nom du groupe
-            children: Champs
-        link_types:
-            label: Associer à
-            no_link: Ne pas associer
-            page_type: Type de page
-            page: Page
-        page_type: Type de page
-        page: Page
-        allow_several_contents: Autoriser plusieurs contenus de ce type
-    errors:
-        existing_link: Un autre type de contenu est déjà lié à ce type de page / cette page
-        missing_page_type: Veuillez sélectionner un type de page
-        missing_page: Veuillez sélectionner une page
-        alert_change_link: Attention, changer l'association peut provoquer la suppression de certains contenus. Voulez-vous continuer ?
-        unique_content: Un contenu existe déjà pour ce type de contenu
 content:
     label: Contenu avancé
     id: Identifiant
-    content_type: Type de contenu
     edit: Modifier le contenu
     create: Créer un contenu
     form:
@@ -93,8 +59,6 @@ field_type:
         label: Iframe
     link:
         label: Lien
-    message:
-        label: Message
     number:
         label: Nombre
     password:
@@ -179,8 +143,6 @@ init:
     errors:
         init_dir: Le dossier %dir% n'existe pas
         entity_not_found: "%entity% '%name%' n'existe pas"
-        page_no_content_type: "Aucun type de contenu n'a été trouvé pour la page %page%. Son contenu ne sera pas traité"
-        content_type_missing_name: Vous devez définir le nom du type de contenu
         field_missing_data: Vous devez définir le nom / le type du champ
         layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
@@ -189,8 +151,6 @@ init:
         field_value_missing_type: Vous devez définir le type du champ du contenu dans "%contentName%"
         field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu
         content_missing_name: Vous devez définir le nom du contenu
-        content_no_content_type_found: Aucun type de contenu n'a été trouvé avec le slug "%slug%"
-        content_type_already_linked: Le type de contenu "%name%" est déjà associé à un type de page ou à une page
         page_type_too_many_matches: Un seul type de page doit correspondre au nom "%name%"
         field_options_not_array: Les options du champ "%slug%" doivent être un tableau
         field_invalid_type: Le champ "%slug%" a un type inconnu "%type%"
@@ -213,12 +173,10 @@ tools:
         title: Export
         description: Exporter les fichiers yaml des entités sélectionnées
         all: Cocher/Décocher tous
-        content_type: Type de contenu
         page: Page
         content: Contenu
         btn: Exporter
         error_empty_selection: Veuillez sélectionner au moins une entité
         empty_list:
-            content_type: Il n'y a pas de types de contenu à exporter
             page: Il n'y a pas de pages à exporter
             content: Il n'y a pas de contenus à exporter

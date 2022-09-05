@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,15 +20,6 @@ interface FieldTypeInterface
      * @return array
      */
     public function getFormFieldValueOptions();
-
-    /**
-     * Get field's options
-     *
-     * @param FieldInterface $field
-     *
-     * @return array
-     */
-    public function getFieldOptions(FieldInterface $field);
 
     /**
      * @return string
@@ -60,13 +50,6 @@ interface FieldTypeInterface
      * @return string
      */
     public function getCode();
-
-    /**
-     * Cleanup field options (in case of field type change)
-     *
-     * @param FieldInterface $field
-     */
-    public function clearOptions(FieldInterface $field);
 
     /**
      * Get Field option names

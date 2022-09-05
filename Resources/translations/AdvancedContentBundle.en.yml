@@ -3,44 +3,10 @@ content_type:
     edit: Edit content type
     create: Create content type
     form:
-        name: Name
-        slug: Slug
-        fields: Fields
         add_field: Add field
-        add_layout: Add group
-        select_field_type: Select field type
-        field:
-            add: Add
-            edit: Edit
-            remove: Remove
-            name: Name
-            slug: Slug
-            type: Field type
-            required: Required
-            position: Sort order
-            hint: Hint
-            options: Options
-        layout:
-            name: Group name
-            children: Fields
-        link_types:
-            label: Link to
-            no_link: No link
-            page_type: Page type
-            page: Page
-        page_type: Page type
-        page: Page
-        allow_several_contents: Allow several contents of this type
-    errors:
-        existing_link: Another content type is already linked to this page type / page
-        missing_page_type: Please select a page type
-        missing_page: Please select a page
-        alert_change_link: Warning, changing the association can lead to content deletion. Are you sure you want to continue?
-        unique_content: A content already exists for this content type
 content:
     label: Content
     id: ID
-    content_type: Content type
     edit: Edit content
     create: Create content
     form:
@@ -93,8 +59,6 @@ field_type:
         label: Iframe
     link:
         label: Link
-    message:
-        label: Message
     number:
         label: Number
     password:
@@ -179,8 +143,6 @@ init:
     errors:
         init_dir: Init directory %dir% does not exist
         entity_not_found: '%entity% "%name%" was not found'
-        page_no_content_type: No content type was found for page %page%. Content will not be processed
-        content_type_missing_name: You need to define the name of the ContentType
         field_missing_data: You need to define the name / the type of the Field
         layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
@@ -189,8 +151,6 @@ init:
         field_value_missing_type: You need to define the type of the FieldValue in "%contentName%"
         field_group_value_missing_name: You need to define the name of the FieldGroupValue
         content_missing_name: You need to define the name of the content
-        content_no_content_type_found: No ContentType with slug "%slug%" was found
-        content_type_already_linked: The ContentType "%name%" is already linked to a PageType or a Page.
         page_type_too_many_matches: Only one PageType should match name "%name%"
         field_options_not_array: Options should be an array for field "%slug%"
         field_invalid_type: Field "%slug%" has an unknown type "%type%"
@@ -213,12 +173,10 @@ tools:
         title: Export
         description: Export yaml files of chosen entities
         all: Select/Unselect all
-        content_type: Content Type
         page: Page
         content: Content
         btn: Export
         error_empty_selection: Please select at least one entity
         empty_list:
-            content_type: There are no content types to export
             page: There are no pages to export
             content: There are no contents to export
