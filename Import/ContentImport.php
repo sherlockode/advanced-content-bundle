@@ -3,16 +3,12 @@
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sherlockode\AdvancedContentBundle\FieldType\AbstractChoice;
 use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
-use Sherlockode\AdvancedContentBundle\FieldType\File as FileFieldType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Sherlockode\AdvancedContentBundle\Model\LayoutInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -139,47 +135,6 @@ class ContentImport extends AbstractImport
             $fieldValue->setValue($fieldValueValue);
 
             $this->em->persist($fieldValue);
-
-            // look for children groups
-            if (isset($fieldValueData['children'])) {
-                $childFieldGroupPosition = 0;
-                foreach ($fieldValueData['children'] as $fieldChildValues) {
-                    $childFieldGroupPosition++;
-                    if (!isset($fieldChildValues['name']) && !isset($fieldChildValues['layout_name'])) {
-                        $this->errors[] = $this->translator->trans('init.errors.field_group_value_missing_name', [], 'AdvancedContentBundle');
-                        continue;
-                    }
-                    // compatibility with old key "name"
-                    $fieldChildName = $fieldChildValues['layout_name'] ?? $fieldChildValues['name'];
-
-                    $childLayout = $this->em->getRepository($this->entityClasses['layout'])->findOneBy([
-                        'parent' => $field,
-                        'name' => $fieldChildName,
-                    ]);
-                    if (!$childLayout instanceof LayoutInterface) {
-                        $this->errors[] = $this->translator->trans('init.errors.entity_not_found', ['%entity%' => 'Layout', '%name%' => $fieldChildName], 'AdvancedContentBundle');
-                        continue;
-                    }
-
-                    $childFieldGroupValue = $this->em->getRepository($this->entityClasses['field_group_value'])->findOneBy([
-                        'parent' => $fieldValue,
-                        'layout' => $childLayout,
-                        'position' => $childFieldGroupPosition,
-                    ]);
-                    if (!$childFieldGroupValue instanceof FieldGroupValueInterface) {
-                        /** @var FieldGroupValueInterface $childFieldGroupValue */
-                        $childFieldGroupValue = new $this->entityClasses['field_group_value'];
-                        $childFieldGroupValue->setParent($fieldValue);
-                        $childFieldGroupValue->setLayout($childLayout);
-                        $this->em->persist($childFieldGroupValue);
-                    }
-                    $childFieldGroupValue->setPosition($childFieldGroupPosition);
-
-                    if (isset($fieldChildValues['children'])) {
-                        $this->createFieldValues($fieldChildValues['children'], $content);
-                    }
-                }
-            }
         }
     }
 

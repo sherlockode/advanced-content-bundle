@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
@@ -14,14 +13,6 @@ class PageImport extends AbstractImport
      * @var ContentImport
      */
     private $contentImport;
-
-    protected function init()
-    {
-        parent::init();
-
-        $this->em->getEventManager()->removeEventListener('postPersist', 'sherlockode_advanced_content.content_type_listener');
-        $this->em->getEventManager()->removeEventListener('postUpdate', 'sherlockode_advanced_content.content_type_listener');
-    }
 
     /**
      * @param string $pageIdentifier

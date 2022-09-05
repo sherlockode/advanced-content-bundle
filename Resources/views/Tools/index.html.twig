@@ -27,16 +27,6 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="acb-export-entities">
-                                {{ form_row(exportForm.contentType) }}
-                                {% if exportForm.contentType.vars.choices is not empty %}
-                                    {{ form_row(exportForm.contentTypeAll) }}
-                                {% else %}
-                                    {{ 'tools.export.empty_list.content_type'|trans }}
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="acb-export-entities">
                                 {{ form_row(exportForm.page) }}
                                 {% if exportForm.page.vars.choices is not empty %}
                                     {{ form_row(exportForm.pageAll) }}

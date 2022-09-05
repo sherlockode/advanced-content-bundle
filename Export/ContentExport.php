@@ -7,7 +7,6 @@ use Sherlockode\AdvancedContentBundle\FieldType\Boolean;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldGroupValueInterface;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 class ContentExport
@@ -76,40 +75,20 @@ class ContentExport
         $fieldValueData = [];
         $fieldValueData['type'] = $fieldValue->getFieldType();
 
-        $children = $fieldValue->getChildren();
-        if (count($children) > 0) {
-            $fieldValueData['children'] = [];
-            foreach ($children as $child) {
-                /** @var FieldGroupValueInterface $child */
-                $childData = [];
-                $childData['layout_name'] = $child->getLayout()->getName();
-                $childData['children'] = $this->exportFieldValues($child->getChildren());
-                $fieldValueData['children'][] = $childData;
-            }
-        } else {
-            $fieldType = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
-            $rawValue = $fieldType->getRawValue($fieldValue);
+        $fieldType = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
+        $rawValue = $fieldType->getRawValue($fieldValue);
 
-            if ($fieldType instanceof File) {
-                if (is_array($rawValue) && isset($rawValue['url'])) {
-                    unset($rawValue['url']);
-                }
-            } elseif ($fieldType instanceof Boolean) {
-                $rawValue = (int) $rawValue;
-            } elseif ($fieldType instanceof AbstractEntity) {
-                if ($fieldType->getIsMultipleChoice($fieldValue->getField())) {
-                    $rawValues = [];
-                    foreach ($rawValue as $value) {
-                        $rawValues[] = $value['value'];
-                    }
-                    $rawValue = $rawValues;
-                } else {
-                    $rawValue = $rawValue['value'];
-                }
+        if ($fieldType instanceof File) {
+            if (is_array($rawValue) && isset($rawValue['url'])) {
+                unset($rawValue['url']);
             }
-
-            $fieldValueData['value'] = $rawValue;
+        } elseif ($fieldType instanceof Boolean) {
+            $rawValue = (int) $rawValue;
+        } elseif ($fieldType instanceof AbstractEntity) {
+            $rawValue = $rawValue['value'];
         }
+
+        $fieldValueData['value'] = $rawValue;
 
         return $fieldValueData;
     }
