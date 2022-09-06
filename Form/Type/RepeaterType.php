@@ -68,7 +68,7 @@ class RepeaterType extends AbstractType
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false,
-            'prototype_name' => '__layout_name__',
+            'prototype_name' => '__group_name__',
             'entry_options' => ['block_prefix' => 'acb_field_collection_entry'],
         ]);
     }

@@ -112,7 +112,7 @@ jQuery(function ($) {
         e.preventDefault();
 
         var list = $($(this).attr('data-list'));
-        var counter = list.data('widget-counter');
+        var counter = list.data('widget-counter') || list.children().length;
 
         var type = $(this).data('type');
         var newWidget = list.data('prototype');
@@ -123,9 +123,9 @@ jQuery(function ($) {
             newWidget = newWidget.replace(/__name__/g, counter);
             newWidget = newWidget.replace(/__random_id__/g, (Math.random() * 1000)|0);
         } else if (type === 'group') {
-            newWidget = newWidget.replace(/__layout_name__label__/g, counter);
-            newWidget = newWidget.replace(/__layout_name__/g, counter);
-            newWidget = newWidget.replace(/__layout_random_id__/g, (Math.random() * 1000)|0);
+            newWidget = newWidget.replace(/__group_name__label__/g, counter);
+            newWidget = newWidget.replace(/__group_name__/g, counter);
+            newWidget = newWidget.replace(/__group_random_id__/g, (Math.random() * 1000)|0);
         }
         counter++;
         list.data('widget-counter', counter);
@@ -440,14 +440,14 @@ jQuery(function ($) {
     ////////////////
 
 
-    $('.acb-add-field-container').find('button').on('click', function () {
+    $('.acb-add-field-container').find('.btn-form-part').on('click', function () {
         let form = $(this).closest('form');
         let container = $(this).closest('.acb-field-values-container').children('.acb-sortable-group');
         let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
         let baseName = $(this).data('base-name');
 
         $.ajax({
-            url: $(this).data('form-field-url'),
+            url: $(this).data('add-field-url'),
             data: {'type': $('.acb-add-field-container').find('select').val()},
             type: 'GET'
         }).done(function (data) {
@@ -458,5 +458,125 @@ jQuery(function ($) {
             calculatePosition();
         }).fail(ajaxFailCallback);
     });
+
+    let slide = $('<div class="acb-lateral-slide"><button type="button" class="close">x</button><div class="acb-lateral-slide-content"></div></div>');
+    slide.find('.close').on('click', function () {
+        closeSlide(slide);
+    });
+
+    $('.acb-add-field-container').find('.btn-new-field').on('click', function () {
+        let baseName = $(this).data('base-name');
+
+        $.ajax({
+            url: $(this).data('new-field-url'),
+            type: 'GET'
+        }).done(function (data) {
+            slide.find('.acb-lateral-slide-content').html(data);
+            slide.find('.acb-add-field-form').on('submit', function (e) {
+                e.preventDefault();
+                getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName, slide.find('.acb-lateral-slide-content'));
+            });
+
+            openSlide(slide);
+
+        }).fail(ajaxFailCallback);
+    });
+
+    $('body').on('click', '.acb-edit-row', function (e) {
+        e.stopPropagation();
+        let row = $(this).closest('.acb-field');
+        getEditFieldForm('/acb/content/field-form', slide.find('.acb-lateral-slide-content'), row);
+        openSlide(slide);
+    });
+
+    // get editing form
+    function getNewFieldForm(url, type, baseName, container) {
+        $.ajax({
+            url: url,
+            data: {'type': type},
+            type: 'GET'
+        }).done(function (data) {
+            container.html(data);
+            container.find('.acb-edit-field-form').on('submit', function (e) {
+                e.preventDefault();
+                saveNewFieldData(this, baseName);
+            });
+        });
+    }
+    // get editing form
+    function getEditFieldForm(url, container, row) {
+        let typeInputName = row.data('name') + '[fieldType]';
+        typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
+        let type = row.find('input[name=' +  typeInputName + ']').val();
+
+        let data = {};
+        row.find('input, textarea, select').each(function () {
+            if ($(this).attr('type') === 'radio' && !$(this).is(':checked')) {
+                return;
+            }
+            data[this.name.replace(row.data('name'), '__field_name__')] = $(this).val();
+        });
+
+        $.ajax({
+            url: url + '?edit=1&type='+type,
+            data: data,
+            type: 'POST'
+        }).done(function (data) {
+            container.html(data);
+            container.find('.acb-edit-field-form').on('submit', function (e) {
+                e.preventDefault();
+                saveFieldData(this, row.data('name'), row);
+            });
+        });
+    }
+
+    // convert slide form to content preview
+    function saveFieldData(form, name, row) {
+        $.ajax({
+            url: form.action,
+            data: $(form).serialize(),
+            type: form.method
+        }).done(function (data) {
+            let preview = data;
+            preview = preview.replace(/__field_name__/g, name).replace(/field_name__/g, name);
+
+            row.replaceWith(preview);
+            calculatePosition();
+
+            closeSlide(slide);
+        });
+    }
+    // convert slide form to content preview
+    function saveNewFieldData(form, baseName) {
+        $.ajax({
+            url: form.action,
+            data: $(form).serialize(),
+            type: form.method
+        }).done(function (data) {
+            let preview = data;
+            let name = baseName + '[__name__]';
+            preview = preview.replace(/__field_name__/g, name)
+                .replace(/field_name__/g, name.replace(/[\[\]]/g, '_')); // replace placeholder in HTML "id"
+
+            let container = $('.acb-field-values-container').children('.acb-sortable-group');
+            let form = container.closest('form');
+            let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
+            preview = preview.replace(/__name__/g, counter++);
+            form.data('widget-counter', counter);
+            container.append(preview);
+            calculatePosition();
+
+            closeSlide(slide);
+        });
+    }
+
+    function openSlide(slide) {
+        $('body').append(slide);
+        setTimeout(() => $('body').addClass('acb-lateral-slide-open'), 10);
+    }
+
+    function closeSlide(slide) {
+        $('body').removeClass('acb-lateral-slide-open');
+    }
 });
 })();

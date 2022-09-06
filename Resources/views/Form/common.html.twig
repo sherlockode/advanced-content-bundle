@@ -56,6 +56,11 @@
 
 {% block acb_panel_actions %}
     <div class="pull-right panel-actions">
+        {% if allowEdit is not defined or allowEdit == true %}
+            <button type="button" class="acb-edit-row" title="{{ 'edit'|trans }}">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+        {% endif %}
         {% if allowDelete is not defined or allowDelete == true %}
             <button type="button" class="acb-remove-row" title="{{ 'delete'|trans }}">
                 <i class="glyphicon glyphicon-trash"></i>
@@ -64,6 +69,9 @@
         <div class="expand_caret caret"></div>
     </div>
 {% endblock %}
+{% macro acb_panel_actions(form) %}
+    {{ block('acb_panel_actions') }}
+{% endmacro %}
 
 {% block acb_content_translations_widget %}
     {% set deleteUrl = path('sherlockode_acb_content_delete_locale') %}

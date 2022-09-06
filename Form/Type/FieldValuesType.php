@@ -105,18 +105,12 @@ class FieldValuesType extends AbstractType
         });
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['field_type_choices'] = $options['field_type_choices'];
-    }
-
     /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'field_type_choices' => $this->fieldManager->getFieldTypeFormChoices(),
             'translation_domain' => 'AdvancedContentBundle',
             'by_reference' => false,
             'row_attr' => ['class' => 'acb-field-values-container'],

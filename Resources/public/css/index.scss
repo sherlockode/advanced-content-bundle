@@ -1,0 +1,36 @@
+@import "acb";
+@import "slide";
+
+.acb-field-list-container {
+  .acb-field-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .acb-field-item {
+      display: block;
+      position: relative;
+      width: 48%;
+      margin: 5px 0;
+
+      input {
+        position: absolute;
+        visibility: hidden;
+
+        &:checked + label {
+          background: #e5e5e5;
+          box-shadow: 0 0 4px #999;
+        }
+      }
+      label {
+        display: block;
+        border: 1px solid #999;
+        border-radius: 3px;
+        padding: 5px;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+}

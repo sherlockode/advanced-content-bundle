@@ -1,0 +1,12 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
+
+<h1>{{ fieldName|trans }}</h1>
+
+{{ form_start(form, {attr: {class: 'acb-edit-field-form'}}) }}
+{% for child in form %}
+    {{ form_row(child) }}
+{% endfor %}
+<button type="submit" class="btn btn-primary">{{ 'save'|trans }}</button>
+{{ form_end(form) }}

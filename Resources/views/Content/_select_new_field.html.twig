@@ -1,0 +1,22 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+<h1>Add new field</h1>
+
+<div class="acb-field-list-container">
+<form action="{{ path('sherlockode_acb_content_field_form') }}" class="acb-add-field-form">
+{% for groupName, elements in fields %}
+    <h2>{{ groupName|trans }}</h2>
+    <ul class="acb-field-list">
+        {% for label, code in elements %}
+        <li class="acb-field-item">
+            <input id="acb-type-{{ code }}" type="radio" name="type" value="{{ code }}"/>
+            <label for="acb-type-{{ code }}">
+                {{ label|trans }}
+            </label>
+        </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+    <button type="submit" class="btn btn-primary">{{ 'save'|trans }}</button>
+</form>
+</div>

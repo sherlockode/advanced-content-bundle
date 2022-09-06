@@ -14,27 +14,44 @@
 {% endblock %}
 
 {% block acb_field_values_widget %}
-    {% set type = 'group' %}
-    {{ block('acb_simple_collection') }}
+    {%- set attr = attr|default([]) -%}
+    {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
+    {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
+    <div {{ block('widget_container_attributes') }} data-sortable-group-id="{{ form.vars.id }}">
+        {% for child in form %}
+            {% set entryForm = child %}
+            {% set fieldId = entryForm.vars.id %}
+            {% set contentPreview = 'NO PREVIEW YET' %}
+            {{ block('acb_field_value_entry') }}
+        {% endfor %}
+    </div>
 
     <div class="acb-add-field-container">
-        <select class="form-select">
-            {% for groupName, items in form.vars['field_type_choices'] %}
-                <optgroup label="{{ groupName|trans }}">
-                    {% for label, value in items %}
-                        <option value="{{ value }}">{{ label|trans }}</option>
-                    {% endfor %}
-                </optgroup>
-            {% endfor %}
-        </select>
-        <button type="button" class="btn btn-primary" data-form-field-url="{{ path('sherlockode_acb_content_field_form') }}" data-base-name="{{ form.vars['full_name'] }}">
-            {{ 'content_type.form.add_field'|trans }}
+        <button type="button" class="btn btn-primary btn-new-field" data-new-field-url="{{ path('sherlockode_acb_content_add_field') }}" data-base-name="{{ form.vars['full_name'] }}">
+            {{ 'Add new field' }}
         </button>
     </div>
 {% endblock %}
 
+{% block acb_field_value_entry %}
+<div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-name="{{ entryForm.vars.full_name }}">
+    <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false">
+        <span class="panel-title">{{ entryForm.vars.label|trans }}</span>
+
+        {{- block('acb_panel_actions') -}}
+    </div>
+    <div class="panel-body collapse" id="field-{{ fieldId }}">
+        {{- contentPreview -}}
+    </div>
+    <div style="display: none">
+        {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': entryForm}) }}
+    </div>
+</div>
+{% endblock %}
+
 {% block acb_field_collection_widget %}
     {% set type = 'group' %}
+    {% set allowEdit = false %}
     {{ block('acb_simple_collection') }}
 {% endblock %}
 

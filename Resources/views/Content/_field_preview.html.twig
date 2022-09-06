@@ -1,0 +1,17 @@
+{% import '@SherlockodeAdvancedContent/Form/common.html.twig' as common %}
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+<div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-name="{{ form.vars.full_name }}">
+    <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false">
+        <span class="panel-title">
+            {{ label|trans }}
+        </span>
+        {{- common.acb_panel_actions(form) -}}
+    </div>
+    <div class="panel-body collapse" id="field-{{ fieldId }}">
+        {{- contentPreview -}}
+    </div>
+    <div style="display: none">
+        {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': form}) }}
+    </div>
+</div>

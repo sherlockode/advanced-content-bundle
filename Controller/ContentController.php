@@ -66,7 +66,24 @@ class ContentController extends AbstractController
         $this->formFactory = $formFactory;
     }
 
-    public function fieldFormAction(Request $request)
+    /**
+     * @return Response
+     */
+    public function addFieldAction()
+    {
+        $fields = $this->fieldManager->getFieldTypeFormChoices();
+
+        return $this->render('@SherlockodeAdvancedContent/Content/_select_new_field.html.twig', [
+            'fields' => $fields,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function fieldFormPartAction(Request $request)
     {
         $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
         $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, ['fieldType' => $fieldType->getCode()], [
@@ -78,6 +95,37 @@ class ContentController extends AbstractController
 
         return $this->render('@SherlockodeAdvancedContent/Content/_field_value.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function fieldFormAction(Request $request)
+    {
+        $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
+        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, ['fieldType' => $fieldType->getCode()], [
+            'field_type' => $fieldType,
+            'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $fieldType->getCode()]),
+            'csrf_protection' => false,
+        ]);
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if (!$request->query->get('edit') && $form->isSubmitted() && $form->isValid()) {
+            return $this->render('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
+                'label' => $fieldType->getFormFieldLabel(),
+                'contentPreview' => 'NO PREVIEW YET',
+                'form' => $form->createView(),
+                'fieldId' => 'random-' . rand(10000, 100000),
+            ]);
+        }
+
+        return $this->render('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
+            'form' => $form->createView(),
+            'fieldName' => $fieldType->getFormFieldLabel(),
         ]);
     }
 
