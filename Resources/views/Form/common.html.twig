@@ -56,11 +56,6 @@
 
 {% block acb_panel_actions %}
     <div class="pull-right panel-actions">
-        {% if allowDuplicate is not defined or allowDuplicate == true %}
-            <button type="button" class="acb-duplicate-row" title="{{ 'duplicate'|trans }}" data-form-id="{{ form.vars.id }}" data-form-name="{{ form.vars.full_name }}" data-form-index="{{ form.vars.name }}">
-                <i class="glyphicon glyphicon-duplicate"></i>
-            </button>
-        {% endif %}
         {% if allowDelete is not defined or allowDelete == true %}
             <button type="button" class="acb-remove-row" title="{{ 'delete'|trans }}">
                 <i class="glyphicon glyphicon-trash"></i>
