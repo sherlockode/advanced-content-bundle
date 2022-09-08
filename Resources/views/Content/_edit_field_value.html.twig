@@ -4,7 +4,7 @@
 
 <h1>{{ fieldName|trans }}</h1>
 
-{{ form_start(form, {attr: {class: 'acb-edit-field-form'}}) }}
+{{ form_start(form, {attr: form.vars.attr|merge({class: form.vars.attr.class|default('') ~ ' acb-edit-field-form'})}) }}
 {% for child in form %}
     {{ form_row(child) }}
 {% endfor %}

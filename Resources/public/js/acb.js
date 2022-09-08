@@ -485,7 +485,8 @@ jQuery(function ($) {
     $('body').on('click', '.acb-edit-row', function (e) {
         e.stopPropagation();
         let row = $(this).closest('.acb-field');
-        getEditFieldForm('/acb/content/field-form', slide.find('.acb-lateral-slide-content'), row);
+        let url = $(this).closest('.acb-field-values-container').data('edit-url');
+        getEditFieldForm(url, slide.find('.acb-lateral-slide-content'), row);
         openSlide(slide);
     });
 

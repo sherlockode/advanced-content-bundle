@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FieldValuesType extends AbstractType
 {
@@ -25,15 +26,23 @@ class FieldValuesType extends AbstractType
     private $configurationManager;
 
     /**
-     * @param FieldManager         $fieldManager
-     * @param ConfigurationManager $configurationManager
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
+     * @param FieldManager          $fieldManager
+     * @param ConfigurationManager  $configurationManager
+     * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
         FieldManager $fieldManager,
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -113,7 +122,10 @@ class FieldValuesType extends AbstractType
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
             'by_reference' => false,
-            'row_attr' => ['class' => 'acb-field-values-container'],
+            'row_attr' => [
+                'class' => 'acb-field-values-container',
+                'data-edit-url' => $this->urlGenerator->generate('sherlockode_acb_content_field_form'),
+            ],
         ]);
     }
 

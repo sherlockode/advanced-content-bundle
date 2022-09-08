@@ -83,26 +83,6 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function fieldFormPartAction(Request $request)
-    {
-        $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
-        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, ['fieldType' => $fieldType->getCode()], [
-            'label' => $fieldType->getFormFieldLabel(),
-            'field_type' => $fieldType,
-            'csrf_protection' => false,
-        ]);
-        $form = $formBuilder->getForm();
-
-        return $this->render('@SherlockodeAdvancedContent/Content/_field_value.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function fieldFormAction(Request $request)
     {
         $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
