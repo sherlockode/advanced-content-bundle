@@ -11,7 +11,6 @@ $zindex: 1000;
   background: #fff;
   transition: .5s ease;
   box-shadow: 0 0 4px #999;
-  padding: 20px;
 
   .acb-lateral-slide-open & {
     margin-right: 0;
@@ -26,9 +25,15 @@ $zindex: 1000;
     height: 20px;
     border: 1px solid #999;
   }
+
+  .acb-lateral-slide-content {
+    padding: 20px;
+      overflow: scroll;
+      height: 100%;
+  }
 }
 
-.acb-lateral-slide-open::before {
+.acb-lateral-slide-open .acb-lateral-slide-layer {
   content: '';
   position: fixed;
   background: rgba(128, 128, 128, 0.4);

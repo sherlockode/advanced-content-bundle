@@ -171,7 +171,7 @@ jQuery(function ($) {
     if (contentTypeName.length > 0 && contentTypeSlug.length > 0) {
         applySlug(contentTypeName, contentTypeSlug);
     }
-    
+
     $('body').on('change', '.field-type', function (e) {
         var data = {
             type: $(this).val(),
@@ -356,7 +356,7 @@ jQuery(function ($) {
             });
         });
     }
-    
+
     function initContentSlug() {
         let contentName = $('.acb-content-name');
         contentName.each(function(){
@@ -460,8 +460,12 @@ jQuery(function ($) {
     });
 
     let slide = $('<div class="acb-lateral-slide"><button type="button" class="close">x</button><div class="acb-lateral-slide-content"></div></div>');
+    let slideLayer = $('<div class="acb-lateral-slide-layer"></div>');
     slide.find('.close').on('click', function () {
-        closeSlide(slide);
+        closeSlide();
+    });
+    slideLayer.on('click', function () {
+      closeSlide();
     });
 
     $('.acb-add-field-container').find('.btn-new-field').on('click', function () {
@@ -477,7 +481,7 @@ jQuery(function ($) {
                 getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName, slide.find('.acb-lateral-slide-content'));
             });
 
-            openSlide(slide);
+            openSlide();
 
         }).fail(ajaxFailCallback);
     });
@@ -487,7 +491,7 @@ jQuery(function ($) {
         let row = $(this).closest('.acb-field');
         let url = $(this).closest('.acb-field-values-container').data('edit-url');
         getEditFieldForm(url, slide.find('.acb-lateral-slide-content'), row);
-        openSlide(slide);
+        openSlide();
     });
 
     // get editing form
@@ -544,7 +548,7 @@ jQuery(function ($) {
             row.replaceWith(preview);
             calculatePosition();
 
-            closeSlide(slide);
+            closeSlide();
         });
     }
     // convert slide form to content preview
@@ -567,16 +571,17 @@ jQuery(function ($) {
             container.append(preview);
             calculatePosition();
 
-            closeSlide(slide);
+            closeSlide();
         });
     }
 
-    function openSlide(slide) {
+    function openSlide() {
+        $('body').append(slideLayer);
         $('body').append(slide);
         setTimeout(() => $('body').addClass('acb-lateral-slide-open'), 10);
     }
 
-    function closeSlide(slide) {
+    function closeSlide() {
         $('body').removeClass('acb-lateral-slide-open');
     }
 });
