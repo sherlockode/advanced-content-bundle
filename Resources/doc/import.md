@@ -1,7 +1,7 @@
 Import
 ======
 
-The import command will create your content types, page types, pages and their content.
+The import command will create your page types, pages and their content.
 
 ## Configuration
 
@@ -49,7 +49,7 @@ $ php bin/console sherlockode:acb:import
 ```
 
 The command has several options:
-- type: type of entity to import. Allowed types are ContentType, Page and Content
+- type: type of entity to import. Allowed types are Page and Content
 - file: file name / file pattern to import
 - dir: directory in which the command can find the files to import (will override your configuration) - You can either use a relative path (relative from `%kernel.project_dir%`) or an absolute path (for example `/tmp/files`)
 - files-dir: directory in which the command can find the resource files (for File / Image FieldTypes) to import (will override your configuration) - You can either use a relative path (relative from `%kernel.project_dir%`) or an absolute path (for example `/tmp/files`)
@@ -95,7 +95,6 @@ pages:
     page-identifier:
         status: 10 # (0: Draft (default) / 10: Published / 20: Trash)
         pageType: Custom Page Type (if defined, will automatically retrieve the ContentType linked to the PageType)
-        contentType: slug of the Content Type (if you want a specific ContentType for this page)
         contents:
             en: # locale of the content
                 #list of FieldValues of the Content linked to this Page
@@ -117,19 +116,11 @@ pages:
                 meta_description: 'Méta Description'
 ```
 
-Each FieldValue will have the following structure:
+Each FieldValue declaration has the following structure:
 ```yaml
 # var/acb/Page/custom_page.yaml
-slug: Slug of the Field
-value: Custom value
-```
-
-Each FieldGroupValue will have the following structure: 
-
-```yaml
-# var/acb/Page/custom_page.yaml
-layout_name: Name of the Layout
-children: list of FieldValues for each Field of the Layout
+type: Type of the Field
+value: Custom value # string on array depending on the data
 ```
 
 You can find a Page import file example here [doc](import/Page/custom_page.yaml)

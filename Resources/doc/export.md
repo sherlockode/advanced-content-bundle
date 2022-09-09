@@ -1,7 +1,7 @@
 Export
 ======
 
-The export command will generate yaml files of your existing content types, page types, pages and their content.
+The export command will generate yaml files of your existing page types, pages and their content.
 
 ## Configuration
 

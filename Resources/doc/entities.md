@@ -40,13 +40,8 @@ class Content extends BaseContent
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ContentType", inversedBy="contents")
-     * @ORM\JoinColumn(name="content_type_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $contentType;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FieldValue", mappedBy="content", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\FieldValue", mappedBy="content", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"position"="ASC"})
      */
     protected $fieldValues;
 
@@ -90,28 +85,6 @@ class FieldValue extends BaseFieldValue
      * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $content;
-
-    /**
-     * @var Field
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Field", inversedBy="fieldValues")
-     * @ORM\JoinColumn(name="field_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $field;
-
-    /**
-     * @var FieldGroupValue
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\FieldGroupValue", inversedBy="children")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $group;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FieldGroupValue", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position" = "ASC"})
-     */
-    protected $children;
 }
 ```
 
