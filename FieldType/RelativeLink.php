@@ -20,6 +20,11 @@ class RelativeLink extends Link
         $this->requestStack = $requestStack;
     }
 
+    public function getPreviewTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/preview/link.html.twig';
+    }
+
     /**
      * Get field's code
      *

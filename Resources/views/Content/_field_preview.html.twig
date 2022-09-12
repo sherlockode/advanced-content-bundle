@@ -9,7 +9,7 @@
         {{- common.acb_panel_actions(form) -}}
     </div>
     <div class="panel-body collapse" id="field-{{ fieldId }}">
-        {{- contentPreview -}}
+        {{ acb_field_preview(form.vars.data) }}
     </div>
     <div style="display: none">
         {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': form}) }}

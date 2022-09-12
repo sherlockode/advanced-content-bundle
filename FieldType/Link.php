@@ -96,7 +96,8 @@ class Link extends AbstractFieldType
      */
     public function getRawValue(FieldValueInterface $fieldValue)
     {
-        $url = $this->getUrlValue($fieldValue->getValue());
+        $rawValue = $fieldValue->getValue();
+        $url = $this->getUrlValue($rawValue);
 
         if (!$url) {
             return null;

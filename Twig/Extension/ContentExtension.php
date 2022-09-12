@@ -45,6 +45,7 @@ class ContentExtension extends AbstractExtension
     {
         return [
             new TwigFunction('acb_render_field', [$this, 'renderFieldValue'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_field_preview', [$this, 'renderFieldPreview'], ['is_safe' => ['html']]),
             new TwigFunction('acb_find_entity', [$this, 'findEntity']),
         ];
     }
@@ -62,6 +63,30 @@ class ContentExtension extends AbstractExtension
 
         return $this->twig->render($field->getFrontTemplate(), $params);
     }
+
+    /**
+     * @param FieldValueInterface $fieldValue
+     *
+     * @return string
+     */
+    public function renderFieldPreview(FieldValueInterface $fieldValue)
+    {
+        $field = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
+
+        $raw = $this->getFieldRawValue($fieldValue);
+        if (is_array($raw)) {
+            $params = $raw;
+        } else {
+            $params = ['value' => $raw];
+        }
+
+        if ($this->twig->getLoader()->exists($field->getPreviewTemplate())) {
+            return $this->twig->render($field->getPreviewTemplate(), $params);
+        }
+
+        return 'NO PREVIEW EXISTS';
+    }
+
 
     public function findEntity($identifier, $class)
     {

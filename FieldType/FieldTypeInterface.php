@@ -27,6 +27,11 @@ interface FieldTypeInterface
     public function getFrontTemplate();
 
     /**
+     * @return mixed
+     */
+    public function getPreviewTemplate();
+
+    /**
      * Add field value's field(s) to content form
      *
      * @param FormBuilderInterface $builder

@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Form;
@@ -31,7 +32,9 @@ class Iframe extends AbstractFieldType
         parent::buildContentFieldValue($builder);
 
         $builder->get('value')
-            ->add('href', UrlType::class)
+            ->add('src', UrlType::class)
+            ->add('width', IntegerType::class, ['required' => false])
+            ->add('height', IntegerType::class, ['required' => false])
         ;
     }
 
@@ -63,15 +66,5 @@ class Iframe extends AbstractFieldType
     public function getCode()
     {
         return 'iframe';
-    }
-
-    /**
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return mixed
-     */
-    public function getRawValue(FieldValueInterface $fieldValue)
-    {
-        return unserialize($fieldValue->getValue());
     }
 }

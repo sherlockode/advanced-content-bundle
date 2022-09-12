@@ -86,7 +86,10 @@ class ContentController extends AbstractController
     public function fieldFormAction(Request $request)
     {
         $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
-        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, ['fieldType' => $fieldType->getCode()], [
+        $fieldValueClass = $this->configurationManager->getEntityClass('field_value');
+        $fieldValue = new $fieldValueClass();
+        $fieldValue->setFieldType($fieldType->getCode());
+        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, $fieldValue, [
             'field_type' => $fieldType,
             'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $fieldType->getCode()]),
             'csrf_protection' => false,
@@ -97,7 +100,6 @@ class ContentController extends AbstractController
         if (!$request->query->get('edit') && $form->isSubmitted() && $form->isValid()) {
             return $this->render('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
                 'label' => $fieldType->getFormFieldLabel(),
-                'contentPreview' => 'NO PREVIEW YET',
                 'form' => $form->createView(),
                 'fieldId' => 'random-' . rand(10000, 100000),
             ]);

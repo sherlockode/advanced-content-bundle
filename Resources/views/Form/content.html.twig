@@ -21,7 +21,6 @@
         {% for child in form %}
             {% set entryForm = child %}
             {% set fieldId = entryForm.vars.id %}
-            {% set contentPreview = 'NO PREVIEW YET' %}
             {{ block('acb_field_value_entry') }}
         {% endfor %}
     </div>
@@ -41,7 +40,7 @@
         {{- block('acb_panel_actions') -}}
     </div>
     <div class="panel-body collapse" id="field-{{ fieldId }}">
-        {{- contentPreview -}}
+        {{ acb_field_preview(entryForm.vars.data) }}
     </div>
     <div style="display: none">
         {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': entryForm}) }}

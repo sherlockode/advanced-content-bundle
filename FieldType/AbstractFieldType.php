@@ -26,6 +26,14 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
+     * @return string
+     */
+    public function getPreviewTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/preview/'. $this->getCode() .'.html.twig';
+    }
+
+    /**
      * Add field value's field(s) to content form
      *
      * @param FormBuilderInterface $builder
