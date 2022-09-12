@@ -1,23 +1,15 @@
-content_type:
-    label: Content type
-    edit: Edit content type
-    create: Create content type
-    form:
-        add_field: Add field
 content:
     label: Content
     id: ID
     edit: Edit content
     create: Create content
+    add_field: Add field
     form:
         name: Name
         slug: Slug
         locale: Locale
         field_values: Fields
-        add_group: Add group
         position: Sort order
-        field:
-            remove: Remove
     duplicate:
         select_language: Choose a locale to duplicate from
         validate: Validate

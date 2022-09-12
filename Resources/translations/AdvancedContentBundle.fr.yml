@@ -1,23 +1,15 @@
-content_type:
-    label: Type de contenu avancé
-    edit: Editer le type de contenu
-    create: Créer un type de contenu
-    form:
-        add_field: Ajouter un champ
 content:
     label: Contenu avancé
     id: Identifiant
     edit: Modifier le contenu
     create: Créer un contenu
+    add_field: Ajouter un champ
     form:
         name: Nom
         slug: Slug
         locale: Locale
         field_values: Champs
-        add_group: Ajouter un groupe
         position: Ordre
-        field:
-            remove: Supprimer
     duplicate:
         select_language: Choisissez une langue à copier
         validate: Valider

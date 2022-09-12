@@ -3,7 +3,7 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
 {% block acb_simple_collection %}
-    {% set button_label = button_label|default('content_type.form.add_field') %}
+    {% set button_label = button_label|default('content.add_field') %}
     {%- set attr = attr|default([]) -%}
     {% if prototype is defined %}
         {% set entryForm = prototype %}
