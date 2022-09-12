@@ -537,7 +537,7 @@ jQuery(function ($) {
 
         let data = {};
         row.find('input, textarea, select').each(function () {
-            if ($(this).attr('type') === 'radio' && !$(this).is(':checked')) {
+            if (['radio', 'checkbox'].includes($(this).attr('type')) && !$(this).is(':checked')) {
                 return;
             }
             data[this.name.replace(row.data('name'), '__field_name__')] = $(this).val();
@@ -562,7 +562,9 @@ jQuery(function ($) {
         updateCKEditorElement(form);
         $.ajax({
             url: form.action,
-            data: $(form).serialize(),
+            data: new FormData(form),
+            processData: false,
+            contentType: false,
             type: form.method
         }).done(function (data) {
             let preview = data;
@@ -580,7 +582,9 @@ jQuery(function ($) {
         updateCKEditorElement(form);
         $.ajax({
             url: form.action,
-            data: $(form).serialize(),
+            data: new FormData(form),
+            processData: false,
+            contentType: false,
             type: form.method
         }).done(function (data) {
             let preview = data;

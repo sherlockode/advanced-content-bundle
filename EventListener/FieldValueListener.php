@@ -45,6 +45,9 @@ class FieldValueListener
         $uow = $em->getUnitOfWork();
         $changeSet = $uow->getEntityChangeSet($object);
 
+        if (!isset($changeSet['value'])) {
+            return;
+        }
         $oldValue = unserialize($changeSet['value'][0]);
         $newValue = unserialize($changeSet['value'][1]);
 
@@ -52,7 +55,9 @@ class FieldValueListener
             return;
         }
 
-        $this->uploadManager->remove($oldValue['src']);
+        if (!empty($oldValue['src'])) {
+            $this->uploadManager->remove($oldValue['src']);
+        }
         unset($newValue['delete']);
         unset($newValue['src']);
 

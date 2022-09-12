@@ -38,16 +38,6 @@ class File extends AbstractFieldType
     }
 
     /**
-     * Get options to apply on field value
-     *
-     * @return array
-     */
-    public function getFormFieldValueOptions()
-    {
-        return ['uploadManager' => $this->uploadManager];
-    }
-
-    /**
      * Get field's code
      *
      * @return string

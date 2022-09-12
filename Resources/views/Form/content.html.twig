@@ -72,6 +72,9 @@
     {% if form.delete is defined %}
         {{ form_row(form.delete) }}
     {% endif %}
+    {% if form.src is defined %}
+        {{ form_row(form.src) }}
+    {% endif %}
 
     {{ form_row(form.alt) }}
 {% endblock %}
@@ -93,6 +96,9 @@
 
     {% if form.delete is defined %}
         {{ form_row(form.delete) }}
+    {% endif %}
+    {% if form.src is defined %}
+        {{ form_row(form.src) }}
     {% endif %}
 
     {{ form_row(form.title) }}

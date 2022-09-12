@@ -38,44 +38,73 @@ class AcbFileType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $event) use ($options) {
+            function (FormEvent $event) {
                 $form = $event->getForm();
                 $data = $event->getData();
-                if ($data === null || !is_array($data)) {
+                if (!is_array($data)) {
                     $data = [];
                 }
 
-                $src = $data['src'] ?? '';
-                $isFileUploaded = $options['uploadManager']->isFileUploaded($src);
-                $form
-                    ->add('file', FileType::class, [
-                        'label' => 'field_type.file.file',
-                        'required' => !$isFileUploaded,
-                    ])
-                ;
+                $this->updateForm($form, $data);
+            }
+        );
 
-                if ($isFileUploaded) {
-                    $form
-                        ->add('delete', CheckboxType::class, [
-                            'label' => 'field_type.file.delete',
-                            'required' => false,
-                        ])
-                    ;
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) {
+                $data = $event->getData();
+                $form = $event->getForm();
+                if ($data['file']) {
+                    $data['src'] = $this->uploadManager->upload($data['file']);
+                    $this->updateForm($form, $data);
+                    unset($data['file']);
+                    $event->setData($data);
+                } elseif (isset($data['src'])) {
+                    $this->updateForm($form, $data);
                 }
             }
         );
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function (FormEvent $event) use ($options) {
+            function (FormEvent $event) {
                 $data = $event->getData();
-                if ($data['file']) {
-                    $data['src'] = $options['uploadManager']->upload($data['file']);
-                    unset($data['file']);
-                    $event->setData($data);
+                if (!empty($data['delete'])) {
+                    unset($data['src']);
+                    unset($data['delete']);
                 }
+                $event->setData($data);
             }
         );
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param array         $data
+     *
+     * @return void
+     */
+    public function updateForm(FormInterface $form, $data)
+    {
+        if (!isset($data['src'])) {
+            $data['src'] = '';
+        }
+        $isFileUploaded = $this->uploadManager->isFileUploaded($data['src']);
+        $form
+            ->add('file', FileType::class, [
+                'label' => 'field_type.file.file',
+                'required' => !$isFileUploaded,
+            ])
+        ;
+
+        if ($isFileUploaded) {
+            $form
+                ->add('delete', CheckboxType::class, [
+                    'label' => 'field_type.file.delete',
+                    'required' => false,
+                ]);
+            $form->add('src', HiddenType::class);
+        }
     }
 
     /**
@@ -85,12 +114,11 @@ class AcbFileType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
-            'uploadManager' => $this->uploadManager,
         ]);
     }
 
     /**
-     * Make message accessible in view
+     * Make the image accessible in view
      *
      * @param FormView      $view    The view
      * @param FormInterface $form    The form
@@ -98,7 +126,7 @@ class AcbFileType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['uploadManager'] = $options['uploadManager'];
+        $view->vars['uploadManager'] = $this->uploadManager;
         $view->vars['src'] = $form->getData()['src'] ?? '';
     }
 
