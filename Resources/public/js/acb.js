@@ -22,13 +22,19 @@ jQuery(function ($) {
     hideEmptyLayoutRow();
     initSortables();
 
-    function initSortables() {
+    function initSortables(parent) {
         if (typeof $(this).sortable !== 'undefined') {
-            $(".acb-sortable-group").each(function () {
+            let groups;
+            if (parent) {
+                groups = $(parent).find('.acb-sortable-group');
+            } else {
+                groups = $('.acb-sortable-group');
+            }
+            groups.each(function () {
                 let ckeditorConfigs = {};
                 $(this).sortable({
                     containment: "parent",
-                    items: '.acb-sortable[data-sortable-parent-group-id="' + $(this).data('sortable-group-id') + '"]',
+                    items: '> .acb-sortable',
                     cursor: "move",
                     axis: "y",
                     update: function (event, ui) {
@@ -506,6 +512,7 @@ jQuery(function ($) {
                 e.preventDefault();
                 saveNewFieldData(this, baseName);
             });
+            initSortables(container);
         });
     }
     // get editing form
@@ -532,6 +539,7 @@ jQuery(function ($) {
                 e.preventDefault();
                 saveFieldData(this, row.data('name'), row);
             });
+            initSortables();
         });
     }
 

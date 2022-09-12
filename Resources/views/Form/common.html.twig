@@ -11,7 +11,7 @@
     {% endif %}
     {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
     {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
-    <div {{ block('widget_container_attributes') }} data-sortable-group-id="{{ form.vars.id }}">
+    <div {{ block('widget_container_attributes') }}>
         {% for child in form %}
             {% set entryForm = child %}
             {{ block('acb_collection_entry') }}
@@ -29,7 +29,7 @@
 
 {% block acb_collection_entry %}
     {% set fieldId = entryForm.vars.id ? entryForm.vars.id : '__random_id__' %}
-    <div class="acb-field panel panel-primary field-row acb-row acb-sortable" {% if entryForm.parent is not empty %}data-sortable-parent-group-id="{{ entryForm.parent.vars.id }}"{% endif %}>
+    <div class="acb-field panel panel-primary field-row acb-row acb-sortable">
         <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false"
              {% if entryForm.parent is not empty %}data-parent="#{{ entryForm.parent.vars.id }}"{% endif %}>
             <span class="panel-title">
