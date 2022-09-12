@@ -17,6 +17,11 @@ class Wysiwyg extends AbstractFieldType
         return WysiwygType::class;
     }
 
+    public function getFrontTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/wysiwyg.html.twig';
+    }
+
     /**
      * Add field's options
      *

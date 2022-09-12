@@ -12,7 +12,10 @@ class ImageType extends AbstractType
     {
         $builder->remove('title');
         $builder
-            ->add('alt', TextType::class, ['label' => 'field_type.image.alt'])
+            ->add('alt', TextType::class, [
+                'label' => 'field_type.image.alt',
+                'required' => false,
+            ])
         ;
     }
 

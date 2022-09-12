@@ -500,6 +500,20 @@ jQuery(function ($) {
         openSlide();
     });
 
+    function updateCKEditorElement(form)
+    {
+        if (typeof CKEDITOR === 'undefined') {
+            return;
+        }
+        // look for ckeditor instances in order to update the value
+        $(form).find('textarea').each(function () {
+            if (typeof CKEDITOR.instances[this.id] === 'undefined') {
+                return;
+            }
+            CKEDITOR.instances[this.id].updateElement();
+        });
+    }
+
     // get editing form
     function getNewFieldForm(url, type, baseName, container) {
         $.ajax({
@@ -545,6 +559,7 @@ jQuery(function ($) {
 
     // convert slide form to content preview
     function saveFieldData(form, name, row) {
+        updateCKEditorElement(form);
         $.ajax({
             url: form.action,
             data: $(form).serialize(),
@@ -559,8 +574,10 @@ jQuery(function ($) {
             closeSlide();
         });
     }
+
     // convert slide form to content preview
     function saveNewFieldData(form, baseName) {
+        updateCKEditorElement(form);
         $.ajax({
             url: form.action,
             data: $(form).serialize(),
