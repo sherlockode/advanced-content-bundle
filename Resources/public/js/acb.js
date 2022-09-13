@@ -17,9 +17,6 @@ jQuery(function ($) {
     // Common //
     ////////////
 
-    updateChoiceList();
-    hideEmptyOptionsRow();
-    hideEmptyLayoutRow();
     initSortables();
 
     function initSortables(parent) {
@@ -138,230 +135,21 @@ jQuery(function ($) {
         var newElem = $(newWidget);
         newElem.appendTo(list);
         newElem.find('.edit-field').click();
-        hideEmptyOptionsRow();
-        hideEmptyLayoutRow();
         initSortables();
         calculatePosition();
     });
-    $('body').on('click', '.acb-add-flexible-item', function (e) {
-        e.preventDefault();
-        var wrapper = $(this).closest('.acb-flexible-add-wrapper');
-        var list = $(wrapper.attr('data-list'));
-        var counter = list.data('widget-counter');
-        var name = wrapper.attr('data-name-prefix') + '[' + counter + ']';
-        var id = wrapper.attr('data-id-prefix') + '_' + counter;
 
-        $.get(wrapper.data('url'), {
-            contentTypeId: wrapper.data('content-type'),
-            layoutId: $(this).data('layout'),
-            parentFormId: wrapper.data('form-id')
-        }, function (response) {
-            var newWidget = response;
-            newWidget = newWidget.replace(/__flexible_name__/g, name);
-            newWidget = newWidget.replace(/flexible_name__/g, id);
-            counter++;
-            list.data('widget-counter', counter);
-            var newElem = $(newWidget);
-            newElem.appendTo(list);
-            initSortables();
-            calculatePosition();
-        });
-    });
-
-    //////////////////
-    // Content Type //
-    //////////////////
-
-    let contentTypeName = $('.acb-contenttype-name');
-    let contentTypeSlug = $('.acb-contenttype-slug');
-    if (contentTypeName.length > 0 && contentTypeSlug.length > 0) {
-        applySlug(contentTypeName, contentTypeSlug);
-    }
-
-    $('body').on('change', '.field-type', function (e) {
-        var data = {
-            type: $(this).val(),
-            formPath: $(this).data('form-path')
-        };
-        $.ajax({
-            url: $(this).closest('.edit-content-type').data('change-type-url'),
-            type: 'POST',
-            data: data,
-            context: this
-        }).done(function (data) {
-            $(this).closest('div.field-row').find('.options').html(data.optionHtml);
-            $(this).closest('div.field-row').find('.layout-row').html(data.layoutHtml);
-            updateChoiceList();
-            hideEmptyOptionsRow();
-            hideEmptyLayoutRow();
-            initSortables();
-            calculatePosition();
-        }).fail(ajaxFailCallback);
-    });
-
-    function updateChoiceList() {
-        $('.choice-list').find('li').each(function() {
-            if ($(this).find('.delete-choice').length === 0) {
-                addChoiceRemoveLink($(this));
-            }
-        });
-    }
-    $('body').on('click', '.add-another-choice', function (e) {
-        e.preventDefault();
-        var list = $(this).siblings('.choice-list');
-        var counter = list.data('widget-counter');
-        var newWidget = list.data('prototype');
-
-        counter++;
-        newWidget = newWidget.replace(/__name__/g, counter);
-        list.data('widget-counter', counter);
-
-        var newElem = $(list.data('widget-tags')).html(newWidget);
-        addChoiceRemoveLink(newElem);
-        newElem.appendTo(list);
-    });
-    $('body').on('click', '.delete-choice', function (e) {
-        e.preventDefault();
-        $(this).closest('.choice-row').remove();
-    });
-
-    let contentTypePageTypeList = $('select.acb-contenttype-page-type');
-    let contentTypePageList = $('select.acb-contenttype-page');
-    let contentTypeAllowSeveralContents = $('input.acb-contenttype-allow-several-contents');
-    let contentTypePageTypeValue = contentTypePageTypeList.val();
-    let contentTypePageValue = contentTypePageList.val();
-    $('body').on('submit', '.edit-content-type', function(e) {
-        var validateChoiceLists = true;
-        var validateSlugs = true;
-        var slugs = {};
-        var slug = '';
-
-        $('.acb-error').hide();
-        $('.field-error').removeClass('field-error');
-
-        $('.choice-list').each(function() {
-            var fieldArea = $(this).closest('.acb-field');
-            var isRequired = fieldArea.find('.acb-is-required').val();
-            if (isRequired > 0 && $(this).children().length === 0) {
-                validateChoiceLists = false;
-                fieldArea.find('.acb-collection-error').show();
-                fieldArea.addClass('field-error');
-                fieldArea.parents('.acb-field').addClass('field-error');
-            }
-        });
-
-        $('.acb-slug', this).each(function() {
-            slug = $(this).val();
-            var parent = $(this).data('parent-id');
-            if (!slugs[slug]) {
-                slugs[slug] = [];
-            }
-            if (!slugs[slug][parent]) {
-                slugs[slug][parent] = [];
-            }
-            slugs[slug][parent].push($(this));
-        });
-        for (slug in slugs) {
-            for (var parent in slugs[slug]) {
-                if (slugs[slug][parent].length > 1) {
-                    for (var i = 0; i < slugs[slug][parent].length; i++) {
-                        var field = slugs[slug][parent][i];
-                        var fieldArea = field.closest('.acb-field');
-
-                        fieldArea.find('.acb-slug-error').show();
-                        fieldArea.addClass('field-error');
-                        fieldArea.parents('.acb-field').addClass('field-error');
-                    }
-                    validateSlugs = false;
-                }
-            }
-        }
-
-        if (!validateChoiceLists || !validateSlugs) {
-            e.preventDefault();
-        }
-
-        if ((contentTypePageTypeValue !== '' && contentTypePageTypeValue !== contentTypePageTypeList.val()) || (contentTypePageValue !== '' && contentTypePageValue !== contentTypePageList.val())) {
-            if (!confirm($('.acb-contenttype-change-link').html())) {
-                e.preventDefault();
-            }
-        }
-    });
-
-    $('body').on('keyup', '.acb-name, .acb-layout-name', function(){
-        $(this).closest('.acb-field').find('.panel-title').first().html($(this).val());
-    });
     $('body').on('focus', '.acb-slug', function(){
         if ($(this).val() === '') {
             $(this).val(generateSlug($(this).closest('.acb-field').find('.acb-name').first().val()));
         }
     });
 
-    function addChoiceRemoveLink(choiceLi) {
-        choiceLi.append($('.field-options-remove-link').html());
-    }
-
-    function hideEmptyOptionsRow() {
-        $('.options-row').each(function() {
-            $(this).show();
-            if ($(this).find('.options > .no-option').length > 0) {
-                $(this).hide();
-            }
-        });
-    }
-
-    function hideEmptyLayoutRow() {
-        $('.layout-row').each(function() {
-            $(this).show();
-            if ($(this).children().length == 0) {
-                $(this).hide();
-            }
-        });
-    }
-
-    displayContentTypePageList();
-    $('.acb-contenttype-link-type').on('change', function(){
-        displayContentTypePageList();
-    });
-    function displayContentTypePageList() {
-        let linkType = $('select.acb-contenttype-link-type').val();
-        contentTypePageTypeList.closest('.form-group').hide();
-        contentTypePageList.closest('.form-group').hide();
-        contentTypeAllowSeveralContents.closest('.form-group').hide();
-
-        if (linkType === '0') { // No link
-            contentTypePageList.val('');
-            contentTypePageTypeList.val('');
-            contentTypeAllowSeveralContents.closest('.form-group').show();
-        }
-        if (linkType === '1') { // Page Type link
-            contentTypePageTypeList.closest('.form-group').show();
-            contentTypePageList.val('');
-        }
-        if (linkType === '2') { // Page link
-            contentTypePageList.closest('.form-group').show();
-            contentTypePageTypeList.val('');
-        }
-    }
-
     /////////////
     // Content //
     /////////////
 
     initContentSlug();
-    initDatePicker();
-
-    function initDatePicker() {
-        $('body').find('.acb-date').each(function() {
-            var format = 'DD/MM/YYYY';
-            if ($(this).hasClass('datetimepicker')) {
-                format = format + ' HH:mm:ss';
-            }
-            $(this).datetimepicker({
-                format: format
-            });
-        });
-    }
 
     function initContentSlug() {
         let contentName = $('.acb-content-name');
