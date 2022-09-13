@@ -19,7 +19,7 @@ class Wysiwyg extends AbstractFieldType
 
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/wysiwyg.html.twig';
+        return '@SherlockodeAdvancedContent/Field/front/wysiwyg.html.twig';
     }
 
     /**

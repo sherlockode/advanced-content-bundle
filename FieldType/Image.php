@@ -16,7 +16,7 @@ class Image extends File
 
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/image.html.twig';
+        return '@SherlockodeAdvancedContent/Field/front/image.html.twig';
     }
 
     /**

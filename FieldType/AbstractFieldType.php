@@ -22,7 +22,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/text.html.twig';
+        return '@SherlockodeAdvancedContent/Field/front/text.html.twig';
     }
 
     /**

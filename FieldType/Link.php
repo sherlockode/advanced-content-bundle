@@ -22,7 +22,7 @@ class Link extends AbstractFieldType
 
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/link.html.twig';
+        return '@SherlockodeAdvancedContent/Field/front/link.html.twig';
     }
 
     /**

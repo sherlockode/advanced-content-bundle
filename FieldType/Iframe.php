@@ -22,7 +22,7 @@ class Iframe extends AbstractFieldType
 
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/iframe.html.twig';
+        return '@SherlockodeAdvancedContent/Field/front/iframe.html.twig';
     }
 
     /**
