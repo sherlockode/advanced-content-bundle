@@ -75,6 +75,12 @@ field_type:
         label: Fichier
     relative_link:
         label: Lien relatif
+    separator:
+        label: Séparateur
+    title:
+        label: Titre
+        level: Niveau
+        text: Texte
     group:
         other: Autres
         simple: Simple

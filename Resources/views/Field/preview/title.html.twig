@@ -1,0 +1,6 @@
+{% if level > 0 and level < 7 %}
+    {% set tag = 'h' ~ level %}
+{% else %}
+    {% set tag = 'h1' %}
+{% endif %}
+<{{ tag }}>{{ text }}</{{ tag }}>
