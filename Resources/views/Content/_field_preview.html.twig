@@ -2,13 +2,13 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
 <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-name="{{ form.vars.full_name }}">
-    <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false">
+    <div class="panel-heading edit-field">
         <span class="panel-title">
             {{ label|trans }}
         </span>
         {{- common.acb_panel_actions(form) -}}
     </div>
-    <div class="panel-body collapse" id="field-{{ fieldId }}">
+    <div class="panel-body">
         {{ acb_field_preview(form.vars.data) }}
     </div>
     <div style="display: none">

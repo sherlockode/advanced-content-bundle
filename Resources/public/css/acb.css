@@ -30,18 +30,6 @@
 .acb-add-collection-item {
     margin-top: 10px;
 }
-.expand_caret {
-    transform: scale(1.6);
-    margin-left: 8px;
-    margin-top: -4px;
-}
-.edit-field[aria-expanded='false'] > .panel-actions > .expand_caret {
-    transform: scale(1.6) rotate(-90deg);
-}
-.acb-field-value + .acb-field-value {
-    border-top: 1px solid #337ab7;
-    padding-top: 10px;
-}
 
 .acb_translations .acb-duplicate-locale-content {
     margin: 0 5px;

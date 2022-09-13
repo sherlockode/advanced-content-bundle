@@ -20,7 +20,6 @@
     <div {{ block('widget_container_attributes') }}>
         {% for child in form %}
             {% set entryForm = child %}
-            {% set fieldId = entryForm.vars.id %}
             {{ block('acb_field_value_entry') }}
         {% endfor %}
     </div>
@@ -34,12 +33,12 @@
 
 {% block acb_field_value_entry %}
 <div class="acb-field panel panel-primary field-row acb-row acb-sortable" data-name="{{ entryForm.vars.full_name }}">
-    <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false">
+    <div class="panel-heading edit-field">
         <span class="panel-title">{{ entryForm.vars.label|trans }}</span>
 
         {{- block('acb_panel_actions') -}}
     </div>
-    <div class="panel-body collapse" id="field-{{ fieldId }}">
+    <div class="panel-body">
         {{ acb_field_preview(entryForm.vars.data) }}
     </div>
     <div style="display: none">

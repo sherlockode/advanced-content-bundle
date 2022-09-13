@@ -28,10 +28,8 @@
 {% endmacro %}
 
 {% block acb_collection_entry %}
-    {% set fieldId = entryForm.vars.id ? entryForm.vars.id : '__random_id__' %}
     <div class="acb-field panel panel-primary field-row acb-row acb-sortable">
-        <div class="panel-heading edit-field" data-toggle="collapse" data-target="#field-{{ fieldId }}" aria-expanded="false"
-             {% if entryForm.parent is not empty %}data-parent="#{{ entryForm.parent.vars.id }}"{% endif %}>
+        <div class="panel-heading edit-field">
             <span class="panel-title">
                 {% if entryForm.vars.panel_label is defined %}
                     {{ entryForm.vars.panel_label|trans }}
@@ -41,7 +39,7 @@
             </span>
             {{- block('acb_panel_actions') -}}
         </div>
-        <div class="panel-body collapse" id="field-{{ fieldId }}">
+        <div class="panel-body">
             {{- form_widget(entryForm) -}}
         </div>
     </div>
@@ -68,7 +66,6 @@
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
         {% endif %}
-        <div class="expand_caret caret"></div>
     </div>
 {% endblock %}
 {% macro acb_panel_actions(form) %}
