@@ -482,9 +482,13 @@ jQuery(function ($) {
             type: 'GET'
         }).done(function (data) {
             slide.find('.acb-lateral-slide-content').html(data);
-            slide.find('.acb-add-field-form').on('submit', function (e) {
+            let form = slide.find('.acb-add-field-form');
+            form.on('submit', function (e) {
                 e.preventDefault();
                 getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName, slide.find('.acb-lateral-slide-content'));
+            });
+            form.find('input').on('change', function () {
+                form.submit();
             });
 
             openSlide();
