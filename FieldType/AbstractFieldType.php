@@ -17,6 +17,11 @@ abstract class AbstractFieldType implements FieldTypeInterface
         return 'field_type.' . $this->getCode() . '.label';
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-cog';
+    }
+
     /**
      * @return string
      */

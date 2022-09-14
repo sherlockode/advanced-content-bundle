@@ -15,6 +15,11 @@ interface FieldTypeInterface
     public function getFormFieldLabel();
 
     /**
+     * @return string
+     */
+    public function getIconClass();
+
+    /**
      * Get options to apply on field value
      *
      * @return array

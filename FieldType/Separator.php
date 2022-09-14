@@ -14,6 +14,11 @@ class Separator extends AbstractFieldType
         return FormType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-minus';
+    }
+
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/separator.html.twig';

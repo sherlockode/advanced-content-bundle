@@ -17,6 +17,11 @@ class Wysiwyg extends AbstractFieldType
         return WysiwygType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-text-size';
+    }
+
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/wysiwyg.html.twig';

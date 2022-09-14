@@ -20,6 +20,11 @@ class Iframe extends AbstractFieldType
         return FormType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-cog';
+    }
+
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/iframe.html.twig';

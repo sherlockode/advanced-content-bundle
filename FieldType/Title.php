@@ -14,6 +14,11 @@ class Title extends AbstractFieldType
         return TitleType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-header';
+    }
+
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/title.html.twig';

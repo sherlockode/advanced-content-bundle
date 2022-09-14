@@ -1,40 +1,4 @@
 @import "acb";
 @import "slide";
 @import "field";
-
-.acb-field-list-container {
-    .acb-field-list {
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: start;
-        padding: 0;
-
-        .acb-field-item {
-            display: block;
-            position: relative;
-            width: 23%;
-            min-width: 120px;
-            margin: 6px 12px 6px 0;
-
-            input {
-                position: absolute;
-                visibility: hidden;
-
-                &:checked + label {
-                    background: #e5e5e5;
-                    box-shadow: 0 0 4px #999;
-                }
-            }
-
-            label {
-                display: block;
-                border: 1px solid #999;
-                border-radius: 4px;
-                padding: 10px;
-                text-align: center;
-                cursor: pointer;
-            }
-        }
-    }
-}
+@import "field-list";

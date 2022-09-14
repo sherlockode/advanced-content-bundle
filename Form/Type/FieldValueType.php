@@ -22,6 +22,7 @@ class FieldValueType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['panel_label'] = 'field_type.' . $options['field_type']->getCode() . '.label';
+        $view->vars['field_icon'] = $options['field_type']->getIconClass();
     }
 
     /**

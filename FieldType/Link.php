@@ -20,6 +20,11 @@ class Link extends AbstractFieldType
         return FormType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-link';
+    }
+
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/link.html.twig';

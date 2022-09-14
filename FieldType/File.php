@@ -37,6 +37,11 @@ class File extends AbstractFieldType
         return AcbFileType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-paperclip';
+    }
+
     /**
      * Get field's code
      *

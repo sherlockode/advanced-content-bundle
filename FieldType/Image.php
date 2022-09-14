@@ -14,6 +14,11 @@ class Image extends File
         return ImageType::class;
     }
 
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-picture';
+    }
+
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/image.html.twig';

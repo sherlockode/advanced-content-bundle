@@ -32,7 +32,7 @@ class FieldManager
      *
      * @return array
      */
-    public function getFieldTypeFormChoices()
+    public function getGroupedFieldTypes()
     {
         $choices = [];
         foreach ($this->fieldTypes as $code => $fieldType) {
@@ -40,7 +40,7 @@ class FieldManager
             if (!isset($choices[$fieldGroup])) {
                 $choices[$fieldGroup] = [];
             }
-            $choices[$fieldGroup]['field_type.' . $fieldType->getCode() . '.label'] = $code;
+            $choices[$fieldGroup]['field_type.' . $fieldType->getCode() . '.label'] = $fieldType;
         }
 
         return $choices;

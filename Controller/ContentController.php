@@ -71,7 +71,7 @@ class ContentController extends AbstractController
      */
     public function addFieldAction()
     {
-        $fields = $this->fieldManager->getFieldTypeFormChoices();
+        $fields = $this->fieldManager->getGroupedFieldTypes();
 
         return $this->render('@SherlockodeAdvancedContent/Content/_select_new_field.html.twig', [
             'fields' => $fields,

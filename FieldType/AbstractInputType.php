@@ -9,6 +9,11 @@ use Symfony\Component\Validator\Constraints\Length;
 
 abstract class AbstractInputType extends AbstractFieldType
 {
+    public function getIconClass()
+    {
+        return 'glyphicon glyphicon-font';
+    }
+
     /**
      * Get options to apply on field value
      *
