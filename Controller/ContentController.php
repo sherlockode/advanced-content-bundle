@@ -9,9 +9,11 @@ use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ContentController
@@ -44,6 +46,11 @@ class ContentController extends AbstractController
     private $formFactory;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * ContentController constructor.
      *
      * @param EntityManagerInterface $em
@@ -51,19 +58,22 @@ class ContentController extends AbstractController
      * @param FieldManager           $fieldManager
      * @param ConfigurationManager   $configurationManager
      * @param FormFactoryInterface   $formFactory
+     * @param TranslatorInterface    $translator
      */
     public function __construct(
         EntityManagerInterface $em,
         ContentManager $contentManager,
         FieldManager $fieldManager,
         ConfigurationManager $configurationManager,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        TranslatorInterface $translator
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
         $this->fieldManager = $fieldManager;
         $this->configurationManager = $configurationManager;
         $this->formFactory = $formFactory;
+        $this->translator = $translator;
     }
 
     /**
@@ -73,8 +83,11 @@ class ContentController extends AbstractController
     {
         $fields = $this->fieldManager->getGroupedFieldTypes();
 
-        return $this->render('@SherlockodeAdvancedContent/Content/_select_new_field.html.twig', [
-            'fields' => $fields,
+        return new JsonResponse([
+            'title' => $this->translator->trans('content.add_field', [], 'AdvancedContentBundle'),
+            'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_select_new_field.html.twig', [
+                'fields' => $fields,
+            ]),
         ]);
     }
 
@@ -105,9 +118,12 @@ class ContentController extends AbstractController
             ]);
         }
 
-        return $this->render('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
-            'form' => $form->createView(),
-            'fieldName' => $fieldType->getFormFieldLabel(),
+        return new JsonResponse([
+            'title' => $this->translator->trans('content.edit_field', [], 'AdvancedContentBundle'),
+            'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
+                'form' => $form->createView(),
+                'fieldName' => $fieldType->getFormFieldLabel(),
+            ])
         ]);
     }
 

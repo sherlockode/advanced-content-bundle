@@ -1,18 +1,8 @@
-(function() {
-'use strict';
-let jQuery;
-let getSlug;
-if (typeof module === "object" && module.exports) {
-    jQuery = require("jquery");
-    getSlug = require("speakingurl");
-} else {
-    jQuery = window.jQuery;
-    getSlug = window.getSlug;
-}
+import Slide from "./slide.js";
+import jQuery from "jquery";
+import getSlug from "../public/js/speakingurl.min.js";
 
 jQuery(function ($) {
-    'use strict';
-
     ////////////
     // Common //
     ////////////
@@ -134,7 +124,6 @@ jQuery(function ($) {
         list.data('widget-counter', counter);
         var newElem = $(newWidget);
         newElem.appendTo(list);
-        newElem.find('.edit-field').click();
         initSortables();
         calculatePosition();
     });
@@ -253,14 +242,7 @@ jQuery(function ($) {
         }).fail(ajaxFailCallback);
     });
 
-    let slide = $('<div class="acb-lateral-slide"><button type="button" class="close">x</button><div class="acb-lateral-slide-content"></div></div>');
-    let slideLayer = $('<div class="acb-lateral-slide-layer"></div>');
-    slide.find('.close').on('click', function () {
-        closeSlide();
-    });
-    slideLayer.on('click', function () {
-      closeSlide();
-    });
+    let slide = new Slide();
 
     $('.acb-add-field-container').find('.btn-new-field').on('click', function () {
         let baseName = $(this).data('base-name');
@@ -269,18 +251,18 @@ jQuery(function ($) {
             url: $(this).data('new-field-url'),
             type: 'GET'
         }).done(function (data) {
-            slide.find('.acb-lateral-slide-content').html(data);
-            let form = slide.find('.acb-add-field-form');
+            slide.setHeader('<h1>' + data.title + '</h1>');
+            slide.setContent(data.content);
+            let form = slide.content.find('.acb-add-field-form');
             form.on('submit', function (e) {
                 e.preventDefault();
-                getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName, slide.find('.acb-lateral-slide-content'));
+                getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName);
             });
             form.find('input').on('change', function () {
                 form.submit();
             });
 
-            openSlide();
-
+            slide.open();
         }).fail(ajaxFailCallback);
     });
 
@@ -288,8 +270,8 @@ jQuery(function ($) {
         e.stopPropagation();
         let row = $(this).closest('.acb-field');
         let url = $(this).closest('.acb-field-values-container').data('edit-url');
-        getEditFieldForm(url, slide.find('.acb-lateral-slide-content'), row);
-        openSlide();
+        getEditFieldForm(url, row);
+        slide.open();
     });
 
     function updateCKEditorElement(form)
@@ -307,22 +289,23 @@ jQuery(function ($) {
     }
 
     // get editing form
-    function getNewFieldForm(url, type, baseName, container) {
+    function getNewFieldForm(url, type, baseName) {
         $.ajax({
             url: url,
             data: {'type': type},
             type: 'GET'
         }).done(function (data) {
-            container.html(data);
-            container.find('.acb-edit-field-form').on('submit', function (e) {
+            slide.setHeader('<h1>' + data.title + '</h1>');
+            slide.setContent(data.content);
+            slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                 e.preventDefault();
                 saveNewFieldData(this, baseName);
             });
-            initSortables(container);
+            initSortables(slide.content);
         });
     }
     // get editing form
-    function getEditFieldForm(url, container, row) {
+    function getEditFieldForm(url, row) {
         let typeInputName = row.data('name') + '[fieldType]';
         typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
         let type = row.find('input[name=' +  typeInputName + ']').val();
@@ -340,8 +323,9 @@ jQuery(function ($) {
             data: data,
             type: 'POST'
         }).done(function (data) {
-            container.html(data);
-            container.find('.acb-edit-field-form').on('submit', function (e) {
+            slide.setHeader('<h1>' + data.title + '</h1>');
+            slide.setContent(data.content);
+            slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                 e.preventDefault();
                 saveFieldData(this, row.data('name'), row);
             });
@@ -365,7 +349,7 @@ jQuery(function ($) {
             row.replaceWith(preview);
             calculatePosition();
 
-            closeSlide();
+            slide.close();
         });
     }
 
@@ -392,18 +376,7 @@ jQuery(function ($) {
             container.append(preview);
             calculatePosition();
 
-            closeSlide();
+            slide.close();
         });
     }
-
-    function openSlide() {
-        $('body').append(slideLayer);
-        $('body').append(slide);
-        setTimeout(() => $('body').addClass('acb-lateral-slide-open'), 10);
-    }
-
-    function closeSlide() {
-        $('body').removeClass('acb-lateral-slide-open');
-    }
 });
-})();

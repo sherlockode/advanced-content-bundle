@@ -4,6 +4,7 @@ content:
     edit: Modifier le contenu
     create: Créer un contenu
     add_field: Ajouter un champ
+    edit_field: Modifier le champ
     form:
         name: Nom
         slug: Slug

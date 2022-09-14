@@ -16,6 +16,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="form.factory"/>
+            <argument type="service" id="translator"/>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
                 <argument type="service" id="Psr\Container\ContainerInterface" />
