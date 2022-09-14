@@ -2,6 +2,8 @@ $zindex: 1000;
 
 .acb-lateral-slide {
     position: fixed;
+    display: flex;
+    flex-direction: column;
     right: 0;
     top: 0;
     bottom: 0;
@@ -40,7 +42,7 @@ $zindex: 1000;
     .acb-lateral-slide-content {
         padding: 16px;
         overflow: scroll;
-        height: 100%;
+        flex-grow: 1;
     }
 }
 
