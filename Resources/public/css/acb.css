@@ -1,27 +1,6 @@
-.acb-field .panel-actions button {
-    color: #fff;
-    border: 0;
-    background: none;
-}
-.acb-field .panel-actions button:hover {
-    color: #fff;
-}
-.acb-field .edit-field:hover {
-    cursor: pointer;
-}
-.btn-add-field {
-    margin-top: 25px;
-}
-.acb-group {
-    border: 1px solid #ddd;
-    padding: 5px;
-}
 .acb-error {
     color: #f00;
     display: block;
-}
-.acb-field.field-error > .edit-field {
-    box-shadow: 0 0 10px #f00;
 }
 .acb-collection .acb-field {
     border: 1px solid #ddd;

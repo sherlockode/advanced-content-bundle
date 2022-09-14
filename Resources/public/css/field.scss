@@ -1,0 +1,43 @@
+.acb-field {
+    border: 1px solid #ddd;
+    margin: 16px 0;
+    border-radius: 4px;
+
+    .acb-field-heading {
+        padding: 8px 16px;
+
+        .field-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 4px;
+        }
+    }
+    .field-actions {
+        float: right;
+        margin: 4px;
+        display: flex;
+
+        button {
+            color: #333;
+            border: 1px solid #ddd;
+            background: none;
+            display: flex;
+            padding: 8px;
+            align-items: center;
+
+            + button {
+                border-left: 0;
+            }
+
+            &:first-child {
+                border-radius: 3px 0 0 3px;
+            }
+            &:last-child {
+                border-radius: 0 3px 3px 0;
+            }
+        }
+    }
+}
+.btn-add-field {
+    margin-top: 25px;
+}

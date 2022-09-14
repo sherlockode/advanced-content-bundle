@@ -28,8 +28,8 @@
 {% endmacro %}
 
 {% block acb_collection_entry %}
-    <div class="acb-field panel panel-primary field-row acb-row acb-sortable">
-        <div class="panel-heading edit-field">
+    <div class="acb-field field-row acb-row acb-sortable">
+        <div class="panel-heading">
             <span class="panel-title">
                 {% if entryForm.vars.panel_label is defined %}
                     {{ entryForm.vars.panel_label|trans }}
@@ -55,7 +55,7 @@
 {% endblock %}
 
 {% block acb_panel_actions %}
-    <div class="pull-right panel-actions">
+    <div class="field-actions">
         {% if allowEdit is not defined or allowEdit == true %}
             <button type="button" class="acb-edit-row" title="{{ 'edit'|trans }}">
                 <i class="glyphicon glyphicon-pencil"></i>
