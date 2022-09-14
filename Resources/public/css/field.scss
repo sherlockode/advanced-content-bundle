@@ -2,6 +2,7 @@
     border: 1px solid #ddd;
     margin: 16px 0;
     border-radius: 4px;
+    background: #fff;
 
     .acb-field-heading {
         padding: 8px 16px;
@@ -35,6 +36,28 @@
             &:last-child {
                 border-radius: 0 3px 3px 0;
             }
+        }
+    }
+
+    .missing-preview {
+        font-size: 16px;
+        font-weight: bold;
+        color: #777;
+        text-align: center;
+        padding: 26px 0;
+        position: relative;
+
+        i {
+            position: absolute;
+            font-size: 72px;
+            color: #e8e8e8;
+            z-index: 0;
+            left: 50%;
+            margin-left: -36px;
+        }
+        p {
+            z-index: 1;
+            position: relative;
         }
     }
 }

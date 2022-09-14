@@ -87,6 +87,7 @@ field_type:
         simple: Simple
         choice: Choice
         layout: Layout
+    missing_preview: Missing preview
     errors:
         empty_collection: Please add at least one option
         empty_collection_field: Please add at least one option for the field "%fieldName%"

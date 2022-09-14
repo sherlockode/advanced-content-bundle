@@ -80,11 +80,12 @@ class ContentExtension extends AbstractExtension
             $params = ['value' => $raw];
         }
 
-        if ($this->twig->getLoader()->exists($field->getPreviewTemplate())) {
-            return $this->twig->render($field->getPreviewTemplate(), $params);
+        $template = $field->getPreviewTemplate();
+        if (!$this->twig->getLoader()->exists($template)) {
+            $template = '@SherlockodeAdvancedContent/Field/preview/no_preview.html.twig';
         }
 
-        return 'NO PREVIEW EXISTS';
+        return $this->twig->render($template, $params);
     }
 
 
