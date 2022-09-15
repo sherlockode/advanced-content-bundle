@@ -8,6 +8,12 @@
 }
 .acb-add-collection-item {
     margin-top: 10px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    display: flex;
+    padding: 8px;
+    align-items: center;
 }
 
 .acb_translations .acb-duplicate-locale-content {

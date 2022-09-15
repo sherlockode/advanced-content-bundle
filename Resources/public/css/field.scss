@@ -4,6 +4,13 @@
     border-radius: 4px;
     background: #fff;
 
+    &:first-child {
+        margin-top: 0;
+    }
+    &:last-child {
+        margin-bottom: 0;
+    }
+
     .acb-field-heading {
         padding: 8px 16px;
 
@@ -63,4 +70,15 @@
 }
 .btn-add-field {
     margin-top: 25px;
+}
+.acb-edit-field-form {
+    .acb-field-element-compound {
+        > div {
+            border: 1px solid #ccc;
+            padding: 12px;
+        }
+    }
+}
+.acb-sortable-group {
+    padding: 12px 0;
 }

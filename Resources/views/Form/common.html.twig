@@ -47,10 +47,11 @@
 
 {% block acb_add_item_button %}
     <button type="button"
-            class="btn btn-success acb-add-collection-item"
+            class="acb-add-collection-item"
             data-list="#{{ form.vars.id }}"
-            data-type="{{ type }}">
-        {{ button_label|trans }}
+            data-type="{{ type }}"
+            aria-label="{{ button_label|trans }}">
+        <i class="glyphicon glyphicon-plus"></i>
     </button>
 {% endblock %}
 
