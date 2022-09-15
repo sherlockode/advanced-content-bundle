@@ -106,15 +106,14 @@ class ContentController extends AbstractController
             'field_type' => $fieldType,
             'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $fieldType->getCode()]),
             'csrf_protection' => false,
+            'label' => $fieldType->getFormFieldLabel(),
         ]);
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if (!$request->query->get('edit') && $form->isSubmitted() && $form->isValid()) {
             return $this->render('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
-                'label' => $fieldType->getFormFieldLabel(),
                 'form' => $form->createView(),
-                'fieldId' => 'random-' . rand(10000, 100000),
             ]);
         }
 
