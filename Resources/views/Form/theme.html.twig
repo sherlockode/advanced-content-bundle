@@ -1,1 +1,8 @@
 {% extends 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    {% if form.parent and form.vars.compound and (form.parent.vars.name == 'value' or (form.parent.parent and form.parent.parent.vars.name == 'value')) %}
+        {% set row_attr = row_attr|default({})|merge({'class': row_attr.class|default('') ~ ' acb-field-element-compound'}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
