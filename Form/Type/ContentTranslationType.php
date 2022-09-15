@@ -50,9 +50,7 @@ class ContentTranslationType extends AbstractType
             }
             foreach ($options['locales'] as $locale) {
                 if (isset($formLocales[$locale])) {
-                    $form->add($locale, ContentType::class, [
-                        'contentType' => $options['contentType'],
-                    ]);
+                    $form->add($locale, ContentType::class);
                 }
             }
         });
@@ -83,7 +81,6 @@ class ContentTranslationType extends AbstractType
             'locales' => $this->localeProvider->getLocales(),
             'default_locale' => $this->localeProvider->getDefaultLocale(),
         ]);
-        $resolver->setRequired('contentType');
     }
 
     public function getBlockPrefix()
