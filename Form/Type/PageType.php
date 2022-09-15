@@ -4,8 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Manager\PageManager;
-use Sherlockode\AdvancedContentBundle\Model\ContentTypeInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -24,25 +22,18 @@ class PageType extends AbstractType
     private $configurationManager;
 
     /**
-     * @var PageManager
-     */
-    private $pageManager;
-
-    /**
      * @var LocaleProviderInterface
      */
     private $localeProvider;
 
     /**
      * @param ConfigurationManager    $configurationManager
-     * @param PageManager             $pageManager
      * @param LocaleProviderInterface $localeProvider
      */
-    public function __construct(ConfigurationManager $configurationManager, PageManager $pageManager, LocaleProviderInterface $localeProvider)
+    public function __construct(ConfigurationManager $configurationManager, LocaleProviderInterface $localeProvider)
     {
         $this->configurationManager = $configurationManager;
         $this->localeProvider = $localeProvider;
-        $this->pageManager = $pageManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -106,6 +97,18 @@ class PageType extends AbstractType
                 }
             }
         });
+
+        // fill the content name and slug as they are not part of the form in Page context
+        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
+            /** @var PageInterface $page */
+            $page = $event->getData();
+            foreach ($page->getContents() as $content) {
+                if (!$content->getId()) {
+                    $content->setName('page-' . $page->getPageIdentifier() . '-' . bin2hex(random_bytes(6)));
+                    $content->setSlug($page->getPageMeta($content->getLocale())->getSlug() . '-' . bin2hex(random_bytes(6)));
+                }
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -114,5 +117,10 @@ class PageType extends AbstractType
             'data_class' => $this->configurationManager->getEntityClass('page'),
             'translation_domain' => 'AdvancedContentBundle',
         ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'acb_page';
     }
 }

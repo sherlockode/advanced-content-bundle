@@ -128,6 +128,7 @@ page:
             draft: Draft
             published: Published
             trash: Trash
+        general: General
         content: Content
         page_type: Page type
         page_identifier: Identifier

@@ -108,3 +108,40 @@
     {{ form_row(form.title) }}
 </div>
 {% endblock %}
+
+{% block acb_page_widget %}
+    <div class="acb-page-field-group">
+        <label>{{ 'page.form.general'|trans }}</label>
+        <div class="acb-page-field-container acb-page-general-container">
+            {{ form_row(form.pageIdentifier) }}
+            {{ form_row(form.pageType) }}
+            {% if form.status is defined %}
+            {{ form_row(form.status) }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="acb-page-field-group">
+    {% if form.pageMeta is defined %}
+        <label for="{{ form.pageMeta.vars.id }}">{{ 'page.form.page_meta'|trans }}</label>
+        {{ form_widget(form.pageMeta) }}
+    {% elseif form.pageMetas is defined %}
+        <label for="{{ form.pageMetas.vars.id }}">{{ 'page.form.page_meta'|trans }}</label>
+        {{ form_widget(form.pageMetas) }}
+    {% endif %}
+    </div>
+
+    <div class="acb-page-field-group">
+    {% if form.content is defined %}
+        <label for="{{ form.content.vars.id }}">{{ 'page.form.content'|trans }}</label>
+        {{ form_widget(form.content) }}
+    {% elseif form.contents is defined %}
+        <label for="{{ form.contents.vars.id }}">{{ 'page.form.content'|trans }}</label>
+        {{ form_widget(form.contents) }}
+    {% endif %}
+    </div>
+
+    {% if form._token is defined %}
+        {{ form_widget(form._token) }}
+    {% endif %}
+{% endblock %}

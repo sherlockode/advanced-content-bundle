@@ -128,6 +128,7 @@ page:
             draft: Brouillon
             published: Publié
             trash: Effacé
+        general: Général
         content: Contenu
         page_type: Type de page
         page_identifier: Identifiant

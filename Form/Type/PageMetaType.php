@@ -78,7 +78,8 @@ class PageMetaType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
+            'data_class' => $this->configurationManager->getEntityClass('page_meta'),
+            'attr' => ['class' => 'acb-page-meta-container acb-page-field-container'],
         ]);
-        $resolver->setDefault('data_class', $this->configurationManager->getEntityClass('page_meta'));
     }
 }

@@ -65,6 +65,8 @@ class ContentType extends AbstractType
                 ])
             ;
             if ($form->getParent()) {
+                $form->remove('name');
+                $form->remove('slug');
                 $form->remove('locale');
             }
         });

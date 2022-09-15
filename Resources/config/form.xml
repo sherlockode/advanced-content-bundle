@@ -26,7 +26,6 @@
         </service>
         <service id="sherlockode_advanced_content.form.page" class="Sherlockode\AdvancedContentBundle\Form\Type\PageType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="form.type"/>
         </service>
