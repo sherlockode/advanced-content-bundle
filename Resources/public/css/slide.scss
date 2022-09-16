@@ -33,6 +33,10 @@ $zindex: 1000;
         padding: 16px;
         border-bottom: 1px solid #ccc;
 
+        &:empty {
+            display: none;
+        }
+
         h1 {
             font-size: 24px;
         }
@@ -42,6 +46,15 @@ $zindex: 1000;
         padding: 16px;
         overflow: scroll;
         flex-grow: 1;
+    }
+
+    .acb-lateral-slide-footer {
+        padding: 16px;
+        border-top: 1px solid #ccc;
+
+        &:empty {
+            display: none;
+        }
     }
 }
 

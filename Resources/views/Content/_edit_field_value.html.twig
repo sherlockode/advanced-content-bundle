@@ -2,11 +2,8 @@
 
 {% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
 
-<h1>{{ fieldName|trans }}</h1>
-
-{{ form_start(form, {attr: form.vars.attr|merge({class: form.vars.attr.class|default('') ~ ' acb-edit-field-form'})}) }}
+{{ form_start(form, {attr: form.vars.attr|merge({class: form.vars.attr.class|default('') ~ ' acb-edit-field-form', id: form.vars.id})}) }}
 {% for child in form %}
     {{ form_row(child) }}
 {% endfor %}
-<button type="submit" class="btn btn-primary">{{ 'save'|trans }}</button>
 {{ form_end(form) }}

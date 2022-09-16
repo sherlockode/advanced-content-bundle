@@ -118,11 +118,13 @@ class ContentController extends AbstractController
         }
 
         return new JsonResponse([
-            'title' => $this->translator->trans('content.edit_field', [], 'AdvancedContentBundle'),
+            'title' => $this->translator->trans($fieldType->getFormFieldLabel(), [], 'AdvancedContentBundle'),
             'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
                 'form' => $form->createView(),
-                'fieldName' => $fieldType->getFormFieldLabel(),
-            ])
+            ]),
+            'footer' => $this->renderView('@SherlockodeAdvancedContent/Content/_button_submit_slide.html.twig', [
+                'form' => $form->createView(),
+            ]),
         ]);
     }
 

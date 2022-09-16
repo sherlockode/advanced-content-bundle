@@ -3,10 +3,16 @@ import $ from 'jquery';
 class Slide
 {
     constructor() {
-        this.element = $('<div class="acb-lateral-slide"><button type="button" class="btn-close"><i class="glyphicon glyphicon-remove"></i></button><div class="acb-lateral-slide-header"></div><div class="acb-lateral-slide-content"></div></div>');
+        this.closeBtn = $('<button type="button" class="btn-close"><i class="glyphicon glyphicon-remove"></i></button>');
+        this.header = $('<div class="acb-lateral-slide-header"></div>');
+        this.content = $('<div class="acb-lateral-slide-content"></div>');
+        this.footer = $('<div class="acb-lateral-slide-footer"></div>');
+        this.element = $('<div class="acb-lateral-slide"></div>');
+        this.element.append(this.closeBtn);
+        this.element.append(this.header);
+        this.element.append(this.content);
+        this.element.append(this.footer);
         this.slideLayer = $('<div class="acb-lateral-slide-layer"></div>');
-        this.header = this.element.find('.acb-lateral-slide-header');
-        this.content = this.element.find('.acb-lateral-slide-content');
 
         let self = this;
         this.element.find('.btn-close').on('click', function () {
@@ -23,6 +29,17 @@ class Slide
 
     setContent(html) {
         this.content.html(html)
+    }
+
+    setFooter(html) {
+        this.footer.html(html)
+    }
+
+    empty()
+    {
+        this.header.html('');
+        this.content.html('');
+        this.footer.html('');
     }
 
     open() {

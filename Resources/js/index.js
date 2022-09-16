@@ -243,9 +243,13 @@ jQuery(function ($) {
     });
 
     let slide = new Slide();
+    slide.element.on('click', '.form-button', function () {
+        $($(this).data('target')).submit();
+    });
 
     $('.acb-add-field-container').find('.btn-new-field').on('click', function () {
         let baseName = $(this).data('base-name');
+        slide.empty();
 
         $.ajax({
             url: $(this).data('new-field-url'),
@@ -290,6 +294,7 @@ jQuery(function ($) {
 
     // get editing form
     function getNewFieldForm(url, type, baseName) {
+        slide.empty();
         $.ajax({
             url: url,
             data: {'type': type},
@@ -297,6 +302,7 @@ jQuery(function ($) {
         }).done(function (data) {
             slide.setHeader('<h1>' + data.title + '</h1>');
             slide.setContent(data.content);
+            slide.setFooter(data.footer);
             slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                 e.preventDefault();
                 saveNewFieldData(this, baseName);
@@ -306,6 +312,7 @@ jQuery(function ($) {
     }
     // get editing form
     function getEditFieldForm(url, row) {
+        slide.empty();
         let typeInputName = row.data('name') + '[fieldType]';
         typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
         let type = row.find('input[name=' +  typeInputName + ']').val();
@@ -325,6 +332,7 @@ jQuery(function ($) {
         }).done(function (data) {
             slide.setHeader('<h1>' + data.title + '</h1>');
             slide.setContent(data.content);
+            slide.setFooter(data.footer);
             slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                 e.preventDefault();
                 saveFieldData(this, row.data('name'), row);
