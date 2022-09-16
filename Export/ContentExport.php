@@ -2,8 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Export;
 
-use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
-use Sherlockode\AdvancedContentBundle\FieldType\Boolean;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -82,10 +80,6 @@ class ContentExport
             if (is_array($rawValue) && isset($rawValue['url'])) {
                 unset($rawValue['url']);
             }
-        } elseif ($fieldType instanceof Boolean) {
-            $rawValue = (int) $rawValue;
-        } elseif ($fieldType instanceof AbstractEntity) {
-            $rawValue = $rawValue['value'];
         }
 
         $fieldValueData['value'] = $rawValue;
