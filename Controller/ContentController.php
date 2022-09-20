@@ -111,10 +111,22 @@ class ContentController extends AbstractController
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
-        if (!$request->query->get('edit') && $form->isSubmitted() && $form->isValid()) {
-            return $this->render('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
-                'form' => $form->createView(),
-            ]);
+        if (!$request->query->get('edit') && $form->isSubmitted()) {
+            if ($form->isValid()) {
+                return new JsonResponse([
+                    'success' => true,
+                    'preview' => $this->renderView('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
+                        'form' => $form->createView(),
+                    ])
+                ]);
+            } else {
+                return new JsonResponse([
+                    'success' => false,
+                    'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
+                        'form' => $form->createView(),
+                    ]),
+                ]);
+            }
         }
 
         return new JsonResponse([

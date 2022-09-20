@@ -351,13 +351,20 @@ jQuery(function ($) {
             contentType: false,
             type: form.method
         }).done(function (data) {
-            let preview = data;
-            preview = preview.replace(/__field_name__/g, name).replace(/field_name__/g, name);
+            if (data.success) {
+                let preview = data.preview.replace(/__field_name__/g, name).replace(/field_name__/g, name);
 
-            row.replaceWith(preview);
-            calculatePosition();
+                row.replaceWith(preview);
+                calculatePosition();
 
-            slide.close();
+                slide.close();
+            } else {
+                slide.setContent(data.content);
+                slide.content.find('.acb-edit-field-form').on('submit', function (e) {
+                    e.preventDefault();
+                    saveFieldData(this, row.data('name'), row);
+                });
+            }
         });
     }
 
@@ -371,20 +378,28 @@ jQuery(function ($) {
             contentType: false,
             type: form.method
         }).done(function (data) {
-            let preview = data;
-            let name = baseName + '[__name__]';
-            preview = preview.replace(/__field_name__/g, name)
-                .replace(/field_name__/g, name.replace(/[\[\]]/g, '_')); // replace placeholder in HTML "id"
+            if (data.success) {
+                let preview = data.preview;
+                let name = baseName + '[__name__]';
+                preview = preview.replace(/__field_name__/g, name)
+                    .replace(/field_name__/g, name.replace(/[\[\]]/g, '_')); // replace placeholder in HTML "id"
 
-            let container = $('.acb-field-values-container').children('.acb-sortable-group');
-            let form = container.closest('form');
-            let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
-            preview = preview.replace(/__name__/g, counter++);
-            form.data('widget-counter', counter);
-            container.append(preview);
-            calculatePosition();
+                let container = $('.acb-field-values-container').children('.acb-sortable-group');
+                let form = container.closest('form');
+                let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
+                preview = preview.replace(/__name__/g, counter++);
+                form.data('widget-counter', counter);
+                container.append(preview);
+                calculatePosition();
 
-            slide.close();
+                slide.close();
+            } else {
+                slide.setContent(data.content);
+                slide.content.find('.acb-edit-field-form').on('submit', function (e) {
+                    e.preventDefault();
+                    saveNewFieldData(this, row.data('name'));
+                });
+            }
         });
     }
 });
