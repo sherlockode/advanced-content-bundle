@@ -47,6 +47,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_render_field', [$this, 'renderFieldValue'], ['is_safe' => ['html']]),
             new TwigFunction('acb_field_preview', [$this, 'renderFieldPreview'], ['is_safe' => ['html']]),
             new TwigFunction('acb_find_entity', [$this, 'findEntity']),
+            new TwigFunction('acb_field_raw_value', [$this, 'getFieldRawValue']),
         ];
     }
 
@@ -101,7 +102,7 @@ class ContentExtension extends AbstractExtension
      *
      * @return mixed
      */
-    private function getFieldRawValue(FieldValueInterface $fieldValue)
+    public function getFieldRawValue(FieldValueInterface $fieldValue)
     {
         return $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType())->getRawValue($fieldValue);
     }
