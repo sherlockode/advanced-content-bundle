@@ -1,6 +1,6 @@
 import Slide from "./slide.js";
 import jQuery from "jquery";
-import getSlug from "../public/js/speakingurl.min.js";
+import './slug.js';
 
 jQuery(function ($) {
     ////////////
@@ -68,16 +68,6 @@ jQuery(function ($) {
         });
     }
 
-    function applySlug(refField, slugField) {
-        var timer;
-        refField.on('keyup', function () {
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                slugField.val(generateSlug(refField.val()));
-            }, 300);
-        });
-    }
-
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
@@ -91,19 +81,6 @@ jQuery(function ($) {
             updateAddButtons(group);
         }
     });
-
-    function generateSlug (value) {
-        // use speakingurl lib if available
-        if (typeof getSlug === 'function') {
-            return getSlug(value);
-        }
-        // simple custom slug generator for fallback
-        // 1) convert to lowercase
-        // 2) remove dashes and pluses
-        // 3) replace spaces with dashes
-        // 4) remove everything but alphanumeric characters and dashes
-        return value.toLowerCase().trim().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    }
 
     $('body').on('click', '.acb-add-collection-item', function (e) {
         e.preventDefault();
@@ -154,96 +131,6 @@ jQuery(function ($) {
 
     $('body').on('sortstop', '.acb-field-values-container .acb-sortable-group', function () {
         updateAddButtons($(this));
-    });
-
-    $('body').on('focus', '.acb-slug', function(){
-        if ($(this).val() === '') {
-            $(this).val(generateSlug($(this).closest('.acb-field').find('.acb-name').first().val()));
-        }
-    });
-
-    /////////////
-    // Content //
-    /////////////
-
-    initContentSlug();
-
-    function initContentSlug() {
-        let contentName = $('.acb-content-name');
-        contentName.each(function(){
-            let contentSlug = $('.acb-content-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
-            if (contentSlug.length > 0) {
-                applySlug($(this), contentSlug);
-            }
-        });
-    }
-
-    //////////
-    // Page //
-    //////////
-
-    let pageTypeList = $('select.acb-page-page-type');
-    let pageTypeValue = pageTypeList.val();
-    $('body').on('submit', '.edit-page', function(e) {
-        if (pageTypeValue !== $(this).find('select.acb-page-page-type').val()) {
-            if (!confirm($('.acb-page-change-type').html())) {
-                e.preventDefault();
-            }
-        }
-    });
-
-    let pageTitle = $('.acb-pagemeta-title');
-    if (pageTitle.length > 0) {
-        pageTitle.each(function(){
-            let pageSlug = $('.acb-pagemeta-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
-            if (pageSlug.length > 0) {
-                applySlug($(this), pageSlug);
-            }
-        });
-    }
-
-    $('.acb_translations .acb-duplicate-locale-content').on('click', function () {
-        $('.acb_translations .acb-duplicate-dropdown button').data('locale', $(this).data('locale'));
-    });
-    $('.acb_translations .acb-duplicate-dropdown .dropdown-menu').on('click', function (e) {
-        // prevent dropdown from closing if clicked inside
-        e.stopPropagation();
-    });
-    $('.acb_translations .acb-duplicate-dropdown button').on('click', function () {
-        let button = $(this);
-
-        let data = {
-            id: button.closest('.dropdown-menu').find('select').val(),
-            locale: button.data('locale')
-        };
-
-        $.ajax(button.data('url'), {
-            method: 'POST',
-            data: data
-        }).done(function () {
-            window.location.reload();
-        });
-    });
-    $('.acb_translations .acb-delete-locale-content').on('click', function () {
-        if (confirm($(this).data('confirm'))) {
-            $.ajax($(this).data('url'), {
-                method: 'POST',
-                data: {id: $(this).data('entityId')},
-            }).done(function () {
-                window.location.reload();
-            });
-        }
-    });
-
-    ////////////
-    // Export //
-    ////////////
-
-    $('.acb-export-all').on('change', function () {
-        let checked = $(this).prop('checked');
-        $(this).closest('.acb-export-entities').find('.acb-export-entity input[type="checkbox"]').each(function () {
-            $(this).prop('checked', checked);
-        });
     });
 
     ////////////////
