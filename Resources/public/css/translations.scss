@@ -1,0 +1,55 @@
+.acb_translations {
+    .acb-duplicate-locale-content {
+        margin: 0 5px;
+    }
+    .nav li .acb-duplicate-dropdown {
+        padding: 10px 15px;
+        background: #f3f3f3;
+
+        a {
+            color: #919191;
+
+            &:hover,
+            &:focus {
+                text-decoration: none;
+            }
+        }
+    }
+    .dropdown-menu {
+        padding: 8px 15px;
+        max-width: 240px;
+    }
+    .acb-duplicate-locale-content-icon {
+        height: 12px;
+        width: 12px;
+        background: #5cb85c;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        margin: 0 5px;
+    }
+    .acb-delete-locale-content {
+        height: 12px;
+        width: 12px;
+        background: #d9534f;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        margin: 0 5px;
+
+        &::after {
+            content: '';
+            background: white;
+            position: absolute;
+            top: 37%;
+            left: 18%;
+            text-align: center;
+            height: 25%;
+            width: 65%;
+            border-radius: 1px;
+        }
+    }
+}
+.acb_translationFields {
+    padding-top: 10px;
+}
