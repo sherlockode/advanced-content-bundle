@@ -83,9 +83,13 @@ jQuery(function ($) {
     }
 
     $('body').on('click', '.acb-remove-row', function (e) {
-        var fieldRow = $(this).closest('.acb-row');
+        let group = $(this).closest('.acb-field-values-container .acb-sortable-group');
+        let fieldRow = $(this).closest('.acb-row');
         fieldRow.remove();
         calculatePosition();
+        if (group.length) {
+            updateAddButtons(group);
+        }
     });
 
     function generateSlug (value) {
@@ -126,6 +130,30 @@ jQuery(function ($) {
         newElem.appendTo(list);
         initSortables();
         calculatePosition();
+    });
+
+    function updateAddButtons(group) {
+        let lastElementType = null;
+        group.children().each(function () {
+            if ($(this).hasClass('acb-add-field-container')) {
+                if (lastElementType === 'add') {
+                    $(this).remove();
+                }
+                lastElementType = 'add';
+            } else if ($(this).hasClass('acb-field')) {
+                if (lastElementType === 'field' || lastElementType === null) {
+                    $(this).before(group.find('.acb-add-field-container').first().clone());
+                }
+                lastElementType = 'field';
+            }
+        });
+        if (lastElementType) {
+            group.append(group.find('.acb-add-field-container').first().clone());
+        }
+    }
+
+    $('body').on('sortstop', '.acb-field-values-container .acb-sortable-group', function () {
+        updateAddButtons($(this));
     });
 
     $('body').on('focus', '.acb-slug', function(){
@@ -222,34 +250,17 @@ jQuery(function ($) {
     // Standalone //
     ////////////////
 
-
-    $('.acb-add-field-container').find('.btn-form-part').on('click', function () {
-        let form = $(this).closest('form');
-        let container = $(this).closest('.acb-field-values-container').children('.acb-sortable-group');
-        let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
-        let baseName = $(this).data('base-name');
-
-        $.ajax({
-            url: $(this).data('add-field-url'),
-            data: {'type': $('.acb-add-field-container').find('select').val()},
-            type: 'GET'
-        }).done(function (data) {
-            let html = data.replace(/__field_name__/g, baseName + '[__name__]');
-            html = html.replace(/__name__/g, counter++);
-            form.data('widget-counter', counter);
-            container.append(html);
-            calculatePosition();
-        }).fail(ajaxFailCallback);
-    });
-
     let slide = new Slide();
     slide.element.on('click', '.form-button', function () {
         $($(this).data('target')).submit();
     });
 
-    $('.acb-add-field-container').find('.btn-new-field').on('click', function () {
+    let usedAddFieldBlock = null;
+
+    $('body').on('click', '.acb-add-field-container .btn-new-field', function () {
         let baseName = $(this).data('base-name');
         slide.empty();
+        usedAddFieldBlock = $(this).closest('.acb-add-field-container');
 
         $.ajax({
             url: $(this).data('new-field-url'),
@@ -389,7 +400,14 @@ jQuery(function ($) {
                 let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
                 preview = preview.replace(/__name__/g, counter++);
                 form.data('widget-counter', counter);
-                container.append(preview);
+
+                if (usedAddFieldBlock) {
+                    usedAddFieldBlock.after(preview);
+                } else {
+                    container.append(preview);
+                }
+                updateAddButtons(container);
+
                 calculatePosition();
 
                 slide.close();

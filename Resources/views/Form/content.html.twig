@@ -19,16 +19,21 @@
     {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
     <div {{ block('widget_container_attributes') }}>
         {% for child in form %}
+            {{ _self.acb_button_add_field(form.vars['full_name']) }}
             {{ _self.acb_field_value_entry(child) }}
         {% endfor %}
+        {{ _self.acb_button_add_field(form.vars['full_name']) }}
     </div>
+{% endblock %}
 
+{% macro acb_button_add_field(baseName) %}
     <div class="acb-add-field-container">
-        <button type="button" class="btn btn-primary btn-new-field" data-new-field-url="{{ path('sherlockode_acb_content_add_field') }}" data-base-name="{{ form.vars['full_name'] }}">
+        <button type="button" class="btn btn-new-field" data-new-field-url="{{ path('sherlockode_acb_content_add_field') }}" data-base-name="{{ baseName }}">
+            <i class="glyphicon glyphicon-plus"></i>
             {{ 'content.add_field'|trans }}
         </button>
     </div>
-{% endblock %}
+{% endmacro %}
 
 {% macro acb_field_value_entry(form) %}
 <div class="acb-field field-row acb-row acb-sortable" data-name="{{ form.vars.full_name }}">

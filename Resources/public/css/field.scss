@@ -13,6 +13,7 @@
 
     .acb-field-heading {
         padding: 8px 16px;
+        cursor: move;
 
         .field-name {
             font-size: 18px;
@@ -70,6 +71,36 @@
 }
 .btn-add-field {
     margin-top: 25px;
+}
+.acb-add-field-container {
+
+    + .acb-add-field-container,
+    + .ui-sortable-helper + .acb-add-field-container {
+        /* avoid showing 2 consecutive buttons during drag and drop */
+        display: none;
+    }
+
+    text-align: center;
+    position: relative;
+
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        border-top: 1px solid #ccc;
+    }
+
+    .btn-new-field {
+        position: relative;
+        z-index: 1;
+
+        i {
+            font-size: 0.8em;
+        }
+    }
 }
 .acb-edit-field-form {
     .acb-field-element-compound {
