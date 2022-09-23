@@ -19,7 +19,7 @@ Field Types
 | File upload | file | array indexed by "src" (file name), "url" (full url to the file resource), "title" |
 | Image upload | image | array indexed by "src" (file name), "url", (full url to the image resource), "alt" |
 
-## Custom FieldType
+## Using a custom FieldType
 
 You can create your own FieldType class matching your needs.
 
@@ -30,8 +30,7 @@ Your class must implement `\Sherlockode\AdvancedContentBundle\FieldType\FieldTyp
 It can inherit `\Sherlockode\AdvancedContentBundle\FieldType\AbstractFieldType`
 which already defines some interface methods for standard behavior.
 
-You will need to define a unique code for your field.
-
+You will need to define a unique code for your field in the `getCode()` method.
 
 ### FieldType Service
 
@@ -43,64 +42,59 @@ app.field_type.custom_field_type:
         - { name: sherlockode_advanced_content.fieldtype }
 ```
 
-## Entity FieldType
+### Specific Form types
 
-An abstract Entity FieldType is available. By extending it, you can create your a new FieldType based on the entity you want.
+There are some specific form types available to ease integration of specific use cases.
 
-### Entity FieldType Class
+#### EntityType
 
-Your class must extend `Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity`
-At least 3 methods must be defined:
-- `getCode()` - unique code for your field type
-- `getEntityClass()` - class of your entity
-- `getEntityChoiceLabel()` - property used for display in the Content form
+You can use the `Sherlockode\AdvancedContentBundle\Form\EntityType` to integrate an Entity form in your custom field type.
+The class directly extends the native EntityType from Symfony and adds a transformer to handle ID storage.
 
-By default, to store selected choice, we will use the property `id`. 
-If you want to use another unique identifier for your entity, you can override `getUniqueFieldIdentifier()`.
+Considering a `CustomField` class with uses `CustomType` as a form, you can define your form class like this:
 
 ```php
 <?php
-// src/FieldType/CustomEntityFieldType.php
-namespace App\FieldType;
+namespace App\Form\Type;
 
-use App\Entity\CustomEntity;
-use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
+use App\Entity\Product;
+use Sherlockode\AdvancedContentBundle\Form\Type\EntityType;
 
-class CustomEntityFieldType extends AbstractEntity
+class CustomType extends AbstractType
 {
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        return 'custom_entity_field_type';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityClass()
-    {
-        return CustomEntity::class;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityChoiceLabel()
-    {
-        return 'property';
+        $builder
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
+            ])
+        ;
     }
 }
 ```
 
-### FieldType Service
+#### RepeaterType
 
-```yaml
-# config/services.yaml
-app.field_type.custom_entity_field_type:
-    class: App\FieldType\CustomEntityFieldType
-    tags:
-        - { name: sherlockode_advanced_content.fieldtype }
-    arguments: ['@doctrine.orm.entity_manager']
+The `RepeaterType` lets you define easily a collection of elements in a field.
+The repeater will automatically and addition, removal and sorting of the elements for the end user.
+The RepeaterType extends the Symfony `CollectionType` so all native options are available.
+
+```php
+<?php
+namespace App\Form\Type;
+
+use Sherlockode\AdvancedContentBundle\Form\Type\RepeaterType;
+
+class FaqType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('categories', RepeaterType::class, [
+                'entry_type' => TextType::class,
+                'entry_options' => ['attr' => ['class' => 'my-text']],
+            ])
+        ;
+    }
+}
 ```

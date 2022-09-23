@@ -37,6 +37,26 @@ return [
 Configuration
 -------------
 
+### Assets
+
+Using Webpack, you may import the assets in your main asset file to integrate them in the build process:
+
+```js
+// assets/js/app.js
+import '../../vendor/sherlockode/advanced-content-bundle/Resources/public/css/index.scss';
+import '../../vendor/sherlockode/advanced-content-bundle/Resources/js/index.js';
+```
+
+```html
+{# templates/layout.html.twig #}
+
+{# ... #}
+{{ encore_entry_link_tags('app') }}
+{# ... #}
+{{ encore_entry_script_tags('app') }}
+```
+
+
 ### Twig
 
 You may enable the bootstrap form theme in your configuration for better-looking forms in the bundle:
@@ -49,22 +69,8 @@ twig:
 
 ### Entities
 
-`SherlockodeAdvancedContentBundle` provides 5 entity models : Content, FieldValue, PageType, Page, PageMeta
+`SherlockodeAdvancedContentBundle` provides 5 entity models : Content, FieldValue, PageType, Page, PageMeta.
 To be able to use them, you need to create your own entities, see examples in the [doc](Resources/doc/entities.md).
-
-Next, make the bundle aware of your entities by adding the following lines to your configuration:
-
-```yaml
-# config/packages/doctrine.yml
-doctrine:
-    orm:
-        resolve_target_entities:
-            SherlockodeAdvancedContentBundle\Model\ContentInterface: App\Entity\Content
-            SherlockodeAdvancedContentBundle\Model\FieldValueInterface: App\Entity\FieldValue
-            SherlockodeAdvancedContentBundle\Model\PageTypeInterface: App\Entity\PageType
-            SherlockodeAdvancedContentBundle\Model\PageInterface: App\Entity\Page
-            SherlockodeAdvancedContentBundle\Model\PageMetaInterface: App\Entity\PageMeta
-```
 
 ```yaml
 # config/packages/sherlockode_advanced_content.yml
@@ -101,9 +107,10 @@ The routing is split into several files for better import rules.
 
 * tools.xml : Routes for tooling pages, like import/export
 * content.xml : Utility routes for editing contents
+* page_meta.xml : Utility routes for editing pages
 * page.xml : basic CRUD routes for Pages (demo purpose)
 * content_crud.xml : basic CRUD routes for Content (demo purpose)
-* all.xml : includes all of the above
+* all.xml : includes all the above
 * base.xml : includes tools.xml, content.xml and page_meta.xml
 
 The base.xml file is sufficient if you plan to manage all your CRUD operations in custom controllers
