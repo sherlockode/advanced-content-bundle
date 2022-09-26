@@ -28,8 +28,8 @@
 
 {% macro acb_button_add_field(baseName) %}
     <div class="acb-add-field-container">
-        <button type="button" class="btn btn-new-field" data-new-field-url="{{ path('sherlockode_acb_content_add_field') }}" data-base-name="{{ baseName }}">
-            <i class="glyphicon glyphicon-plus"></i>
+        <button type="button" class="btn btn-light btn-new-field" data-new-field-url="{{ path('sherlockode_acb_content_add_field') }}" data-base-name="{{ baseName }}">
+            <i class="fa-solid fa-plus"></i>
             {{ 'content.add_field'|trans }}
         </button>
     </div>
@@ -45,7 +45,7 @@
 
         {{- block('acb_panel_actions') -}}
     </div>
-    <div class="panel-body">
+    <div class="acb-field-body">
         {{ acb_field_preview(form.vars.data) }}
     </div>
     <div style="display: none">
@@ -118,7 +118,7 @@
 
 {% block acb_page_widget %}
     <div class="acb-page-field-group">
-        <label>{{ 'page.form.general'|trans }}</label>
+        <label class="acb-section-title">{{ 'page.form.general'|trans }}</label>
         <div class="acb-page-field-container acb-page-general-container">
             {{ form_row(form.pageIdentifier) }}
             {{ form_row(form.pageType) }}
@@ -130,20 +130,20 @@
 
     <div class="acb-page-field-group">
     {% if form.pageMeta is defined %}
-        <label for="{{ form.pageMeta.vars.id }}">{{ 'page.form.page_meta'|trans }}</label>
+        <label for="{{ form.pageMeta.vars.id }}" class="acb-section-title">{{ 'page.form.page_meta'|trans }}</label>
         {{ form_widget(form.pageMeta) }}
     {% elseif form.pageMetas is defined %}
-        <label for="{{ form.pageMetas.vars.id }}">{{ 'page.form.page_meta'|trans }}</label>
+        <label for="{{ form.pageMetas.vars.id }}" class="acb-section-title">{{ 'page.form.page_meta'|trans }}</label>
         {{ form_widget(form.pageMetas) }}
     {% endif %}
     </div>
 
     <div class="acb-page-field-group">
     {% if form.content is defined %}
-        <label for="{{ form.content.vars.id }}">{{ 'page.form.content'|trans }}</label>
+        <label for="{{ form.content.vars.id }}" class="acb-section-title">{{ 'page.form.content'|trans }}</label>
         {{ form_widget(form.content) }}
     {% elseif form.contents is defined %}
-        <label for="{{ form.contents.vars.id }}">{{ 'page.form.content'|trans }}</label>
+        <label for="{{ form.contents.vars.id }}" class="acb-section-title">{{ 'page.form.content'|trans }}</label>
         {{ form_widget(form.contents) }}
     {% endif %}
     </div>

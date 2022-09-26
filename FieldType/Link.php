@@ -22,7 +22,7 @@ class Link extends AbstractFieldType
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-link';
+        return 'fa-solid fa-link';
     }
 
     public function getFrontTemplate()

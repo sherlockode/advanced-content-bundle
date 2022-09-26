@@ -16,7 +16,7 @@ class Title extends AbstractFieldType
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-header';
+        return 'fa-solid fa-heading';
     }
 
     public function getFrontTemplate()

@@ -3,7 +3,7 @@ import $ from 'jquery';
 class Slide
 {
     constructor() {
-        this.closeBtn = $('<button type="button" class="btn-close"><i class="glyphicon glyphicon-remove"></i></button>');
+        this.closeBtn = $('<button type="button" class="btn-close"><i class="fa-solid fa-xmark"></i></button>');
         this.header = $('<div class="acb-lateral-slide-header"></div>');
         this.content = $('<div class="acb-lateral-slide-content"></div>');
         this.footer = $('<div class="acb-lateral-slide-footer"></div>');

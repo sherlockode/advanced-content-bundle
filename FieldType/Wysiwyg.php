@@ -19,7 +19,7 @@ class Wysiwyg extends AbstractFieldType
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-text-size';
+        return 'fa-solid fa-text-height';
     }
 
     public function getFrontTemplate()

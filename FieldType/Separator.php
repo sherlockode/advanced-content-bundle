@@ -16,7 +16,7 @@ class Separator extends AbstractFieldType
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-minus';
+        return 'fa-solid fa-minus';
     }
 
     public function getFrontTemplate()

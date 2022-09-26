@@ -11,7 +11,7 @@ abstract class AbstractInputType extends AbstractFieldType
 {
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-font';
+        return 'fa-solid fa-font';
     }
 
     /**

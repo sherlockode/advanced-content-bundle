@@ -19,7 +19,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-cog';
+        return 'fa-solid fa-gear';
     }
 
     /**

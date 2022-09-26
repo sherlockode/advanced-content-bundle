@@ -1,9 +1,9 @@
 # Sherlockode AdvancedContentBundle
 
-This bundle provides advanced CMS features inspired by the Wordpress ACF plugin.
+This bundle provides advanced CMS features for end user contribution.
 
-Users are able to create pages with base and custom building block.
-These models are used by back-office contributors to create actual contents without coding after the setup is done.
+Users are able to create pages with standard and custom building blocks.
+These blocks are used by back-office contributors to create actual contents without coding after the setup is done.
 
 [![Total Downloads](https://poser.pugx.org/sherlockode/advanced-content-bundle/downloads)](https://packagist.org/packages/sherlockode/advanced-content-bundle)
 [![Latest Stable Version](https://poser.pugx.org/sherlockode/advanced-content-bundle/v/stable)](https://packagist.org/packages/sherlockode/advanced-content-bundle)
@@ -41,10 +41,17 @@ Configuration
 
 Using Webpack, you may import the assets in your main asset file to integrate them in the build process:
 
+Please note that Font Awesome is optional, but natively used for icons display on contribution pages.
+To use it you should require `@fortawesome/fontawesome-free` in `package.json` (or use another install method of your choice).
+
 ```js
 // assets/js/app.js
 import '../../vendor/sherlockode/advanced-content-bundle/Resources/public/css/index.scss';
 import '../../vendor/sherlockode/advanced-content-bundle/Resources/js/index.js';
+
+// font awesome (optional)
+import '@fortawesome/fontawesome-free/css/fontawesome.css';
+import '@fortawesome/fontawesome-free/css/solid.css';
 ```
 
 ```html

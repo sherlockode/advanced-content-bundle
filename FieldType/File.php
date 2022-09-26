@@ -39,7 +39,7 @@ class File extends AbstractFieldType
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-paperclip';
+        return 'fa-solid fa-paperclip';
     }
 
     /**

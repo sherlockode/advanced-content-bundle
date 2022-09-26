@@ -16,7 +16,7 @@ class Image extends File
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-picture';
+        return 'fa-solid fa-image';
     }
 
     public function getFrontTemplate()

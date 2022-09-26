@@ -22,7 +22,7 @@ class Iframe extends AbstractFieldType
 
     public function getIconClass()
     {
-        return 'glyphicon glyphicon-cog';
+        return 'fa-solid fa-gear';
     }
 
     public function getFrontTemplate()
