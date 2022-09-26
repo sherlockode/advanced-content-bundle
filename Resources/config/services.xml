@@ -19,6 +19,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="twig"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument>form_div_layout.html.twig</argument>
             <tag name="twig.extension"/>
         </service>
 

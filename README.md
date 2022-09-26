@@ -71,7 +71,18 @@ You may enable the bootstrap form theme in your configuration for better-looking
 ```yaml
 # config/packages/twig.yml
 twig:
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes: ['bootstrap_5_layout.html.twig']
+```
+
+Take care that we use the last defined form theme as the base theme for all forms.
+
+Alternatively, if you run into theme issues or if you just want to use a different form theme,
+you can override the bundle's base form theme file `Form/base_theme.html.twig`
+
+```
+{# templates/bundles/SherlockodeAdvancedContentBundle/Form/base_theme.html.twig #}
+
+{% extends 'bootstrap_5_layout.html.twig' %}
 ```
 
 ### Entities

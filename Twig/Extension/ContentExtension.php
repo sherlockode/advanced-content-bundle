@@ -27,13 +27,22 @@ class ContentExtension extends AbstractExtension
     private $em;
 
     /**
-     * @param FieldManager $fieldManager
+     * @var string
      */
-    public function __construct(FieldManager $fieldManager, Environment $twig, EntityManager $em)
+    private $baseFormTheme;
+
+    /**
+     * @param FieldManager  $fieldManager
+     * @param Environment   $twig
+     * @param EntityManager $em
+     * @param string        $baseFormTheme
+     */
+    public function __construct(FieldManager $fieldManager, Environment $twig, EntityManager $em, $baseFormTheme)
     {
         $this->fieldManager = $fieldManager;
         $this->twig = $twig;
         $this->em = $em;
+        $this->baseFormTheme = $baseFormTheme;
     }
 
     /**
@@ -48,6 +57,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_field_preview', [$this, 'renderFieldPreview'], ['is_safe' => ['html']]),
             new TwigFunction('acb_find_entity', [$this, 'findEntity']),
             new TwigFunction('acb_field_raw_value', [$this, 'getFieldRawValue']),
+            new TwigFunction('acb_base_form_theme', [$this, 'getBaseFormTheme']),
         ];
     }
 
@@ -105,5 +115,13 @@ class ContentExtension extends AbstractExtension
     public function getFieldRawValue(FieldValueInterface $fieldValue)
     {
         return $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType())->getRawValue($fieldValue);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseFormTheme()
+    {
+        return $this->baseFormTheme;
     }
 }

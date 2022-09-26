@@ -1,4 +1,4 @@
-{% extends 'form_div_layout.html.twig' %}
+{% extends '@SherlockodeAdvancedContent/Form/base_theme.html.twig' %}
 
 {% block form_row %}
     {% if form.parent and form.vars.compound and (form.parent.vars.name == 'value' or (form.parent.parent and form.parent.parent.vars.name == 'value')) %}
