@@ -17,7 +17,7 @@ class Wysiwyg extends AbstractFieldType
         return WysiwygType::class;
     }
 
-    public function getIconClass()
+    protected function getDefaultIconClass()
     {
         return 'fa-solid fa-text-height';
     }

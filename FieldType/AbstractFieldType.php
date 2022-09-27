@@ -9,6 +9,15 @@ use Symfony\Component\Form\Form;
 
 abstract class AbstractFieldType implements FieldTypeInterface
 {
+    protected $configData = [];
+
+    public function setConfigData(array $data)
+    {
+        $this->configData = $data;
+
+        return $this;
+    }
+
     /**
      * @return string
      */
@@ -18,6 +27,14 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     public function getIconClass()
+    {
+        return $this->configData['icon'] ?? $this->getDefaultIconClass();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultIconClass()
     {
         return 'fa-solid fa-gear';
     }

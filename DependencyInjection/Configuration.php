@@ -106,6 +106,15 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->prototype('scalar')->end()
                 ->end()
+                ->arrayNode('field_types')
+                    ->useAttributeAsKey('code')
+                    ->arrayPrototype()
+                        ->children()
+                            ->booleanNode('enabled')->defaultTrue()->end()
+                            ->scalarNode('icon')->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

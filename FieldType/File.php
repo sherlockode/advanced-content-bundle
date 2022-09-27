@@ -37,7 +37,7 @@ class File extends AbstractFieldType
         return AcbFileType::class;
     }
 
-    public function getIconClass()
+    protected function getDefaultIconClass()
     {
         return 'fa-solid fa-paperclip';
     }

@@ -14,7 +14,7 @@ class Separator extends AbstractFieldType
         return FormType::class;
     }
 
-    public function getIconClass()
+    protected function getDefaultIconClass()
     {
         return 'fa-solid fa-minus';
     }

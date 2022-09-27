@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -18,11 +17,6 @@ class Iframe extends AbstractFieldType
     public function getFormFieldType()
     {
         return FormType::class;
-    }
-
-    public function getIconClass()
-    {
-        return 'fa-solid fa-gear';
     }
 
     public function getFrontTemplate()

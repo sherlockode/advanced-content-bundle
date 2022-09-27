@@ -12,9 +12,15 @@ class FieldManager
      */
     private $fieldTypes;
 
-    public function __construct()
+    /**
+     * @var array
+     */
+    private $fieldsConfiguration;
+
+    public function __construct(array $fieldsConfiguration)
     {
         $this->fieldTypes = [];
+        $this->fieldsConfiguration = $fieldsConfiguration;
     }
 
     /**
@@ -24,7 +30,16 @@ class FieldManager
      */
     public function addFieldType(FieldTypeInterface $fieldType)
     {
-        $this->fieldTypes[$fieldType->getCode()] = $fieldType;
+        $enabled = true;
+        if (isset($this->fieldsConfiguration[$fieldType->getCode()])) {
+            if ($this->fieldsConfiguration[$fieldType->getCode()]['enabled'] === false) {
+                $enabled = false;
+            }
+            $fieldType->setConfigData($this->fieldsConfiguration[$fieldType->getCode()]);
+        }
+        if ($enabled) {
+            $this->fieldTypes[$fieldType->getCode()] = $fieldType;
+        }
     }
 
     /**

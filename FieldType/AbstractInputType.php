@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 abstract class AbstractInputType extends AbstractFieldType
 {
-    public function getIconClass()
+    protected function getDefaultIconClass()
     {
         return 'fa-solid fa-font';
     }

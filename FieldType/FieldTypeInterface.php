@@ -91,4 +91,11 @@ interface FieldTypeInterface
      * @return mixed
      */
     public function getRawValue(FieldValueInterface $fieldValue);
+
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function setConfigData(array $data);
 }

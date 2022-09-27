@@ -33,6 +33,18 @@ class SherlockodeAdvancedContentExtension extends Extension
 
         $container->setParameter('sherlockode_advanced_content.entity_class_mapping', $config['entity_class']);
 
+        $this->setupUploads($config, $container);
+
+        $container->getDefinition('sherlockode_advanced_content.field_manager')->setArgument(0, $config['field_types']);
+
+        $localeProvider = $container->getDefinition('sherlockode_advanced_content.locale_provider');
+        $localeProvider->setArgument(0, $config['locales']);
+
+        $container->setParameter('sherlockode_advanced_content.templates.tools', $config['templates']['tools']);
+    }
+
+    protected function setupUploads(array $config, ContainerBuilder $container)
+    {
         $targetDir = $config['upload']['image_directory'] ?? sys_get_temp_dir();
         $webPath = $config['upload']['uri_prefix'] ?? '/';
 
@@ -41,10 +53,5 @@ class SherlockodeAdvancedContentExtension extends Extension
             $targetDir,
             $webPath,
         ]);
-
-        $localeProvider = $container->getDefinition('sherlockode_advanced_content.locale_provider');
-        $localeProvider->setArgument(0, $config['locales']);
-
-        $container->setParameter('sherlockode_advanced_content.templates.tools', $config['templates']['tools']);
     }
 }
