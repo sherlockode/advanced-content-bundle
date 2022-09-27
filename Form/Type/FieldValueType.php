@@ -4,6 +4,8 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,6 +19,20 @@ class FieldValueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $options['field_type']->buildContentFieldValue($builder);
+
+        $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+            $cleanData = [];
+            // remove possibly obsolete data if the form was changed
+            foreach ($form as $key => $child) {
+                if (isset($data[$key])) {
+                    $cleanData[$key] = $data[$key];
+                }
+            }
+
+            $event->setData($cleanData);
+        });
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
