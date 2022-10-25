@@ -42,8 +42,8 @@ class Link extends AbstractFieldType
         parent::buildContentFieldValue($builder);
 
         $builder->get('value')
-            ->add('url', $this->getUrlFormType())
-            ->add('title', TextType::class)
+            ->add('url', $this->getUrlFormType(), ['label' => 'field_type.link.url'])
+            ->add('title', TextType::class, ['label' => 'field_type.link.title'])
         ;
     }
 

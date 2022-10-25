@@ -49,6 +49,9 @@ class FieldValueType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['field_type']);
+        $resolver->setDefaults([
+            'translation_domain' => 'AdvancedContentBundle',
+        ]);
     }
 
     public function getBlockPrefix()

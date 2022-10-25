@@ -42,32 +42,15 @@ field_type:
         label: Textarea
         nb_rows:
             label: Nb rows
-    boolean:
-        label: Yes/No
-    checkbox:
-        label: Checkbox
-    email:
-        label: Email
     iframe:
         label: Iframe
+        src: Url
+        width: Width
+        height: Height
     link:
         label: Link
-    number:
-        label: Number
-    password:
-        label: Password
-    phone:
-        label: Phone
-    radio:
-        label: Radio button
-    select:
-        label: Select
-    color:
-        label: Color
-    date:
-        label: Date
-        time:
-            label: Include time ?
+        title: Title
+        url: Url
     file:
         name: File
         title: Title

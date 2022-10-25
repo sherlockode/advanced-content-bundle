@@ -42,32 +42,15 @@ field_type:
         label: Zone de texte
         nb_rows:
             label: Nb lignes
-    boolean:
-        label: Oui/Non
-    checkbox:
-        label: Case à cocher
-    email:
-        label: Email
     iframe:
         label: Iframe
+        src: Url
+        width: Largeur
+        height: Hauteur
     link:
         label: Lien
-    number:
-        label: Nombre
-    password:
-        label: Mot de passe
-    phone:
-        label: Téléphone
-    radio:
-        label: Radio bouton
-    select:
-        label: Liste déroulante
-    color:
-        label: Couleur
-    date:
-        label: Date
-        time:
-            label: Inclure l'heure ?
+        title: Titre
+        url: Url
     file:
         name: Fichier
         title: Titre

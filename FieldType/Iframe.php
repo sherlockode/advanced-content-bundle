@@ -31,9 +31,9 @@ class Iframe extends AbstractFieldType
         parent::buildContentFieldValue($builder);
 
         $builder->get('value')
-            ->add('src', UrlType::class)
-            ->add('width', IntegerType::class, ['required' => false])
-            ->add('height', IntegerType::class, ['required' => false])
+            ->add('src', UrlType::class, ['label' => 'field_type.iframe.src'])
+            ->add('width', IntegerType::class, ['required' => false, 'label' => 'field_type.iframe.width'])
+            ->add('height', IntegerType::class, ['required' => false, 'label' => 'field_type.iframe.height'])
         ;
     }
 
