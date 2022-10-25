@@ -19,11 +19,6 @@ class Separator extends AbstractFieldType
         return 'fa-solid fa-minus';
     }
 
-    public function getFrontTemplate()
-    {
-        return '@SherlockodeAdvancedContent/Field/front/separator.html.twig';
-    }
-
     /**
      * Get field's code
      *

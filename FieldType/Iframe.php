@@ -19,11 +19,6 @@ class Iframe extends AbstractFieldType
         return FormType::class;
     }
 
-    public function getFrontTemplate()
-    {
-        return '@SherlockodeAdvancedContent/Field/front/iframe.html.twig';
-    }
-
     /**
      * Add field value's field(s) to content form
      *

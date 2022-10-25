@@ -19,11 +19,6 @@ class Image extends File
         return 'fa-solid fa-image';
     }
 
-    public function getFrontTemplate()
-    {
-        return '@SherlockodeAdvancedContent/Field/front/image.html.twig';
-    }
-
     /**
      * Get field's code
      *

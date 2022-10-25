@@ -10,6 +10,14 @@ use Symfony\Component\Form\Form;
 class TextArea extends AbstractInputType
 {
     /**
+     * @return string
+     */
+    public function getFrontTemplate()
+    {
+        return '@SherlockodeAdvancedContent/Field/front/text.html.twig';
+    }
+
+    /**
      * Get options to apply on field value
      *
      * @return array

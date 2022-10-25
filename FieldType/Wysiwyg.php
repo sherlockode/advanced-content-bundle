@@ -22,11 +22,6 @@ class Wysiwyg extends AbstractFieldType
         return 'fa-solid fa-text-height';
     }
 
-    public function getFrontTemplate()
-    {
-        return '@SherlockodeAdvancedContent/Field/front/wysiwyg.html.twig';
-    }
-
     /**
      * Add field's options
      *

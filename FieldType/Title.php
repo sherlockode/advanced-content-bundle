@@ -19,11 +19,6 @@ class Title extends AbstractFieldType
         return 'fa-solid fa-heading';
     }
 
-    public function getFrontTemplate()
-    {
-        return '@SherlockodeAdvancedContent/Field/front/title.html.twig';
-    }
-
     /**
      * Get field's code
      *
