@@ -59,10 +59,17 @@ class RelativeLink extends Link
             return $url;
         }
 
-        if (!$this->requestStack->getMasterRequest()) {
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            // SF >= 5.3
+            $mainRequest = $this->requestStack->getMainRequest();
+        } else {
+            // compat SF < 5.3
+            $mainRequest = $this->requestStack->getMasterRequest();
+        }
+        if (!$mainRequest) {
             return $url;
         }
 
-        return $this->requestStack->getMasterRequest()->getSchemeAndHttpHost() . '/' . ltrim($url, '/');
+        return $mainRequest->getSchemeAndHttpHost() . '/' . ltrim($url, '/');
     }
 }
