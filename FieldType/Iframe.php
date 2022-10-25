@@ -4,9 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class Iframe extends AbstractFieldType
@@ -35,26 +33,6 @@ class Iframe extends AbstractFieldType
             ->add('width', IntegerType::class, ['required' => false, 'label' => 'field_type.iframe.width'])
             ->add('height', IntegerType::class, ['required' => false, 'label' => 'field_type.iframe.height'])
         ;
-    }
-
-    /**
-     * Add field's options
-     *
-     * @param Form|FormBuilderInterface $builder
-     *
-     * @return void
-     */
-    public function addFieldOptions($builder)
-    {
-        $builder->get('options')
-            ->add('width', NumberType::class, ['required' => false])
-            ->add('height', NumberType::class, ['required' => false])
-        ;
-    }
-
-    public function getFieldOptionNames()
-    {
-        return ['width', 'height'];
     }
 
     /**

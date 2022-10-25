@@ -5,7 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Form;
 
 abstract class AbstractFieldType implements FieldTypeInterface
 {
@@ -76,27 +75,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
             $builder->get('value')
                 ->addModelTransformer($modelTransformer);
         }
-    }
-
-    /**
-     * Add field's options
-     *
-     * @param Form|FormBuilderInterface $builder
-     *
-     * @return void
-     */
-    public function addFieldOptions($builder)
-    {
-    }
-
-    /**
-     * Get Field option names
-     *
-     * @return array
-     */
-    public function getFieldOptionNames()
-    {
-        return [];
     }
 
     /**

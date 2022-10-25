@@ -19,14 +19,7 @@ content:
 field_type:
     text:
         label: Text
-        min_length: Min. length
-        max_length: Max. length
     wysiwyg:
-        toolbar:
-            label: Toolbar
-            basic: Basic
-            standard: Standard
-            full: Full
         label: Editor
     image:
         label: Image
@@ -40,8 +33,6 @@ field_type:
         label: Flexible
     textarea:
         label: Textarea
-        nb_rows:
-            label: Nb rows
     iframe:
         label: Iframe
         src: Url

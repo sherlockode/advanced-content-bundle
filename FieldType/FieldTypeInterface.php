@@ -5,7 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Form;
 
 interface FieldTypeInterface
 {
@@ -46,27 +45,11 @@ interface FieldTypeInterface
     public function buildContentFieldValue(FormBuilderInterface $builder);
 
     /**
-     * Add field's options
-     *
-     * @param Form|FormBuilderInterface $builder
-     *
-     * @return void
-     */
-    public function addFieldOptions($builder);
-
-    /**
      * Get field's code
      *
      * @return string
      */
     public function getCode();
-
-    /**
-     * Get Field option names
-     *
-     * @return array
-     */
-    public function getFieldOptionNames();
 
     /**
      * Get model transformer for value field

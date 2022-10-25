@@ -3,12 +3,10 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Form;
 
 class Link extends AbstractFieldType
 {
@@ -53,35 +51,6 @@ class Link extends AbstractFieldType
     protected function getUrlFormType()
     {
         return UrlType::class;
-    }
-
-    /**
-     * Add field's options
-     *
-     * @param Form|FormBuilderInterface $builder
-     *
-     * @return void
-     */
-    public function addFieldOptions($builder)
-    {
-        $builder->get('options')
-            ->add('target', ChoiceType::class, [
-                'choices' => [
-                    'Blank' => '_blank',
-                    'Self' => '_self'
-                ]
-            ])
-        ;
-    }
-
-    /**
-     * Get Field option names
-     *
-     * @return array
-     */
-    public function getFieldOptionNames()
-    {
-        return ['target'];
     }
 
     /**
