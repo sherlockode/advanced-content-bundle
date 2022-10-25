@@ -23,15 +23,17 @@ class FieldValueType extends AbstractType
         $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
             $form = $event->getForm();
-            $cleanData = [];
-            // remove possibly obsolete data if the form was changed
-            foreach ($form as $key => $child) {
-                if (isset($data[$key])) {
-                    $cleanData[$key] = $data[$key];
+            if ($form->getConfig()->getCompound()) {
+                $cleanData = [];
+                // remove possibly obsolete data if the form was changed
+                foreach ($form as $key => $child) {
+                    if (isset($data[$key])) {
+                        $cleanData[$key] = $data[$key];
+                    }
                 }
-            }
 
-            $event->setData($cleanData);
+                $event->setData($cleanData);
+            }
         });
     }
 
