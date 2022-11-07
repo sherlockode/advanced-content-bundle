@@ -7,10 +7,7 @@
             <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
         </service>
         <service id="sherlockode_advanced_content.page_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageListener">
-            <argument type="service" id="sherlockode_advanced_content.page_manager"/>
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
-            <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
-            <tag name="doctrine.event_listener" event="postUpdate" lazy="1"/>
         </service>
         <service id="sherlockode_advanced_content.page_type_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageTypeListener">
             <argument type="service" id="sherlockode_advanced_content.page_manager"/>
