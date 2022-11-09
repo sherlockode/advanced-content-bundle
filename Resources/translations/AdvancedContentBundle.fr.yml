@@ -135,6 +135,7 @@ init:
         unknown_entity_type: Le type "%type%" est inconnu. Les types d'entité disponibles sont %list%.
         file_not_found: Le fichier %file% n'a pas été trouvé dans le dossier "%dir%"
         field_value_entity_not_found: Aucune entité avec identifiant "%value%" n'a été trouvée pour le champ "%slug%"
+        cannot_create_directory: Impossible de créer le répertoire "%path%"
     export_success: Les fichiers ont bien été exportés dans "%dir%"
 tools:
     label: Outils
