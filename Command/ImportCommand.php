@@ -193,6 +193,15 @@ class ImportCommand extends Command
             $this->importManager->setFilesDirectory($filesDir);
         }
 
+        $targetDir = $this->configurationManager->getImageDirectory();
+        if (!file_exists($targetDir) && !mkdir($targetDir, 0755)) {
+            throw new \Exception($this->translator->trans(
+                'init.errors.cannot_create_directory',
+                ['%path%' => $targetDir],
+                'AdvancedContentBundle'
+            ));
+        }
+
         $allowUpdate = $this->configurationManager->initCanUpdate();
         if ($input->getOption('update') === true) {
             $allowUpdate = true;
