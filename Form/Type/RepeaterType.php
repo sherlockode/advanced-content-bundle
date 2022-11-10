@@ -20,6 +20,17 @@ class RepeaterType extends AbstractType
             $prototype = $builder->getAttribute('prototype');
             if ($prototype->getConfig()->getCompound()) {
                 $prototype->add('position', HiddenType::class);
+            } else {
+                // rebuild prototype using the RepeatedChildWrappedType
+                $prototypeOptions = $prototype->getConfig()->getOptions();
+                $prototypeOptions = array_merge($prototypeOptions, [
+                    'child_options' => $prototype->getConfig()->getOptions(),
+                    'child_form' => get_class($prototype->getConfig()->getType()->getInnerType()),
+                    'compound' => true,
+                ]);
+
+                $prototype = $builder->create($prototype->getConfig()->getName(), RepeatedChildWrappedType::class, $prototypeOptions);
+                $builder->setAttribute('prototype', $prototype->getForm());
             }
         }
 
@@ -27,12 +38,19 @@ class RepeaterType extends AbstractType
         $positionCallback = function (FormEvent $event) {
             $form = $event->getForm();
 
-            foreach ($form->all() as $child) {
+            foreach ($form->all() as $i => $child) {
                 if ($child->getConfig()->getCompound()) {
-                    $child->add('position', HiddenType::class);
+                    $child->add('position', HiddenType::class, ['data' => $i]);
+                } else {
+                    $form->add($i, RepeatedChildWrappedType::class, [
+                        'child_options' => $child->getConfig()->getOptions(),
+                        'child_form' => get_class($child->getConfig()->getType()->getInnerType()),
+                        'position' => $i
+                    ]);
                 }
             }
         };
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, $positionCallback, -10);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, $positionCallback, -10);
 
@@ -54,9 +72,21 @@ class RepeaterType extends AbstractType
                 return $a['position'] <=> $b['position'];
             });
 
+            // unset the position key in the saved data
+            $orderedData = array_map(function ($item) {
+                if (is_array($item)) {
+                    unset($item['position']);
+                    if (isset($item['wrapped_child'])) {
+                        $item = $item['wrapped_child'];
+                    }
+                }
+                return $item;
+            }, $orderedData);
+
             $event->setData(array_values($orderedData));
         });
     }
+
     public function getParent()
     {
         return CollectionType::class;
