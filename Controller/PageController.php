@@ -143,6 +143,29 @@ class PageController extends AbstractController
      *
      * @return Response
      */
+    public function duplicateAction(Request $request)
+    {
+        $id = $request->get('id');
+        $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
+
+        if ($page === null) {
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
+            );
+        }
+
+        $newPage = $this->pageManager->duplicate($page);
+        $this->em->persist($newPage);
+        $this->em->flush();
+
+        return new RedirectResponse($request->server->get('HTTP_REFERER', '/'));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function duplicateLocaleAction(Request $request)
     {
         $id = $request->get('id');

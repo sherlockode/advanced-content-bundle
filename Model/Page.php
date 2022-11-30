@@ -55,6 +55,28 @@ abstract class Page implements PageInterface
         $this->pageMetas = new ArrayCollection();
     }
 
+    public function __clone()
+    {
+        $this->id = null;
+        $this->setStatus(PageInterface::STATUS_DRAFT);
+
+        $pageMetas = new ArrayCollection();
+        foreach ($this->pageMetas as $pageMeta) {
+            $newPageMeta = clone $pageMeta;
+            $newPageMeta->setPage($this);
+            $pageMetas->add($newPageMeta);
+        }
+        $this->pageMetas = $pageMetas;
+
+        $contents = new ArrayCollection();
+        foreach ($this->contents as $content) {
+            $newContent = clone $content;
+            $newContent->setPage($this);
+            $contents->add($newContent);
+        }
+        $this->contents = $contents;
+    }
+
     /**
      * @return int
      */
