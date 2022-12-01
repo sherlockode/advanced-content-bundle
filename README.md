@@ -163,6 +163,7 @@ sherlockode_advanced_content:
 This bundle is compatible with webpack.
 jQuery library is mandatory.
 jQuery ui sortable is advised but not required.
+Some field types, such as the image carousel, use Bootstrap 5 for their display. 
 
 ## License
 

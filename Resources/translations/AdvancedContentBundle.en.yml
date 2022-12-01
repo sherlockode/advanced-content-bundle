@@ -67,6 +67,14 @@ field_type:
         width: Width
     content:
         label: Content
+    image_carousel:
+        label: Image carousel
+        images: Images
+        display_arrows: Display slider arrows
+        display_pagination: Display slider pagination
+        image_label: Slide %nb%
+        arrow_previous: Previous
+        arrow_next: Next
     group:
         other: Others
         simple: Simple

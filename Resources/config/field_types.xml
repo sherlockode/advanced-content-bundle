@@ -21,6 +21,11 @@
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
             <argument type="service" id="assets.packages"/>
         </service>
+        <service id="sherlockode_acb.field_type.image_carousel" class="Sherlockode\AdvancedContentBundle\FieldType\ImageCarousel">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+            <argument type="service" id="assets.packages"/>
+        </service>
         <service id="sherlockode_acb.field_type.file" class="Sherlockode\AdvancedContentBundle\FieldType\File">
             <tag name="sherlockode_advanced_content.fieldtype"/>
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>

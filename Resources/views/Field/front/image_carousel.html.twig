@@ -1,0 +1,37 @@
+{% if images is defined and images|length > 0 %}
+    {% set carouselId = 'acb_image_carousel_' ~ random() %}
+    <div id="{{ carouselId }}" class="carousel slide" data-bs-ride="carousel">
+        {% if displayPagination is defined and displayPagination == true %}
+            <div class="carousel-indicators">
+                {% for image in images %}
+                    <button type="button"
+                            data-bs-target="#{{ carouselId }}"
+                            data-bs-slide-to="{{ loop.index0 }}"
+                            aria-label="{{ image.alt is defined and image.alt is not empty ? image.alt : 'field_type.image_carousel.image_label'|trans({'%nb%': loop.index}, 'AdvancedContentBundle') }}"
+                        {% if loop.first %}
+                            class="active"
+                            aria-current="true"
+                        {% endif %}
+                    ></button>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="carousel-inner">
+            {% for image in images %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <img src="{{ image.url }}" class="d-block w-100" alt="{{ image.alt is defined ? image.alt : '' }}">
+                </div>
+            {% endfor %}
+        </div>
+        {% if displayArrows is defined and displayArrows == true %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#{{ carouselId }}" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">{{ 'field_type.image_carousel.arrow_previous'|trans({}, 'AdvancedContentBundle') }}</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#{{ carouselId }}" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">{{ 'field_type.image_carousel.arrow_next'|trans({}, 'AdvancedContentBundle') }}</span>
+            </button>
+        {% endif %}
+    </div>
+{% endif %}
