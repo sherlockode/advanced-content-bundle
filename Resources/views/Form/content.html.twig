@@ -16,7 +16,6 @@
 {% block acb_field_values_widget %}
     {%- set attr = attr|default([]) -%}
     {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
-    {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
     <div {{ block('widget_container_attributes') }}>
         {% for child in form %}
             {{ _self.acb_button_add_field(form.vars['full_name']) }}
@@ -36,7 +35,12 @@
 {% endmacro %}
 
 {% macro acb_field_value_entry(form) %}
-<div class="acb-field field-row acb-row acb-sortable" data-name="{{ form.vars.full_name }}">
+<div class="acb-field field-row acb-row acb-sortable"
+     data-name="{{ form.vars.full_name }}"
+     data-form-id="{{ form.vars.id }}"
+     data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
+     data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.fieldType}) }}"
+>
     <div class="acb-field-heading">
         {% if form.vars.field_icon %}
         <i class="{{ form.vars.field_icon }}"></i>
@@ -48,7 +52,7 @@
     <div class="acb-field-body">
         {{ acb_field_preview(form.vars.data) }}
     </div>
-    <div style="display: none">
+    <div class="acb-field-values" style="display: none">
         {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': form}) }}
     </div>
 </div>

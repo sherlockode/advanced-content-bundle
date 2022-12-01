@@ -109,6 +109,25 @@ jQuery(function ($) {
         calculatePosition();
     });
 
+    $('body').on('click', '.acb-duplicate-row', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        let oldRow = usedAddFieldBlock = $(this).closest('.acb-row');
+        let formData = new FormData();
+        for (const [key, value] of Object.entries(extractRowData(oldRow))) {
+            formData.append(key, value);
+        }
+
+        submitNewRow(
+            formData,
+            oldRow.data('duplicate-url'),
+            'POST',
+            oldRow.closest('.acb-field-values-container').find('.btn-new-field').data('base-name'),
+            false
+        );
+    });
+
     function updateAddButtons(group) {
         let lastElementType = null;
         group.children().each(function () {
@@ -215,17 +234,9 @@ jQuery(function ($) {
         typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
         let type = row.find('input[name=' +  typeInputName + ']').val();
 
-        let data = {};
-        row.find('input, textarea, select').each(function () {
-            if (['radio', 'checkbox'].includes($(this).attr('type')) && !$(this).is(':checked')) {
-                return;
-            }
-            data[this.name.replace(row.data('name'), '__field_name__')] = $(this).val();
-        });
-
         $.ajax({
             url: url + '?edit=1&type='+type,
-            data: data,
+            data: extractRowData(row),
             type: 'POST'
         }).done(function (data) {
             slide.setHeader('<h1>' + data.title + '</h1>');
@@ -235,8 +246,20 @@ jQuery(function ($) {
                 e.preventDefault();
                 saveFieldData(this, row.data('name'), row);
             });
-            initSortables();
+            initSortables(slide.content);
         });
+    }
+
+    function extractRowData(row) {
+        let data = {};
+        row.find('input, textarea, select').each(function () {
+            if (['radio', 'checkbox'].includes($(this).attr('type')) && !$(this).is(':checked')) {
+                return;
+            }
+            data[this.name.replace(row.data('name'), '__field_name__')] = $(this).val();
+        });
+
+        return data;
     }
 
     // convert slide form to content preview
@@ -250,7 +273,9 @@ jQuery(function ($) {
             type: form.method
         }).done(function (data) {
             if (data.success) {
-                let preview = data.preview.replace(/__field_name__/g, name).replace(/field_name__/g, name);
+                let preview = data.preview.replace(/__field_name__/g, row.data('name')).replace(/field_name__/g, row.data('form-id'));
+                preview = $(preview);
+                preview.data('form-index', row.data('form-index'));
 
                 row.replaceWith(preview);
                 calculatePosition();
@@ -269,24 +294,33 @@ jQuery(function ($) {
     // convert slide form to content preview
     function saveNewFieldData(form, baseName) {
         updateCKEditorElement(form);
+        submitNewRow(new FormData(form), form.action, form.method, baseName, true);
+    }
+
+    function submitNewRow(formData, action, method, baseName, isSlideOpened) {
         $.ajax({
-            url: form.action,
-            data: new FormData(form),
+            url: action,
+            data: formData,
             processData: false,
             contentType: false,
-            type: form.method
+            type: method
         }).done(function (data) {
             if (data.success) {
                 let preview = data.preview;
                 let name = baseName + '[__name__]';
                 preview = preview.replace(/__field_name__/g, name)
-                    .replace(/field_name__/g, name.replace(/[\[\]]/g, '_')); // replace placeholder in HTML "id"
+                    .replace(
+                        /field_name__/g,
+                        name.replace(/(\]\[)/g, '_')
+                            .replace(/[\[\]]/g, '_')
+                            .replace(/_{3}$/g, '__')
+                    ); // replace placeholder in HTML "id"
 
                 let container = $('.acb-field-values-container').children('.acb-sortable-group');
                 let form = container.closest('form');
-                let counter = form.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children().length;
+                let counter = container.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children('.acb-row').length;
                 preview = preview.replace(/__name__/g, counter++);
-                form.data('widget-counter', counter);
+                container.data('widget-counter', counter);
 
                 if (usedAddFieldBlock) {
                     usedAddFieldBlock.after(preview);
@@ -294,16 +328,19 @@ jQuery(function ($) {
                     container.append(preview);
                 }
                 updateAddButtons(container);
-
                 calculatePosition();
 
-                slide.close();
+                if (isSlideOpened) {
+                    slide.close();
+                }
             } else {
-                slide.setContent(data.content);
-                slide.content.find('.acb-edit-field-form').on('submit', function (e) {
-                    e.preventDefault();
-                    saveNewFieldData(this, row.data('name'));
-                });
+                if (isSlideOpened) {
+                    slide.setContent(data.content);
+                    slide.content.find('.acb-edit-field-form').on('submit', function (e) {
+                        e.preventDefault();
+                        saveNewFieldData(this, baseName);
+                    });
+                }
             }
         });
     }
