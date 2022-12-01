@@ -39,5 +39,10 @@
         <service id="sherlockode_acb.field_type.video" class="Sherlockode\AdvancedContentBundle\FieldType\Video">
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
+        <service id="sherlockode_acb.field_type.content" class="Sherlockode\AdvancedContentBundle\FieldType\Content">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
     </services>
 </container>

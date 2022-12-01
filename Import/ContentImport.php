@@ -128,6 +128,20 @@ class ContentImport extends AbstractImport
                 $data = $result;
             }
         }
+        if (isset($data['_content'])) {
+            $slug = $data['_content']['slug'] ?? null;
+            $locale = $data['_content']['locale'] ?? null;
+            $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findOneBy([
+                'slug' => $slug,
+                'locale' => $locale,
+            ]);
+            $data = [
+                'content' => $content === null ? null : $content->getId(),
+            ];
+            if ($content === null) {
+                $this->errors[] = $this->translator->trans('init.errors.content_entity_not_found', ['%slug%' => $slug, '%locale%' => $locale], 'AdvancedContentBundle');
+            }
+        }
 
         // browse array
         $newData = [];

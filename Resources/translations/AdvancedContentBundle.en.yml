@@ -65,6 +65,8 @@ field_type:
         controls: Display controls bar
         height: Height
         width: Width
+    content:
+        label: Content
     group:
         other: Others
         simple: Simple
@@ -143,6 +145,7 @@ init:
         field_value_file_not_found: File "%file%" not found for FieldValue
         unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
         file_not_found: File %file% was not found in directory "%dir%"
+        content_entity_not_found: Content with slug "%slug%" and locale "%locale%" was not found
         cannot_create_directory: Unable to create directory "%path%"
     export_success: Files were successfully exported in "%dir%"
 tools:

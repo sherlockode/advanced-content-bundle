@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Export;
 
+use Sherlockode\AdvancedContentBundle\FieldType\Content;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -79,6 +80,16 @@ class ContentExport
         if ($fieldType instanceof File) {
             if (is_array($rawValue) && isset($rawValue['url'])) {
                 unset($rawValue['url']);
+            }
+        }
+        if ($fieldType instanceof Content) {
+            if (is_array($rawValue) && isset($rawValue['entity'])) {
+                $rawValue['_content'] = [
+                    'slug' => $rawValue['entity']->getSlug(),
+                    'locale' => $rawValue['entity']->getLocale(),
+                ];
+                unset($rawValue['entity']);
+                unset($rawValue['content']);
             }
         }
 
