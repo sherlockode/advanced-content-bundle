@@ -56,6 +56,15 @@ field_type:
         label: Titre
         level: Niveau
         text: Texte
+    video:
+        label: Vidéo
+        url: URL de la vidéo
+        muted: Couper le son
+        autoplay: Lire automatiquement
+        loop: Lire en boucle
+        controls: Afficher la barre de contrôle
+        height: Hauteur
+        width: Largeur
     group:
         other: Autres
         simple: Simple

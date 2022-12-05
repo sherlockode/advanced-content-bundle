@@ -36,5 +36,8 @@
         <service id="sherlockode_acb.field_type.title" class="Sherlockode\AdvancedContentBundle\FieldType\Title">
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
+        <service id="sherlockode_acb.field_type.video" class="Sherlockode\AdvancedContentBundle\FieldType\Video">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
     </services>
 </container>

@@ -1,0 +1,47 @@
+{% if url is defined and url is not empty %}
+    {% set options = 'playsinline' %}
+    {% set urlOptions = [] %}
+    {% if muted is defined and muted == true %}
+        {% set options = options ~ ' muted' %}
+        {% set urlOptions = urlOptions|merge([{'param': 'muted', 'value': 1}]) %}
+    {% endif %}
+    {% if autoplay is defined and autoplay == true %}
+        {% set options = options ~ ' autoplay' %}
+        {% set urlOptions = urlOptions|merge([{'param': 'autoplay', 'value': 1}]) %}
+    {% endif %}
+    {% if loop is defined and loop == true %}
+        {% set options = options ~ ' loop' %}
+        {% set urlOptions = urlOptions|merge([{'param': 'loop', 'value': 1}]) %}
+    {% endif %}
+    {% if controls is defined and controls == true %}
+        {% set options = options ~ ' controls' %}
+        {% set urlOptions = urlOptions|merge([{'param': 'controls', 'value': 1}]) %}
+    {% endif %}
+
+    {% set videoHeight = '' %}
+    {% if height is defined and height is not empty %}
+        {% set videoHeight = 'height="' ~ height ~ '"' %}
+        {% set urlOptions = urlOptions|merge([{'param': 'height', 'value': height}]) %}
+    {% endif %}
+
+    {% set videoWidth = '' %}
+    {% if width is defined and width is not empty %}
+        {% set videoWidth = 'width="' ~ width ~ '"' %}
+        {% set urlOptions = urlOptions|merge([{'param': 'width', 'value': width}]) %}
+    {% endif %}
+
+    {% if '.mp4' in url %}
+        <video src="{{ url }}" {{ options }} {{ videoHeight|raw }} {{ videoWidth|raw }}></video>
+    {% else %}
+        {% for option in urlOptions %}
+            {% set url = url ~ ('?' in url ? '&' : '?') ~ option.param ~ '=' ~ option.value %}
+        {% endfor %}
+        <iframe src="{{ url }}"
+                {{ videoHeight|raw }}
+                {{ videoWidth|raw }}
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+        ></iframe>
+    {% endif %}
+{% endif %}

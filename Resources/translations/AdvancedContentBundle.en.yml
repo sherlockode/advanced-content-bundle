@@ -56,6 +56,15 @@ field_type:
         label: Title
         level: Level
         text: text
+    video:
+        label: Video
+        url: Video URL
+        muted: Turn the sound off
+        autoplay: Play automatically
+        loop: Play in loop
+        controls: Display controls bar
+        height: Height
+        width: Width
     group:
         other: Others
         simple: Simple
