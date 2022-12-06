@@ -39,7 +39,7 @@ Configuration
 
 ### Assets
 
-Using Webpack, you may import the assets in your main asset file to integrate them in the build process:
+You may import the provided assets in your main asset file to integrate them in your asset build process.
 
 Please note that Font Awesome is optional, but natively used for icons display on contribution pages.
 To use it you should require `@fortawesome/fontawesome-free` in `package.json` (or use another install method of your choice).
@@ -54,6 +54,13 @@ import '@fortawesome/fontawesome-free/css/fontawesome.css';
 import '@fortawesome/fontawesome-free/css/solid.css';
 ```
 
+You can use the provided `layout.html.twig` or build your own depending on your needs.
+The `symfony/webpack-encore-bundle` is required in order to use this layout with the Webpack Encore Twig functions.
+
+```
+composer require symfony/webpack-encore-bundle
+```
+
 ```html
 {# templates/layout.html.twig #}
 
@@ -62,7 +69,6 @@ import '@fortawesome/fontawesome-free/css/solid.css';
 {# ... #}
 {{ encore_entry_script_tags('app') }}
 ```
-
 
 ### Twig
 
