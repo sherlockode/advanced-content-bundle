@@ -95,8 +95,6 @@ class FieldValue extends BaseFieldValue
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Blameable\Traits\BlameableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Sherlockode\AdvancedContentBundle\Model\Page as BasePage;
 
 /**
@@ -105,9 +103,6 @@ use Sherlockode\AdvancedContentBundle\Model\Page as BasePage;
  */
 class Page extends BasePage
 {
-    use TimestampableEntity;
-    use BlameableEntity;
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
