@@ -10,7 +10,6 @@
         {%- set attr = attr|merge({'data-prototype': block('acb_collection_entry') }) -%}
     {% endif %}
     {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
-    {%- set attr = attr|merge({'data-widget-counter': form|length }) -%}
     <div {{ block('widget_container_attributes') }}>
         {% for child in form %}
             {% set entryForm = child %}
@@ -60,6 +59,9 @@
         {% if allowEdit is not defined or allowEdit == true %}
             <button type="button" class="acb-edit-row" title="{{ 'edit'|trans }}">
                 <i class="fa-solid fa-pencil"></i>
+            </button>
+            <button type="button" class="acb-duplicate-row" title="{{ 'duplicate'|trans }}">
+                <i class="fa-solid fa-copy"></i>
             </button>
         {% endif %}
         {% if allowDelete is not defined or allowDelete == true %}
