@@ -21,6 +21,7 @@
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="twig"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>
             <argument>form_div_layout.html.twig</argument>
             <tag name="twig.extension"/>
         </service>
@@ -57,5 +58,11 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface" alias="sherlockode_advanced_content.slug_provider"/>
+
+        <service id="sherlockode_advanced_content.url_builder_manager" class="Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager">
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+            <argument type="service" id="assets.packages"/>
+            <argument type="service" id="request_stack"/>
+        </service>
     </services>
 </container>

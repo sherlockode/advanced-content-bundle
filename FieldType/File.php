@@ -3,30 +3,22 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType;
-use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
+use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
 use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
-use Symfony\Component\Asset\Packages;
 
 class File extends AbstractFieldType
 {
     /**
-     * @var UploadManager
+     * @var UrlBuilderManager
      */
-    private $uploadManager;
+    private $urlBuilderManager;
 
     /**
-     * @var Packages
+     * @param UrlBuilderManager $urlBuilderManager
      */
-    private $assetPackages;
-
-    /**
-     * @param UploadManager $uploadManager
-     * @param Packages      $packages
-     */
-    public function __construct(UploadManager $uploadManager, Packages $packages)
+    public function __construct(UrlBuilderManager $urlBuilderManager)
     {
-        $this->uploadManager = $uploadManager;
-        $this->assetPackages = $packages;
+        $this->urlBuilderManager = $urlBuilderManager;
     }
 
     /**
@@ -59,18 +51,7 @@ class File extends AbstractFieldType
      */
     protected function getFilename($value)
     {
-        if (empty($value['src'])) {
-            return '';
-        }
-
-        $fileName = $this->uploadManager->getTargetDir() . DIRECTORY_SEPARATOR . $value['src'];
-        if (!file_exists($fileName)) {
-            return '';
-        }
-
-        $fileName = $this->assetPackages->getUrl($this->uploadManager->getWebPath() . '/' . $value['src']);
-
-        return $fileName;
+        return $this->urlBuilderManager->getFileUrl($value['src'] ?? '');
     }
 
     /**
