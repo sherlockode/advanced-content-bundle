@@ -52,5 +52,10 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
+        <service id="sherlockode_advanced_content.form.field_type_content" class="Sherlockode\AdvancedContentBundle\Form\Type\AcbContentType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
+            <tag name="form.type"/>
+        </service>
     </services>
 </container>

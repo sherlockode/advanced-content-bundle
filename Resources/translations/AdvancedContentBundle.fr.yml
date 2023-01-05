@@ -65,6 +65,8 @@ field_type:
         controls: Afficher la barre de contrôle
         height: Hauteur
         width: Largeur
+    content:
+        label: Contenu
     group:
         other: Autres
         simple: Simple
@@ -143,6 +145,7 @@ init:
         field_value_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ
         unknown_entity_type: Le type "%type%" est inconnu. Les types d'entité disponibles sont %list%.
         file_not_found: Le fichier %file% n'a pas été trouvé dans le dossier "%dir%"
+        content_entity_not_found: Aucun contenu avec slug "%slug%" et langue "%locale%" n'a été trouvé
         cannot_create_directory: Impossible de créer le répertoire "%path%"
     export_success: Les fichiers ont bien été exportés dans "%dir%"
 tools:
