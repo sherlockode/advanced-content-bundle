@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sherlockode\AdvancedContentBundle\FieldType\AbstractEntity;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
@@ -110,24 +109,6 @@ class ContentImport extends AbstractImport
             }
             if (isset($fieldValueData['value'])) {
                 $fieldValueValue = $fieldValueData['value'];
-                if ($fieldType instanceof AbstractEntity) {
-                    $hasError = false;
-                    if (is_array($fieldValueValue)) {
-                        foreach ($fieldValueValue as $value) {
-                            if ($fieldType->getEntityByIdentifier($value) === null) {
-                                $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%value%' => $value], 'AdvancedContentBundle');
-                                $hasError = true;
-                            }
-                        }
-                    } elseif ($fieldType->getEntityByIdentifier($fieldValueValue) === null) {
-                        $this->errors[] = $this->translator->trans('init.errors.field_value_entity_not_found', ['%value%' => $fieldValueValue], 'AdvancedContentBundle');
-                        $hasError = true;
-                    }
-                    if ($hasError) {
-                        continue;
-                    }
-                }
-
                 if (is_array($fieldValueValue)) {
                     $fieldValueValue = $this->processValueArray($fieldValueValue);
                 }

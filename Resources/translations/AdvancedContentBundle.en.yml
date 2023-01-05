@@ -143,7 +143,6 @@ init:
         field_value_file_not_found: File "%file%" not found for FieldValue
         unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
         file_not_found: File %file% was not found in directory "%dir%"
-        field_value_entity_not_found: Entity with identifier "%value%" was not found for field
         cannot_create_directory: Unable to create directory "%path%"
     export_success: Files were successfully exported in "%dir%"
 tools:
