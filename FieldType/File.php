@@ -57,7 +57,7 @@ class File extends AbstractFieldType
      *
      * @return string
      */
-    private function getFilename($value)
+    protected function getFilename($value)
     {
         if (empty($value['src'])) {
             return '';
