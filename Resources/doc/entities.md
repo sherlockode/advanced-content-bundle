@@ -3,11 +3,12 @@ Entities
 
 ## Basics
 
-We implemented the following models :
+We implemented the following entity models:
 - Content
-    - FieldValue
+- FieldValue
 - PageType
 - Page
+- PageMeta
 
 See the list of available field types [here](field_types.md)
 
@@ -15,7 +16,7 @@ When you create a new Page you will be able to fill in your Content inside.
 
 ## Implementation examples
 
-Here are basic example implementations for the entity classes:
+If you need to override the entities with your own, here are the native implementations used within the bundle:
 
 ```php
 <?php
