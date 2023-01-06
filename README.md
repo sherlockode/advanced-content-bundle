@@ -94,10 +94,10 @@ you can override the bundle's base form theme file `Form/base_theme.html.twig`
 ### Entities
 
 `SherlockodeAdvancedContentBundle` provides 5 entity models : Content, FieldValue, PageType, Page, PageMeta.
-To be able to use them, you need to create your own entities, see examples in the [doc](Resources/doc/entities.md).
+If you want to override them, you will need to update the yaml configuration with your own entities, see examples in the [doc](Resources/doc/entities.md).
 
 ```yaml
-# config/packages/sherlockode_advanced_content.yml
+# config/packages/sherlockode_advanced_content.yaml
 sherlockode_advanced_content:
     entity_class:
         content: App\Entity\Content

@@ -2,6 +2,11 @@
 
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
+use Sherlockode\AdvancedContentBundle\Entity\Content;
+use Sherlockode\AdvancedContentBundle\Entity\FieldValue;
+use Sherlockode\AdvancedContentBundle\Entity\Page;
+use Sherlockode\AdvancedContentBundle\Entity\PageMeta;
+use Sherlockode\AdvancedContentBundle\Entity\PageType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -23,24 +28,24 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->children()
                         ->scalarNode('field_value')
-                            ->isRequired()
                             ->cannotBeEmpty()
+                            ->defaultValue(FieldValue::class)
                         ->end()
                         ->scalarNode('content')
-                            ->isRequired()
                             ->cannotBeEmpty()
+                            ->defaultValue(Content::class)
                         ->end()
                         ->scalarNode('page_type')
-                            ->isRequired()
                             ->cannotBeEmpty()
+                            ->defaultValue(PageType::class)
                         ->end()
                         ->scalarNode('page')
-                            ->isRequired()
                             ->cannotBeEmpty()
+                            ->defaultValue(Page::class)
                         ->end()
                         ->scalarNode('page_meta')
-                            ->isRequired()
                             ->cannotBeEmpty()
+                            ->defaultValue(PageMeta::class)
                         ->end()
                     ->end()
                 ->end()
