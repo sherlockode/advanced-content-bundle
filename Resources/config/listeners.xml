@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sherlockode_advanced_content.field_value_listener" class="Sherlockode\AdvancedContentBundle\EventListener\FieldValueListener">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
-            <tag name="doctrine.event_listener" event="preUpdate" lazy="1"/>
-        </service>
         <service id="sherlockode_advanced_content.page_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageListener">
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
         </service>

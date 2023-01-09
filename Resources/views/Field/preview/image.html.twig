@@ -1,3 +1,5 @@
-<p>
-    <img src="{{ url }}" alt="{{ alt is defined ? alt : '' }}"/>
-</p>
+{% if url is not empty %}
+    <p>
+        <img src="{{ url }}" alt="{{ alt is defined ? alt : '' }}"/>
+    </p>
+{% endif %}

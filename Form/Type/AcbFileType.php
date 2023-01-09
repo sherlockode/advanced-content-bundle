@@ -54,25 +54,22 @@ class AcbFileType extends AbstractType
             function (FormEvent $event) {
                 $data = $event->getData();
                 $form = $event->getForm();
+                if (!empty($data['delete'])) {
+                    if (!empty($data['src'])) {
+                        $this->uploadManager->remove($data['src']);
+                        unset($data['src']);
+                    }
+                    unset($data['delete']);
+                }
+
                 if ($data['file']) {
                     $data['src'] = $this->uploadManager->upload($data['file']);
                     $this->updateForm($form, $data);
                     unset($data['file']);
-                    $event->setData($data);
                 } elseif (isset($data['src'])) {
                     $this->updateForm($form, $data);
                 }
-            }
-        );
 
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) {
-                $data = $event->getData();
-                if (!empty($data['delete'])) {
-                    unset($data['src']);
-                    unset($data['delete']);
-                }
                 $event->setData($data);
             }
         );

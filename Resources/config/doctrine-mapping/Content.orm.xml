@@ -4,6 +4,7 @@
         <field name="name" type="string" column="name"/>
         <field name="slug" type="string" column="slug"/>
         <field name="locale" type="string" column="locale" nullable="true"/>
+        <field name="data" type="json" column="data"/>
         <unique-constraints>
             <unique-constraint columns="slug,locale"></unique-constraint>
         </unique-constraints>

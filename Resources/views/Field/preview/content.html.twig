@@ -1,8 +1,8 @@
 {% if entity is not null %}
     <em>{{ entity.name }}</em>
     <hr>
-    {% for fieldValue in entity.fieldValues %}
-        {{ acb_field_preview(fieldValue) }}
+    {% for element in entity.data %}
+        {{ acb_element_preview(element) }}
         {% if not loop.last %}
             <hr>
         {% endif %}

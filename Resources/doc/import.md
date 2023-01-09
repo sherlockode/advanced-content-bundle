@@ -97,7 +97,7 @@ pages:
         pageType: Custom Page Type (if defined, will automatically retrieve the ContentType linked to the PageType)
         contents:
             en: # locale of the content
-                #list of FieldValues of the Content linked to this Page
+                #list of elements of the Content linked to this Page
                 - type: text
                   value: hello
             fr:
@@ -116,7 +116,7 @@ pages:
                 meta_description: 'Méta Description'
 ```
 
-Each FieldValue declaration has the following structure:
+Each element declaration has the following structure:
 ```yaml
 # var/acb/Page/custom_page.yaml
 type: Type of the Field
@@ -138,7 +138,7 @@ contents:
         locale: en
 ```
 
-Then, as for the content of your Pages, you need to define your FieldValues under `children`
+Then, as for the content of your Pages, you need to define your elements under `children`
 
 You can find a Content import file example here [doc](import/Content/standalone_content.yaml)
 These example files also show you how to create and populate File and Image field types.

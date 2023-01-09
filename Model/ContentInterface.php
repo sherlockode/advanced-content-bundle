@@ -44,27 +44,11 @@ interface ContentInterface
     /**
      * Get content's field values
      *
-     * @return Collection|FieldValueInterface[]
+     * @return array
      */
-    public function getFieldValues();
+    public function getData();
 
-    /**
-     * Add field value to content
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return $this
-     */
-    public function addFieldValue(FieldValueInterface $fieldValue);
-
-    /**
-     * Remove field value from content
-     *
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return $this
-     */
-    public function removeFieldValue(FieldValueInterface $fieldValue);
+    public function setData(array $data);
 
     /**
      * Get content's content page

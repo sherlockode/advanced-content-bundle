@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbContentType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 class Content extends AbstractFieldType
 {
@@ -51,32 +50,26 @@ class Content extends AbstractFieldType
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param mixed $element
      *
      * @return array
      */
-    public function getRawValue(FieldValueInterface $fieldValue)
+    public function getRawValue($element)
     {
-        $value = $fieldValue->getValue();
-        $value['entity'] = null;
+        $element['entity'] = null;
 
-        $contentId = $value['content'] ?? null;
+        $contentId = $element['content'] ?? null;
         if ($contentId === null) {
-            return $value;
+            return $element;
         }
 
         $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($contentId);
         if ($content === null) {
-            return $value;
+            return $element;
         }
 
-        $parentContent = $fieldValue->getContent();
-        if ($parentContent !== null && $parentContent->getId() === $content->getId()) {
-            return $value;
-        }
+        $element['entity'] = $content;
 
-        $value['entity'] = $content;
-
-        return $value;
+        return $element;
     }
 }

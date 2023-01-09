@@ -51,7 +51,7 @@ If your content is not linked to any page (for example, your homepage), you can 
 The bundle provides a twig function that will return a string or array containing formatted data for a given content.
 
 ```twig
-{% set rawData = acb_render_field(content.myField) %}
+{% set rawData = acb_render_element(content.myField) %}
 ```
 
 Depending on the type and structure of the field, the data will be formatted differently.

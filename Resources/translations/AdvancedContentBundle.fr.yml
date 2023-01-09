@@ -9,7 +9,7 @@ content:
         name: Nom
         slug: Slug
         locale: Locale
-        field_values: Champs
+        data: Champs
         position: Ordre
     duplicate:
         select_language: Choisissez une langue à copier
@@ -141,16 +141,13 @@ init:
         layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
         page_missing_metas: Vous devez définir les métas de la page
-        field_value_missing_slug: Vous devez définir le slug du champ du contenu dans "%contentName%"
-        field_value_missing_type: Vous devez définir le type du champ du contenu dans "%contentName%"
-        field_group_value_missing_name: Vous devez définir le nom du group de champs de contenu
+        element_missing_type: Vous devez définir le type du champ du contenu dans "%contentName%"
         content_missing_name: Vous devez définir le nom du contenu
         page_type_too_many_matches: Un seul type de page doit correspondre au nom "%name%"
         field_options_not_array: Les options du champ "%slug%" doivent être un tableau
         field_invalid_type: Le champ "%slug%" a un type inconnu "%type%"
         field_invalid_option: Le champ "%slug%" a une option inconnue "%option%". Les options autorisées sont %options%.
-        field_value_invalid_option: La valeur du champ a une option inconnue "%option%". Les options autorisées sont %options%.
-        field_value_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ
+        element_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ
         unknown_entity_type: Le type "%type%" est inconnu. Les types d'entité disponibles sont %list%.
         file_not_found: Le fichier %file% n'a pas été trouvé dans le dossier "%dir%"
         content_entity_not_found: Aucun contenu avec slug "%slug%" et langue "%locale%" n'a été trouvé

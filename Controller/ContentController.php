@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sherlockode\AdvancedContentBundle\Form\Type\FieldValueType;
+use Sherlockode\AdvancedContentBundle\Form\Type\ElementType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
@@ -99,10 +99,9 @@ class ContentController extends AbstractController
     public function fieldFormAction(Request $request)
     {
         $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
-        $fieldValueClass = $this->configurationManager->getEntityClass('field_value');
-        $fieldValue = new $fieldValueClass();
-        $fieldValue->setFieldType($fieldType->getCode());
-        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', FieldValueType::class, $fieldValue, [
+        $element = [];
+        $element['fieldType'] = $fieldType->getCode();
+        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementType::class, $element, [
             'field_type' => $fieldType,
             'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $fieldType->getCode()]),
             'csrf_protection' => false,
@@ -122,7 +121,7 @@ class ContentController extends AbstractController
             } else {
                 return new JsonResponse([
                     'success' => false,
-                    'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
+                    'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
                         'form' => $form->createView(),
                     ]),
                 ]);
@@ -131,7 +130,7 @@ class ContentController extends AbstractController
 
         return new JsonResponse([
             'title' => $this->translator->trans($fieldType->getFormFieldLabel(), [], 'AdvancedContentBundle'),
-            'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_field_value.html.twig', [
+            'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
                 'form' => $form->createView(),
             ]),
             'footer' => $this->renderView('@SherlockodeAdvancedContent/Content/_button_submit_slide.html.twig', [

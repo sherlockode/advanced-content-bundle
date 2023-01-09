@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -29,15 +28,15 @@ class Link extends AbstractFieldType
     }
 
     /**
-     * Add field value's field(s) to content form
+     * Add element's field(s) to content form
      *
      * @param FormBuilderInterface $builder
      *
      * @return void
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder)
+    public function buildContentElement(FormBuilderInterface $builder)
     {
-        parent::buildContentFieldValue($builder);
+        parent::buildContentElement($builder);
 
         $builder->get('value')
             ->add('url', $this->getUrlFormType(), ['label' => 'field_type.link.url'])
@@ -64,22 +63,21 @@ class Link extends AbstractFieldType
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param mixed $element
      *
      * @return mixed
      */
-    public function getRawValue(FieldValueInterface $fieldValue)
+    public function getRawValue($element)
     {
-        $rawValue = $fieldValue->getValue();
-        $url = $this->getUrlValue($rawValue);
+        $url = $this->getUrlValue($element);
 
         if (!$url) {
             return null;
         }
 
-        $rawValue['url'] = $url;
+        $element['url'] = $url;
 
-        return $rawValue;
+        return $element;
     }
 
     /**
