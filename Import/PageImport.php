@@ -89,7 +89,7 @@ class PageImport extends AbstractImport
 
                 $this->contentImport
                     ->resetErrors()
-                    ->createFieldValues($contentData, $content);
+                    ->createElements($contentData, $content);
                 $errors = $this->contentImport->getErrors();
                 foreach ($errors as $error) {
                     $this->errors[] = $error;

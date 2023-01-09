@@ -26,8 +26,7 @@ class PageExport
         }
         $contentData = [];
         foreach ($page->getContents() as $content) {
-            $fieldValues = $content->getFieldValues();
-            $contentData[$content->getLocale()] = $this->contentExport->exportFieldValues($fieldValues);
+            $contentData[$content->getLocale()] = $this->contentExport->exportElements($content->getData());
         }
         if (count($contentData) > 0) {
             $data['contents'] = $contentData;

@@ -7,7 +7,6 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -77,7 +76,7 @@ class ContentImport extends AbstractImport
         $content->setName($contentData['name']);
         $content->setLocale($contentData['locale'] ?? null);
         if (isset($contentData['children'])) {
-            $this->createFieldValues($contentData['children'], $content);
+            $this->createElements($contentData['children'], $content);
         }
 
         $this->em->persist($content);
@@ -85,38 +84,39 @@ class ContentImport extends AbstractImport
     }
 
     /**
-     * @param array                         $fieldValuesData
-     * @param ContentInterface              $content
+     * @param array            $elementsData
+     * @param ContentInterface $content
      */
-    public function createFieldValues(array $fieldValuesData, ContentInterface $content)
+    public function createElements(array $elementsData, ContentInterface $content)
     {
-        foreach ($fieldValuesData as $fieldValueData) {
-            if (!isset($fieldValueData['type'])) {
-                $this->errors[] = $this->translator->trans('init.errors.field_value_missing_type', ['%contentName%' => $content->getName()], 'AdvancedContentBundle');
+        $elements = [];
+        $position = 0;
+        foreach ($elementsData as $elementData) {
+            if (!isset($elementData['type'])) {
+                $this->errors[] = $this->translator->trans('init.errors.element_missing_type', ['%contentName%' => $content->getName()], 'AdvancedContentBundle');
                 continue;
             }
 
-            $fieldType = $this->fieldManager->getFieldTypeByCode($fieldValueData['type']);
+            $fieldType = $this->fieldManager->getFieldTypeByCode($elementData['type']);
 
-            /** @var FieldValueInterface $fieldValue */
-            $fieldValue = new $this->entityClasses['field_value'];
-            $fieldValue->setContent($content);
-            $fieldValue->setFieldType($fieldType->getCode());
+            $element = [];
+            $element['fieldType'] = $fieldType->getCode();
+            $element['position'] = $position++;
 
-            $fieldValueValue = '';
+            $value = '';
             if ($fieldType->getValueModelTransformer() !== null) {
-                $fieldValueValue = [];
+                $value = [];
             }
-            if (isset($fieldValueData['value'])) {
-                $fieldValueValue = $fieldValueData['value'];
-                if (is_array($fieldValueValue)) {
-                    $fieldValueValue = $this->processValueArray($fieldValueValue);
+            if (isset($elementData['value'])) {
+                $value = $elementData['value'];
+                if (is_array($value)) {
+                    $value = $this->processValueArray($value);
                 }
             }
-            $fieldValue->setValue($fieldValueValue);
-
-            $this->em->persist($fieldValue);
+            $element['value'] = $value;
+            $elements[] = $element;
         }
+        $content->setData($elements);
     }
 
     private function processValueArray(array $data)
@@ -161,7 +161,7 @@ class ContentImport extends AbstractImport
         try {
             $fileName = $this->getFilesDirectory() . $data['_file'];
             if (!file_exists($fileName)) {
-                $this->errors[] = $this->translator->trans('init.errors.field_value_file_not_found', ['%file%' => $fileName], 'AdvancedContentBundle');
+                $this->errors[] = $this->translator->trans('init.errors.element_file_not_found', ['%file%' => $fileName], 'AdvancedContentBundle');
                 return false;
             }
             $file = new File($fileName);
