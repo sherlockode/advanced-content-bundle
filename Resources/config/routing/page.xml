@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-    <route id="sherlockode_acb_page_type_edit" path="/page-type/edit/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.page_type:editAction</default>
-    </route>
-    <route id="sherlockode_acb_page_type_create" path="/page-type/create">
-        <default key="_controller">sherlockode_advanced_content.controller.page_type:createAction</default>
-    </route>
-    <route id="sherlockode_acb_page_type_delete" path="/page-type/delete/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.page_type:deleteAction</default>
-    </route>
-    <route id="sherlockode_acb_page_type_list" path="/page-type/list">
-        <default key="_controller">sherlockode_advanced_content.controller.page_type:listAction</default>
-    </route>
-
-    <route id="sherlockode_acb_page_edit" path="/page/edit/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.page:editAction</default>
-    </route>
-    <route id="sherlockode_acb_page_create" path="/page/create">
-        <default key="_controller">sherlockode_advanced_content.controller.page:createAction</default>
-    </route>
-    <route id="sherlockode_acb_page_delete" path="/page/delete/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.page:deleteAction</default>
-    </route>
-    <route id="sherlockode_acb_page_list" path="/page/list">
-        <default key="_controller">sherlockode_advanced_content.controller.page:listAction</default>
+    <route id="sherlockode_acb_page_duplicate" path="/page/duplicate">
+        <default key="_controller">sherlockode_advanced_content.controller.page:duplicateAction</default>
     </route>
 </routes>

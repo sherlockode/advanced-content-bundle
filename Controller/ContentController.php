@@ -145,6 +145,29 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
+    public function duplicateAction(Request $request)
+    {
+        $id = $request->get('id');
+        $content = $this->contentManager->getContentById($id);
+
+        if ($content === null) {
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
+            );
+        }
+
+        $newContent = $this->contentManager->duplicate($content);
+        $this->em->persist($newContent);
+        $this->em->flush();
+
+        return new RedirectResponse($request->server->get('HTTP_REFERER', '/'));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function duplicateLocaleAction(Request $request)
     {
         $id = $request->get('id');
