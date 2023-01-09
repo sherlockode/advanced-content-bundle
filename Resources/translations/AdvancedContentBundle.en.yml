@@ -9,7 +9,7 @@ content:
         name: Name
         slug: Slug
         locale: Locale
-        field_values: Fields
+        data: Fields
         position: Sort order
     duplicate:
         select_language: Choose a locale to duplicate from
@@ -141,16 +141,13 @@ init:
         layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
         page_missing_metas: You need to define the page metas
-        field_value_missing_slug: You need to define the slug of the FieldValue in "%contentName%"
-        field_value_missing_type: You need to define the type of the FieldValue in "%contentName%"
-        field_group_value_missing_name: You need to define the name of the FieldGroupValue
+        element_missing_type: You need to define the type of the element in "%contentName%"
         content_missing_name: You need to define the name of the content
         page_type_too_many_matches: Only one PageType should match name "%name%"
         field_options_not_array: Options should be an array for field "%slug%"
         field_invalid_type: Field "%slug%" has an unknown type "%type%"
         field_invalid_option: Field "%slug%" has an unknown option "%option%". Allowed options are %options%.
-        field_value_invalid_option: FieldValue has an unknown option "%option%". Allowed options are %options%.
-        field_value_file_not_found: File "%file%" not found for FieldValue
+        element_file_not_found: File "%file%" not found for element
         unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
         file_not_found: File %file% was not found in directory "%dir%"
         content_entity_not_found: Content with slug "%slug%" and locale "%locale%" was not found

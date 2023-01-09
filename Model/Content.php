@@ -2,9 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-
 abstract class Content implements ContentInterface
 {
     /**
@@ -23,9 +20,9 @@ abstract class Content implements ContentInterface
     protected $slug;
 
     /**
-     * @var Collection
+     * @var array
      */
-    protected $fieldValues;
+    protected $data;
 
     /**
      * @var PageInterface
@@ -42,17 +39,12 @@ abstract class Content implements ContentInterface
      */
     public function __construct()
     {
-        $this->fieldValues = new ArrayCollection();
+        $this->data = [];
     }
 
     public function __clone()
     {
         $this->id = null;
-        $fieldValues = $this->fieldValues;
-        $this->fieldValues = new ArrayCollection();
-        foreach ($fieldValues as $fieldValue) {
-            $this->addFieldValue(clone $fieldValue);
-        }
     }
 
     /**
@@ -104,34 +96,26 @@ abstract class Content implements ContentInterface
     }
 
     /**
-     * @return Collection|FieldValueInterface[]
+     * @return array
      */
-    public function getFieldValues()
+    public function getData()
     {
-        return $this->fieldValues;
+        $data = $this->data ?? [];
+        usort($data, function ($a, $b) {
+            return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
+        });
+
+        return $data;
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param array $data
      *
      * @return $this
      */
-    public function addFieldValue(FieldValueInterface $fieldValue)
+    public function setData(array $data)
     {
-        $this->fieldValues[] = $fieldValue;
-        $fieldValue->setContent($this);
-
-        return $this;
-    }
-
-    /**
-     * @param FieldValueInterface $fieldValue
-     *
-     * @return $this
-     */
-    public function removeFieldValue(FieldValueInterface $fieldValue)
-    {
-        $this->fieldValues->removeElement($fieldValue);
+        $this->data = $data;
 
         return $this;
     }

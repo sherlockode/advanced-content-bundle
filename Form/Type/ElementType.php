@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FieldValueType extends AbstractType
+class ElementType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,7 +18,7 @@ class FieldValueType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $options['field_type']->buildContentFieldValue($builder);
+        $options['field_type']->buildContentElement($builder);
 
         $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
@@ -56,6 +56,6 @@ class FieldValueType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'acb_field_value';
+        return 'acb_element';
     }
 }

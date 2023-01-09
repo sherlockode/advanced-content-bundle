@@ -93,7 +93,7 @@ you can override the bundle's base form theme file `Form/base_theme.html.twig`
 
 ### Entities
 
-`SherlockodeAdvancedContentBundle` provides 5 entity models : Content, FieldValue, PageType, Page, PageMeta.
+`SherlockodeAdvancedContentBundle` provides 4 entity models : Content, PageType, Page, PageMeta.
 If you want to override them, you will need to update the yaml configuration with your own entities, see examples in the [doc](Resources/doc/entities.md).
 
 ```yaml
@@ -101,7 +101,6 @@ If you want to override them, you will need to update the yaml configuration wit
 sherlockode_advanced_content:
     entity_class:
         content: App\Entity\Content
-        field_value: App\Entity\FieldValue
         page_type: App\Entity\PageType
         page: App\Entity\Page
         page_meta: App\Entity\PageMeta

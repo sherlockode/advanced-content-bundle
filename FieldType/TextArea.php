@@ -7,15 +7,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class TextArea extends AbstractInputType
 {
     /**
-     * Get options to apply on field value
+     * Get options to apply on element
      *
      * @return array
      */
-    public function getFormFieldValueOptions()
+    public function getFormElementOptions()
     {
         $fieldOptions = [];
 
-        $formFieldOptions = parent::getFormFieldValueOptions();
+        $formFieldOptions = parent::getFormElementOptions();
         if (isset($fieldOptions['nbRows'])) {
             $formFieldOptions['attr'] = ['rows' => $fieldOptions['nbRows']];
         }

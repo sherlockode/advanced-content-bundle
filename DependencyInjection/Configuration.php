@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
 use Sherlockode\AdvancedContentBundle\Entity\Content;
-use Sherlockode\AdvancedContentBundle\Entity\FieldValue;
 use Sherlockode\AdvancedContentBundle\Entity\Page;
 use Sherlockode\AdvancedContentBundle\Entity\PageMeta;
 use Sherlockode\AdvancedContentBundle\Entity\PageType;
@@ -27,10 +26,6 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('entity_class')
                     ->isRequired()
                     ->children()
-                        ->scalarNode('field_value')
-                            ->cannotBeEmpty()
-                            ->defaultValue(FieldValue::class)
-                        ->end()
                         ->scalarNode('content')
                             ->cannotBeEmpty()
                             ->defaultValue(Content::class)

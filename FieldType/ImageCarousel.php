@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\ImageCarouselType;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 class ImageCarousel extends File
 {
@@ -31,18 +30,17 @@ class ImageCarousel extends File
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param mixed $element
      *
      * @return mixed
      */
-    public function getRawValue(FieldValueInterface $fieldValue)
+    public function getRawValue($element)
     {
-        $value = $fieldValue->getValue();
-        $images = $value['images'] ?? [];
+        $images = $element['images'] ?? [];
         foreach ($images as $key => $imageData) {
             $url = $this->getFilename($imageData);
             if (empty($url)) {
-                unset($value['images'][$key]);
+                unset($element['images'][$key]);
                 continue;
             }
 
@@ -50,9 +48,9 @@ class ImageCarousel extends File
             if (isset($imageData['delete'])) {
                 unset($imageData['delete']);
             }
-            $value['images'][$key] = $imageData;
+            $element['images'][$key] = $imageData;
         }
 
-        return $value;
+        return $element;
     }
 }

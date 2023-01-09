@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class FieldValuesType extends AbstractType
+class ContentDataType extends AbstractType
 {
     /**
      * @var FieldManager
@@ -59,12 +59,11 @@ class FieldValuesType extends AbstractType
             }
 
             $i = 0;
-            foreach ($data as $name => $fieldValue) {
-                $field = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
-                $form->add($i++, FieldValueType::class, [
+            foreach ($data as $name => $element) {
+                $field = $this->fieldManager->getFieldTypeByCode($element['fieldType']);
+                $form->add($i++, ElementType::class, [
                     'label'      => $field->getFormFieldLabel(),
                     'field_type' => $field,
-                    'data_class' => $this->configurationManager->getEntityClass('field_value'),
                     'property_path' => '['.$name.']',
                 ]);
             }
@@ -83,11 +82,10 @@ class FieldValuesType extends AbstractType
                 }
             }
 
-            foreach ($data as $name => $value) {
+            foreach ($data as $name => $element) {
                 if (!$form->has($name)) {
-                    $form->add($name, FieldValueType::class, [
-                        'field_type' => $this->fieldManager->getFieldTypeByCode($value['fieldType'] ?? 'text'),
-                        'data_class' => $this->configurationManager->getEntityClass('field_value'),
+                    $form->add($name, ElementType::class, [
+                        'field_type' => $this->fieldManager->getFieldTypeByCode($element['fieldType'] ?? 'text'),
                         'property_path' => '['.$name.']',
                     ]);
                 }
@@ -123,7 +121,7 @@ class FieldValuesType extends AbstractType
             'translation_domain' => 'AdvancedContentBundle',
             'by_reference' => false,
             'row_attr' => [
-                'class' => 'acb-field-values-container',
+                'class' => 'acb-elements-container',
                 'data-edit-url' => $this->urlGenerator->generate('sherlockode_acb_content_field_form'),
             ],
         ]);
@@ -131,6 +129,6 @@ class FieldValuesType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'acb_field_values';
+        return 'acb_elements';
     }
 }

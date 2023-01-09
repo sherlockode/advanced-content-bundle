@@ -4,7 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 class File extends AbstractFieldType
 {
@@ -55,19 +54,18 @@ class File extends AbstractFieldType
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param mixed $element
      *
      * @return mixed
      */
-    public function getRawValue(FieldValueInterface $fieldValue)
+    public function getRawValue($element)
     {
-        $value = $fieldValue->getValue();
-        $value['url'] = $this->getFilename($value);
+        $element['url'] = $this->getFilename($element);
 
-        if (isset($value['delete'])) {
-            unset($value['delete']);
+        if (isset($element['delete'])) {
+            unset($element['delete']);
         }
 
-        return $value;
+        return $element;
     }
 }

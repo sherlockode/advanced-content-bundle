@@ -73,7 +73,7 @@ jQuery(function ($) {
     }
 
     $('body').on('click', '.acb-remove-row', function (e) {
-        let group = $(this).closest('.acb-field-values-container .acb-sortable-group');
+        let group = $(this).closest('.acb-elements-container .acb-sortable-group');
         let fieldRow = $(this).closest('.acb-row');
         fieldRow.remove();
         calculatePosition();
@@ -123,7 +123,7 @@ jQuery(function ($) {
             formData,
             oldRow.data('duplicate-url'),
             'POST',
-            oldRow.closest('.acb-field-values-container').find('.btn-new-field').data('base-name'),
+            oldRow.closest('.acb-elements-container').find('.btn-new-field').data('base-name'),
             false
         );
     });
@@ -148,7 +148,7 @@ jQuery(function ($) {
         }
     }
 
-    $('body').on('sortstop', '.acb-field-values-container .acb-sortable-group', function () {
+    $('body').on('sortstop', '.acb-elements-container .acb-sortable-group', function () {
         updateAddButtons($(this));
     });
 
@@ -190,7 +190,7 @@ jQuery(function ($) {
     $('body').on('click', '.acb-edit-row', function (e) {
         e.stopPropagation();
         let row = $(this).closest('.acb-field');
-        let url = $(this).closest('.acb-field-values-container').data('edit-url');
+        let url = $(this).closest('.acb-elements-container').data('edit-url');
         getEditFieldForm(url, row);
         slide.open();
     });
@@ -316,9 +316,9 @@ jQuery(function ($) {
                             .replace(/_{3}$/g, '__')
                     ); // replace placeholder in HTML "id"
 
-                let container = $('.acb-field-values-container').children('.acb-sortable-group');
+                let container = $('.acb-elements-container').children('.acb-sortable-group');
                 let form = container.closest('form');
-                let counter = container.data('widget-counter') || form.find('.acb-field-values-container > .acb-sortable-group').first().children('.acb-row').length;
+                let counter = container.data('widget-counter') || form.find('.acb-elements-container > .acb-sortable-group').first().children('.acb-row').length;
                 preview = preview.replace(/__name__/g, counter++);
                 container.data('widget-counter', counter);
 

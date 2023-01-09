@@ -5,7 +5,6 @@ Entities
 
 We implemented the following entity models:
 - Content
-- FieldValue
 - PageType
 - Page
 - PageMeta
@@ -41,52 +40,12 @@ class Content extends BaseContent
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FieldValue", mappedBy="content", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position"="ASC"})
-     */
-    protected $fieldValues;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="contents")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $page;
 }
 
-```
-
-```php
-<?php
-// src/Entity/FieldValue.php
-
-namespace App\Entity;
-
-use Sherlockode\AdvancedContentBundle\Model\FieldValue as BaseFieldValue;
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity
- * @ORM\Table(name="field_value")
- */
-class FieldValue extends BaseFieldValue
-{
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @var Content
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="fieldValues")
-     * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $content;
-}
 ```
 
 ```php

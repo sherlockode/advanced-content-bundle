@@ -10,7 +10,7 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
-        <service id="sherlockode_advanced_content.form.field_values" class="Sherlockode\AdvancedContentBundle\Form\Type\FieldValuesType">
+        <service id="sherlockode_advanced_content.form.data" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentDataType">
             <argument type="service" id="sherlockode_advanced_content.field_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="router"/>

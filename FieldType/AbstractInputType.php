@@ -12,11 +12,11 @@ abstract class AbstractInputType extends AbstractFieldType
     }
 
     /**
-     * Get options to apply on field value
+     * Get options to apply on element
      *
      * @return array
      */
-    public function getFormFieldValueOptions()
+    public function getFormElementOptions()
     {
         $fieldOptions = [];
 

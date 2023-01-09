@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -19,11 +18,11 @@ interface FieldTypeInterface
     public function getIconClass();
 
     /**
-     * Get options to apply on field value
+     * Get options to apply on element
      *
      * @return array
      */
-    public function getFormFieldValueOptions();
+    public function getFormElementOptions();
 
     /**
      * @return string
@@ -36,13 +35,13 @@ interface FieldTypeInterface
     public function getPreviewTemplate();
 
     /**
-     * Add field value's field(s) to content form
+     * Add element's field(s) to content form
      *
      * @param FormBuilderInterface $builder
      *
      * @return void
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder);
+    public function buildContentElement(FormBuilderInterface $builder);
 
     /**
      * Get field's code
@@ -69,11 +68,11 @@ interface FieldTypeInterface
     public function getFieldGroup();
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param mixed $element
      *
      * @return mixed
      */
-    public function getRawValue(FieldValueInterface $fieldValue);
+    public function getRawValue($element);
 
     /**
      * @param array $data

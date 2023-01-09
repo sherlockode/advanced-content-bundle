@@ -1,5 +1,5 @@
 {% if entity is not null %}
-    {% for fieldValue in entity.fieldValues %}
-        {{ acb_render_field(fieldValue) }}
+    {% for element in entity.data %}
+        {{ acb_render_element(element) }}
     {% endfor %}
 {% endif %}

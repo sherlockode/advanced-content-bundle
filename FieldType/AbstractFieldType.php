@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -55,19 +54,19 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Add field value's field(s) to content form
+     * Add element's field(s) to content form
      *
      * @param FormBuilderInterface $builder
      *
      * @return void
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder)
+    public function buildContentElement(FormBuilderInterface $builder)
     {
         $builder->add('fieldType', HiddenType::class);
         $builder->add('position', HiddenType::class);
         $builder->add('value', $this->getFormFieldType(), array_merge(
-            $this->getDefaultFormFieldValueOptions(),
-            $this->getFormFieldValueOptions()
+            $this->getDefaultFormElementOptions(),
+            $this->getFormElementOptions()
         ));
 
         $modelTransformer = $this->getValueModelTransformer();
@@ -78,11 +77,11 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Get options to apply on field value
+     * Get options to apply on element
      *
      * @return array
      */
-    public function getFormFieldValueOptions()
+    public function getFormElementOptions()
     {
         return [];
     }
@@ -98,11 +97,11 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Add field hint to field value form
+     * Add field hint to element form
      *
      * @return array
      */
-    public function getDefaultFormFieldValueOptions()
+    public function getDefaultFormElementOptions()
     {
         $defaultOptions = ['label' => false];
         if ($this->getHint()) {
@@ -125,13 +124,13 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param mixed $element
      *
      * @return mixed
      */
-    public function getRawValue(FieldValueInterface $fieldValue)
+    public function getRawValue($element)
     {
-        return $fieldValue->getValue();
+        return $element;
     }
 
     /**

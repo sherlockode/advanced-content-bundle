@@ -45,8 +45,8 @@ class ContentType extends AbstractType
             ->add('locale', TextType::class, [
                 'label' => 'content.form.locale',
             ])
-            ->add('fieldValues', FieldValuesType::class, [
-                'label' => 'content.form.field_values',
+            ->add('data', ContentDataType::class, [
+                'label' => 'content.form.data',
             ]);
         ;
 

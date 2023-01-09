@@ -18,15 +18,15 @@ class Iframe extends AbstractFieldType
     }
 
     /**
-     * Add field value's field(s) to content form
+     * Add element's field(s) to content form
      *
      * @param FormBuilderInterface $builder
      *
      * @return void
      */
-    public function buildContentFieldValue(FormBuilderInterface $builder)
+    public function buildContentElement(FormBuilderInterface $builder)
     {
-        parent::buildContentFieldValue($builder);
+        parent::buildContentElement($builder);
 
         $builder->get('value')
             ->add('src', UrlType::class, ['label' => 'field_type.iframe.src'])

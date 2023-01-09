@@ -5,7 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -66,8 +65,8 @@ class ContentExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('acb_render_field', [$this, 'renderFieldValue'], ['is_safe' => ['html']]),
-            new TwigFunction('acb_field_preview', [$this, 'renderFieldPreview'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_render_element', [$this, 'renderElement'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_element_preview', [$this, 'renderElementPreview'], ['is_safe' => ['html']]),
             new TwigFunction('acb_find_entity', [$this, 'findEntity']),
             new TwigFunction('acb_field_raw_value', [$this, 'getFieldRawValue']),
             new TwigFunction('acb_base_form_theme', [$this, 'getBaseFormTheme']),
@@ -76,11 +75,11 @@ class ContentExtension extends AbstractExtension
         ];
     }
 
-    public function renderFieldValue(FieldValueInterface $fieldValue)
+    public function renderElement(array $element)
     {
-        $field = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
+        $field = $this->fieldManager->getFieldTypeByCode($element['fieldType']);
 
-        $raw = $this->getFieldRawValue($fieldValue);
+        $raw = $this->getFieldRawValue($element);
         if (is_array($raw)) {
             $params = $raw;
         } else {
@@ -91,15 +90,15 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param array $element
      *
      * @return string
      */
-    public function renderFieldPreview(FieldValueInterface $fieldValue)
+    public function renderElementPreview(array $element)
     {
-        $field = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
+        $field = $this->fieldManager->getFieldTypeByCode($element['fieldType']);
 
-        $raw = $this->getFieldRawValue($fieldValue);
+        $raw = $this->getFieldRawValue($element);
         if (is_array($raw)) {
             $params = $raw;
         } else {
@@ -121,15 +120,15 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * Get FieldValue raw value
+     * Get element raw value
      *
-     * @param FieldValueInterface $fieldValue
+     * @param array $element
      *
      * @return mixed
      */
-    public function getFieldRawValue(FieldValueInterface $fieldValue)
+    public function getFieldRawValue(array $element)
     {
-        return $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType())->getRawValue($fieldValue);
+        return $this->fieldManager->getFieldTypeByCode($element['fieldType'])->getRawValue($element['value'] ?? null);
     }
 
     /**
