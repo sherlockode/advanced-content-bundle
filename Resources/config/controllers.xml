@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="sherlockode_advanced_content.controller.content_crud" class="Sherlockode\AdvancedContentBundle\Controller\MyContentController" public="true">
+        <service id="sherlockode_advanced_content.controller.content_crud" class="Sherlockode\AdvancedContentBundle\Controller\Crud\ContentController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.content_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
@@ -32,7 +32,7 @@
                 <argument type="service" id="Psr\Container\ContainerInterface" />
             </call>
         </service>
-        <service id="sherlockode_advanced_content.controller.page_type" class="Sherlockode\AdvancedContentBundle\Controller\PageTypeController" public="true">
+        <service id="sherlockode_advanced_content.controller.page_type_crud" class="Sherlockode\AdvancedContentBundle\Controller\Crud\PageTypeController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="container.service_subscriber"/>
@@ -44,6 +44,14 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.page_manager"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" />
+            </call>
+        </service>
+        <service id="sherlockode_advanced_content.controller.page_crud" class="Sherlockode\AdvancedContentBundle\Controller\Crud\PageController" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
                 <argument type="service" id="Psr\Container\ContainerInterface" />

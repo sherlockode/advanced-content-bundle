@@ -1,6 +1,6 @@
 <?php
 
-namespace Sherlockode\AdvancedContentBundle\Controller;
+namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\Type\PageTypeType;

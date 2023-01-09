@@ -1,6 +1,6 @@
 <?php
 
-namespace Sherlockode\AdvancedContentBundle\Controller;
+namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class MyContentController
+ * Class ContentController
  */
-class MyContentController extends AbstractController
+class ContentController extends AbstractController
 {
     /**
      * @var EntityManagerInterface
@@ -31,7 +31,7 @@ class MyContentController extends AbstractController
     private $configurationManager;
 
     /**
-     * MyContentController constructor.
+     * ContentController constructor.
      *
      * @param EntityManagerInterface $em
      * @param ContentManager         $contentManager
