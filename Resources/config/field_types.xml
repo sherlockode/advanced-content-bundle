@@ -18,22 +18,19 @@
         </service>
         <service id="sherlockode_acb.field_type.image" class="Sherlockode\AdvancedContentBundle\FieldType\Image">
             <tag name="sherlockode_advanced_content.fieldtype"/>
-            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
-            <argument type="service" id="assets.packages"/>
+            <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>
         </service>
         <service id="sherlockode_acb.field_type.image_carousel" class="Sherlockode\AdvancedContentBundle\FieldType\ImageCarousel">
             <tag name="sherlockode_advanced_content.fieldtype"/>
-            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
-            <argument type="service" id="assets.packages"/>
+            <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>
         </service>
         <service id="sherlockode_acb.field_type.file" class="Sherlockode\AdvancedContentBundle\FieldType\File">
             <tag name="sherlockode_advanced_content.fieldtype"/>
-            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
-            <argument type="service" id="assets.packages"/>
+            <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>
         </service>
         <service id="sherlockode_acb.field_type.relative_link" class="Sherlockode\AdvancedContentBundle\FieldType\RelativeLink">
             <tag name="sherlockode_advanced_content.fieldtype"/>
-            <argument type="service" id="request_stack"/>
+            <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>
         </service>
         <service id="sherlockode_acb.field_type.separator" class="Sherlockode\AdvancedContentBundle\FieldType\Separator">
             <tag name="sherlockode_advanced_content.fieldtype"/>

@@ -2,22 +2,22 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
+use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class RelativeLink extends Link
 {
     /**
-     * @var RequestStack
+     * @var UrlBuilderManager
      */
-    private $requestStack;
+    private $urlBuilderManager;
 
     /**
-     * @param RequestStack $requestStack
+     * @param UrlBuilderManager $urlBuilderManager
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(UrlBuilderManager $urlBuilderManager)
     {
-        $this->requestStack = $requestStack;
+        $this->urlBuilderManager = $urlBuilderManager;
     }
 
     public function getPreviewTemplate()
@@ -50,26 +50,6 @@ class RelativeLink extends Link
      */
     protected function getUrlValue($value)
     {
-        $url = $value['url'] ?? '';
-        if (!$url) {
-            return '';
-        }
-
-        if (substr($url, 0, 1) === '#') {
-            return $url;
-        }
-
-        if (method_exists($this->requestStack, 'getMainRequest')) {
-            // SF >= 5.3
-            $mainRequest = $this->requestStack->getMainRequest();
-        } else {
-            // compat SF < 5.3
-            $mainRequest = $this->requestStack->getMasterRequest();
-        }
-        if (!$mainRequest) {
-            return $url;
-        }
-
-        return $mainRequest->getSchemeAndHttpHost() . '/' . ltrim($url, '/');
+        return $this->urlBuilderManager->getFullUrl($value['url'] ?? '');
     }
 }
