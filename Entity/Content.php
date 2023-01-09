@@ -4,13 +4,12 @@ namespace Sherlockode\AdvancedContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sherlockode\AdvancedContentBundle\Model\Content as BaseContent;
-use Sylius\Component\Resource\Model\ResourceInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="acb_content")
  */
-class Content extends BaseContent implements ResourceInterface
+class Content extends BaseContent
 {
     /**
      * @var int

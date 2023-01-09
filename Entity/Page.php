@@ -4,13 +4,12 @@ namespace Sherlockode\AdvancedContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sherlockode\AdvancedContentBundle\Model\Page as BasePage;
-use Sylius\Component\Resource\Model\ResourceInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="acb_page")
  */
-class Page extends BasePage implements ResourceInterface
+class Page extends BasePage
 {
     /**
      * @var int
