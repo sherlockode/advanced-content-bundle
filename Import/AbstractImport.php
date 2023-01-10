@@ -5,7 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractImport
@@ -24,11 +23,6 @@ abstract class AbstractImport
      * @var TranslatorInterface
      */
     protected $translator;
-
-    /**
-     * @var FieldManager
-     */
-    protected $fieldManager;
 
     /**
      * @var array
@@ -54,18 +48,15 @@ abstract class AbstractImport
      * @param EntityManagerInterface $em
      * @param ConfigurationManager   $configurationManager
      * @param TranslatorInterface    $translator
-     * @param FieldManager           $fieldManager
      */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        FieldManager $fieldManager
+        TranslatorInterface $translator
     ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
         $this->translator = $translator;
-        $this->fieldManager = $fieldManager;
         $this->init();
     }
 

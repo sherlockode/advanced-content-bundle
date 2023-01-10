@@ -230,7 +230,7 @@ jQuery(function ($) {
     // get editing form
     function getEditFieldForm(url, row) {
         slide.empty();
-        let typeInputName = row.data('name') + '[fieldType]';
+        let typeInputName = row.data('name') + '[elementType]';
         typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
         let type = row.find('input[name=' +  typeInputName + ']').val();
 

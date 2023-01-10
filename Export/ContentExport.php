@@ -2,24 +2,21 @@
 
 namespace Sherlockode\AdvancedContentBundle\Export;
 
-use Sherlockode\AdvancedContentBundle\FieldType\Content;
-use Sherlockode\AdvancedContentBundle\FieldType\File;
-use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentExport
 {
     /**
-     * @var FieldManager
+     * @var ElementExport
      */
-    private $fieldManager;
+    private $elementExport;
 
     /**
-     * @param FieldManager $fieldManager
+     * @param ElementExport $elementExport
      */
-    public function __construct(FieldManager $fieldManager)
+    public function __construct(ElementExport $elementExport)
     {
-        $this->fieldManager = $fieldManager;
+        $this->elementExport = $elementExport;
     }
 
     /**
@@ -31,6 +28,9 @@ class ContentExport
     {
         $data = [];
         $data['name'] = $content->getName();
+        if ($content->getLocale()) {
+            $data['locale'] = $content->getLocale();
+        }
 
         $elements = $content->getData() ?? [];
         $data['children'] = $this->exportElements($elements);
@@ -57,43 +57,9 @@ class ContentExport
 
         $data = [];
         foreach ($elements as $element) {
-            $data[] = $this->exportElement($element);
+            $data[] = $this->elementExport->getElementExportData($element);
         }
 
         return $data;
-    }
-
-    /**
-     * @param array $element
-     *
-     * @return array
-     */
-    private function exportElement(array $element)
-    {
-        $elementData = [];
-        $elementData['type'] = $element['fieldType'];
-
-        $fieldType = $this->fieldManager->getFieldTypeByCode($element['fieldType']);
-        $rawValue = $fieldType->getRawValue($element['value'] ?? null);
-
-        if ($fieldType instanceof File) {
-            if (is_array($rawValue) && isset($rawValue['url'])) {
-                unset($rawValue['url']);
-            }
-        }
-        if ($fieldType instanceof Content) {
-            if (is_array($rawValue) && isset($rawValue['entity'])) {
-                $rawValue['_content'] = [
-                    'slug' => $rawValue['entity']->getSlug(),
-                    'locale' => $rawValue['entity']->getLocale(),
-                ];
-                unset($rawValue['entity']);
-                unset($rawValue['content']);
-            }
-        }
-
-        $elementData['value'] = $rawValue;
-
-        return $elementData;
     }
 }

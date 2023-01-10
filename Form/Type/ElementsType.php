@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
+use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -11,14 +11,13 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ContentDataType extends AbstractType
+class ElementsType extends AbstractType
 {
     /**
-     * @var FieldManager
+     * @var ElementManager
      */
-    private $fieldManager;
+    private $elementManager;
 
     /**
      * @var ConfigurationManager
@@ -26,23 +25,15 @@ class ContentDataType extends AbstractType
     private $configurationManager;
 
     /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
-     * @param FieldManager          $fieldManager
-     * @param ConfigurationManager  $configurationManager
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param ElementManager       $elementManager
+     * @param ConfigurationManager $configurationManager
      */
     public function __construct(
-        FieldManager $fieldManager,
-        ConfigurationManager $configurationManager,
-        UrlGeneratorInterface $urlGenerator
+        ElementManager $elementManager,
+        ConfigurationManager $configurationManager
     ) {
-        $this->fieldManager = $fieldManager;
+        $this->elementManager = $elementManager;
         $this->configurationManager = $configurationManager;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -60,10 +51,10 @@ class ContentDataType extends AbstractType
 
             $i = 0;
             foreach ($data as $name => $element) {
-                $field = $this->fieldManager->getFieldTypeByCode($element['fieldType']);
+                $field = $this->elementManager->getElementByCode($element['elementType']);
                 $form->add($i++, ElementType::class, [
                     'label'      => $field->getFormFieldLabel(),
-                    'field_type' => $field,
+                    'element_type' => $field,
                     'property_path' => '['.$name.']',
                 ]);
             }
@@ -85,7 +76,7 @@ class ContentDataType extends AbstractType
             foreach ($data as $name => $element) {
                 if (!$form->has($name)) {
                     $form->add($name, ElementType::class, [
-                        'field_type' => $this->fieldManager->getFieldTypeByCode($element['fieldType'] ?? 'text'),
+                        'element_type' => $this->elementManager->getElementByCode($element['elementType'] ?? 'text'),
                         'property_path' => '['.$name.']',
                     ]);
                 }
@@ -120,10 +111,6 @@ class ContentDataType extends AbstractType
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
             'by_reference' => false,
-            'row_attr' => [
-                'class' => 'acb-elements-container',
-                'data-edit-url' => $this->urlGenerator->generate('sherlockode_acb_content_field_form'),
-            ],
         ]);
     }
 

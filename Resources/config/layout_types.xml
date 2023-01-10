@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="sherlockode_acb.layout_type.row" class="Sherlockode\AdvancedContentBundle\LayoutType\Row">
+            <tag name="sherlockode_advanced_content.layouttype"/>
+        </service>
+        <service id="sherlockode_acb.layout_type.column" class="Sherlockode\AdvancedContentBundle\LayoutType\Column">
+            <tag name="sherlockode_advanced_content.layouttype"/>
+        </service>
+    </services>
+</container>
