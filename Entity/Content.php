@@ -21,12 +21,6 @@ class Content extends BaseContent
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Sherlockode\AdvancedContentBundle\Entity\FieldValue", mappedBy="content", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\OrderBy({"position"="ASC"})
-     */
-    protected $fieldValues;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Sherlockode\AdvancedContentBundle\Entity\Page", inversedBy="contents")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="SET NULL")
      */
