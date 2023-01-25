@@ -6,11 +6,13 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ElementsType extends AbstractType
 {
@@ -25,15 +27,23 @@ class ElementsType extends AbstractType
     private $configurationManager;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @param ElementManager       $elementManager
      * @param ConfigurationManager $configurationManager
+     * @param TranslatorInterface  $translator
      */
     public function __construct(
         ElementManager $elementManager,
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
+        TranslatorInterface $translator
     ) {
         $this->elementManager = $elementManager;
         $this->configurationManager = $configurationManager;
+        $this->translator = $translator;
     }
 
     /**
@@ -83,7 +93,6 @@ class ElementsType extends AbstractType
             }
         });
 
-
         $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) use ($options) {
             $form = $event->getForm();
             $data = $event->getData();
@@ -97,6 +106,31 @@ class ElementsType extends AbstractType
 
             foreach ($toDelete as $name) {
                 unset($data[$name]);
+            }
+            $data = array_values($data);
+
+            if ($parentForm = $form->getParent()) {
+                if ($parentForm->has('elementType')) {
+                    $parentElementType = $parentForm->get('elementType')->getData();
+                    if ($parentElementType === 'row' || $parentElementType === 'column') {
+                        foreach ($data as $child) {
+                            if ($parentElementType === 'row' && $child['elementType'] !== 'column') {
+                                $form->addError(new FormError($this->translator->trans(
+                                    'layout_type.errors.invalid_element_in_row',
+                                    [],
+                                    'AdvancedContentBundle'
+                                )));
+                            }
+                            if ($parentElementType === 'column' && $child['elementType'] === 'column') {
+                                $form->addError(new FormError($this->translator->trans(
+                                    'layout_type.errors.invalid_element_in_column',
+                                    [],
+                                    'AdvancedContentBundle'
+                                )));
+                            }
+                        }
+                    }
+                }
             }
 
             $event->setData($data);

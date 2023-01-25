@@ -14,48 +14,112 @@
 {% endblock %}
 
 {% block acb_elements_widget %}
-    {%- set attr = attr|default([]) -%}
-    {%- set attr = attr|merge({'class': 'acb-sortable-group' }) -%}
-    <div {{ block('widget_container_attributes') }}>
+    <div {{ block('widget_container_attributes') }} data-form-container-name="{{ form.vars.full_name }}">
         {% for child in form %}
-            {{ _self.acb_button_add_field(form.vars['full_name']) }}
             {{ _self.acb_element_entry(child) }}
         {% endfor %}
-        {{ _self.acb_button_add_field(form.vars['full_name']) }}
     </div>
 {% endblock %}
 
+{% block _content_data_widget %}
+    <div class="acb-sortable-group acb-root-sortable-group" data-base-name="{{ form.vars.full_name }}" data-widget-counter="{{ form.children|length }}">
+        {% for child in form.children %}
+            {{ _self.acb_render_elements(child) }}
+        {% endfor %}
+    </div>
+    {{ _self.acb_button_add_field(form.vars.full_name) }}
+    {{ block('acb_elements_widget') }}
+{% endblock %}
+{% block _acb_page_content_data_widget %}
+    {{ block('_content_data_widget') }}
+{% endblock %}
+
 {% macro acb_button_add_field(baseName) %}
-    <div class="acb-add-field-container">
-        <button type="button" class="btn btn-light btn-new-field" data-new-field-url="{{ path('sherlockode_acb_content_add_field') }}" data-base-name="{{ baseName }}">
+    <div class="acb-add-field-container" data-base-name="{{ baseName }}">
+        <button type="button" class="btn btn-light btn-append-layout" data-col-num="1">
+            <i class="fa-solid fa-bars"></i>
+            <span>{{ 'layout_type.add_one_column'|trans }}</span>
+        </button>
+        <button type="button" class="btn btn-light btn-append-layout" data-col-num="2">
+            <i class="fa-solid fa-th-large"></i>
+            <span>{{ 'layout_type.add_two_columns'|trans }}</span>
+        </button>
+        <button type="button" class="btn btn-light btn-append-layout" data-col-num="3">
+            <i class="fa-solid fa-th"></i>
+            <span>{{ 'layout_type.add_three_columns'|trans }}</span>
+        </button>
+        <button type="button" class="btn btn-light btn-append-layout" data-col-num="4">
+            <i class="fa-solid fa-columns"></i><i class="fa-solid fa-columns"></i>
+            <span>{{ 'layout_type.add_four_columns'|trans }}</span>
+        </button>
+        <button type="button" class="btn btn-light btn-append-field">
             <i class="fa-solid fa-plus"></i>
-            {{ 'content.add_field'|trans }}
+            <span>{{ 'content.add_field'|trans }}</span>
         </button>
     </div>
 {% endmacro %}
 
+{% macro acb_render_elements(form) %}
+    {% set isLayout = form.vars.data.elementType == 'row' or form.vars.data.elementType == 'column' %}
+    {% if not isLayout %}
+        <div class="acb-field field-row acb-row acb-sortable" data-name="{{ form.vars.full_name }}">
+        {{ _self.acb_element_toolbar(form) }}
+    {% endif %}
+    {{ acb_element_preview(form.vars.data, form) }}
+    {% if not isLayout %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
 {% macro acb_element_entry(form) %}
-<div class="acb-field field-row acb-row acb-sortable"
+<div class="acb-element-form"
      data-name="{{ form.vars.full_name }}"
      data-form-id="{{ form.vars.id }}"
      data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
-     data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
+     style="display: none;"
 >
-    <div class="acb-field-heading">
-        {% if form.vars.field_icon %}
-        <i class="{{ form.vars.field_icon }}"></i>
-        {% endif %}
-        <span class="field-name">{{ form.vars.label|trans }}</span>
-
-        {{- block('acb_panel_actions') -}}
-    </div>
-    <div class="acb-field-body">
-        {{ acb_element_preview(form.vars.data) }}
-    </div>
-    <div class="acb-field-data" style="display: none">
-        {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': form}) }}
-    </div>
+    {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': form}) }}
 </div>
+{% endmacro %}
+
+{% macro acb_element_toolbar(form) %}
+    <div class="acb-element-toolbar"
+         data-name="{{ form.vars.full_name }}"
+         data-form-id="{{ form.vars.id }}"
+         data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
+         data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
+    >
+        <div class="acb-field-heading">
+            {% if form.vars.field_icon %}
+                <i class="{{ form.vars.field_icon }}"></i>
+            {% endif %}
+            <span class="field-name">{{ acb_get_element_label(form.vars.data.elementType)|trans }}</span>
+            <div class="field-actions">
+                {% if form.vars.data.elementType != 'row' %}
+                    <button type="button" class="acb-edit-row" title="{{ 'edit'|trans }}">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                {% endif %}
+                <button type="button" class="acb-duplicate-row" title="{{ 'duplicate'|trans }}">
+                    <i class="fa-solid fa-copy"></i>
+                </button>
+                <button type="button" class="acb-remove-row" title="{{ 'delete'|trans }}">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+                <button type="button" class="btn-new-field btn-new-field-before" title="{{ 'add_element_before'|trans }}">
+                    <i class="fa-solid fa-circle-up"></i>
+                </button>
+                {% if form.vars.data.elementType == 'row' or form.vars.data.elementType == 'column' %}
+                    <button type="button" class="btn-append-field" title="{{ 'content.add_field'|trans }}">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                {% endif %}
+                <button type="button" class="btn-new-field" title="{{ 'add_element_after'|trans }}">
+                    <i class="fa-solid fa-circle-down"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 {% endmacro %}
 
 {% block acb_field_collection_widget %}

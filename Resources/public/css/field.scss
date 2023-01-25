@@ -1,18 +1,45 @@
 .acb-field {
-    border: 1px solid #ddd;
-    margin: 16px 0;
+    border: 1px dashed rgb(0 0 0 / 10%);
     border-radius: 4px;
     background: #fff;
+    position: relative;
 
-    &:first-child {
+    &:not(.acb-layout-column) {
+        margin: 16px 0;
+    }
+    &.acb-layout-column {
+        min-height: 50px;
+    }
+
+    &.ui-sortable-helper {
+        &, &:hover {
+            border-color: transparent;
+        }
+        background: transparent;
+        * {
+            display: none;
+        }
+        .acb-element-toolbar {
+            &, .acb-field-heading {
+                &, .field-name {
+                    display: block;
+                }
+                .field-actions {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    &:not(.acb-layout-row):not(.acb-layout-column):first-child {
         margin-top: 0;
     }
-    &:last-child {
+    &:not(.acb-layout-row):not(.acb-layout-column):last-child {
         margin-bottom: 0;
     }
 
     .acb-field-heading {
-        padding: 8px 16px;
+        padding: 0;
         cursor: move;
 
         .field-name {
@@ -72,6 +99,26 @@
             position: relative;
         }
     }
+
+    .acb-elements-container & {
+        > .acb-element-toolbar {
+            display: none;
+            position: absolute;
+            top: -40px;
+            background-color: #ffffff;
+            width: auto;
+        }
+
+        &:hover {
+            body:not(.acb-sorting) & {
+                border: 1px dashed red;
+
+                > .acb-element-toolbar {
+                    display: block;
+                }
+            }
+        }
+    }
 }
 .acb-add-field-container {
 
@@ -81,26 +128,23 @@
         display: none;
     }
 
-    text-align: center;
-    position: relative;
+    border: 1px dashed #ccc;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
 
-    &::before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 50%;
-        width: 100%;
-        height: 1px;
-        border-top: 1px solid #ccc;
-    }
-
-    .btn-new-field {
+    .btn {
         position: relative;
         z-index: 1;
         background: #e9e9ed;
 
         i {
-            font-size: 0.8em;
+            font-size: 2.5em;
+        }
+        span {
+            display: block;
         }
     }
 }
@@ -114,4 +158,9 @@
 }
 .acb-sortable-group {
     padding: 12px 0;
+}
+.acb-sortable-drop-zone {
+    height: 40px;
+    background-image: linear-gradient(45deg, #d4d4d4 8.33%, #ffffff 8.33%, #ffffff 50%, #d4d4d4 50%, #d4d4d4 58.33%, #ffffff 58.33%, #ffffff 100%);
+    background-size: 8.49px 8.49px;
 }

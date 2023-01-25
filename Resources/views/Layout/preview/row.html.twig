@@ -1,5 +1,12 @@
-<div class="row">
-    {% for element in elements|default([]) %}
-        {{ acb_element_preview(element) }}
+{% import '@SherlockodeAdvancedContent/Form/content.html.twig' as common %}
+
+<div class="row acb-layout-row acb-field field-row acb-row acb-sortable acb-sortable-group acb-row-sortable-group"
+     data-name="{{ form.vars.full_name }}"
+     data-base-name="{{ form.children.elements.vars.full_name }}"
+     data-widget-counter="{{ elements|default([])|length }}"
+>
+    {{ common.acb_element_toolbar(form) }}
+    {% for key, element in elements|default([]) %}
+        {{ acb_element_preview(element, form.children.elements.children[key]|default(null)) }}
     {% endfor %}
 </div>

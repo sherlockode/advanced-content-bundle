@@ -18,16 +18,35 @@ jQuery(function ($) {
                 groups = $('.acb-sortable-group');
             }
             groups.each(function () {
+                let connectWithSelector = false;
+                if ($(this).hasClass('acb-row-sortable-group')) {
+                    // If you are in a row,
+                    // then you are a column,
+                    // so you can be moved in any other row
+                    connectWithSelector = '.acb-row-sortable-group';
+                } else if ($(this).hasClass('acb-column-sortable-group')) {
+                    // If you are in a column,
+                    // then you are a field or a row,
+                    // so you can be moved to a column or to root container
+                    connectWithSelector = '.acb-root-sortable-group, .acb-column-sortable-group';
+                } else if ($(this).closest('.acb-lateral-slide').length === 0) {
+                    // Otherwise you are in root container,
+                    // then you are a field or a row,
+                    // so you can be moved in any column
+                    connectWithSelector = '.acb-column-sortable-group';
+                }
+
                 let ckeditorConfigs = {};
                 $(this).sortable({
-                    containment: "parent",
+                    connectWith: connectWithSelector,
                     items: '> .acb-sortable',
                     cursor: "move",
-                    axis: "y",
+                    placeholder: 'acb-sortable-drop-zone',
                     update: function (event, ui) {
                         calculatePosition();
                     },
                     start: function (event, ui) {
+                        $('body').addClass('acb-sorting');
                         if (typeof CKEDITOR === 'undefined') {
                             return;
                         }
@@ -41,6 +60,7 @@ jQuery(function ($) {
                         })
                     },
                     stop: function (event, ui) {
+                        $('body').removeClass('acb-sorting');
                         // rebuild destroyed ckeditor instances
                         if (typeof CKEDITOR !== 'undefined') {
                             return;
@@ -49,6 +69,26 @@ jQuery(function ($) {
                             CKEDITOR.replace(id, ckeditorConfigs[id]);
                             delete ckeditorConfigs[id];
                         }
+                    },
+                    receive: function (event, ui) {
+                        // ui.item => moved element
+                        // ui.sender => source group
+                        // event.target => target group
+
+                        let previewRow = $(ui.item).closest('.acb-row');
+                        let formRow = $('.acb-element-form[data-name="' + previewRow.data('name') + '"]');
+                        let formData = new FormData();
+                        for (const [key, value] of Object.entries(extractRowData(formRow))) {
+                            formData.append(key, value);
+                        }
+
+                        moveElementToList(
+                            formData,
+                            $(ui.item).find('.acb-element-toolbar').data('duplicate-url'),
+                            'POST',
+                            $(event.target).data('base-name'),
+                            previewRow.data('name')
+                        );
                     }
                 });
             });
@@ -62,8 +102,12 @@ jQuery(function ($) {
             let sortables = $(this).children('.acb-sortable');
             for (var i=0; i < sortables.length; i++) {
                 let newPosition = i+1;
-                $(sortables[i]).find('[name$="[position]"]').first().val(newPosition);
-                $(sortables[i]).find('.panel-position').first().html(newPosition);
+                if ($(sortables[i]).closest('.acb-lateral-slide').length === 0) {
+                    $('[name="' + $(sortables[i]).data('name') + '[position]"]').first().val(newPosition);
+                } else {
+                    $(sortables[i]).find('[name$="[position]"]').first().val(newPosition);
+                    $(sortables[i]).find('.panel-position').first().html(newPosition);
+                }
             }
         });
     }
@@ -75,11 +119,9 @@ jQuery(function ($) {
     $('body').on('click', '.acb-remove-row', function (e) {
         let group = $(this).closest('.acb-elements-container .acb-sortable-group');
         let fieldRow = $(this).closest('.acb-row');
+        $('.acb-element-form[data-name="' + fieldRow.data('name') + '"]').remove();
         fieldRow.remove();
         calculatePosition();
-        if (group.length) {
-            updateAddButtons(group);
-        }
     });
 
     $('body').on('click', '.acb-add-collection-item', function (e) {
@@ -113,18 +155,53 @@ jQuery(function ($) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        let oldRow = usedAddFieldBlock = $(this).closest('.acb-row');
+        usedContainer = null;
+        let previewRow = usedAddFieldBlock = $(this).closest('.acb-row');
+        let formRow = $('.acb-element-form[data-name="' + previewRow.data('name') + '"]');
         let formData = new FormData();
-        for (const [key, value] of Object.entries(extractRowData(oldRow))) {
+        for (const [key, value] of Object.entries(extractRowData(formRow))) {
             formData.append(key, value);
         }
 
         submitNewRow(
             formData,
-            oldRow.data('duplicate-url'),
+            $(this).closest('.acb-element-toolbar').data('duplicate-url'),
             'POST',
-            oldRow.closest('.acb-elements-container').find('.btn-new-field').data('base-name'),
-            false
+            previewRow.closest('.acb-sortable').parents('.acb-sortable-group').data('base-name'),
+            false,
+            true
+        );
+    });
+
+    $('body').on('click', '.btn-append-layout', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        usedAddFieldBlock = null;
+        usedContainer = null;
+        let formData = new FormData();
+        let elements = [];
+        for (let i=0; i < parseInt($(this).data('col-num')); i++) {
+            elements.push({
+                'elementType': 'column',
+                'config': {
+                    'size': Math.round(12 / Math.max(1, parseInt($(this).data('col-num'))))
+                }
+            });
+        }
+        let data = {
+            'elementType': 'row',
+            'elements': elements
+        };
+        let layoutData = buildCustomLayoutFormData(formData, data, '__field_name__');
+
+        submitNewRow(
+            layoutData,
+            $('.acb-elements-container').data('edit-url') + '?type=row',
+            'POST',
+            $(this).closest('.acb-add-field-container').data('base-name'),
+            false,
+            true
         );
     });
 
@@ -162,14 +239,51 @@ jQuery(function ($) {
     });
 
     let usedAddFieldBlock = null;
+    let usedContainer = null;
 
-    $('body').on('click', '.acb-add-field-container .btn-new-field', function () {
-        let baseName = $(this).data('base-name');
+    $('body').on('click', '.btn-new-field', function () {
+        let baseName = $(this).parents('.acb-sortable').parents('.acb-sortable-group').data('base-name');
+        usedAddFieldBlock = $(this).closest('.acb-row');
+        usedContainer = null;
+        let addAfter = !$(this).hasClass('btn-new-field-before');
+        usedContainer = null;
+
+        if (usedAddFieldBlock.hasClass('acb-layout-column')) {
+            // We want to add a new field before or after a column
+            // So we need to create a new column
+            getNewFieldForm($('.acb-elements-container').data('edit-url'), 'column', baseName, addAfter);
+            return;
+        }
+
+        openSlideForNewField(baseName, addAfter);
+    });
+    $('body').on('click', '.btn-append-field', function () {
+        usedAddFieldBlock = null;
+        usedContainer = null;
+        let baseName = $('.acb-elements-container').find('> .acb-sortable-group').data('base-name');
+        let layout = $(this).closest('.acb-field');
+        if (layout.length > 0) {
+            if (layout.hasClass('acb-layout-row')) {
+                // We want to add a field within a row
+                // So we need to create a new column
+                usedContainer = layout;
+                baseName = layout.data('base-name');
+                getNewFieldForm($('.acb-elements-container').data('edit-url'), 'column', baseName, true);
+                return;
+            } else if (layout.hasClass('acb-layout-column')) {
+                // We want to add a field within a column
+                // Container will be the column instead of root container
+                usedContainer = layout.find('> .acb-sortable-group');
+                baseName = usedContainer.data('base-name');
+            }
+        }
+        openSlideForNewField(baseName, true);
+    });
+
+    function openSlideForNewField(baseName, addAfter) {
         slide.empty();
-        usedAddFieldBlock = $(this).closest('.acb-add-field-container');
-
         $.ajax({
-            url: $(this).data('new-field-url'),
+            url: $('.acb-elements-container').data('new-field-url'),
             type: 'GET'
         }).done(function (data) {
             slide.setHeader('<h1>' + data.title + '</h1>');
@@ -177,7 +291,7 @@ jQuery(function ($) {
             let form = slide.content.find('.acb-add-field-form');
             form.on('submit', function (e) {
                 e.preventDefault();
-                getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName);
+                getNewFieldForm(this.action, $(this).find('input[name=type]:checked').val(), baseName, addAfter);
             });
             form.find('input').on('change', function () {
                 form.submit();
@@ -185,12 +299,12 @@ jQuery(function ($) {
 
             slide.open();
         }).fail(ajaxFailCallback);
-    });
+    }
 
     $('body').on('click', '.acb-edit-row', function (e) {
         e.stopPropagation();
         let row = $(this).closest('.acb-field');
-        let url = $(this).closest('.acb-elements-container').data('edit-url');
+        let url = $('.acb-elements-container').data('edit-url');
         getEditFieldForm(url, row);
         slide.open();
     });
@@ -210,7 +324,7 @@ jQuery(function ($) {
     }
 
     // get editing form
-    function getNewFieldForm(url, type, baseName) {
+    function getNewFieldForm(url, type, baseName, addAfter = true) {
         slide.empty();
         $.ajax({
             url: url,
@@ -222,8 +336,9 @@ jQuery(function ($) {
             slide.setFooter(data.footer);
             slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                 e.preventDefault();
-                saveNewFieldData(this, baseName);
+                saveNewFieldData(this, baseName, addAfter);
             });
+            slide.open();
             initSortables(slide.content);
         });
     }
@@ -232,11 +347,11 @@ jQuery(function ($) {
         slide.empty();
         let typeInputName = row.data('name') + '[elementType]';
         typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
-        let type = row.find('input[name=' +  typeInputName + ']').val();
+        let type = $('.acb-elements-form-container').find('input[name=' +  typeInputName + ']').val();
 
         $.ajax({
             url: url + '?edit=1&type='+type,
-            data: extractRowData(row),
+            data: extractRowData($('.acb-element-form[data-name="' + row.data('name') + '"]')),
             type: 'POST'
         }).done(function (data) {
             slide.setHeader('<h1>' + data.title + '</h1>');
@@ -273,11 +388,14 @@ jQuery(function ($) {
             type: form.method
         }).done(function (data) {
             if (data.success) {
-                let preview = data.preview.replace(/__field_name__/g, row.data('name')).replace(/field_name__/g, row.data('form-id'));
-                preview = $(preview);
-                preview.data('form-index', row.data('form-index'));
-
+                let preview = $(replacePlaceholderEditData(data.preview, row));
+                preview.find('> .acb-element-toolbar').data('form-index', row.data('form-index'));
                 row.replaceWith(preview);
+
+                let elementForm = $(replacePlaceholderEditData(data.form, row));
+                elementForm.data('form-index', row.data('form-index'));
+                $('.acb-element-form[data-name="' + name + '"]').replaceWith(elementForm);
+
                 calculatePosition();
 
                 slide.close();
@@ -292,12 +410,12 @@ jQuery(function ($) {
     }
 
     // convert slide form to content preview
-    function saveNewFieldData(form, baseName) {
+    function saveNewFieldData(form, baseName, addAfter = true) {
         updateCKEditorElement(form);
-        submitNewRow(new FormData(form), form.action, form.method, baseName, true);
+        submitNewRow(new FormData(form), form.action, form.method, baseName, true, addAfter);
     }
 
-    function submitNewRow(formData, action, method, baseName, isSlideOpened) {
+    function submitNewRow(formData, action, method, baseName, isSlideOpened, addAfter = true) {
         $.ajax({
             url: action,
             data: formData,
@@ -306,28 +424,32 @@ jQuery(function ($) {
             type: method
         }).done(function (data) {
             if (data.success) {
-                let preview = data.preview;
-                let name = baseName + '[__name__]';
-                preview = preview.replace(/__field_name__/g, name)
-                    .replace(
-                        /field_name__/g,
-                        name.replace(/(\]\[)/g, '_')
-                            .replace(/[\[\]]/g, '_')
-                            .replace(/_{3}$/g, '__')
-                    ); // replace placeholder in HTML "id"
+                let container = $('.acb-elements-container').find('> .acb-sortable-group');
+                if (usedContainer) {
+                    container = usedContainer;
+                }
+                if (usedAddFieldBlock) {
+                    container = usedAddFieldBlock.parents('.acb-sortable-group');
+                }
+                let counter = container.data('widget-counter') || container.find('> .acb-sortable').length;
 
-                let container = $('.acb-elements-container').children('.acb-sortable-group');
-                let form = container.closest('form');
-                let counter = container.data('widget-counter') || form.find('.acb-elements-container > .acb-sortable-group').first().children('.acb-row').length;
-                preview = preview.replace(/__name__/g, counter++);
+                let preview = replacePlaceholderNewData(data.preview, baseName, counter);
+                let elementForm = replacePlaceholderNewData(data.form, baseName, counter);
+
+                counter++;
                 container.data('widget-counter', counter);
 
                 if (usedAddFieldBlock) {
-                    usedAddFieldBlock.after(preview);
+                    if (addAfter) {
+                        usedAddFieldBlock.after(preview);
+                    } else {
+                        usedAddFieldBlock.before(preview);
+                    }
                 } else {
                     container.append(preview);
                 }
-                updateAddButtons(container);
+                $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
+                initSortables();
                 calculatePosition();
 
                 if (isSlideOpened) {
@@ -343,5 +465,64 @@ jQuery(function ($) {
                 }
             }
         });
+    }
+
+    function moveElementToList(formData, action, method, baseName, oldName) {
+        $.ajax({
+            url: action,
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: method
+        }).done(function (data) {
+            if (data.success) {
+                let container = $('.acb-sortable-group[data-base-name="' + baseName + '"]');
+                let counter = container.data('widget-counter') || container.find('> .acb-sortable').length;
+
+                let preview = replacePlaceholderNewData(data.preview, baseName, counter);
+                let elementForm = replacePlaceholderNewData(data.form, baseName, counter);
+
+                counter++;
+                container.data('widget-counter', counter);
+
+                $('.acb-sortable[data-name="' + oldName + '"]').replaceWith($(preview));
+                $('.acb-elements-form-container').find('.acb-element-form[data-name="' + oldName + '"]').remove();
+                $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
+                calculatePosition();
+            }
+        });
+    }
+
+    function replacePlaceholderEditData(content, row) {
+        return content.replace(/__field_name__/g, row.data('name')).replace(/field_name__/g, row.data('form-id'));
+    }
+    function replacePlaceholderNewData(content, baseName, counter) {
+        let name = baseName + '[__name__]';
+        content = content.replace(/__field_name__/g, name)
+            .replace(
+                /field_name__/g,
+                name.replace(/(\]\[)/g, '_')
+                    .replace(/[\[\]]/g, '_')
+                    .replace(/_{3}$/g, '__')
+            ); // replace placeholder in HTML "id"
+        content = content.replace(/__name__/g, counter++);
+
+        return content;
+    }
+
+    function buildCustomLayoutFormData(formData, data, prefix) {
+        for (const [key, value] of Object.entries(data)) {
+            if (Array.isArray(value)) {
+                for (let i = 0; i < value.length; i++) {
+                    formData = buildCustomLayoutFormData(formData, value[i], prefix + '[' + key + ']' + '[' + i + ']');
+                }
+            } else if (typeof value === 'object') {
+                formData = buildCustomLayoutFormData(formData, value, prefix + '[' + key + ']');
+            } else {
+                formData.append(prefix + '[' + key + ']', value);
+            }
+        }
+
+        return formData;
     }
 });

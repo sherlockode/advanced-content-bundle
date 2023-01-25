@@ -96,6 +96,8 @@ edit: Edit
 save: Save
 show: Show
 duplicate: Duplicate
+add_element_after: Add element after
+add_element_before: Add element before
 page_type:
     label: Page Type
     create: Create Page Type
@@ -177,3 +179,12 @@ layout_type:
         label: Row
     column:
         label: Column
+        config:
+            size: Size (from 1 to 12)
+    errors:
+        invalid_element_in_row: Only columns can be placed into rows.
+        invalid_element_in_column: Columns cannot be placed into columns.
+    add_one_column: Add one column
+    add_two_columns: Add two columns
+    add_three_columns: Add three columns
+    add_four_columns: Add four columns

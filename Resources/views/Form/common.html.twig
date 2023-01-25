@@ -71,9 +71,6 @@
         {% endif %}
     </div>
 {% endblock %}
-{% macro acb_panel_actions(form) %}
-    {{ block('acb_panel_actions') }}
-{% endmacro %}
 
 {% block acb_content_translations_widget %}
     {% set deleteUrl = path('sherlockode_acb_content_delete_locale') %}
