@@ -23,6 +23,26 @@ class RepeaterType extends AbstractType
             } else {
                 // rebuild prototype using the RepeatedChildWrappedType
                 $prototypeOptions = $prototype->getConfig()->getOptions();
+                $prototypeOptions = array_filter($prototypeOptions, function ($k, $v) {
+                    $whitelist = [
+                        'data_class',
+                        'empty_data',
+                        'trim',
+                        'required',
+                        'property_path',
+                        'mapped',
+                        'by_reference',
+                        'label_attr',
+                        'inherit_data',
+                        'compound',
+                        'method',
+                        'action',
+                        'attr',
+                        'form_attr',
+                    ];
+
+                    return in_array($k, $whitelist);
+                }, ARRAY_FILTER_USE_BOTH);
                 $prototypeOptions = array_merge($prototypeOptions, [
                     'child_options' => $prototype->getConfig()->getOptions(),
                     'child_form' => get_class($prototype->getConfig()->getType()->getInnerType()),
