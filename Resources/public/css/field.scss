@@ -12,6 +12,8 @@
     }
 
     .acb-field-heading {
+        display: flex;
+        align-items: center;
         padding: 8px 16px;
         cursor: move;
 
@@ -25,8 +27,7 @@
         padding: 8px 16px;
     }
     .field-actions {
-        float: right;
-        margin: 4px;
+        margin-left: auto;
         display: flex;
 
         button {
@@ -98,6 +99,9 @@
         position: relative;
         z-index: 1;
         background: #e9e9ed;
+        border: none;
+        border-radius: 0.375rem;
+        padding: 0.375rem 0.75rem;
 
         i {
             font-size: 0.8em;
