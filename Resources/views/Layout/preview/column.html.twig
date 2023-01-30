@@ -1,16 +1,29 @@
 {% import '@SherlockodeAdvancedContent/Form/content.html.twig' as common %}
+{% trans_default_domain 'AdvancedContentBundle' %}
 
-<div class="col-{{ min(12, max(1, config.size|default(6))) }} acb-layout-column acb-field field-row acb-row acb-sortable" data-name="{{ form.vars.full_name }}">
-    {{ common.acb_element_toolbar(form) }}
-    <div class="acb-sortable-group acb-column-sortable-group" data-base-name="{{ form.children.elements.vars.full_name }}" data-widget-counter="{{ elements|default([])|length }}">
-        {% for key, element in elements|default([]) %}
-            {% set childForm = form.children.elements.children[key]|default(null) %}
-            {% if childForm is not null %}
-                <div class="acb-field field-row acb-row acb-sortable" data-name="{{ childForm.vars.full_name }}">
-                    {{ common.acb_element_toolbar(childForm) }}
-                    {{ acb_element_preview(element, childForm) }}
-                </div>
-            {% endif %}
-        {% endfor %}
+{% set elements = elements|default([]) %}
+{% set colSize = min(12, max(1, config.size|default(6))) %}
+<div class="col-{{ colSize }} acb-layout-column acb-field field-row acb-row acb-sortable {{ elements|length == 0 ? 'acb-empty-column' : '' }}" data-name="{{ form.vars.full_name }}" data-col-size="{{ colSize }}">
+    <div class="acb-column-content acb-sorting-inline-block">
+        {{ common.acb_column_toolbar(form, true) }}
+        <div class="acb-sortable-group acb-column-sortable-group" data-base-name="{{ form.children.elements.vars.full_name }}" data-widget-counter="{{ elements|length }}">
+            {% for key, element in elements %}
+                {% set childForm = form.children.elements.children[key]|default(null) %}
+                {% if childForm is not null %}
+                    {% if childForm.vars.data.elementType|default('') == 'row' %}
+                        {{ acb_element_preview(element, childForm) }}
+                    {% else %}
+                        <div class="acb-field field-row acb-row acb-sortable" data-name="{{ childForm.vars.full_name }}">
+                            {{ common.acb_element_toolbar(childForm) }}
+                            {{ acb_element_preview(element, childForm) }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            <button type="button" class="btn-append-field" title="{{ 'content.add_field'|trans }}">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+        {{ common.acb_column_toolbar(form, false) }}
     </div>
 </div>
