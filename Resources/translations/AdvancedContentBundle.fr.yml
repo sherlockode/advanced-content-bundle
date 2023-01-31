@@ -182,8 +182,9 @@ layout_type:
         config:
             size: Taille (de 1 à 12)
     errors:
+        invalid_element_in_root: Seules des lignes peuvent être placées dans le contenant principal.
         invalid_element_in_row: Seules des colonnes peuvent être placées dans des lignes.
-        invalid_element_in_column: Les colonnes ne peuvent pas être placées dans des colonnes.
+        invalid_element_in_column: Seuls des champs peuvent être placés dans des colonnes.
     add_one_column: Ajouter une colonne
     add_two_columns: Ajouter deux colonnes
     add_three_columns: Ajouter trois colonnes

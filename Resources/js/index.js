@@ -27,14 +27,14 @@ jQuery(function ($) {
                     connectWithSelector = '.acb-row-sortable-group';
                 } else if ($(this).hasClass('acb-column-sortable-group')) {
                     // If you are in a column,
-                    // then you are a field or a row,
-                    // so you can be moved to a column or to root container
-                    connectWithSelector = '.acb-root-sortable-group, .acb-column-sortable-group';
+                    // then you are a field,
+                    // so you can be moved to any other column
+                    connectWithSelector = '.acb-column-sortable-group';
                 } else if ($(this).closest('.acb-lateral-slide').length === 0) {
                     // Otherwise you are in root container,
-                    // then you are a field or a row,
-                    // so you can be moved in any column
-                    connectWithSelector = '.acb-column-sortable-group';
+                    // then you are a row,
+                    // so you cannot be moved anywhere other than the root container
+                    connectWithSelector = false;
                 } else {
                     handleSelector = false;
                 }
