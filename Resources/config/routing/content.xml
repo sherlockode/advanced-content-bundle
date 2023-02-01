@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     <route id="sherlockode_acb_content_add_field" path="/content/add-field">
-        <default key="_controller">sherlockode_advanced_content.controller.content:addFieldAction</default>
-    </route>
-    <route id="sherlockode_acb_content_field_form_part" path="/content/field-form-part">
-        <default key="_controller">sherlockode_advanced_content.controller.content:fieldFormPartAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.content::addFieldAction</default>
     </route>
     <route id="sherlockode_acb_content_field_form" path="/content/field-form">
-        <default key="_controller">sherlockode_advanced_content.controller.content:fieldFormAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.content::fieldFormAction</default>
     </route>
     <route id="sherlockode_acb_content_duplicate_locale" path="/content/duplicate-locale">
-        <default key="_controller">sherlockode_advanced_content.controller.content:duplicateLocaleAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.content::duplicateLocaleAction</default>
     </route>
     <route id="sherlockode_acb_content_delete_locale" path="/content/delete-locale">
-        <default key="_controller">sherlockode_advanced_content.controller.content:deleteLocaleAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.content::deleteLocaleAction</default>
     </route>
     <route id="sherlockode_acb_content_duplicate" path="/content/duplicate">
-        <default key="_controller">sherlockode_advanced_content.controller.content:duplicateAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.content::duplicateAction</default>
     </route>
 </routes>
