@@ -7,6 +7,9 @@
 >
     {{ common.acb_row_toolbar(form) }}
     {% for key, element in elements|default([]) %}
-        {{ acb_element_preview(element, form.children.elements.children[key]|default(null)) }}
+        {% set childForm = form.children.elements.children[key]|default(null) %}
+        {% if childForm is not null %}
+            {{ acb_element_preview(element, childForm) }}
+        {% endif %}
     {% endfor %}
 </div>

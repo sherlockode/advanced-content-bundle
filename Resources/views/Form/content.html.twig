@@ -36,22 +36,6 @@
 
 {% macro acb_button_add_field(baseName) %}
     <div class="acb-add-field-container" data-base-name="{{ baseName }}">
-        <button type="button" class="btn btn-light btn-append-layout" data-col-num="1">
-            <i class="fa-solid fa-bars"></i>
-            <span>{{ 'layout_type.add_one_column'|trans }}</span>
-        </button>
-        <button type="button" class="btn btn-light btn-append-layout" data-col-num="2">
-            <i class="fa-solid fa-th-large"></i>
-            <span>{{ 'layout_type.add_two_columns'|trans }}</span>
-        </button>
-        <button type="button" class="btn btn-light btn-append-layout" data-col-num="3">
-            <i class="fa-solid fa-th"></i>
-            <span>{{ 'layout_type.add_three_columns'|trans }}</span>
-        </button>
-        <button type="button" class="btn btn-light btn-append-layout" data-col-num="4">
-            <i class="fa-solid fa-columns"></i><i class="fa-solid fa-columns"></i>
-            <span>{{ 'layout_type.add_four_columns'|trans }}</span>
-        </button>
         <button type="button" class="btn btn-light btn-append-field">
             <i class="fa-solid fa-plus"></i>
             <span>{{ 'content.add_field'|trans }}</span>
@@ -133,6 +117,23 @@
                 {% endif %}
                 <span class="field-name acb-sorting-inline-block" style="display: none;">{{ acb_get_element_label(form.vars.data.elementType)|trans }}</span>
             </span>
+            <div class="change-display button" title="{{ 'change_display'|trans }}">
+                <i class="fa-solid fa-bars"></i>
+                <div class="change-display-options">
+                    <button type="button" class="btn btn-light" data-col-num="1" title="{{ 'layout_type.layouts.one_column'|trans }}">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <button type="button" class="btn btn-light" data-col-num="2" title="{{ 'layout_type.layouts.two_columns'|trans }}">
+                        <i class="fa-solid fa-th-large"></i>
+                    </button>
+                    <button type="button" class="btn btn-light" data-col-num="3" title="{{ 'layout_type.layouts.three_columns'|trans }}">
+                        <i class="fa-solid fa-th"></i>
+                    </button>
+                    <button type="button" class="btn btn-light" data-col-num="4" title="{{ 'layout_type.layouts.four_columns'|trans }}">
+                        <i class="fa-solid fa-columns"></i><i class="fa-solid fa-columns"></i>
+                    </button>
+                </div>
+            </div>
             <button type="button" class="btn-append-field" title="{{ 'content.add_field'|trans }}">
                 <i class="fa-solid fa-plus"></i>
             </button>

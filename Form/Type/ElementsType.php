@@ -77,11 +77,13 @@ class ElementsType extends AbstractType
                 $data = [];
             }
 
+            // Remove existing children
+            // And reset existing data
+            // To prevent data mismatch on submit between existing and submitted data
             foreach ($form as $child) {
-                if (!isset($data[$child->getName()])) {
-                    $form->remove($child->getName());
-                }
+                $form->remove($child->getName());
             }
+            $form->setData([]);
 
             foreach ($data as $name => $element) {
                 if (!$form->has($name)) {
@@ -96,18 +98,8 @@ class ElementsType extends AbstractType
         $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) use ($options) {
             $form = $event->getForm();
             $data = $event->getData();
-
-            $toDelete = [];
-            foreach ($data as $name => $child) {
-                if (!$form->has($name)) {
-                    $toDelete[] = $name;
-                }
-            }
-
-            foreach ($toDelete as $name) {
-                unset($data[$name]);
-            }
             $data = array_values($data);
+
             if ($parentForm = $form->getParent()) {
                 $parentElementType = $parentForm->has('elementType') ? $parentForm->get('elementType')->getData() : 'root';
                 foreach ($data as $child) {

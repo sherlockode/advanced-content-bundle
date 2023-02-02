@@ -10,14 +10,10 @@
             {% for key, element in elements %}
                 {% set childForm = form.children.elements.children[key]|default(null) %}
                 {% if childForm is not null %}
-                    {% if childForm.vars.data.elementType|default('') == 'row' %}
+                    <div class="acb-field field-row acb-row acb-sortable" data-name="{{ childForm.vars.full_name }}">
+                        {{ common.acb_element_toolbar(childForm) }}
                         {{ acb_element_preview(element, childForm) }}
-                    {% else %}
-                        <div class="acb-field field-row acb-row acb-sortable" data-name="{{ childForm.vars.full_name }}">
-                            {{ common.acb_element_toolbar(childForm) }}
-                            {{ acb_element_preview(element, childForm) }}
-                        </div>
-                    {% endif %}
+                    </div>
                 {% endif %}
             {% endfor %}
             <button type="button" class="btn-append-field" title="{{ 'content.add_field'|trans }}">
