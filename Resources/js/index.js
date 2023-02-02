@@ -153,12 +153,16 @@ jQuery(function ($) {
     });
 
     $('body').on('click', '.acb-remove-row', function (e) {
-        let group = $(this).closest('.acb-elements-container .acb-sortable-group');
-        let fieldRow = $(this).closest('.acb-row');
-        $('.acb-element-form[data-name="' + fieldRow.data('name') + '"]').remove();
-        fieldRow.remove();
-        calculatePosition();
+        if (confirm($(this).data('confirm-delete'))) {
+            deleteElement($(this).closest('.acb-row'));
+        }
     });
+
+    function deleteElement(element) {
+        $('.acb-element-form[data-name="' + element.data('name') + '"]').remove();
+        element.remove();
+        calculatePosition();
+    }
 
     $('body').on('click', '.acb-add-collection-item', function (e) {
         e.preventDefault();
@@ -247,7 +251,7 @@ jQuery(function ($) {
                             'fieldName': fieldName
                         });
                     });
-                    $(element).find('.acb-column-toolbar .acb-remove-row').click();
+                    deleteElement($(element));
                 } else {
                     $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
                 }

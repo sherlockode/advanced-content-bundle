@@ -92,6 +92,7 @@ actions: Actions
 back_to_list: Back to list
 cancel: Cancel
 delete: Delete
+delete_confirm: Are you sure you want to delete this element?
 edit: Edit
 save: Save
 show: Show
