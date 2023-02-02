@@ -6,6 +6,7 @@ use Sherlockode\AdvancedContentBundle\Exception\InvalidElementException;
 use Sherlockode\AdvancedContentBundle\FieldType\Content;
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
+use Sherlockode\AdvancedContentBundle\LayoutType\Column;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -100,6 +101,11 @@ class ElementExport
             $elementsData[] = $this->getElementExportData($childElement);
         }
 
-        return ['elements' => $elementsData];
+        $layoutData = [];
+        if ($element instanceof Column) {
+            $layoutData['config'] = $raw['config'] ?? [];
+        }
+
+        return array_merge(['elements' => $elementsData], $layoutData);
     }
 }
