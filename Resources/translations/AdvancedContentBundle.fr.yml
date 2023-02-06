@@ -178,6 +178,17 @@ tools:
 layout_type:
     row:
         label: Ligne
+        config:
+            columns_gap: Espacement entre les colonnes en pixel (utilise les marges CSS)
+            columns_gap_placeholder: Normal
+            mobile_reverse_columns: Inverser l'ordre des colonnes sur mobile
+            justify_content: Alignement des colonnes
+            justify_contents:
+                start: Gauche
+                end: Droite
+                center: Centré
+                between: Espace entre les colonnes
+                around: Espace autour des colonnes
     column:
         label: Colonne
         config:

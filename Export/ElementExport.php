@@ -101,11 +101,9 @@ class ElementExport
             $elementsData[] = $this->getElementExportData($childElement);
         }
 
-        $layoutData = [];
-        if ($element instanceof Column) {
-            $layoutData['config'] = $raw['config'] ?? [];
-        }
-
-        return array_merge(['elements' => $elementsData], $layoutData);
+        return [
+            'elements' => $elementsData,
+            'config' => $raw['config'] ?? [],
+        ];
     }
 }

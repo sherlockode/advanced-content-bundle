@@ -120,12 +120,10 @@ class ElementImport
             $elementsData[] = $this->getElementImportData($childElement, $position++);
         }
 
-        $layoutData = [];
-        if ($element instanceof Column) {
-            $layoutData['config'] = $elementData['config'] ?? [];
-        }
-
-        return array_merge(['elements' => $elementsData], $layoutData);
+        return [
+            'elements' => $elementsData,
+            'config' => $elementData['config'] ?? [],
+        ];
     }
 
     private function processValueArray(array $data)

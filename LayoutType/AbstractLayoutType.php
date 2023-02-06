@@ -49,6 +49,13 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
                 'class' => 'acb-layout-elements-container',
             ],
         ]);
+
+        $configurationFormType = $this->getConfigurationFormType();
+        if ($configurationFormType !== null) {
+            $builder->add('config', $configurationFormType, [
+                'label' => false,
+            ]);
+        }
     }
 
     /**
@@ -63,6 +70,16 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
             return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
         });
 
-        return ['elements' => $elements];
+        return [
+            'elements' => $elements,
+            'config' => $element['config'] ?? [],
+        ];
     }
+
+    /**
+     * Get layout configuration form type
+     *
+     * @return string
+     */
+    abstract protected function getConfigurationFormType(): ?string;
 }
