@@ -1,9 +1,20 @@
 {% import '@SherlockodeAdvancedContent/Form/content.html.twig' as common %}
 {% trans_default_domain 'AdvancedContentBundle' %}
 
+{% set colSize = min(12, max(1, config.size|default(12))) %}
+{% set colOffset = min(11, max(0, config.offset|default(0))) %}
+{% set devices = ['sm', 'md', 'lg', 'xl'] %}
+{% for device in devices %}
+    {% if config['size_' ~ device] is not null %}
+        {% set colSize = config['size_' ~ device] %}
+    {% endif %}
+    {% if config['offset_' ~ device] is not null %}
+        {% set colOffset = config['offset_' ~ device] %}
+    {% endif %}
+{% endfor %}
+
 {% set elements = elements|default([]) %}
-{% set colSize = min(12, max(1, config.size|default(6))) %}
-<div class="col-{{ colSize }} acb-layout-column acb-field field-row acb-row acb-sortable {{ elements|length == 0 ? 'acb-empty-column' : '' }}" data-name="{{ form.vars.full_name }}" data-col-size="{{ colSize }}">
+<div class="{{ acb_get_column_classes(config)|join(' ') }} acb-layout-column acb-field field-row acb-row acb-sortable {{ elements|length == 0 ? 'acb-empty-column' : '' }}" data-name="{{ form.vars.full_name }}" data-col-size="{{ colSize + colOffset }}">
     <div class="acb-column-content acb-sorting-inline-block">
         {{ common.acb_column_toolbar(form, true) }}
         <div class="acb-sortable-group acb-column-sortable-group" data-base-name="{{ form.children.elements.vars.full_name }}" data-widget-counter="{{ elements|length }}">

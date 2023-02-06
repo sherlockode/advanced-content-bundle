@@ -280,3 +280,38 @@
         {{ form_widget(form._token) }}
     {% endif %}
 {% endblock %}
+
+{% block acb_column_config_row %}
+    <table class="acb-column-config table">
+        <tr>
+            <th>{{ 'responsive.device'|trans }}</th>
+            <th>{{ 'layout_type.column.config.offset'|trans }}</th>
+            <th>{{ 'layout_type.column.config.size'|trans }}</th>
+        </tr>
+        <tr>
+            <td class="device-type"><i class="fa-solid fa-desktop" title="{{ 'responsive.devices.desktop'|trans }}"></i></td>
+            <td>{{ form_widget(form.offset_xl) }}</td>
+            <td>{{ form_widget(form.size_xl) }}</td>
+        </tr>
+        <tr>
+            <td class="device-type"><i class="fa-solid fa-tablet fa-rotate-90" title="{{ 'responsive.devices.tablet_landscape'|trans }}"></i></td>
+            <td>{{ form_widget(form.offset_lg) }}</td>
+            <td>{{ form_widget(form.size_lg) }}</td>
+        </tr>
+        <tr>
+            <td class="device-type"><i class="fa-solid fa-tablet" title="{{ 'responsive.devices.tablet_portrait'|trans }}"></i></td>
+            <td>{{ form_widget(form.offset_md) }}</td>
+            <td>{{ form_widget(form.size_md) }}</td>
+        </tr>
+        <tr>
+            <td class="device-type"><i class="fa-solid fa-mobile fa-rotate-90" title="{{ 'responsive.devices.mobile_landscape'|trans }}"></i></td>
+            <td>{{ form_widget(form.offset_sm) }}</td>
+            <td>{{ form_widget(form.size_sm) }}</td>
+        </tr>
+        <tr>
+            <td class="device-type"><i class="fa-solid fa-mobile" title="{{ 'responsive.devices.mobile_portrait'|trans }}"></i></td>
+            <td>{{ form_widget(form.offset) }}</td>
+            <td>{{ form_widget(form.size) }}</td>
+        </tr>
+    </table>
+{% endblock %}

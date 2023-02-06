@@ -1,4 +1,4 @@
-<div class="col-{{ min(12, max(1, config.size|default(6))) }}">
+<div class="{{ acb_get_column_classes(config)|join(' ') }}">
     {% for element in elements|default([]) %}
         {{ acb_render_element(element) }}
     {% endfor %}

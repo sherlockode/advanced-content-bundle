@@ -181,7 +181,35 @@ layout_type:
     column:
         label: Column
         config:
-            size: Size (from 1 to 12)
+            inherit_from_smaller: Inherit from smaller device
+            size: Size
+            offset: Offset
+            sizes:
+                1_column: One column - 1/12
+                2_column: Two columns - 1/6
+                3_column: Three columns - 1/4
+                4_column: Four columns - 1/3
+                5_column: Five columns - 5/12
+                6_column: Six columns - 1/2
+                7_column: Seven columns - 7/12
+                8_column: Eight columns - 2/3
+                9_column: Nine columns - 3/4
+                10_column: Ten columns - 5/6
+                11_column: Eleven columns - 11/12
+                12_column: Twelve columns - 1/1
+            offsets:
+                no_offset: No offset
+                1_column: One column - 1/12
+                2_column: Two columns - 1/6
+                3_column: Three columns - 1/4
+                4_column: Four columns - 1/3
+                5_column: Five columns - 5/12
+                6_column: Six columns - 1/2
+                7_column: Seven columns - 7/12
+                8_column: Eight columns - 2/3
+                9_column: Nine columns - 3/4
+                10_column: Ten columns - 5/6
+                11_column: Eleven columns - 11/12
     errors:
         invalid_element_in_root: Only rows can be placed into the main container.
         invalid_element_in_row: Only columns can be placed into rows.
@@ -191,3 +219,11 @@ layout_type:
         two_columns: 1/2 + 1/2
         three_columns: 1/3 + 1/3 + 1/3
         four_columns: 1/4 + 1/4 + 1/4 + 1/4
+responsive:
+    device: Device
+    devices:
+        mobile_portrait: Mobile Portrait
+        mobile_landscape: Mobile Landscape
+        tablet_portrait: Tablet Portrait
+        tablet_landscape: Tablet Landscape
+        desktop: Desktop
