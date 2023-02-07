@@ -6,7 +6,6 @@ use Sherlockode\AdvancedContentBundle\FieldType\Content;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
 use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
-use Sherlockode\AdvancedContentBundle\Model\FieldValueInterface;
 
 class ContentExport
 {
@@ -33,8 +32,8 @@ class ContentExport
         $data = [];
         $data['name'] = $content->getName();
 
-        $fieldValues = $content->getFieldValues();
-        $data['children'] = $this->exportFieldValues($fieldValues);
+        $elements = $content->getData() ?? [];
+        $data['children'] = $this->exportElements($elements);
 
         $data = [
             'contents' => [
@@ -46,36 +45,36 @@ class ContentExport
     }
 
     /**
-     * @param array|FieldValueInterface[] $fieldValues
+     * @param array|array[] $elements
      *
      * @return array
      */
-    public function exportFieldValues($fieldValues)
+    public function exportElements($elements)
     {
-        if (count($fieldValues) === 0) {
+        if (count($elements) === 0) {
             return [];
         }
 
         $data = [];
-        foreach ($fieldValues as $fieldValue) {
-            $data[] = $this->exportFieldValue($fieldValue);
+        foreach ($elements as $element) {
+            $data[] = $this->exportElement($element);
         }
 
         return $data;
     }
 
     /**
-     * @param FieldValueInterface $fieldValue
+     * @param array $element
      *
      * @return array
      */
-    private function exportFieldValue(FieldValueInterface $fieldValue)
+    private function exportElement(array $element)
     {
-        $fieldValueData = [];
-        $fieldValueData['type'] = $fieldValue->getFieldType();
+        $elementData = [];
+        $elementData['type'] = $element['fieldType'];
 
-        $fieldType = $this->fieldManager->getFieldTypeByCode($fieldValue->getFieldType());
-        $rawValue = $fieldType->getRawValue($fieldValue);
+        $fieldType = $this->fieldManager->getFieldTypeByCode($element['fieldType']);
+        $rawValue = $fieldType->getRawValue($element['value'] ?? null);
 
         if ($fieldType instanceof File) {
             if (is_array($rawValue) && isset($rawValue['url'])) {
@@ -93,8 +92,8 @@ class ContentExport
             }
         }
 
-        $fieldValueData['value'] = $rawValue;
+        $elementData['value'] = $rawValue;
 
-        return $fieldValueData;
+        return $elementData;
     }
 }
