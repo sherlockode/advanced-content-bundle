@@ -182,8 +182,9 @@ layout_type:
         config:
             size: Size (from 1 to 12)
     errors:
+        invalid_element_in_root: Only rows can be placed into the main container.
         invalid_element_in_row: Only columns can be placed into rows.
-        invalid_element_in_column: Columns cannot be placed into columns.
+        invalid_element_in_column: Only fields can be placed into columns.
     add_one_column: Add one column
     add_two_columns: Add two columns
     add_three_columns: Add three columns

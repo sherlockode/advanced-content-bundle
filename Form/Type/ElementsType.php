@@ -108,27 +108,31 @@ class ElementsType extends AbstractType
                 unset($data[$name]);
             }
             $data = array_values($data);
-
             if ($parentForm = $form->getParent()) {
-                if ($parentForm->has('elementType')) {
-                    $parentElementType = $parentForm->get('elementType')->getData();
-                    if ($parentElementType === 'row' || $parentElementType === 'column') {
-                        foreach ($data as $child) {
-                            if ($parentElementType === 'row' && $child['elementType'] !== 'column') {
-                                $form->addError(new FormError($this->translator->trans(
-                                    'layout_type.errors.invalid_element_in_row',
-                                    [],
-                                    'AdvancedContentBundle'
-                                )));
-                            }
-                            if ($parentElementType === 'column' && $child['elementType'] === 'column') {
-                                $form->addError(new FormError($this->translator->trans(
-                                    'layout_type.errors.invalid_element_in_column',
-                                    [],
-                                    'AdvancedContentBundle'
-                                )));
-                            }
-                        }
+                $parentElementType = $parentForm->has('elementType') ? $parentForm->get('elementType')->getData() : 'root';
+                foreach ($data as $child) {
+                    if ($parentElementType === 'root' && $child['elementType'] !== 'row') {
+                        $form->addError(new FormError($this->translator->trans(
+                            'layout_type.errors.invalid_element_in_root',
+                            [],
+                            'AdvancedContentBundle'
+                        )));
+                    }
+                    if ($parentElementType === 'row' && $child['elementType'] !== 'column') {
+                        $form->addError(new FormError($this->translator->trans(
+                            'layout_type.errors.invalid_element_in_row',
+                            [],
+                            'AdvancedContentBundle'
+                        )));
+                    }
+                    if ($parentElementType === 'column' &&
+                        ($child['elementType'] === 'column' || $child['elementType'] === 'row')
+                    ) {
+                        $form->addError(new FormError($this->translator->trans(
+                            'layout_type.errors.invalid_element_in_column',
+                            [],
+                            'AdvancedContentBundle'
+                        )));
                     }
                 }
             }
