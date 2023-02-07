@@ -326,38 +326,6 @@ jQuery(function ($) {
         );
     }
 
-    $('body').on('click', '.btn-append-layout', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        usedAddFieldBlock = null;
-        usedContainer = null;
-        let formData = new FormData();
-        let elements = [];
-        for (let i=0; i < parseInt($(this).data('col-num')); i++) {
-            elements.push({
-                'elementType': 'column',
-                'config': {
-                    'size': Math.round(12 / Math.max(1, parseInt($(this).data('col-num'))))
-                }
-            });
-        }
-        let data = {
-            'elementType': 'row',
-            'elements': elements
-        };
-        let layoutData = buildCustomLayoutFormData(formData, data, '__field_name__');
-
-        submitNewRow(
-            layoutData,
-            $('.acb-elements-container').data('edit-url') + '?type=row',
-            'POST',
-            $(this).closest('.acb-add-field-container').data('base-name'),
-            false,
-            true
-        );
-    });
-
     function updateAddButtons(group) {
         let lastElementType = null;
         group.children().each(function () {
@@ -393,6 +361,7 @@ jQuery(function ($) {
 
     let usedAddFieldBlock = null;
     let usedContainer = null;
+    let includeNewFieldInRowCol = false;
 
     $('body').on('click', '.btn-new-field', function () {
         let baseName = $(this).parents('.acb-sortable').parents('.acb-sortable-group').data('base-name');
@@ -413,6 +382,7 @@ jQuery(function ($) {
     $('body').on('click', '.btn-append-field', function () {
         usedAddFieldBlock = null;
         usedContainer = null;
+        includeNewFieldInRowCol = false;
         let baseName = $('.acb-elements-container').find('> .acb-sortable-group').data('base-name');
         let layout = $(this).closest('.acb-field');
         let addAfter = true;
@@ -440,6 +410,10 @@ jQuery(function ($) {
                     addAfter = false;
                 }
             }
+        } else {
+            // If there is no existing layout
+            // We will have to create it dynamically after new field is saved
+            includeNewFieldInRowCol = true;
         }
         openSlideForNewField(baseName, addAfter);
     });
@@ -620,46 +594,77 @@ jQuery(function ($) {
             type: method
         }).done(function (data) {
             if (data.success) {
-                let container = $('.acb-elements-container').find('> .acb-sortable-group');
-                if (usedContainer) {
-                    container = usedContainer;
-                }
-                if (usedAddFieldBlock) {
-                    container = usedAddFieldBlock.parents('.acb-sortable-group');
-                }
-                let counter = container.data('widget-counter') || container.find('> .acb-sortable').length;
+                if (includeNewFieldInRowCol) {
+                    usedAddFieldBlock = null;
+                    usedContainer = null;
+                    includeNewFieldInRowCol = false;
 
-                let preview = replacePlaceholderNewData(data.preview, baseName, counter);
-                let elementForm = replacePlaceholderNewData(data.form, baseName, counter);
-
-                counter++;
-                container.data('widget-counter', counter);
-                let mainElement;
-
-                if (usedAddFieldBlock) {
-                    mainElement = usedAddFieldBlock;
-                    if (addAfter) {
-                        usedAddFieldBlock.after(preview);
-                    } else {
-                        usedAddFieldBlock.before(preview);
+                    let layoutData = buildCustomLayoutFormData(new FormData(), {
+                        'elementType': 'row',
+                        'elements': [
+                            {
+                                'elementType': 'column',
+                                'config': {
+                                    'size': 12
+                                }
+                            }
+                        ]
+                    }, '__field_name__');
+                    let elementForm = replacePlaceholderNewData(data.form, '', 0);
+                    for (const [key, value] of Object.entries(extractRowData($(elementForm)))) {
+                        layoutData.append(key.replace('[__field_name__]', '__field_name__[elements][0][elements][0]'), value);
                     }
+
+                    submitNewRow(
+                        layoutData,
+                        $('.acb-elements-container').data('edit-url') + '?type=row',
+                        'POST',
+                        $('.acb-elements-container').find('> .acb-sortable-group').data('base-name'),
+                        isSlideOpened,
+                        addAfter
+                    );
                 } else {
-                    mainElement = container;
-                    if (addAfter) {
-                        container.append(preview);
-                    } else {
-                        container.prepend(preview);
+                    let container = $('.acb-elements-container').find('> .acb-sortable-group');
+                    if (usedContainer) {
+                        container = usedContainer;
                     }
-                }
-                $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
-                initSortables();
-                calculatePosition();
+                    if (usedAddFieldBlock) {
+                        container = usedAddFieldBlock.parents('.acb-sortable-group');
+                    }
+                    let counter = container.data('widget-counter') || container.find('> .acb-sortable').length;
 
-                if (isSlideOpened) {
-                    slide.close();
-                }
+                    let preview = replacePlaceholderNewData(data.preview, baseName, counter);
+                    let elementForm = replacePlaceholderNewData(data.form, baseName, counter);
 
-                mainElement.trigger('elementAdded');
+                    counter++;
+                    container.data('widget-counter', counter);
+                    let mainElement;
+
+                    if (usedAddFieldBlock) {
+                        mainElement = usedAddFieldBlock;
+                        if (addAfter) {
+                            usedAddFieldBlock.after(preview);
+                        } else {
+                            usedAddFieldBlock.before(preview);
+                        }
+                    } else {
+                        mainElement = container;
+                        if (addAfter) {
+                            container.append(preview);
+                        } else {
+                            container.prepend(preview);
+                        }
+                    }
+                    $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
+                    initSortables();
+                    calculatePosition();
+
+                    if (isSlideOpened) {
+                        slide.close();
+                    }
+
+                    mainElement.trigger('elementAdded');
+                }
             } else {
                 if (isSlideOpened) {
                     slide.setContent(data.content);
