@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Exception\InvalidElementException;
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
+use Sherlockode\AdvancedContentBundle\LayoutType\Column;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
@@ -119,7 +120,12 @@ class ElementImport
             $elementsData[] = $this->getElementImportData($childElement, $position++);
         }
 
-        return ['elements' => $elementsData];
+        $layoutData = [];
+        if ($element instanceof Column) {
+            $layoutData['config'] = $elementData['config'] ?? [];
+        }
+
+        return array_merge(['elements' => $elementsData], $layoutData);
     }
 
     private function processValueArray(array $data)
