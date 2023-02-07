@@ -19,6 +19,7 @@ jQuery(function ($) {
             }
             groups.each(function () {
                 let connectWithSelector = false;
+                let handleSelector = '.sortable-handle';
                 if ($(this).hasClass('acb-row-sortable-group')) {
                     // If you are in a row,
                     // then you are a column,
@@ -34,6 +35,8 @@ jQuery(function ($) {
                     // then you are a field or a row,
                     // so you can be moved in any column
                     connectWithSelector = '.acb-column-sortable-group';
+                } else {
+                    handleSelector = false;
                 }
 
                 let ckeditorConfigs = {};
@@ -42,6 +45,7 @@ jQuery(function ($) {
                     items: '> .acb-sortable',
                     cursor: "move",
                     placeholder: 'acb-sortable-drop-zone',
+                    handle: handleSelector,
                     update: function (event, ui) {
                         calculatePosition();
                     },
@@ -89,11 +93,31 @@ jQuery(function ($) {
                             $(event.target).data('base-name'),
                             previewRow.data('name')
                         );
+
+                        toggleColumnPlaceholderButton($(ui.sender), true);
+                    },
+                    out: function (event, ui) {
+                        toggleColumnPlaceholderButton($(event.target), true);
+                    },
+                    over: function (event, ui) {
+                        toggleColumnPlaceholderButton($(event.target), false);
                     }
                 });
             });
         } else {
             $('.element-position').show();
+        }
+    }
+
+    function toggleColumnPlaceholderButton(column, show) {
+        if (column.hasClass('acb-column-sortable-group')) {
+            if (column.find('.acb-sortable').length === 0) {
+                if (show) {
+                    column.find('.btn-append-field').show();
+                } else {
+                    column.find('.btn-append-field').hide();
+                }
+            }
         }
     }
 
@@ -109,12 +133,24 @@ jQuery(function ($) {
                     $(sortables[i]).find('.panel-position').first().html(newPosition);
                 }
             }
+            if ($(this).closest('.acb-field').hasClass('acb-layout-column')) {
+                if (sortables.length === 0) {
+                    $(this).closest('.acb-field').addClass('acb-empty-column');
+                } else {
+                    $(this).closest('.acb-field').removeClass('acb-empty-column');
+                }
+            }
         });
     }
 
     function ajaxFailCallback(jqXhr) {
         alert('An error occurred.');
     }
+
+    $('body').on('click', '.acb-collapse-row', function() {
+        $(this).closest('.acb-layout-row').toggleClass('collapsed');
+        $(this).find('i').toggleClass('fa-caret-down').toggleClass('fa-caret-up');
+    });
 
     $('body').on('click', '.acb-remove-row', function (e) {
         let group = $(this).closest('.acb-elements-container .acb-sortable-group');
@@ -262,22 +298,51 @@ jQuery(function ($) {
         usedContainer = null;
         let baseName = $('.acb-elements-container').find('> .acb-sortable-group').data('base-name');
         let layout = $(this).closest('.acb-field');
+        let addAfter = true;
         if (layout.length > 0) {
             if (layout.hasClass('acb-layout-row')) {
                 // We want to add a field within a row
                 // So we need to create a new column
+                let existingColumns = layout.find('> .acb-sortable');
+                let lastRowSize = 0;
+                existingColumns.each(function() {
+                    lastRowSize += parseInt($(this).data('col-size'));
+                    if (lastRowSize >= 12) {
+                        lastRowSize = 0;
+                    }
+                });
+
+                let formData = new FormData();
+                let data = {
+                    'elementType': 'column',
+                    'config': {
+                        'size': 12 - lastRowSize
+                    }
+                };
+                let columnData = buildCustomLayoutFormData(formData, data, '__field_name__');
+
                 usedContainer = layout;
-                baseName = layout.data('base-name');
-                getNewFieldForm($('.acb-elements-container').data('edit-url'), 'column', baseName, true);
+                submitNewRow(
+                    columnData,
+                    $('.acb-elements-container').data('edit-url') + '?type=column',
+                    'POST',
+                    layout.data('base-name'),
+                    false,
+                    true
+                );
+
                 return;
             } else if (layout.hasClass('acb-layout-column')) {
                 // We want to add a field within a column
                 // Container will be the column instead of root container
-                usedContainer = layout.find('> .acb-sortable-group');
+                usedContainer = layout.find('.acb-column-content').find('> .acb-sortable-group');
                 baseName = usedContainer.data('base-name');
+                if ($(this).closest('.acb-column-toolbar').hasClass('acb-column-toolbar-top')) {
+                    addAfter = false;
+                }
             }
         }
-        openSlideForNewField(baseName, true);
+        openSlideForNewField(baseName, addAfter);
     });
 
     function openSlideForNewField(baseName, addAfter) {
@@ -446,7 +511,11 @@ jQuery(function ($) {
                         usedAddFieldBlock.before(preview);
                     }
                 } else {
-                    container.append(preview);
+                    if (addAfter) {
+                        container.append(preview);
+                    } else {
+                        container.prepend(preview);
+                    }
                 }
                 $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
                 initSortables();
