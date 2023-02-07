@@ -141,7 +141,7 @@ init:
         layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
         page_missing_metas: Vous devez définir les métas de la page
-        element_missing_type: Vous devez définir le type du champ du contenu dans "%contentName%"
+        element_missing_type: Vous devez définir le type du champ du contenu
         content_missing_name: Vous devez définir le nom du contenu
         page_type_too_many_matches: Un seul type de page doit correspondre au nom "%name%"
         field_options_not_array: Les options du champ "%slug%" doivent être un tableau
@@ -172,3 +172,8 @@ tools:
         empty_list:
             page: Il n'y a pas de pages à exporter
             content: Il n'y a pas de contenus à exporter
+layout_type:
+    row:
+        label: Ligne
+    column:
+        label: Colonne

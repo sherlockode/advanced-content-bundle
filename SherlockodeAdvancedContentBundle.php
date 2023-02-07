@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle;
 
-use Sherlockode\AdvancedContentBundle\DependencyInjection\Compiler\FieldTypePass;
+use Sherlockode\AdvancedContentBundle\DependencyInjection\Compiler\ElementPass;
 use Sherlockode\AdvancedContentBundle\DependencyInjection\Compiler\FormThemePass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,7 +17,7 @@ class SherlockodeAdvancedContentBundle extends Bundle
     {
         parent::build($container);
         $this->addRegisterMappingsPass($container);
-        $container->addCompilerPass(new FieldTypePass());
+        $container->addCompilerPass(new ElementPass());
         $container->addCompilerPass(new FormThemePass());
     }
 

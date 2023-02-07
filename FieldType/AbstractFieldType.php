@@ -2,10 +2,13 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
+use Sherlockode\AdvancedContentBundle\Element\AbstractElement;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
-abstract class AbstractFieldType implements FieldTypeInterface
+abstract class AbstractFieldType extends AbstractElement implements FieldTypeInterface
 {
     protected $configData = [];
 
@@ -27,14 +30,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function getIconClass()
     {
         return $this->configData['icon'] ?? $this->getDefaultIconClass();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getDefaultIconClass()
-    {
-        return 'fa-solid fa-gear';
     }
 
     /**
@@ -62,8 +57,8 @@ abstract class AbstractFieldType implements FieldTypeInterface
      */
     public function buildContentElement(FormBuilderInterface $builder)
     {
-        $builder->add('fieldType', HiddenType::class);
-        $builder->add('position', HiddenType::class);
+        parent::buildContentElement($builder);
+
         $builder->add('value', $this->getFormFieldType(), array_merge(
             $this->getDefaultFormElementOptions(),
             $this->getFormElementOptions()
@@ -74,16 +69,30 @@ abstract class AbstractFieldType implements FieldTypeInterface
             $builder->get('value')
                 ->addModelTransformer($modelTransformer);
         }
+
+        $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+            if ($form->getConfig()->getCompound()) {
+                $cleanData = [];
+                // remove possibly obsolete data if the form was changed
+                foreach ($form as $key => $child) {
+                    if (isset($data[$key])) {
+                        $cleanData[$key] = $data[$key];
+                    }
+                }
+
+                $event->setData($cleanData);
+            }
+        });
     }
 
     /**
-     * Get options to apply on element
-     *
      * @return array
      */
-    public function getFormElementOptions()
+    public function getDefaultFormElementOptions()
     {
-        return [];
+        return ['label' => false];
     }
 
     /**
@@ -97,22 +106,13 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * Add field hint to element form
+     * Get options to apply on element
      *
      * @return array
      */
-    public function getDefaultFormElementOptions()
+    public function getFormElementOptions()
     {
-        $defaultOptions = ['label' => false];
-        if ($this->getHint()) {
-            $defaultOptions['attr']['help'] = $this->getHint();
-        }
-        return $defaultOptions;
-    }
-
-    public function getHint()
-    {
-        return null;
+        return [];
     }
 
     /**
@@ -121,6 +121,23 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function getFieldGroup()
     {
         return 'other';
+    }
+
+    /**
+     * @param array $element
+     *
+     * @return array
+     */
+    public function getRawData($element)
+    {
+        $rawValue = $this->getRawValue($element['value'] ?? null);
+        if (is_array($rawValue)) {
+            $rowData = $rawValue;
+        } else {
+            $rowData = ['value' => $rawValue];
+        }
+
+        return $rowData;
     }
 
     /**

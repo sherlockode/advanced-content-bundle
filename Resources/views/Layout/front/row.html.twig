@@ -1,0 +1,5 @@
+<div class="row">
+    {% for element in elements|default([]) %}
+        {{ acb_render_element(element) }}
+    {% endfor %}
+</div>

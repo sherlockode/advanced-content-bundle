@@ -141,7 +141,7 @@ init:
         layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
         page_missing_metas: You need to define the page metas
-        element_missing_type: You need to define the type of the element in "%contentName%"
+        element_missing_type: You need to define the type of the element
         content_missing_name: You need to define the name of the content
         page_type_too_many_matches: Only one PageType should match name "%name%"
         field_options_not_array: Options should be an array for field "%slug%"
@@ -172,3 +172,8 @@ tools:
         empty_list:
             page: There are no pages to export
             content: There are no contents to export
+layout_type:
+    row:
+        label: Row
+    column:
+        label: Column

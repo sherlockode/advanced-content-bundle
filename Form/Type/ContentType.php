@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ContentType extends AbstractType
 {
@@ -21,11 +22,18 @@ class ContentType extends AbstractType
     private $configurationManager;
 
     /**
-     * @param ConfigurationManager $configurationManager
+     * @var UrlGeneratorInterface
      */
-    public function __construct(ConfigurationManager $configurationManager)
+    private $urlGenerator;
+
+    /**
+     * @param ConfigurationManager  $configurationManager
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct(ConfigurationManager $configurationManager, UrlGeneratorInterface $urlGenerator)
     {
         $this->configurationManager = $configurationManager;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -45,9 +53,13 @@ class ContentType extends AbstractType
             ->add('locale', TextType::class, [
                 'label' => 'content.form.locale',
             ])
-            ->add('data', ContentDataType::class, [
+            ->add('data', ElementsType::class, [
                 'label' => 'content.form.data',
-            ]);
+                'row_attr' => [
+                    'class' => 'acb-elements-container',
+                    'data-edit-url' => $this->urlGenerator->generate('sherlockode_acb_content_field_form'),
+                ],
+            ])
         ;
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {

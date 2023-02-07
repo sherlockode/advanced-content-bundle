@@ -39,7 +39,7 @@
      data-name="{{ form.vars.full_name }}"
      data-form-id="{{ form.vars.id }}"
      data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
-     data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.fieldType}) }}"
+     data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
 >
     <div class="acb-field-heading">
         {% if form.vars.field_icon %}

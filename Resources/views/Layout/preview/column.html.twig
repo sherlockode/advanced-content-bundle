@@ -1,0 +1,5 @@
+<div class="col-6">
+    {% for element in elements|default([]) %}
+        {{ acb_element_preview(element) }}
+    {% endfor %}
+</div>

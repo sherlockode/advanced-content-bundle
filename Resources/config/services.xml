@@ -7,7 +7,7 @@
             <argument type="service" id="sherlockode_advanced_content.slug_provider"/>
         </service>
         <service id="sherlockode_advanced_content.configuration_manager" class="Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager" />
-        <service id="sherlockode_advanced_content.field_manager" class="Sherlockode\AdvancedContentBundle\Manager\FieldManager" />
+        <service id="sherlockode_advanced_content.element_manager" class="Sherlockode\AdvancedContentBundle\Manager\ElementManager" />
         <service id="sherlockode_advanced_content.upload_manager" class="Sherlockode\AdvancedContentBundle\Manager\UploadManager">
             <argument/>
             <argument/>
@@ -18,7 +18,7 @@
             <argument type="service" id="sherlockode_advanced_content.slug_provider"/>
         </service>
         <service id="sherlockode_advanced_content.content_extension" class="Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.element_manager"/>
             <argument type="service" id="twig"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>

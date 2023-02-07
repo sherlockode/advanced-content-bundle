@@ -3,17 +3,16 @@
     <services>
         <service id="sherlockode_advanced_content.form.content" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
+            <argument type="service" id="router"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.content_create" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
-        <service id="sherlockode_advanced_content.form.data" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentDataType">
-            <argument type="service" id="sherlockode_advanced_content.field_manager"/>
+        <service id="sherlockode_advanced_content.form.data" class="Sherlockode\AdvancedContentBundle\Form\Type\ElementsType">
+            <argument type="service" id="sherlockode_advanced_content.element_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="router"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.export" class="Sherlockode\AdvancedContentBundle\Form\Type\ExportType">

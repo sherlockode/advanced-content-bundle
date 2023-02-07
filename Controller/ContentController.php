@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\Type\ElementType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
-use Sherlockode\AdvancedContentBundle\Manager\FieldManager;
+use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,9 +31,9 @@ class ContentController extends AbstractController
     private $contentManager;
 
     /**
-     * @var FieldManager
+     * @var ElementManager
      */
-    private $fieldManager;
+    private $elementManager;
 
     /**
      * @var ConfigurationManager
@@ -55,22 +55,22 @@ class ContentController extends AbstractController
      *
      * @param EntityManagerInterface $em
      * @param ContentManager         $contentManager
-     * @param FieldManager           $fieldManager
+     * @param ElementManager         $elementManager
      * @param ConfigurationManager   $configurationManager
      * @param FormFactoryInterface   $formFactory
      * @param TranslatorInterface    $translator
      */
     public function __construct(
         EntityManagerInterface $em,
-        ContentManager $contentManager,
-        FieldManager $fieldManager,
-        ConfigurationManager $configurationManager,
-        FormFactoryInterface $formFactory,
-        TranslatorInterface $translator
+        ContentManager         $contentManager,
+        ElementManager         $elementManager,
+        ConfigurationManager   $configurationManager,
+        FormFactoryInterface   $formFactory,
+        TranslatorInterface    $translator
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
-        $this->fieldManager = $fieldManager;
+        $this->elementManager = $elementManager;
         $this->configurationManager = $configurationManager;
         $this->formFactory = $formFactory;
         $this->translator = $translator;
@@ -81,7 +81,7 @@ class ContentController extends AbstractController
      */
     public function addFieldAction()
     {
-        $fields = $this->fieldManager->getGroupedFieldTypes();
+        $fields = $this->elementManager->getGroupedFieldTypes();
 
         return new JsonResponse([
             'title' => $this->translator->trans('content.add_field', [], 'AdvancedContentBundle'),
@@ -98,14 +98,14 @@ class ContentController extends AbstractController
      */
     public function fieldFormAction(Request $request)
     {
-        $fieldType = $this->fieldManager->getFieldTypeByCode($request->get('type'));
-        $element = [];
-        $element['fieldType'] = $fieldType->getCode();
-        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementType::class, $element, [
-            'field_type' => $fieldType,
-            'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $fieldType->getCode()]),
+        $element = $this->elementManager->getElementByCode($request->get('type'));
+        $elementData = [];
+        $elementData['elementType'] = $element->getCode();
+        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementType::class, $elementData, [
+            'element_type' => $element,
+            'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
             'csrf_protection' => false,
-            'label' => $fieldType->getFormFieldLabel(),
+            'label' => $element->getFormFieldLabel(),
         ]);
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
@@ -129,7 +129,7 @@ class ContentController extends AbstractController
         }
 
         return new JsonResponse([
-            'title' => $this->translator->trans($fieldType->getFormFieldLabel(), [], 'AdvancedContentBundle'),
+            'title' => $this->translator->trans($element->getFormFieldLabel(), [], 'AdvancedContentBundle'),
             'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
                 'form' => $form->createView(),
             ]),
