@@ -151,6 +151,21 @@
                 padding: 8px;
             }
         }
+        .change-display {
+            position: relative;
+            &:hover {
+                .change-display-options {
+                    display: flex;
+                }
+            }
+        }
+        .change-display-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+        }
     }
 
     &.acb-layout-column {

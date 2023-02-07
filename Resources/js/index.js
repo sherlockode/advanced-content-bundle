@@ -209,6 +209,123 @@ jQuery(function ($) {
         );
     });
 
+    $('body').on('click', '.change-display-options button', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        let row = $(this).closest('.acb-field');
+        let colNumber = parseInt($(this).data('col-num'));
+        let colSize = Math.round(12 / Math.max(1, colNumber));
+        let currentColumns = row.find('> .acb-sortable');
+        let currentColNumber = currentColumns.length;
+
+        if (currentColNumber > colNumber) {
+            // I currently have 4 columns
+            // I want to use only 2 columns
+            // I need to move content from columns 3 and 4 into column 2
+            // Then remove columns 3 and 4
+            // And finally change size of columns 1 and 2
+            let targetColumnContainer = $(currentColumns[colNumber - 1]).find('.acb-sortable-group');
+            let elementsToMove = [];
+            let elementsMoved = 0;
+            currentColumns.each(function (index, element) {
+                if (index >= colNumber) {
+                    let columnElements = $(element).find('.acb-sortable-group > .acb-sortable');
+                    columnElements.each(function (fieldIndex, field) {
+                        let previewRow = $(field).closest('.acb-row');
+                        let fieldName = previewRow.data('name');
+                        let formRow = $('.acb-element-form[data-name="' + fieldName + '"]');
+                        let formData = new FormData();
+                        for (const [key, value] of Object.entries(extractRowData(formRow))) {
+                            formData.append(key, value);
+                        }
+                        previewRow.appendTo(targetColumnContainer);
+
+                        elementsToMove.push({
+                            'formData': formData,
+                            'duplicateUrl': $(field).find('.acb-element-toolbar').data('duplicate-url'),
+                            'fieldName': fieldName
+                        });
+                    });
+                    $(element).find('.acb-column-toolbar .acb-remove-row').click();
+                } else {
+                    $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
+                }
+            });
+            if (elementsToMove.length > 0) {
+                targetColumnContainer.on('elementMoved', function () {
+                    elementsMoved++;
+                    if (elementsMoved === elementsToMove.length) {
+                        targetColumnContainer.off('elementMoved');
+                        // When all elements have been moved to the last column
+                        // Update row data and display updated preview
+                        updateRowAfterLayoutUpdate(row);
+                    }
+                });
+                for (let i = 0; i < elementsToMove.length; i++) {
+                    moveElementToList(
+                        elementsToMove[i].formData,
+                        elementsToMove[i].duplicateUrl,
+                        'POST',
+                        targetColumnContainer.data('base-name'),
+                        elementsToMove[i].fieldName
+                    );
+                }
+            } else {
+                updateRowAfterLayoutUpdate(row);
+            }
+        } else if (currentColNumber < colNumber) {
+            // I currently have 2 columns
+            // I want to use 3 columns
+            // I need to add a third column
+            // Then change size of all columns
+
+            let columnsToAdd = colNumber - currentColNumber;
+            let columnsAdded = 0;
+
+            row.on('elementAdded', function () {
+                columnsAdded++;
+                if (columnsAdded === columnsToAdd) {
+                    row.off('elementAdded');
+
+                    currentColumns.each(function (index, element) {
+                        $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
+                    });
+                    // When all columns have been added
+                    // Update row data and display updated preview
+                    updateRowAfterLayoutUpdate(row);
+                }
+            });
+            for (let i = 0; i < columnsToAdd; i++) {
+                addColumnToRow(colSize, row);
+            }
+        } else {
+            // I currently have 2 columns
+            // I want to use 2 columns
+            // I need to change size of existing columns
+
+            currentColumns.each(function (index, element) {
+                $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
+            });
+            updateRowAfterLayoutUpdate(row);
+        }
+    });
+
+    function updateRowAfterLayoutUpdate(row) {
+        let formData = new FormData();
+        for (const [key, value] of Object.entries(extractRowData($('.acb-element-form[data-name="' + row.data('name') + '"]')))) {
+            formData.append(key, value);
+        }
+
+        saveExistingField(
+            $('.acb-elements-container').data('edit-url') + '?type=row',
+            formData,
+            'POST',
+            row,
+            false
+        );
+    }
+
     $('body').on('click', '.btn-append-layout', function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -311,25 +428,7 @@ jQuery(function ($) {
                         lastRowSize = 0;
                     }
                 });
-
-                let formData = new FormData();
-                let data = {
-                    'elementType': 'column',
-                    'config': {
-                        'size': 12 - lastRowSize
-                    }
-                };
-                let columnData = buildCustomLayoutFormData(formData, data, '__field_name__');
-
-                usedContainer = layout;
-                submitNewRow(
-                    columnData,
-                    $('.acb-elements-container').data('edit-url') + '?type=column',
-                    'POST',
-                    layout.data('base-name'),
-                    false,
-                    true
-                );
+                addColumnToRow(12 - lastRowSize, layout);
 
                 return;
             } else if (layout.hasClass('acb-layout-column')) {
@@ -344,6 +443,29 @@ jQuery(function ($) {
         }
         openSlideForNewField(baseName, addAfter);
     });
+
+    function addColumnToRow(columnSize, row) {
+        let formData = new FormData();
+        let data = {
+            'elementType': 'column',
+            'config': {
+                'size': columnSize
+            }
+        };
+        let columnData = buildCustomLayoutFormData(formData, data, '__field_name__');
+
+        usedAddFieldBlock = null;
+        usedContainer = row;
+
+        submitNewRow(
+            columnData,
+            $('.acb-elements-container').data('edit-url') + '?type=column',
+            'POST',
+            row.data('base-name'),
+            false,
+            true
+        );
+    }
 
     function openSlideForNewField(baseName, addAfter) {
         slide.empty();
@@ -445,12 +567,16 @@ jQuery(function ($) {
     // convert slide form to content preview
     function saveFieldData(form, name, row) {
         updateCKEditorElement(form);
+        saveExistingField(form.action, new FormData(form), form.method, row, true);
+    }
+
+    function saveExistingField(url, formData, method, row, isSlideOpened) {
         $.ajax({
-            url: form.action,
-            data: new FormData(form),
+            url: url,
+            data: formData,
             processData: false,
             contentType: false,
-            type: form.method
+            type: method
         }).done(function (data) {
             if (data.success) {
                 let preview = $(replacePlaceholderEditData(data.preview, row));
@@ -459,17 +585,22 @@ jQuery(function ($) {
 
                 let elementForm = $(replacePlaceholderEditData(data.form, row));
                 elementForm.data('form-index', row.data('form-index'));
-                $('.acb-element-form[data-name="' + name + '"]').replaceWith(elementForm);
+                $('.acb-element-form[data-name="' + row.data('name') + '"]').replaceWith(elementForm);
 
+                initSortables();
                 calculatePosition();
 
-                slide.close();
+                if (isSlideOpened) {
+                    slide.close();
+                }
             } else {
-                slide.setContent(data.content);
-                slide.content.find('.acb-edit-field-form').on('submit', function (e) {
-                    e.preventDefault();
-                    saveFieldData(this, row.data('name'), row);
-                });
+                if (isSlideOpened) {
+                    slide.setContent(data.content);
+                    slide.content.find('.acb-edit-field-form').on('submit', function (e) {
+                        e.preventDefault();
+                        saveFieldData(this, row.data('name'), row);
+                    });
+                }
             }
         });
     }
@@ -503,14 +634,17 @@ jQuery(function ($) {
 
                 counter++;
                 container.data('widget-counter', counter);
+                let mainElement;
 
                 if (usedAddFieldBlock) {
+                    mainElement = usedAddFieldBlock;
                     if (addAfter) {
                         usedAddFieldBlock.after(preview);
                     } else {
                         usedAddFieldBlock.before(preview);
                     }
                 } else {
+                    mainElement = container;
                     if (addAfter) {
                         container.append(preview);
                     } else {
@@ -524,6 +658,8 @@ jQuery(function ($) {
                 if (isSlideOpened) {
                     slide.close();
                 }
+
+                mainElement.trigger('elementAdded');
             } else {
                 if (isSlideOpened) {
                     slide.setContent(data.content);
@@ -558,6 +694,8 @@ jQuery(function ($) {
                 $('.acb-elements-form-container').find('.acb-element-form[data-name="' + oldName + '"]').remove();
                 $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
                 calculatePosition();
+
+                container.trigger('elementMoved');
             }
         });
     }

@@ -112,6 +112,19 @@ class ContentController extends AbstractController
 
         if (!$request->query->get('edit') && $form->isSubmitted()) {
             if ($form->isValid()) {
+                // Rebuild form for row and columns
+                // Because data is being rearranged on submit
+                // Otherwise posted elements cannot be matched with form children
+                if ($element->getCode() === 'row' || $element->getCode() === 'column') {
+                    $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementType::class, $form->getData(), [
+                        'element_type'    => $element,
+                        'action'          => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
+                        'csrf_protection' => false,
+                        'label'           => $element->getFormFieldLabel(),
+                    ]);
+                    $form = $formBuilder->getForm();
+                }
+
                 return new JsonResponse([
                     'success' => true,
                     'preview' => $this->renderView('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
