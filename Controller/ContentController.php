@@ -116,7 +116,10 @@ class ContentController extends AbstractController
                     'success' => true,
                     'preview' => $this->renderView('@SherlockodeAdvancedContent/Content/_field_preview.html.twig', [
                         'form' => $form->createView(),
-                    ])
+                    ]),
+                    'form' => $this->renderView('@SherlockodeAdvancedContent/Content/_field_form.html.twig', [
+                        'form' => $form->createView(),
+                    ]),
                 ]);
             } else {
                 return new JsonResponse([

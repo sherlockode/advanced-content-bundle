@@ -101,7 +101,7 @@ abstract class Content implements ContentInterface
     public function getData()
     {
         $data = $this->data ?? [];
-        usort($data, function ($a, $b) {
+        uasort($data, function ($a, $b) {
             return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
         });
 

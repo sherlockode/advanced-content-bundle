@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
+use Symfony\Component\Form\FormView;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -71,6 +72,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_base_form_theme', [$this, 'getBaseFormTheme']),
             new TwigFunction('acb_get_file_url', [$this, 'getFileUrl']),
             new TwigFunction('acb_get_full_url', [$this, 'getFullUrl']),
+            new TwigFunction('acb_get_element_label', [$this, 'getElementLabel']),
         ];
     }
 
@@ -83,11 +85,12 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * @param array $elementData
+     * @param array         $elementData
+     * @param FormView|null $form
      *
      * @return string
      */
-    public function renderElementPreview(array $elementData)
+    public function renderElementPreview(array $elementData, FormView $form = null): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
 
@@ -97,7 +100,7 @@ class ContentExtension extends AbstractExtension
             $template = '@SherlockodeAdvancedContent/Field/preview/no_preview.html.twig';
         }
 
-        return $this->twig->render($template, $params);
+        return $this->twig->render($template, array_merge($params, ['form' => $form]));
     }
 
 
@@ -132,5 +135,17 @@ class ContentExtension extends AbstractExtension
     public function getFullUrl(string $url): string
     {
         return $this->urlBuilderManager->getFullUrl($url);
+    }
+
+    /**
+     * @param string $elementType
+     *
+     * @return string
+     */
+    public function getElementLabel(string $elementType): string
+    {
+        $element = $this->elementManager->getElementByCode($elementType);
+
+        return $element->getFormFieldLabel();
     }
 }

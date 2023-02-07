@@ -43,9 +43,11 @@ class Slide
     }
 
     open() {
-        $('body').append(this.slideLayer);
-        $('body').append(this.element);
-        setTimeout(() => $('body').addClass('acb-lateral-slide-open'), 10);
+        if (!$('body').hasClass('acb-lateral-slide-open')) {
+            $('body').append(this.slideLayer);
+            $('body').append(this.element);
+            setTimeout(() => $('body').addClass('acb-lateral-slide-open'), 10);
+        }
     }
 
     close() {

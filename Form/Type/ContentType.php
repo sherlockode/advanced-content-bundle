@@ -58,6 +58,10 @@ class ContentType extends AbstractType
                 'row_attr' => [
                     'class' => 'acb-elements-container',
                     'data-edit-url' => $this->urlGenerator->generate('sherlockode_acb_content_field_form'),
+                    'data-new-field-url' => $this->urlGenerator->generate('sherlockode_acb_content_add_field'),
+                ],
+                'attr' => [
+                    'class' => 'acb-elements-form-container',
                 ],
             ])
         ;

@@ -44,7 +44,10 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
         parent::buildContentElement($builder);
 
         $builder->add('elements', ElementsType::class, [
-            'label' => 'content.form.data',
+            'label' => false,
+            'row_attr' => [
+                'class' => 'acb-layout-elements-container',
+            ],
         ]);
     }
 
@@ -56,7 +59,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
     public function getRawData($element)
     {
         $elements = $element['elements'] ?? [];
-        usort($elements, function ($a, $b) {
+        uasort($elements, function ($a, $b) {
             return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
         });
 

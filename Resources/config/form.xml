@@ -13,6 +13,7 @@
         <service id="sherlockode_advanced_content.form.data" class="Sherlockode\AdvancedContentBundle\Form\Type\ElementsType">
             <argument type="service" id="sherlockode_advanced_content.element_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="translator"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.export" class="Sherlockode\AdvancedContentBundle\Form\Type\ExportType">
