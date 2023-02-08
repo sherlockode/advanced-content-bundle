@@ -137,7 +137,9 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
             $rowData = ['value' => $rawValue];
         }
 
-        return $rowData;
+        return array_merge($rowData, [
+            'extra' => $element['extra'] ?? [],
+        ]);
     }
 
     /**

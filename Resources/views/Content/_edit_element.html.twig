@@ -3,7 +3,67 @@
 {% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
 
 {{ form_start(form, {attr: form.vars.attr|merge({class: form.vars.attr.class|default('') ~ ' acb-edit-field-form', id: form.vars.id})}) }}
+
+{% set hasConfigurationFieldsToDisplay = false %}
 {% for child in form %}
-    {{ form_row(child) }}
+    {% if child.vars.name != 'extra' %}
+         {% if 'hidden' not in child.vars.block_prefixes %}
+             {% if child.vars.compound == false or child.children|length > 0 %}
+                 {% set hasConfigurationFieldsToDisplay = true %}
+             {% endif %}
+         {% endif %}
+    {% endif %}
 {% endfor %}
+
+<ul class="nav nav-tabs" role="tablist">
+    {% if hasConfigurationFieldsToDisplay %}
+        <li class="nav-item" role="presentation">
+            <button type="button"
+                    class="nav-link active"
+                    id="configuration-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#configuration"
+                    role="tab"
+                    aria-controls="configuration"
+                    aria-selected="true"
+            >{{ 'configuration.label'|trans }}</button>
+        </li>
+    {% endif %}
+    <li class="nav-item" role="presentation">
+        <button type="button"
+                class="nav-link {{ hasConfigurationFieldsToDisplay ? '' : 'active' }}"
+                id="advanced-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#advanced"
+                role="tab"
+                aria-controls="advanced"
+                aria-selected="{{ hasConfigurationFieldsToDisplay ? 'false' : 'true' }}"
+        >{{ 'configuration.advanced.label'|trans }}</button>
+    </li>
+</ul>
+<div class="tab-content pt-3">
+    {% if hasConfigurationFieldsToDisplay %}
+        <div class="tab-pane fade show active" id="configuration" role="tabpanel" aria-labelledby="configuration-tab">
+            {% for child in form %}
+                {% if child.vars.name != 'extra' %}
+                    {{ form_row(child) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="tab-pane fade {{ hasConfigurationFieldsToDisplay ? '' : 'show active' }}" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+        {% for child in form.extra.advanced %}
+            {{ form_row(child) }}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="d-none">
+    {% for child in form %}
+        {% if not child.isRendered() %}
+            {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+</div>
+
 {{ form_end(form) }}

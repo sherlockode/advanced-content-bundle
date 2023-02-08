@@ -1,5 +1,7 @@
-<div>
-    <p>
-        {{ value|nl2br }}
-    </p>
-</div>
+{% set attributes = acb_get_element_attributes(extra|default([])) %}
+
+<p class="{{ attributes.classes }}"
+   {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+>
+    {{ value|nl2br }}
+</p>

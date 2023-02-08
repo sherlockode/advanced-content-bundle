@@ -1,5 +1,10 @@
 {% if entity is not null %}
-    {% for element in entity.data %}
-        {{ acb_render_element(element) }}
-    {% endfor %}
+    {% set attributes = acb_get_element_attributes(extra|default([])) %}
+    <div class="{{ attributes.classes }}"
+       {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+    >
+        {% for element in entity.data %}
+            {{ acb_render_element(element) }}
+        {% endfor %}
+    </div>
 {% endif %}

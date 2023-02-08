@@ -75,6 +75,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_element_label', [$this, 'getElementLabel']),
             new TwigFunction('acb_get_column_classes', [$this, 'getColumnClasses']),
             new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
+            new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
         ];
     }
 
@@ -198,5 +199,56 @@ class ContentExtension extends AbstractExtension
         }
 
         return $classes;
+    }
+
+    /**
+     * @param array  $extra
+     * @param string $defaultDisplay
+     *
+     * @return array
+     */
+    public function getElementAttributes(array $extra, string $defaultDisplay = 'block'): array
+    {
+        $classes = [];
+
+        $advanced = $extra['advanced'] ?? [];
+        if ($advanced['class'] ?? '') {
+            $classes[] = $advanced['class'];
+        }
+
+        $hideOn = $advanced['hide_on'] ?? [];
+        if (!is_array($hideOn)) {
+            $hideOn = [$hideOn];
+        }
+        if (count($hideOn) > 0) {
+            $devices = [
+                'xs',
+                'sm',
+                'md',
+                'lg',
+                'xl',
+            ];
+            $lastDisplayed = null;
+            $lastHidden = null;
+
+            foreach ($devices as $key => $device) {
+                if (in_array($device, $hideOn)) {
+                    if ($lastHidden === null || ($lastHidden + 1) !== $key) {
+                        $classes[] = 'd-' . ($device === 'xs' ? '' : $device . '-') . 'none';
+                    }
+                    $lastHidden = $key;
+                } else {
+                    if ($device !== 'xs' && ($lastDisplayed === null || ($lastDisplayed + 1) !== $key)) {
+                        $classes[] = 'd-' . $device . '-' . $defaultDisplay;
+                    }
+                    $lastDisplayed = $key;
+                }
+            }
+        }
+
+        return [
+            'classes' => implode(' ', $classes),
+            'id' => $advanced['id'] ?? null,
+        ];
     }
 }

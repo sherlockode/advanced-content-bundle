@@ -73,6 +73,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
         return [
             'elements' => $elements,
             'config' => $element['config'] ?? [],
+            'extra' => $element['extra'] ?? [],
         ];
     }
 

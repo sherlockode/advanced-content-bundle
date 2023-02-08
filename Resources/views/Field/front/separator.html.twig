@@ -1,1 +1,5 @@
-<hr>
+{% set attributes = acb_get_element_attributes(extra|default([])) %}
+
+<hr class="{{ attributes.classes }}"
+    {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+>

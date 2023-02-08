@@ -15,7 +15,7 @@ class Slide
         this.slideLayer = $('<div class="acb-lateral-slide-layer"></div>');
 
         let self = this;
-        this.element.find('.btn-close').on('click', function () {
+        this.element.on('click', '.btn-cancel, .btn-close', function () {
             self.close();
         });
         this.slideLayer.on('click', function () {

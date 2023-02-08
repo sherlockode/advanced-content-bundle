@@ -1,3 +1,8 @@
-<div>
-    <a href="{{ url }}">{{ title }}</a>
-</div>
+{% set attributes = acb_get_element_attributes(extra|default([])) %}
+
+<a href="{{ url }}"
+   class="{{ attributes.classes }}"
+   {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+>
+    {{ title }}
+</a>

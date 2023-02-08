@@ -238,3 +238,10 @@ responsive:
         tablet_portrait: Tablette Portrait
         tablet_landscape: Tablette Paysage
         desktop: Ecran ordinateur
+configuration:
+    label: Configuration
+    advanced:
+        label: Avancé
+        class: Classe de l'élément
+        id: ID de l'élément (Attention à l'unicité des IDs sur chaque page)
+        hide_on: Cacher l'élément
