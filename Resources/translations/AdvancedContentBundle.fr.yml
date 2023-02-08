@@ -181,7 +181,35 @@ layout_type:
     column:
         label: Colonne
         config:
-            size: Taille (de 1 à 12)
+            inherit_from_smaller: Hérite du support précédent
+            size: Taille
+            offset: Décalage latéral
+            sizes:
+                1_column: Une colonne - 1/12
+                2_column: Deux colonnes - 1/6
+                3_column: Trois colonnes - 1/4
+                4_column: Quatre colonnes - 1/3
+                5_column: Cinq colonnes - 5/12
+                6_column: Six colonnes - 1/2
+                7_column: Sept colonnes - 7/12
+                8_column: Huit colonnes - 2/3
+                9_column: Neuf colonnes - 3/4
+                10_column: Dix colonnes - 5/6
+                11_column: Onze colonnes - 11/12
+                12_column: Douze colonnes - 1/1
+            offsets:
+                no_offset: Pas de décalage
+                1_column: Une colonne - 1/12
+                2_column: Deux colonnes - 1/6
+                3_column: Trois colonnes - 1/4
+                4_column: Quatre colonnes - 1/3
+                5_column: Cinq colonnes - 5/12
+                6_column: Six colonnes - 1/2
+                7_column: Sept colonnes - 7/12
+                8_column: Huit colonnes - 2/3
+                9_column: Neuf colonnes - 3/4
+                10_column: Dix colonnes - 5/6
+                11_column: Onze colonnes - 11/12
     errors:
         invalid_element_in_root: Seules des lignes peuvent être placées dans le contenant principal.
         invalid_element_in_row: Seules des colonnes peuvent être placées dans des lignes.
@@ -191,3 +219,11 @@ layout_type:
         two_columns: 1/2 + 1/2
         three_columns: 1/3 + 1/3 + 1/3
         four_columns: 1/4 + 1/4 + 1/4 + 1/4
+responsive:
+    device: Support
+    devices:
+        mobile_portrait: Mobile Portrait
+        mobile_landscape: Mobile Paysage
+        tablet_portrait: Tablette Portrait
+        tablet_landscape: Tablette Paysage
+        desktop: Ecran ordinateur

@@ -277,3 +277,18 @@
     background-image: linear-gradient(45deg, #d4d4d4 8.33%, #ffffff 8.33%, #ffffff 50%, #d4d4d4 50%, #d4d4d4 58.33%, #ffffff 58.33%, #ffffff 100%);
     background-size: 8.49px 8.49px;
 }
+
+.acb-column-config {
+    th {
+        text-align: center;
+    }
+    td {
+        padding: 20px;
+    }
+    .device-type {
+        text-align: center;
+        i {
+            font-size: 30px;
+        }
+    }
+}

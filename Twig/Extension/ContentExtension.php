@@ -73,6 +73,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_file_url', [$this, 'getFileUrl']),
             new TwigFunction('acb_get_full_url', [$this, 'getFullUrl']),
             new TwigFunction('acb_get_element_label', [$this, 'getElementLabel']),
+            new TwigFunction('acb_get_column_classes', [$this, 'getColumnClasses']),
         ];
     }
 
@@ -147,5 +148,38 @@ class ContentExtension extends AbstractExtension
         $element = $this->elementManager->getElementByCode($elementType);
 
         return $element->getFormFieldLabel();
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    public function getColumnClasses(array $config): array
+    {
+        $classes = [];
+        $size = $config['size'] ?? 12;
+        $classes[] = 'col-' . $size;
+        $offset = $config['offset'] ?? 0;
+        if (!empty($offset)) {
+            $classes[] = 'offset-' . $offset;
+        }
+
+        $devices = [
+            'sm',
+            'md',
+            'lg',
+            'xl',
+        ];
+        foreach ($devices as $device) {
+            if (isset($config['size_' . $device])) {
+                $classes[] = 'col-' . $device . '-' . $config['size_' . $device];
+            }
+            if (isset($config['offset_' . $device])) {
+                $classes[] = 'offset-' . $device . '-' . $config['offset_' . $device];
+            }
+        }
+
+        return $classes;
     }
 }
