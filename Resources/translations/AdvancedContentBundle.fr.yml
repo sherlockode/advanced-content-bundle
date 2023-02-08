@@ -92,6 +92,7 @@ actions: Actions
 back_to_list: Retour à la liste
 cancel: Annuler
 delete: Supprimer
+delete_confirm: Etes-vous sûr de vouloir supprimer cet élément ?
 edit: Modifier
 save: Valider
 show: Voir

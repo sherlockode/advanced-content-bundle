@@ -65,7 +65,7 @@
             </button>
         {% endif %}
         {% if allowDelete is not defined or allowDelete == true %}
-            <button type="button" class="acb-remove-row" title="{{ 'delete'|trans }}">
+            <button type="button" class="acb-remove-row" title="{{ 'delete'|trans }}" data-confirm-delete="{{ 'delete_confirm'|trans }}">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         {% endif %}
