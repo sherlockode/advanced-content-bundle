@@ -2,6 +2,7 @@ import Slide from "./slide.js";
 import jQuery from "jquery";
 import './slug.js';
 import './export.js';
+import './page.js';
 
 jQuery(function ($) {
     ////////////

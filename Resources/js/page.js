@@ -28,7 +28,7 @@ jQuery(function ($) {
         // prevent dropdown from closing if clicked inside
         e.stopPropagation();
     });
-    $('.acb_translations .acb-duplicate-dropdown button').on('click', function () {
+    $('.acb_translations .acb-duplicate-dropdown .dropdown-menu button').on('click', function () {
         let button = $(this);
 
         let data = {
