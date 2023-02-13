@@ -1,9 +1,10 @@
 {% if url is not empty %}
     {% set attributes = acb_get_element_attributes(extra|default([]), 'inline') %}
-
+    {% set style = attributes.style|default('') %}
     <img src="{{ url }}"
          alt="{{ alt is defined ? alt : '' }}"
          class="{{ attributes.classes }}"
          {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+         {% if style|trim is not empty %}style="{{ style }}"{% endif %}
     />
 {% endif %}

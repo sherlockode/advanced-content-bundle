@@ -24,6 +24,9 @@ class ElementType extends AbstractType
         $builder->get('extra')->add('advanced', ElementAdvancedType::class, [
             'label' => false,
         ]);
+        $builder->get('extra')->add('design', ElementDesignType::class, [
+            'label' => false,
+        ]);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

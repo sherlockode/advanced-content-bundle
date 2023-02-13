@@ -209,6 +209,21 @@ class ContentExtension extends AbstractExtension
      */
     public function getElementAttributes(array $extra, string $defaultDisplay = 'block'): array
     {
+        return [
+            'classes' => implode(' ', $this->getElementClasses($extra, $defaultDisplay)),
+            'id' => $extra['advanced']['id'] ?? null,
+            'style' => implode(';', $this->getElementStyles($extra)),
+        ];
+    }
+
+    /**
+     * @param array  $extra
+     * @param string $defaultDisplay
+     *
+     * @return array
+     */
+    private function getElementClasses(array $extra, string $defaultDisplay = 'block'): array
+    {
         $classes = [];
 
         $advanced = $extra['advanced'] ?? [];
@@ -246,9 +261,80 @@ class ContentExtension extends AbstractExtension
             }
         }
 
-        return [
-            'classes' => implode(' ', $classes),
-            'id' => $advanced['id'] ?? null,
-        ];
+        return $classes;
+    }
+
+    /**
+     * @param array $extra
+     *
+     * @return array
+     */
+    private function getElementStyles(array $extra): array
+    {
+        $design = $extra['design'] ?? [];
+        $styles = [];
+
+        foreach ($this->getPixelProperties() as $property) {
+            if ($design[$property] ?? null) {
+                $styles[] = str_replace('_', '-', $property) . ':' . $design[$property] . 'px';
+            }
+        }
+
+        $colorProperties = ['border', 'background'];
+        foreach ($colorProperties as $colorProperty) {
+            $color = $this->getColorForProperty($design, $colorProperty);
+            if ($color !== null) {
+                $styles[] = $colorProperty . '-color:' . $color;
+            }
+        }
+
+        $borderStyle = $design['border_style'] ?? 'none';
+        if ($borderStyle !== 'none') {
+            $styles[] = 'border-style:' . $borderStyle;
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @param array  $design
+     * @param string $property
+     *
+     * @return string|null
+     */
+    private function getColorForProperty(array $design, string $property): ?string
+    {
+        $selectColor = $design[$property . '_color_select'] ?? 'none';
+        if ($selectColor === 'none') {
+            return null;
+        }
+        if ($selectColor === 'transparent') {
+            return 'transparent';
+        }
+
+        return $design[$property . '_color'] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPixelProperties(): array
+    {
+        $directions = ['top', 'right', 'bottom', 'left'];
+        $properties = ['margin_%s', 'border_%s_width', 'padding_%s'];
+        $pixelProperties = [];
+        foreach ($properties as $property) {
+            foreach ($directions as $direction) {
+                $pixelProperties[] = sprintf($property, $direction);
+            }
+        }
+        $pixelProperties = array_merge($pixelProperties, [
+            'border_top_left_radius',
+            'border_top_right_radius',
+            'border_bottom_right_radius',
+            'border_bottom_left_radius',
+        ]);
+
+        return $pixelProperties;
     }
 }

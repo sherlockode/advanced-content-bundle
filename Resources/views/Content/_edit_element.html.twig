@@ -32,12 +32,23 @@
     <li class="nav-item" role="presentation">
         <button type="button"
                 class="nav-link {{ hasConfigurationFieldsToDisplay ? '' : 'active' }}"
+                id="design-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#design"
+                role="tab"
+                aria-controls="design"
+                aria-selected="{{ hasConfigurationFieldsToDisplay ? 'false' : 'true' }}"
+        >{{ 'configuration.design.label'|trans }}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button type="button"
+                class="nav-link"
                 id="advanced-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#advanced"
                 role="tab"
                 aria-controls="advanced"
-                aria-selected="{{ hasConfigurationFieldsToDisplay ? 'false' : 'true' }}"
+                aria-selected="false"
         >{{ 'configuration.advanced.label'|trans }}</button>
     </li>
 </ul>
@@ -51,7 +62,88 @@
             {% endfor %}
         </div>
     {% endif %}
-    <div class="tab-pane fade {{ hasConfigurationFieldsToDisplay ? '' : 'show active' }}" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+    <div class="tab-pane fade {{ hasConfigurationFieldsToDisplay ? '' : 'show active' }}" id="design" role="tabpanel" aria-labelledby="design-tab">
+        <div class="row element-design-form">
+            <div class="col-6 box-model p-3">
+                <div class="box-radius box-element">
+                    <span class="title">{{ 'configuration.design.radius'|trans }}</span>
+                    {{ form_widget(form.extra.design.border_top_left_radius) }}
+                    {{ form_widget(form.extra.design.border_top_right_radius) }}
+                    {{ form_widget(form.extra.design.border_bottom_right_radius) }}
+                    {{ form_widget(form.extra.design.border_bottom_left_radius) }}
+                    <div class="box-margin box-element">
+                        <span class="title">{{ 'configuration.design.margin'|trans }}</span>
+                        {{ form_widget(form.extra.design.margin_top) }}
+                        {{ form_widget(form.extra.design.margin_right) }}
+                        {{ form_widget(form.extra.design.margin_bottom) }}
+                        {{ form_widget(form.extra.design.margin_left) }}
+                        <div class="box-border box-element">
+                            <span class="title">{{ 'configuration.design.border'|trans }}</span>
+                            {{ form_widget(form.extra.design.border_top_width) }}
+                            {{ form_widget(form.extra.design.border_right_width) }}
+                            {{ form_widget(form.extra.design.border_bottom_width) }}
+                            {{ form_widget(form.extra.design.border_left_width) }}
+                            <div class="box-padding box-element">
+                                <span class="title">{{ 'configuration.design.padding'|trans }}</span>
+                                {{ form_widget(form.extra.design.padding_top) }}
+                                {{ form_widget(form.extra.design.padding_right) }}
+                                {{ form_widget(form.extra.design.padding_bottom) }}
+                                {{ form_widget(form.extra.design.padding_left) }}
+                                <div class="box-content box-element">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5">
+                    {{ form_row(form.extra.design.simplify_controls) }}
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="field">
+                            {{ form_label(form.extra.design.border_color_select) }}
+                            <div class="row">
+                                <div class="col-6">
+                                    {{ form_widget(form.extra.design.border_color_select) }}
+                                </div>
+                                <div class="col-6">
+                                    {{ form_widget(form.extra.design.border_color) }}
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.extra.design.border_style) }}
+                        <div class="field">
+                            {{ form_label(form.extra.design.background_color_select) }}
+                            <div class="row">
+                                <div class="col-6">
+                                    {{ form_widget(form.extra.design.background_color_select) }}
+                                </div>
+                                <div class="col-6">
+                                    {{ form_widget(form.extra.design.background_color) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <span>{{ 'configuration.design.example.title'|trans }}</span>
+                        <div>
+                            <div class="example-container">
+                                {{ 'configuration.design.example.container'|trans }}
+                                <div class="example">
+                                    {{ 'configuration.design.example.content'|trans }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
         {% for child in form.extra.advanced %}
             {{ form_row(child) }}
         {% endfor %}

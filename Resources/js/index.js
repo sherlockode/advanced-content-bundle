@@ -759,4 +759,56 @@ jQuery(function ($) {
 
         return formData;
     }
+
+    slide.element.on('slideContentUpdated', updateExampleContainer);
+    slide.element.on('change, input', '[data-css-property]', function() {
+        if ($(this).data('controls')) {
+            updateControls(false);
+        }
+        updateExampleContainer();
+    });
+
+    function updateExampleContainer() {
+        $('.element-design-form').find('[data-css-property]').each(function(index, element) {
+            if ($(element).data('select-color')) {
+                if ($(element).val() === 'none') {
+                    $('.example').css($(element).data('css-property'), '');
+                } else if ($(element).val() === 'transparent') {
+                    $('.example').css($(element).data('css-property'), 'transparent');
+                }
+
+                return;
+            } else if ($('.element-design-form').find('[data-select-color="' + $(element).data('css-property') + '"]').length > 0) {
+                if ($('.element-design-form').find('[data-select-color="' + $(element).data('css-property') + '"]').val() !== 'pick') {
+                    return;
+                }
+            }
+
+            $('.example').css($(element).data('css-property'), function() {
+                let value = $(element).val();
+                if ($(element).closest('.box-model').length > 0 && value !== '') {
+                    value = value + 'px';
+                }
+
+                return value;
+            });
+        });
+    }
+
+    slide.element.on('slideContentUpdated', updateControls);
+    slide.element.on('change', '.simplify-controls', updateControls);
+
+    function updateControls(updateContainer = true) {
+        if (slide.element.find('.simplify-controls').is(':checked')) {
+            $('.box-model [data-follows]').prop('readonly', true);
+            $('.box-model [data-controls]').each(function (index, element) {
+                $('.box-model [data-follows="' + $(element).data('controls') + '"]').val($(element).val());
+            });
+            if (updateContainer !== false) {
+                updateExampleContainer();
+            }
+        } else {
+            $('.box-model [data-follows]').prop('readonly', false);
+        }
+    }
 });

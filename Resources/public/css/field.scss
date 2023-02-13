@@ -325,3 +325,103 @@
         }
     }
 }
+.box-element {
+    position: relative;
+    [data-css-property] {
+        position: absolute;
+    }
+}
+.box-radius {
+    padding: 20px 30px;
+    > .title {
+        position: absolute;
+        right: 50px;
+        top: 0;
+    }
+    .box-margin {
+        background-color: #FFFAD8;
+        color: #2e2e2e;
+        padding: 65px;
+        .title {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+        }
+
+        .box-border {
+            background-color: #2e2e2e;
+            color: #FFF;
+            padding: 50px 65px;
+
+            .box-padding {
+                background-color: #FFCEAA;
+                color: #2e2e2e;
+                padding: 50px 65px;
+
+                .box-content {
+                    background-color: #F1F1F1;
+                    height: 50px;
+                }
+            }
+        }
+
+        [data-css-property*="top"], [data-css-property*="bottom"] {
+            left: 0;
+            right: 0;
+            margin: 0 auto !important;
+        }
+        [data-css-property*="right"], [data-css-property*="left"] {
+            top: 0;
+            bottom: 0;
+            margin: auto 0 !important;
+        }
+        [data-css-property*="top"] {
+            top: 10px;
+        }
+        [data-css-property*="bottom"] {
+            bottom: 10px;
+        }
+        [data-css-property*="right"] {
+            right: 10px;
+        }
+        [data-css-property*="left"] {
+            left: 10px;
+        }
+    }
+
+    [data-css-property="border-top-left-radius"] {
+        top: 0;
+        left: 0;
+    }
+    [data-css-property="border-top-right-radius"] {
+        top: 0;
+        right: 0;
+    }
+    [data-css-property="border-bottom-right-radius"] {
+        bottom: 0;
+        right: 0;
+    }
+    [data-css-property="border-bottom-left-radius"] {
+        bottom: 0;
+        left: 0;
+    }
+}
+.example-container {
+    border: 1px solid black;
+    background-color: #F1F1F1;
+    padding: 10px;
+}
+.ui.form {
+    .box-model {
+        input[type="number"] {
+            width: 45px;
+            height: 30px;
+            padding: 4px;
+            text-align: end;
+            z-index: 1;
+            &[data-follows]:read-only {
+                background-color: #e4e3e3;
+            }
+        }
+    }
+}

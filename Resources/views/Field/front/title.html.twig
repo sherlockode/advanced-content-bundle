@@ -1,4 +1,5 @@
 {% set attributes = acb_get_element_attributes(extra|default([])) %}
+{% set style = attributes.style|default('') %}
 
 {% if level > 0 and level < 7 %}
     {% set tag = 'h' ~ level %}
@@ -7,6 +8,7 @@
 {% endif %}
 <{{ tag }} class="{{ attributes.classes }}"
            {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+           {% if style|trim is not empty %}style="{{ style }}"{% endif %}
 >
     {{ text }}
 </{{ tag }}>

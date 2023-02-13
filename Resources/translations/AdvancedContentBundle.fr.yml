@@ -245,3 +245,51 @@ configuration:
         class: Classe de l'élément
         id: ID de l'élément (Attention à l'unicité des IDs sur chaque page)
         hide_on: Cacher l'élément
+    design:
+        label: Options d'affichage
+        border_color: Couleur de la bordure
+        colors: 
+            none: Aucune
+            transparent: Transparent
+            pick: Choisir une couleur
+        border_style: Style de la bordure
+        border_styles:
+            none: Aucune
+            dotted: Pointillés
+            dashed: Tirets
+            solid: Trait simple
+            double: Trait double
+            groove: Incrustée avec effet 3D
+            ridge: En relief avec effet 3D
+            inset: Boîte renfoncée
+            outset: Boîte ressortant
+        background_color: Couleur du fond
+        simplify_controls: Simplifier les contrôles
+        margin: Marge
+        margins:
+            top: Marge haute
+            right: Marge droite
+            bottom: Marge basse
+            left: Marge gauche
+        border: Bordure
+        borders:
+            top: Bordure haute
+            right: Bordure droite
+            bottom: Bordure basse
+            left: Bordure gauche
+        padding: Padding
+        paddings:
+            top: Padding haut
+            right: Padding droite
+            bottom: Padding bas
+            left: Padding gauche
+        radius: Angle de la bordure
+        radiuses:
+            top_left: Angle de la bordure haute/gauche
+            top_right: Angle de la bordure haute/droite
+            bottom_right: Angle de la bordure basse/droite
+            bottom_left: Angle de la bordure basse/gauche
+        example:
+            title: Exemple de rendu
+            container: Contenant
+            content: Contenu

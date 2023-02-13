@@ -11,16 +11,9 @@
         <hr>
         <div class="row">
             <div class="col-md-12">
-                <div class="row">
-                    {% for element in content.data %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{ acb_render_element(element) }}
-                            </div>
-                        </div>
-                        <hr>
-                    {% endfor %}
-                </div>
+                {% for element in content.data %}
+                    {{ acb_render_element(element) }}
+                {% endfor %}
             </div>
         </div>
     </div>
