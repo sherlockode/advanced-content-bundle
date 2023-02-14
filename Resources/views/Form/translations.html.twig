@@ -60,17 +60,17 @@
             {% endfor %}
 
             {% if missingLocales|length > 0 and value|length > 0 %}
-            <div id="duplicate_acb_translations-fields" class="tab-pane">
-                <p>{{ 'content.duplicate.select_target_language'|trans }}</p>
-                {% for locale in missingLocales %}
-                    <button class="btn btn-light acb-duplicate-locale-content" type="button" data-locale="{{ locale }}">
-                        {{ locale|humanize }}
-                    </button>
-                {% endfor %}
+            <div id="duplicate_acb_translations-fields" class="tab-pane acb-missing-locales">
+                <label for="acb-duplicate-target-language">{{ 'content.duplicate.select_target_language'|trans }}</label>
+                <select id="acb-duplicate-target-language" class="form-control acb-duplicate-locale-value">
+                    {% for locale in missingLocales %}
+                        <option value="{{ locale }}">{{ locale }}</option>
+                    {% endfor %}
+                </select>
                 <div class="acb-duplicate-source">
                     <div class="form-group my-2">
-                        <label>{{ 'content.duplicate.select_source_language'|trans }}</label>
-                        <select class="form-control">
+                        <label for="acb-duplicate-source-language">{{ 'content.duplicate.select_source_language'|trans }}</label>
+                        <select id="acb-duplicate-source-language" class="form-control">
                             {% for lang, data in value %}
                                 <option value="{{ data.id }}">{{ lang }}</option>
                             {% endfor %}
