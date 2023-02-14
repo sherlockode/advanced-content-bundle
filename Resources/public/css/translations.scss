@@ -1,32 +1,19 @@
 .acb_translations {
     .acb-duplicate-locale-content {
-        margin: 0 5px;
-    }
-    .nav .acb-duplicate-dropdown {
-        background: #f3f3f3;
+        margin: 0 6px;
 
-        a {
-            color: #919191;
+        &.selected {
+            border: 2px solid #5cb85c;
 
-            &:hover,
-            &:focus {
-                text-decoration: none;
+            ~ .acb-duplicate-source {
+                display: block;
             }
         }
     }
-    .dropdown-menu {
-        padding: 8px 15px;
-        max-width: 240px;
+    .acb-duplicate-source {
+        display: none;
     }
-    .acb-duplicate-locale-content-icon {
-        height: 12px;
-        width: 12px;
-        background: #5cb85c;
-        border-radius: 50%;
-        display: inline-block;
-        position: relative;
-        margin: 0 5px;
-    }
+
     .acb-delete-locale-content {
         height: 12px;
         width: 12px;

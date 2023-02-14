@@ -41,23 +41,10 @@
             {% endfor %}
 
             {% if missingLocales|length > 0 and value|length > 0 %}
-                <li class="nav-item dropdown acb-duplicate-dropdown">
-                    {% for locale in missingLocales %}
-                        <button class="nav-link acb-duplicate-locale-content dropdown-toggle" type="button" data-bs-toggle="dropdown" data-locale="{{ locale }}">
-                            {{ locale|humanize }} <i class="acb-duplicate-locale-content-icon"></i>
-                        </button>
-                    {% endfor %}
-                    <div class="dropdown-menu">
-                        <div class="form-group">
-                            <label>{{ 'content.duplicate.select_language'|trans }}</label>
-                            <select class="form-control">
-                                {% for lang, data in value %}
-                                    <option value="{{ data.id }}">{{ lang }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <button data-url="{{ duplicateUrl }}" class="btn btn-success" type="button">{{ duplicateBtnLabel }}</button>
-                    </div>
+                <li class="nav-item">
+                    <button class="nav-link" type="button" data-bs-target="#duplicate_acb_translations-fields" data-bs-toggle="tab" role="tab">
+                        {{ 'content.duplicate.other_locales'|trans }}
+                    </button>
                 </li>
             {% endif %}
         </ul>
@@ -71,6 +58,28 @@
                     {{ form_widget(translationsFields) }}
                 </div>
             {% endfor %}
+
+            {% if missingLocales|length > 0 and value|length > 0 %}
+            <div id="duplicate_acb_translations-fields" class="tab-pane">
+                <p>{{ 'content.duplicate.select_target_language'|trans }}</p>
+                {% for locale in missingLocales %}
+                    <button class="btn btn-light acb-duplicate-locale-content" type="button" data-locale="{{ locale }}">
+                        {{ locale|humanize }}
+                    </button>
+                {% endfor %}
+                <div class="acb-duplicate-source">
+                    <div class="form-group my-2">
+                        <label>{{ 'content.duplicate.select_source_language'|trans }}</label>
+                        <select class="form-control">
+                            {% for lang, data in value %}
+                                <option value="{{ data.id }}">{{ lang }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button data-url="{{ duplicateUrl }}" class="btn btn-success my-2" type="button">{{ duplicateBtnLabel }}</button>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
