@@ -1,6 +1,6 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
-{% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
+{% form_theme form with ['@SherlockodeAdvancedContent/Form/content.html.twig', '@SherlockodeAdvancedContent/Form/translations.html.twig'] %}
 
 {{ form_start(form) }}
     {{ form_errors(form) }}
