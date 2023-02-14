@@ -21,17 +21,12 @@ jQuery(function ($) {
         });
     }
 
-    $('.acb_translations .acb-duplicate-locale-content').on('click', function () {
-        $('.acb_translations .acb-duplicate-source button').data('locale', $(this).data('locale'));
-        $(this).addClass('selected').siblings().removeClass('selected');
-    });
-
     $('.acb_translations .acb-duplicate-source button').on('click', function () {
         let button = $(this);
 
         let data = {
             id: button.closest('.acb-duplicate-source').find('select').val(),
-            locale: button.data('locale')
+            locale: button.closest('.acb-missing-locales').find('.acb-duplicate-locale-value').val()
         };
 
         $.ajax(button.data('url'), {

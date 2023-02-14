@@ -1,19 +1,4 @@
 .acb_translations {
-    .acb-duplicate-locale-content {
-        margin: 0 6px;
-
-        &.selected {
-            border: 2px solid #5cb85c;
-
-            ~ .acb-duplicate-source {
-                display: block;
-            }
-        }
-    }
-    .acb-duplicate-source {
-        display: none;
-    }
-
     .acb-delete-locale-content {
         height: 12px;
         width: 12px;
