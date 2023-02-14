@@ -12,7 +12,9 @@ content:
         field_values: Champs
         position: Ordre
     duplicate:
-        select_language: Choisissez une langue à copier
+        other_locales: Nouveau
+        select_source_language: Choisissez la langue à copier
+        select_target_language: Choisissez la langue à générer
         validate: Valider
     delete:
         validate: Supprimer ce contenu ?
