@@ -39,10 +39,23 @@ Configuration
 
 ### Assets
 
-You may import the provided assets in your main asset file to integrate them in your asset build process.
+jQuery and jQuery UI are mandatory and should be required in `package.json` in order for the assets build to work.
 
 Please note that Font Awesome is optional, but natively used for icons display on contribution pages.
 To use it you should require `@fortawesome/fontawesome-free` in `package.json` (or use another install method of your choice).
+
+```json
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.2",
+    "jquery": "^3.5.0",
+    "jquery-ui": "1.12.1"
+  }
+}
+```
+
+You should import the provided assets in your main asset file to integrate them in your asset build process.
+
 
 ```js
 // assets/js/app.js
@@ -72,23 +85,15 @@ composer require symfony/webpack-encore-bundle
 
 ### Twig
 
-You may enable the bootstrap form theme in your configuration for better-looking forms in the bundle:
+The bundle automatically uses Bootstrap 5 (or Bootstrap 4 for Symfony < 5.3) as the base form theme for all forms.
 
-```yaml
-# config/packages/twig.yml
-twig:
-    form_themes: ['bootstrap_5_layout.html.twig']
-```
-
-Take care that we use the last defined form theme as the base theme for all forms.
-
-Alternatively, if you run into theme issues or if you just want to use a different form theme,
+If you just want to use a different form theme,
 you can override the bundle's base form theme file `Form/base_theme.html.twig`
 
 ```
 {# templates/bundles/SherlockodeAdvancedContentBundle/Form/base_theme.html.twig #}
 
-{% extends 'bootstrap_5_layout.html.twig' %}
+{% extends 'form_div_layout.html.twig' %}
 ```
 
 ### Entities
