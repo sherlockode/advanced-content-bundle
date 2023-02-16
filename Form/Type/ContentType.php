@@ -104,6 +104,10 @@ class ContentType extends AbstractType
                 $form->get('data')->setData([$emptyRowCol]);
             }
         });
+
+        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+            $event->setData(json_decode($event->getData(), true));
+        }, 1);
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options)

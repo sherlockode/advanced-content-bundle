@@ -76,6 +76,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_column_classes', [$this, 'getColumnClasses']),
             new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
             new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
+            new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
         ];
     }
 
@@ -336,5 +337,24 @@ class ContentExtension extends AbstractExtension
         ]);
 
         return $pixelProperties;
+    }
+
+    /**
+     * @param FormView $form
+     *
+     * @return array|mixed
+     */
+    public function getJsonForm(FormView $form)
+    {
+        $json = [];
+        if ($form->vars['compound'] && !in_array('acb_advanced_hide_on', $form->vars['block_prefixes'])) {
+            foreach ($form->children as $child) {
+                $json[$child->vars['name']] = $this->getJsonForm($child);
+            }
+        } else {
+            return in_array('acb_advanced_hide_on', $form->vars['block_prefixes']) ? $form->vars['value'] : $form->vars['data'];
+        }
+
+        return $json;
     }
 }

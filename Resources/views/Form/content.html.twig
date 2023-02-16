@@ -13,12 +13,8 @@
     {% endif %}
 {% endblock %}
 
-{% block acb_elements_widget %}
-    <div {{ block('widget_container_attributes') }} data-form-container-name="{{ form.vars.full_name }}">
-        {% for child in form %}
-            {{ _self.acb_element_entry(child) }}
-        {% endfor %}
-    </div>
+{% block content_data_json_form %}
+    <input type="hidden" id="content-data-json" name="{{ form.vars.full_name }}" value="{{ acb_get_json_form(form)|json_encode() }}">
 {% endblock %}
 
 {% block _content_data_widget %}
@@ -28,7 +24,7 @@
         {% endfor %}
     </div>
     {{ _self.acb_button_add_field(form.vars.full_name) }}
-    {{ block('acb_elements_widget') }}
+    {{ block('content_data_json_form') }}
 {% endblock %}
 {% block _acb_page_content_data_widget %}
     {{ block('_content_data_widget') }}
@@ -55,21 +51,9 @@
     {% endif %}
 {% endmacro %}
 
-{% macro acb_element_entry(form) %}
-<div class="acb-element-form"
-     data-name="{{ form.vars.full_name }}"
-     data-form-id="{{ form.vars.id }}"
-     data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
-     style="display: none;"
->
-    {{ include('@SherlockodeAdvancedContent/Content/_field_form_part.html.twig', {'form': form}) }}
-</div>
-{% endmacro %}
-
 {% macro acb_element_toolbar(form) %}
     <div class="acb-element-toolbar acb-field-toolbar acb-sorting-block"
          data-name="{{ form.vars.full_name }}"
-         data-form-id="{{ form.vars.id }}"
          data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
          data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
     >
@@ -105,7 +89,6 @@
 {% macro acb_row_toolbar(form) %}
     <div class="acb-element-toolbar acb-row-toolbar acb-sorting-flex"
          data-name="{{ form.vars.full_name }}"
-         data-form-id="{{ form.vars.id }}"
          data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
          data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
     >
@@ -169,7 +152,6 @@
 {% macro acb_column_toolbar(form, isToolbarTop) %}
     <div class="acb-element-toolbar acb-column-toolbar {{ isToolbarTop ? 'acb-column-toolbar-top acb-sorting-flex sortable-handle' : 'acb-column-toolbar-bottom' }}"
          data-name="{{ form.vars.full_name }}"
-         data-form-id="{{ form.vars.id }}"
          data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
          data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
     >

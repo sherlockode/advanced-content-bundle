@@ -5,10 +5,10 @@
 {% set colOffset = min(11, max(0, config.offset|default(0))) %}
 {% set devices = ['sm', 'md', 'lg', 'xl'] %}
 {% for device in devices %}
-    {% if config['size_' ~ device] is not null %}
+    {% if config['size_' ~ device]|default(null) is not null %}
         {% set colSize = config['size_' ~ device] %}
     {% endif %}
-    {% if config['offset_' ~ device] is not null %}
+    {% if config['offset_' ~ device]|default(null) is not null %}
         {% set colOffset = config['offset_' ~ device] %}
     {% endif %}
 {% endfor %}

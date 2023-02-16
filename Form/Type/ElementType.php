@@ -3,6 +3,8 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -27,6 +29,12 @@ class ElementType extends AbstractType
         $builder->get('extra')->add('design', ElementDesignType::class, [
             'label' => false,
         ]);
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($options) {
+            if ($options['is_post_json']) {
+                $event->setData(json_decode($event->getData() ?? '[]', true));
+            }
+        });
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
@@ -43,6 +51,7 @@ class ElementType extends AbstractType
         $resolver->setRequired(['element_type']);
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
+            'is_post_json' => false
         ]);
     }
 
