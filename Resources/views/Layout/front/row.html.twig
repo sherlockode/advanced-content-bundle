@@ -1,4 +1,6 @@
-<div class="row">
+<div class="{{ acb_get_row_classes(config|default([]))|join(' ') }} row"
+     {% if config.columns_gap|default(null) %}style="column-gap: {{ config.columns_gap }}px;"{% endif %}
+>
     {% for element in elements|default([]) %}
         {{ acb_render_element(element) }}
     {% endfor %}

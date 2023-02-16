@@ -1,9 +1,10 @@
 {% import '@SherlockodeAdvancedContent/Form/content.html.twig' as common %}
 
-<div class="row acb-layout-row acb-field field-row acb-row acb-sortable acb-sortable-group acb-row-sortable-group"
+<div class="{{ acb_get_row_classes(config|default([]))|join(' ') }} row acb-layout-row acb-field field-row acb-row acb-sortable acb-sortable-group acb-row-sortable-group"
      data-name="{{ form.vars.full_name }}"
      data-base-name="{{ form.children.elements.vars.full_name }}"
      data-widget-counter="{{ elements|default([])|length }}"
+     {% if config.columns_gap|default(null) %}style="column-gap: {{ config.columns_gap }}px;"{% endif %}
 >
     {{ common.acb_row_toolbar(form) }}
     {% for key, element in elements|default([]) %}

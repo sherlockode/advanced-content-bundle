@@ -74,6 +74,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_full_url', [$this, 'getFullUrl']),
             new TwigFunction('acb_get_element_label', [$this, 'getElementLabel']),
             new TwigFunction('acb_get_column_classes', [$this, 'getColumnClasses']),
+            new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
         ];
     }
 
@@ -178,6 +179,22 @@ class ContentExtension extends AbstractExtension
             if (isset($config['offset_' . $device])) {
                 $classes[] = 'offset-' . $device . '-' . $config['offset_' . $device];
             }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return array
+     */
+    public function getRowClasses(array $config): array
+    {
+        $classes = [];
+        $classes[] = 'justify-content-' . ($config['justify_content'] ?? 'start');
+        if ($config['mobile_reverse_columns'] ?? false) {
+            $classes[] = 'flex-row-reverse flex-md-row';
         }
 
         return $classes;

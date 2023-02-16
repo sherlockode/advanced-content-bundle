@@ -18,30 +18,10 @@ class Column extends AbstractLayoutType
     }
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
-     *
-     * @return void
+     * @return string|null
      */
-    public function buildContentElement(FormBuilderInterface $builder)
+    protected function getConfigurationFormType(): ?string
     {
-        parent::buildContentElement($builder);
-
-        $builder->add('config', ColumnType::class, [
-            'label' => false,
-        ]);
-    }
-
-    /**
-     * @param array $element
-     *
-     * @return array
-     */
-    public function getRawData($element)
-    {
-        return array_merge(parent::getRawData($element), [
-            'config' => $element['config'] ?? [],
-        ]);
+        return ColumnType::class;
     }
 }
