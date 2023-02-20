@@ -315,7 +315,7 @@
         <div class="{% if required %}required {% endif %} acb-advanced-hide-on">
             {%- for child in form %}
                 <div class="checkbox">
-                    {{- form_widget(child, sylius_test_form_attribute('option')) -}}
+                    {{- form_widget(child) -}}
                     <label for="{{ child.vars.id }}" title="{{ child.vars.label|trans({}, child.vars.translation_domain) }}">
                         <i class="{{ _self.device_icon_class(child.vars.value)|trim }}"></i>
                     </label>
