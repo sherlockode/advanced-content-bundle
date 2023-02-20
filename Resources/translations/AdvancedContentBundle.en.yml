@@ -12,7 +12,9 @@ content:
         data: Fields
         position: Sort order
     duplicate:
-        select_language: Choose a locale to duplicate from
+        other_locales: New
+        select_source_language: Choose a locale to duplicate from
+        select_target_language: Choose a locale to generate
         validate: Validate
     delete:
         validate: Delete this content?

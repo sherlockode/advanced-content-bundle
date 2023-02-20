@@ -3,7 +3,7 @@ Entities
 
 ## Basics
 
-We implemented the following entity models:
+We implemented the following models:
 - Content
 - PageType
 - Page
@@ -15,7 +15,7 @@ When you create a new Page you will be able to fill in your Content inside.
 
 ## Implementation examples
 
-If you need to override the entities with your own, here are the native implementations used within the bundle:
+Here are basic example implementations for the entity classes:
 
 ```php
 <?php

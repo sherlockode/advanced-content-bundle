@@ -1,6 +1,9 @@
 import Slide from "./slide.js";
 import jQuery from "jquery";
+import 'jquery-ui/ui/widgets/sortable.js';
 import './slug.js';
+import './export.js';
+import './page.js';
 
 jQuery(function ($) {
     ////////////

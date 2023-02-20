@@ -62,7 +62,7 @@ class AcbFileType extends AbstractType
                     unset($data['delete']);
                 }
 
-                if ($data['file']) {
+                if (!empty($data['file'])) {
                     $data['src'] = $this->uploadManager->upload($data['file']);
                     $this->updateForm($form, $data);
                     unset($data['file']);
