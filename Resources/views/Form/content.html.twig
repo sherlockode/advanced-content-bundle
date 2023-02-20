@@ -55,7 +55,6 @@
     <div class="acb-element-toolbar acb-field-toolbar acb-sorting-block"
          data-name="{{ form.vars.full_name }}"
          data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
-         data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
     >
         <div class="acb-field-heading acb-sorting-flex">
             <div class="sortable-handle acb-sorting-block" title="{{ 'move'|trans }}">
@@ -90,7 +89,6 @@
     <div class="acb-element-toolbar acb-row-toolbar acb-sorting-flex"
          data-name="{{ form.vars.full_name }}"
          data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
-         data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
     >
         <div class="field-actions acb-sorting-block">
             <span class="sortable-handle acb-sorting-block button" title="{{ 'move'|trans }}">
@@ -153,7 +151,6 @@
     <div class="acb-element-toolbar acb-column-toolbar {{ isToolbarTop ? 'acb-column-toolbar-top acb-sorting-flex sortable-handle' : 'acb-column-toolbar-bottom' }}"
          data-name="{{ form.vars.full_name }}"
          data-form-index="{{ form.vars.name == '__field_name__' ? '__name__' : form.vars.name }}"
-         data-duplicate-url="{{ path('sherlockode_acb_content_field_form', {'type': form.vars.data.elementType}) }}"
     >
         {% if isToolbarTop %}
             <span class="acb-sorting-block" title="{{ 'move'|trans }}" style="display: none;">
