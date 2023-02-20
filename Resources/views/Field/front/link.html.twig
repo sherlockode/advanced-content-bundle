@@ -1,8 +1,10 @@
 {% set attributes = acb_get_element_attributes(extra|default([])) %}
+{% set style = attributes.style|default('') %}
 
 <a href="{{ url }}"
    class="{{ attributes.classes }}"
    {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+   {% if style|trim is not empty %}style="{{ style }}"{% endif %}
 >
     {{ title }}
 </a>

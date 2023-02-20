@@ -1,7 +1,9 @@
 {% set attributes = acb_get_element_attributes(extra|default([])) %}
+{% set style = attributes.style|default('') %}
 
 <div class="{{ acb_get_column_classes(config)|join(' ') }} {{ attributes.classes }}"
      {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+     {% if style|trim is not empty %}style="{{ style }}"{% endif %}
 >
     {% for element in elements|default([]) %}
         {{ acb_render_element(element) }}

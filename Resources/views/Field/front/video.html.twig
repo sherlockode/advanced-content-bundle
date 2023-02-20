@@ -31,6 +31,7 @@
     {% endif %}
 
     {% set attributes = acb_get_element_attributes(extra|default([]), 'inline') %}
+    {% set style = attributes.style|default('') %}
 
     {% if '.mp4' in url %}
         <video src="{{ url }}"
@@ -39,6 +40,7 @@
                {{ videoWidth|raw }}
                class="{{ attributes.classes }}"
                {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+               {% if style|trim is not empty %}style="{{ style }}"{% endif %}
         ></video>
     {% else %}
         {% for option in urlOptions %}
@@ -52,6 +54,7 @@
                 allowfullscreen
                 class="{{ attributes.classes }}"
                 {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+                {% if style|trim is not empty %}style="{{ style }}"{% endif %}
         ></iframe>
     {% endif %}
 {% endif %}

@@ -28,7 +28,8 @@ class Slide
     }
 
     setContent(html) {
-        this.content.html(html)
+        this.content.html(html);
+        this.element.trigger('slideContentUpdated');
     }
 
     setFooter(html) {

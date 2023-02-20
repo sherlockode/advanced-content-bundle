@@ -1,8 +1,12 @@
-{% set attributes = acb_get_element_attributes(extra|default([])) %}
+{% set attributes = acb_get_element_attributes(extra|default([]), 'flex') %}
+{% set style = attributes.style|default('') %}
+{% if config.columns_gap|default(null) %}
+    {% set style = 'column-gap:' ~ config.columns_gap ~ 'px;' ~ style %}
+{% endif %}
 
 <div class="{{ acb_get_row_classes(config|default([]))|join(' ') }} {{ attributes.classes }} row"
      {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
-     {% if config.columns_gap|default(null) %}style="column-gap: {{ config.columns_gap }}px;"{% endif %}
+     {% if style|trim is not empty %}style="{{ style }}"{% endif %}
 >
     {% for element in elements|default([]) %}
         {{ acb_render_element(element) }}

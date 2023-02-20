@@ -245,3 +245,51 @@ configuration:
         class: Element class
         id: Element ID (Make sure the IDs unicity is respected on each page)
         hide_on: Hide element
+    design:
+        label: Design options
+        border_color: Border color
+        colors:
+            none: None
+            transparent: Transparent
+            pick: Pick a color
+        border_style: Border style
+        border_styles:
+            none: None
+            dotted: Dots
+            dashed: Dashes
+            solid: Simple line
+            double: Double line
+            groove: 3D grooved border
+            ridge: 3D ridged border
+            inset: 3D inset border
+            outset: 3D outset border
+        background_color: Background color
+        simplify_controls: Simplify controls
+        margin: Margin
+        margins:
+            top: Margin top
+            right: Margin right
+            bottom: Margin bottom
+            left: Margin left
+        border: Border
+        borders:
+            top: Border top
+            right: Border right
+            bottom: Border bottom
+            left: Border left
+        padding: Padding
+        paddings:
+            top: Padding top
+            right: Padding right
+            bottom: Padding bottom
+            left: Padding left
+        radius: Border radius
+        radiuses:
+            top_left: Border radius top/left
+            top_right: Border radius top/right
+            bottom_right: Border radius bottom/right
+            bottom_left: Border radius bottom/left
+        example:
+            title: Display example
+            container: Container
+            content: Content

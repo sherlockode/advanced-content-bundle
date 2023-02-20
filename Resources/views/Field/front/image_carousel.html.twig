@@ -1,8 +1,13 @@
 {% if images is defined and images|length > 0 %}
     {% set attributes = acb_get_element_attributes(extra|default([])) %}
+    {% set style = attributes.style|default('') %}
 
     {% set carouselId = attributes.id ?? 'acb_image_carousel_' ~ random() %}
-    <div id="{{ carouselId }}" class="carousel slide {{ attributes.classes }}" data-bs-ride="carousel">
+    <div id="{{ carouselId }}"
+         class="carousel slide {{ attributes.classes }}"
+         data-bs-ride="carousel"
+         {% if style|trim is not empty %}style="{{ style }}"{% endif %}
+    >
         {% if displayPagination is defined and displayPagination == true %}
             <div class="carousel-indicators">
                 {% for image in images %}
