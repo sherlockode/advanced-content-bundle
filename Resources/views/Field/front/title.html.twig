@@ -1,6 +1,12 @@
+{% set attributes = acb_get_element_attributes(extra|default([])) %}
+
 {% if level > 0 and level < 7 %}
     {% set tag = 'h' ~ level %}
 {% else %}
     {% set tag = 'h1' %}
 {% endif %}
-<{{ tag }}>{{ text }}</{{ tag }}>
+<{{ tag }} class="{{ attributes.classes }}"
+           {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+>
+    {{ text }}
+</{{ tag }}>

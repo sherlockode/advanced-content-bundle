@@ -53,7 +53,10 @@ class ElementExport
             throw new InvalidElementException(sprintf('Element of type "%s" is not handled in export', get_class($element)));
         }
 
-        return array_merge(['type' => $elementData['elementType']], $data);
+        return array_merge([
+            'type' => $elementData['elementType'],
+            'extra' => $elementData['extra'] ?? [],
+        ], $data);
     }
 
     /**

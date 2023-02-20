@@ -139,6 +139,18 @@
             </button>
         </div>
         <div class="field-actions">
+            {% set elementId = form.vars.value.extra.advanced.id|default('') %}
+            {% set elementClass = form.vars.value.extra.advanced.class|default('') %}
+            {% if elementId is not empty or elementClass is not empty %}
+                <span class="row-extra">
+                    {% if elementId is not empty %}
+                        #{{ elementId }}
+                    {% endif %}
+                    {% if elementClass is not empty %}
+                        .{{ elementClass }}
+                    {% endif %}
+                </span>
+            {% endif %}
             <button type="button" class="acb-collapse-row" title="{{ 'collapse'|trans }}">
                 <i class="fa-solid fa-caret-up"></i>
             </button>
@@ -292,29 +304,58 @@
             <th>{{ 'layout_type.column.config.size'|trans }}</th>
         </tr>
         <tr>
-            <td class="device-type"><i class="fa-solid fa-desktop" title="{{ 'responsive.devices.desktop'|trans }}"></i></td>
+            <td class="device-type"><i class="{{ _self.device_icon_class('xl')|trim }}" title="{{ 'responsive.devices.desktop'|trans }}"></i></td>
             <td>{{ form_widget(form.offset_xl) }}</td>
             <td>{{ form_widget(form.size_xl) }}</td>
         </tr>
         <tr>
-            <td class="device-type"><i class="fa-solid fa-tablet fa-rotate-90" title="{{ 'responsive.devices.tablet_landscape'|trans }}"></i></td>
+            <td class="device-type"><i class="{{ _self.device_icon_class('lg')|trim }}" title="{{ 'responsive.devices.tablet_landscape'|trans }}"></i></td>
             <td>{{ form_widget(form.offset_lg) }}</td>
             <td>{{ form_widget(form.size_lg) }}</td>
         </tr>
         <tr>
-            <td class="device-type"><i class="fa-solid fa-tablet" title="{{ 'responsive.devices.tablet_portrait'|trans }}"></i></td>
+            <td class="device-type"><i class="{{ _self.device_icon_class('md')|trim }}" title="{{ 'responsive.devices.tablet_portrait'|trans }}"></i></td>
             <td>{{ form_widget(form.offset_md) }}</td>
             <td>{{ form_widget(form.size_md) }}</td>
         </tr>
         <tr>
-            <td class="device-type"><i class="fa-solid fa-mobile fa-rotate-90" title="{{ 'responsive.devices.mobile_landscape'|trans }}"></i></td>
+            <td class="device-type"><i class="{{ _self.device_icon_class('sm')|trim }}" title="{{ 'responsive.devices.mobile_landscape'|trans }}"></i></td>
             <td>{{ form_widget(form.offset_sm) }}</td>
             <td>{{ form_widget(form.size_sm) }}</td>
         </tr>
         <tr>
-            <td class="device-type"><i class="fa-solid fa-mobile" title="{{ 'responsive.devices.mobile_portrait'|trans }}"></i></td>
+            <td class="device-type"><i class="{{ _self.device_icon_class('xs')|trim }}" title="{{ 'responsive.devices.mobile_portrait'|trans }}"></i></td>
             <td>{{ form_widget(form.offset) }}</td>
             <td>{{ form_widget(form.size) }}</td>
         </tr>
     </table>
 {% endblock %}
+
+{% block acb_advanced_hide_on_widget %}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="{% if required %}required {% endif %} acb-advanced-hide-on">
+            {%- for child in form %}
+                <div class="checkbox">
+                    {{- form_widget(child, sylius_test_form_attribute('option')) -}}
+                    <label for="{{ child.vars.id }}" title="{{ child.vars.label|trans({}, child.vars.translation_domain) }}">
+                        <i class="{{ _self.device_icon_class(child.vars.value)|trim }}"></i>
+                    </label>
+                </div>
+            {% endfor -%}
+        </div>
+    </div>
+{% endblock %}
+
+{% macro device_icon_class(device) %}
+    {% if device == 'xs' %}
+        fa-solid fa-mobile
+    {% elseif device == 'sm' %}
+        fa-solid fa-mobile fa-rotate-90
+    {% elseif device == 'md' %}
+        fa-solid fa-tablet
+    {% elseif device == 'lg' %}
+        fa-solid fa-tablet fa-rotate-90
+    {% else %}
+        fa-solid fa-desktop
+    {% endif %}
+{% endmacro %}

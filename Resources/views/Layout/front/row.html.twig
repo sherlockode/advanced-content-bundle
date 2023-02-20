@@ -1,4 +1,7 @@
-<div class="{{ acb_get_row_classes(config|default([]))|join(' ') }} row"
+{% set attributes = acb_get_element_attributes(extra|default([])) %}
+
+<div class="{{ acb_get_row_classes(config|default([]))|join(' ') }} {{ attributes.classes }} row"
+     {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
      {% if config.columns_gap|default(null) %}style="column-gap: {{ config.columns_gap }}px;"{% endif %}
 >
     {% for element in elements|default([]) %}

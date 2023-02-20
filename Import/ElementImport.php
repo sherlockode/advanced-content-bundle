@@ -92,6 +92,7 @@ class ElementImport
         return array_merge([
             'elementType' => $elementData['type'],
             'position' => $position,
+            'extra' => $elementData['extra'] ?? [],
         ], $data);
     }
 

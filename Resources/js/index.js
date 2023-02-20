@@ -81,13 +81,9 @@ jQuery(function ($) {
 
                         let previewRow = $(ui.item).closest('.acb-row');
                         let formRow = $('.acb-element-form[data-name="' + previewRow.data('name') + '"]');
-                        let formData = new FormData();
-                        for (const [key, value] of Object.entries(extractRowData(formRow))) {
-                            formData.append(key, value);
-                        }
 
                         moveElementToList(
-                            formData,
+                            mergeRowDataIntoFormData(new FormData(), extractRowData(formRow)),
                             $(ui.item).find('.acb-element-toolbar').data('duplicate-url'),
                             'POST',
                             $(event.target).data('base-name'),
@@ -198,13 +194,9 @@ jQuery(function ($) {
         usedContainer = null;
         let previewRow = usedAddFieldBlock = $(this).closest('.acb-row');
         let formRow = $('.acb-element-form[data-name="' + previewRow.data('name') + '"]');
-        let formData = new FormData();
-        for (const [key, value] of Object.entries(extractRowData(formRow))) {
-            formData.append(key, value);
-        }
 
         submitNewRow(
-            formData,
+            mergeRowDataIntoFormData(new FormData(), extractRowData(formRow)),
             $(this).closest('.acb-element-toolbar').data('duplicate-url'),
             'POST',
             previewRow.closest('.acb-sortable').parents('.acb-sortable-group').data('base-name'),
@@ -239,14 +231,10 @@ jQuery(function ($) {
                         let previewRow = $(field).closest('.acb-row');
                         let fieldName = previewRow.data('name');
                         let formRow = $('.acb-element-form[data-name="' + fieldName + '"]');
-                        let formData = new FormData();
-                        for (const [key, value] of Object.entries(extractRowData(formRow))) {
-                            formData.append(key, value);
-                        }
                         previewRow.appendTo(targetColumnContainer);
 
                         elementsToMove.push({
-                            'formData': formData,
+                            'formData': mergeRowDataIntoFormData(new FormData(), extractRowData(formRow)),
                             'duplicateUrl': $(field).find('.acb-element-toolbar').data('duplicate-url'),
                             'fieldName': fieldName
                         });
@@ -316,14 +304,9 @@ jQuery(function ($) {
     });
 
     function updateRowAfterLayoutUpdate(row) {
-        let formData = new FormData();
-        for (const [key, value] of Object.entries(extractRowData($('.acb-element-form[data-name="' + row.data('name') + '"]')))) {
-            formData.append(key, value);
-        }
-
         saveExistingField(
             $('.acb-elements-container').data('edit-url') + '?type=row',
-            formData,
+            mergeRowDataIntoFormData(new FormData(), extractRowData($('.acb-element-form[data-name="' + row.data('name') + '"]'))),
             'POST',
             row,
             false
@@ -532,14 +515,50 @@ jQuery(function ($) {
 
     function extractRowData(row) {
         let data = {};
+        let processedCheckboxes = [];
         row.find('input, textarea, select').each(function () {
             if (['radio', 'checkbox'].includes($(this).attr('type')) && !$(this).is(':checked')) {
                 return;
             }
-            data[this.name.replace(row.data('name'), '__field_name__')] = $(this).val();
+            let value = $(this).val();
+            if (this.name.match(/^.*\[\]$/) && $(this).attr('type') === 'checkbox') {
+                if (processedCheckboxes.indexOf(this.name) !== -1) {
+                    return;
+                }
+                processedCheckboxes.push(this.name);
+
+                let checkedInputs = row.find('[name="' + this.name + '"]:checked');
+                if (checkedInputs.length === 0) {
+                    return;
+                }
+
+                value = [];
+                checkedInputs.each(function (index, checkbox) {
+                    value.push($(checkbox).val());
+                });
+            }
+            data[this.name.replace(row.data('name'), '__field_name__')] = value;
         });
 
         return data;
+    }
+
+    function mergeRowDataIntoFormData(formData, rowData, search, replacement) {
+        for (const [key, value] of Object.entries(rowData)) {
+            let newKey = key;
+            if (search && replacement) {
+                newKey = key.replace(search, replacement);
+            }
+            if (Array.isArray(value)) {
+                value.forEach(function(element) {
+                    formData.append(newKey, element);
+                });
+            } else {
+                formData.append(newKey, value);
+            }
+        }
+
+        return formData;
     }
 
     // convert slide form to content preview
@@ -557,13 +576,15 @@ jQuery(function ($) {
             type: method
         }).done(function (data) {
             if (data.success) {
-                let preview = $(replacePlaceholderEditData(data.preview, row));
-                preview.find('> .acb-element-toolbar').data('form-index', row.data('form-index'));
+                let name = row.data('name');
+                let formId = row.find('> .acb-element-toolbar').data('form-id');
+                let formIndex = row.find('> .acb-element-toolbar').data('form-index');
+
+                let preview = $(replacePlaceholderEditData(data.preview, name, formId, formIndex));
                 row.replaceWith(preview);
 
-                let elementForm = $(replacePlaceholderEditData(data.form, row));
-                elementForm.data('form-index', row.data('form-index'));
-                $('.acb-element-form[data-name="' + row.data('name') + '"]').replaceWith(elementForm);
+                let elementForm = $(replacePlaceholderEditData(data.form, name, formId, formIndex));
+                $('.acb-element-form[data-name="' + name + '"]').replaceWith(elementForm);
 
                 initSortables();
                 calculatePosition();
@@ -615,12 +636,9 @@ jQuery(function ($) {
                         ]
                     }, '__field_name__');
                     let elementForm = replacePlaceholderNewData(data.form, '', 0);
-                    for (const [key, value] of Object.entries(extractRowData($(elementForm)))) {
-                        layoutData.append(key.replace('[__field_name__]', '__field_name__[elements][0][elements][0]'), value);
-                    }
 
                     submitNewRow(
-                        layoutData,
+                        mergeRowDataIntoFormData(layoutData, extractRowData($(elementForm)), '[__field_name__]', '__field_name__[elements][0][elements][0]'),
                         $('.acb-elements-container').data('edit-url') + '?type=row',
                         'POST',
                         $('.acb-elements-container').find('> .acb-sortable-group').data('base-name'),
@@ -709,8 +727,8 @@ jQuery(function ($) {
         });
     }
 
-    function replacePlaceholderEditData(content, row) {
-        return content.replace(/__field_name__/g, row.data('name')).replace(/field_name__/g, row.data('form-id'));
+    function replacePlaceholderEditData(content, name, formId, formIndex) {
+        return content.replace(/__field_name__/g, name).replace(/field_name__/g, formId).replace(/__name__/g, formIndex);
     }
     function replacePlaceholderNewData(content, baseName, counter) {
         let name = baseName + '[__name__]';

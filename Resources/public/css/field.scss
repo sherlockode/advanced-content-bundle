@@ -143,12 +143,17 @@
         .field-actions {
             margin: 0;
             float: none;
+            align-items: center;
             button, .element-icon, .button {
                 background-color: #d8d8d8;
                 border-color: #eee;
             }
             .element-icon {
                 padding: 8px;
+            }
+            .row-extra {
+                color: #939393;
+                margin-right: 10px;
             }
         }
         .change-display {
@@ -289,6 +294,34 @@
         text-align: center;
         i {
             font-size: 30px;
+        }
+    }
+}
+
+.acb-lateral-slide .acb-layout-elements-container.required.field {
+    display: none;
+}
+.acb-advanced-hide-on {
+    display: flex;
+    column-gap: 2px;
+    .checkbox {
+        label {
+            background-color: #d3d3d3;
+            border: 1px solid #fefefe;
+            border-radius: 5px;
+            cursor: pointer;
+            height: 35px;
+            width: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        input[type="checkbox"] {
+            display: none;
+            &:checked ~ label, ~ label:hover {
+                background-color: #a9a9a9;
+                border: 1px solid #2e2e2e;
+            }
         }
     }
 }

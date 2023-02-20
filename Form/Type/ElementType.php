@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -17,6 +18,12 @@ class ElementType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $options['element_type']->buildContentElement($builder);
+        $builder->add('extra', FormType::class, [
+            'label' => false,
+        ]);
+        $builder->get('extra')->add('advanced', ElementAdvancedType::class, [
+            'label' => false,
+        ]);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

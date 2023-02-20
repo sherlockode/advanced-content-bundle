@@ -1,1 +1,8 @@
-<iframe src="{{ src }}" {% if height|default(null) %}width="{{ width }}"{% endif %} {% if height|default(null) %}height="{{ height }}"{% endif %}></iframe>
+{% set attributes = acb_get_element_attributes(extra|default([]), 'inline') %}
+
+<iframe src="{{ src }}"
+        {% if height|default(null) %}width="{{ width }}"{% endif %}
+        {% if height|default(null) %}height="{{ height }}"{% endif %}
+        class="{{ attributes.classes }}"
+        {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+></iframe>

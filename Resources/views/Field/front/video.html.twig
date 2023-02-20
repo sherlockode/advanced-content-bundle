@@ -30,8 +30,16 @@
         {% set urlOptions = urlOptions|merge([{'param': 'width', 'value': width}]) %}
     {% endif %}
 
+    {% set attributes = acb_get_element_attributes(extra|default([]), 'inline') %}
+
     {% if '.mp4' in url %}
-        <video src="{{ url }}" {{ options }} {{ videoHeight|raw }} {{ videoWidth|raw }}></video>
+        <video src="{{ url }}"
+               {{ options }}
+               {{ videoHeight|raw }}
+               {{ videoWidth|raw }}
+               class="{{ attributes.classes }}"
+               {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
+        ></video>
     {% else %}
         {% for option in urlOptions %}
             {% set url = url ~ ('?' in url ? '&' : '?') ~ option.param ~ '=' ~ option.value %}
@@ -42,6 +50,8 @@
                 frameborder="0"
                 allow="autoplay; fullscreen; picture-in-picture"
                 allowfullscreen
+                class="{{ attributes.classes }}"
+                {% if attributes.id %}id="{{ attributes.id }}"{% endif %}
         ></iframe>
     {% endif %}
 {% endif %}

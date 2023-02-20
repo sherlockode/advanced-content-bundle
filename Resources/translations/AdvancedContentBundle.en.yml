@@ -238,3 +238,10 @@ responsive:
         tablet_portrait: Tablet Portrait
         tablet_landscape: Tablet Landscape
         desktop: Desktop
+configuration:
+    label: Configuration
+    advanced:
+        label: Advanced
+        class: Element class
+        id: Element ID (Make sure the IDs unicity is respected on each page)
+        hide_on: Hide element
