@@ -106,6 +106,7 @@ class ContentController extends AbstractController
             'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
             'csrf_protection' => false,
             'label' => $element->getFormFieldLabel(),
+            'is_post_json' => $request->query->has('edit'),
         ]);
         $form = $formBuilder->getForm();
         $form->handleRequest($request);

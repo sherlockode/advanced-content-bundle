@@ -47,7 +47,7 @@ jQuery(function ($) {
                     placeholder: 'acb-sortable-drop-zone',
                     handle: handleSelector,
                     update: function (event, ui) {
-                        calculatePosition();
+                        calculatePosition($(this));
                     },
                     start: function (event, ui) {
                         $('body').addClass('acb-sorting');
@@ -80,17 +80,21 @@ jQuery(function ($) {
                         // event.target => target group
 
                         let previewRow = $(ui.item).closest('.acb-row');
-                        let formRow = $('.acb-element-form[data-name="' + previewRow.data('name') + '"]');
+                        let oldContainer = $(ui.sender);
+                        let newContainer = $(event.target);
+                        let counter = getCounterFromContainer(newContainer);
 
-                        moveElementToList(
-                            mergeRowDataIntoFormData(new FormData(), extractRowData(formRow)),
-                            $(ui.item).find('.acb-element-toolbar').data('duplicate-url'),
-                            'POST',
-                            $(event.target).data('base-name'),
-                            previewRow.data('name')
-                        );
+                        previewRow.replaceWith(getNewPreview(previewRow, newContainer, counter));
+                        updateFormData(newContainer.data('base-name') + '[' + counter + ']', getFormData(previewRow.data('name')));
+                        updateFormData(previewRow.data('name'), undefined);
 
-                        toggleColumnPlaceholderButton($(ui.sender), true);
+                        counter++;
+                        newContainer.data('widget-counter', counter);
+
+                        calculatePosition(newContainer);
+                        calculatePosition(oldContainer);
+
+                        toggleColumnPlaceholderButton(oldContainer, true);
                     },
                     out: function (event, ui) {
                         toggleColumnPlaceholderButton($(event.target), true);
@@ -105,6 +109,17 @@ jQuery(function ($) {
         }
     }
 
+    function getNewPreview(preview, newContainer, counter) {
+        let newPreview = $('<div></div>').append(preview.clone()).html();
+        newPreview = $(newPreview.replace(
+            new RegExp(escapeNameForRegExp(preview.data('name')), 'g'),
+            newContainer.data('base-name') + '[' + counter + ']'
+        ));
+        newPreview.find('> .acb-element-toolbar').data('form-index', counter);
+
+        return newPreview;
+    }
+
     function toggleColumnPlaceholderButton(column, show) {
         if (column.hasClass('acb-column-sortable-group')) {
             if (column.find('.acb-sortable').length === 0) {
@@ -117,13 +132,16 @@ jQuery(function ($) {
         }
     }
 
-    function calculatePosition() {
-        $(".acb-sortable-group").each(function(){
+    function calculatePosition(group) {
+        if (typeof group === 'undefined') {
+            group = $(".acb-sortable-group");
+        }
+        group.each(function(){
             let sortables = $(this).children('.acb-sortable');
             for (var i=0; i < sortables.length; i++) {
                 let newPosition = i+1;
                 if ($(sortables[i]).closest('.acb-lateral-slide').length === 0) {
-                    $('[name="' + $(sortables[i]).data('name') + '[position]"]').first().val(newPosition);
+                    updateFormData($(sortables[i]).data('name') + '[position]', newPosition);
                 } else {
                     $(sortables[i]).find('[name$="[position]"]').first().val(newPosition);
                     $(sortables[i]).find('.panel-position').first().html(newPosition);
@@ -154,10 +172,12 @@ jQuery(function ($) {
         }
     });
 
-    function deleteElement(element) {
-        $('.acb-element-form[data-name="' + element.data('name') + '"]').remove();
+    function deleteElement(element, canCalculatePosition) {
+        updateFormData(element.data('name'), undefined);
         element.remove();
-        calculatePosition();
+        if (canCalculatePosition !== false) {
+            calculatePosition();
+        }
     }
 
     $('body').on('click', '.acb-add-collection-item', function (e) {
@@ -191,18 +211,17 @@ jQuery(function ($) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        usedContainer = null;
-        let previewRow = usedAddFieldBlock = $(this).closest('.acb-row');
-        let formRow = $('.acb-element-form[data-name="' + previewRow.data('name') + '"]');
+        let previewRow = $(this).closest('.acb-row');
+        let container = previewRow.closest('.acb-sortable').parents('.acb-sortable-group');
+        let counter = getCounterFromContainer(container);
 
-        submitNewRow(
-            mergeRowDataIntoFormData(new FormData(), extractRowData(formRow)),
-            $(this).closest('.acb-element-toolbar').data('duplicate-url'),
-            'POST',
-            previewRow.closest('.acb-sortable').parents('.acb-sortable-group').data('base-name'),
-            false,
-            true
-        );
+        previewRow.after(getNewPreview(previewRow, container, counter));
+        updateFormData(container.data('base-name') + '[' + counter + ']', getFormData(previewRow.data('name')));
+
+        counter++;
+        container.data('widget-counter', counter);
+
+        calculatePosition(container);
     });
 
     $('body').on('click', '.change-display-options button', function(e) {
@@ -230,18 +249,17 @@ jQuery(function ($) {
                     columnElements.each(function (fieldIndex, field) {
                         let previewRow = $(field).closest('.acb-row');
                         let fieldName = previewRow.data('name');
-                        let formRow = $('.acb-element-form[data-name="' + fieldName + '"]');
                         previewRow.appendTo(targetColumnContainer);
 
                         elementsToMove.push({
-                            'formData': mergeRowDataIntoFormData(new FormData(), extractRowData(formRow)),
+                            'formData': buildCustomLayoutFormData(new FormData(), getFormData(fieldName)),
                             'duplicateUrl': $(field).find('.acb-element-toolbar').data('duplicate-url'),
                             'fieldName': fieldName
                         });
                     });
-                    deleteElement($(element));
+                    deleteElement($(element), false);
                 } else {
-                    $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
+                    updateFormData($(element).data('name') + '[config][size]', colSize);
                 }
             });
             if (elementsToMove.length > 0) {
@@ -260,7 +278,9 @@ jQuery(function ($) {
                         elementsToMove[i].duplicateUrl,
                         'POST',
                         targetColumnContainer.data('base-name'),
-                        elementsToMove[i].fieldName
+                        elementsToMove[i].fieldName,
+                        false,
+                        true
                     );
                 }
             } else {
@@ -281,7 +301,7 @@ jQuery(function ($) {
                     row.off('elementAdded');
 
                     currentColumns.each(function (index, element) {
-                        $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
+                        updateFormData($(element).data('name') + '[config][size]', colSize);
                     });
                     // When all columns have been added
                     // Update row data and display updated preview
@@ -297,7 +317,7 @@ jQuery(function ($) {
             // I need to change size of existing columns
 
             currentColumns.each(function (index, element) {
-                $('.acb-elements-form-container').find('[name="' + $(element).data('name') + '[config][size]"]').val(colSize);
+                updateFormData($(element).data('name') + '[config][size]', colSize);
             });
             updateRowAfterLayoutUpdate(row);
         }
@@ -306,36 +326,13 @@ jQuery(function ($) {
     function updateRowAfterLayoutUpdate(row) {
         saveExistingField(
             $('.acb-elements-container').data('edit-url') + '?type=row',
-            mergeRowDataIntoFormData(new FormData(), extractRowData($('.acb-element-form[data-name="' + row.data('name') + '"]'))),
+            buildCustomLayoutFormData(new FormData(), getFormData(row.data('name'))),
             'POST',
             row,
-            false
+            false,
+            true
         );
     }
-
-    function updateAddButtons(group) {
-        let lastElementType = null;
-        group.children().each(function () {
-            if ($(this).hasClass('acb-add-field-container')) {
-                if (lastElementType === 'add') {
-                    $(this).remove();
-                }
-                lastElementType = 'add';
-            } else if ($(this).hasClass('acb-field')) {
-                if (lastElementType === 'field' || lastElementType === null) {
-                    $(this).before(group.find('.acb-add-field-container').first().clone());
-                }
-                lastElementType = 'field';
-            }
-        });
-        if (lastElementType) {
-            group.append(group.find('.acb-add-field-container').first().clone());
-        }
-    }
-
-    $('body').on('sortstop', '.acb-elements-container .acb-sortable-group', function () {
-        updateAddButtons($(this));
-    });
 
     ////////////////
     // Standalone //
@@ -413,7 +410,7 @@ jQuery(function ($) {
                 'size': columnSize
             }
         };
-        let columnData = buildCustomLayoutFormData(formData, data, '__field_name__');
+        let columnData = buildCustomLayoutFormData(formData, data);
 
         usedAddFieldBlock = null;
         usedContainer = row;
@@ -493,13 +490,16 @@ jQuery(function ($) {
     // get editing form
     function getEditFieldForm(url, row) {
         slide.empty();
-        let typeInputName = row.data('name') + '[elementType]';
-        typeInputName = typeInputName.replaceAll('[', '\\[').replaceAll(']', '\\]');
-        let type = $('.acb-elements-form-container').find('input[name=' +  typeInputName + ']').val();
+
+        let targetName = row.data('name');
+        let data = getFormData(targetName);
+        if (data.elements) {
+            delete data.elements;
+        }
 
         $.ajax({
-            url: url + '?edit=1&type='+type,
-            data: extractRowData($('.acb-element-form[data-name="' + row.data('name') + '"]')),
+            url: url + '?edit=1&type=' + data.elementType,
+            data: {'__field_name__': JSON.stringify(data)},
             type: 'POST'
         }).done(function (data) {
             slide.setHeader('<h1>' + data.title + '</h1>');
@@ -507,67 +507,19 @@ jQuery(function ($) {
             slide.setFooter(data.footer);
             slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                 e.preventDefault();
-                saveFieldData(this, row.data('name'), row);
+                saveFieldData(this, row, false);
             });
             initSortables(slide.content);
         });
     }
 
-    function extractRowData(row) {
-        let data = {};
-        let processedCheckboxes = [];
-        row.find('input, textarea, select').each(function () {
-            if (['radio', 'checkbox'].includes($(this).attr('type')) && !$(this).is(':checked')) {
-                return;
-            }
-            let value = $(this).val();
-            if (this.name.match(/^.*\[\]$/) && $(this).attr('type') === 'checkbox') {
-                if (processedCheckboxes.indexOf(this.name) !== -1) {
-                    return;
-                }
-                processedCheckboxes.push(this.name);
-
-                let checkedInputs = row.find('[name="' + this.name + '"]:checked');
-                if (checkedInputs.length === 0) {
-                    return;
-                }
-
-                value = [];
-                checkedInputs.each(function (index, checkbox) {
-                    value.push($(checkbox).val());
-                });
-            }
-            data[this.name.replace(row.data('name'), '__field_name__')] = value;
-        });
-
-        return data;
-    }
-
-    function mergeRowDataIntoFormData(formData, rowData, search, replacement) {
-        for (const [key, value] of Object.entries(rowData)) {
-            let newKey = key;
-            if (search && replacement) {
-                newKey = key.replace(search, replacement);
-            }
-            if (Array.isArray(value)) {
-                value.forEach(function(element) {
-                    formData.append(newKey, element);
-                });
-            } else {
-                formData.append(newKey, value);
-            }
-        }
-
-        return formData;
-    }
-
     // convert slide form to content preview
-    function saveFieldData(form, name, row) {
+    function saveFieldData(form, row, updateElements) {
         updateCKEditorElement(form);
-        saveExistingField(form.action, new FormData(form), form.method, row, true);
+        saveExistingField(form.action, new FormData(form), form.method, row, true, updateElements);
     }
 
-    function saveExistingField(url, formData, method, row, isSlideOpened) {
+    function saveExistingField(url, formData, method, row, isSlideOpened, updateElements) {
         $.ajax({
             url: url,
             data: formData,
@@ -577,14 +529,33 @@ jQuery(function ($) {
         }).done(function (data) {
             if (data.success) {
                 let name = row.data('name');
-                let formId = row.find('> .acb-element-toolbar').data('form-id');
                 let formIndex = row.find('> .acb-element-toolbar').data('form-index');
 
-                let preview = $(replacePlaceholderEditData(data.preview, name, formId, formIndex));
+                let preview = $(replacePlaceholderEditData(data.preview, name, formIndex));
+                if (updateElements === false) {
+                    let oldContainer = null, newContainer = null, counter = null, elements = [];
+                    if (row.hasClass('acb-sortable-group')) {
+                        oldContainer = row;
+                        newContainer = preview;
+                    } else if (row.hasClass('acb-layout-column')) {
+                        oldContainer = row.find('> .acb-column-content > .acb-sortable-group');
+                        newContainer = preview.find('> .acb-column-content > .acb-sortable-group');
+                    }
+                    if (oldContainer !== null) {
+                        counter = getCounterFromContainer(oldContainer);
+                        elements = oldContainer.find('> .acb-sortable');
+                        newContainer.append(elements);
+                        newContainer.data('widget-counter', counter);
+                    }
+                }
                 row.replaceWith(preview);
 
-                let elementForm = $(replacePlaceholderEditData(data.form, name, formId, formIndex));
-                $('.acb-element-form[data-name="' + name + '"]').replaceWith(elementForm);
+                for (const [key, value] of Object.entries(JSON.parse($(data.form).val()))) {
+                    if (key === 'elements' && updateElements === false) {
+                        continue;
+                    }
+                    updateFormData(name + '[' + key + ']', value);
+                }
 
                 initSortables();
                 calculatePosition();
@@ -597,7 +568,7 @@ jQuery(function ($) {
                     slide.setContent(data.content);
                     slide.content.find('.acb-edit-field-form').on('submit', function (e) {
                         e.preventDefault();
-                        saveFieldData(this, row.data('name'), row);
+                        saveFieldData(this, row, updateElements);
                     });
                 }
             }
@@ -631,14 +602,16 @@ jQuery(function ($) {
                                 'elementType': 'column',
                                 'config': {
                                     'size': 12
-                                }
+                                },
+                                'elements': [
+                                    JSON.parse($(data.form).val())
+                                ]
                             }
                         ]
-                    }, '__field_name__');
-                    let elementForm = replacePlaceholderNewData(data.form, '', 0);
+                    });
 
                     submitNewRow(
-                        mergeRowDataIntoFormData(layoutData, extractRowData($(elementForm)), '[__field_name__]', '__field_name__[elements][0][elements][0]'),
+                        layoutData,
                         $('.acb-elements-container').data('edit-url') + '?type=row',
                         'POST',
                         $('.acb-elements-container').find('> .acb-sortable-group').data('base-name'),
@@ -653,10 +626,10 @@ jQuery(function ($) {
                     if (usedAddFieldBlock) {
                         container = usedAddFieldBlock.parents('.acb-sortable-group');
                     }
-                    let counter = container.data('widget-counter') || container.find('> .acb-sortable').length;
+                    let counter = getCounterFromContainer(container);
 
                     let preview = replacePlaceholderNewData(data.preview, baseName, counter);
-                    let elementForm = replacePlaceholderNewData(data.form, baseName, counter);
+                    updateFormData(baseName + '[' + counter + ']', JSON.parse($(data.form).val()));
 
                     counter++;
                     container.data('widget-counter', counter);
@@ -677,7 +650,6 @@ jQuery(function ($) {
                             container.prepend(preview);
                         }
                     }
-                    $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
                     initSortables();
                     calculatePosition();
 
@@ -699,7 +671,7 @@ jQuery(function ($) {
         });
     }
 
-    function moveElementToList(formData, action, method, baseName, oldName) {
+    function moveElementToList(formData, action, method, baseName, oldName, canDeleteOldElement, canCalculatePosition) {
         $.ajax({
             url: action,
             data: formData,
@@ -709,26 +681,35 @@ jQuery(function ($) {
         }).done(function (data) {
             if (data.success) {
                 let container = $('.acb-sortable-group[data-base-name="' + baseName + '"]');
-                let counter = container.data('widget-counter') || container.find('> .acb-sortable').length;
+                let counter = getCounterFromContainer(container);
 
                 let preview = replacePlaceholderNewData(data.preview, baseName, counter);
-                let elementForm = replacePlaceholderNewData(data.form, baseName, counter);
+                updateFormData(baseName + '[' + counter + ']', JSON.parse($(data.form).val()));
+                if (canDeleteOldElement !== false) {
+                    updateFormData(oldName, undefined);
+                }
 
                 counter++;
                 container.data('widget-counter', counter);
 
                 $('.acb-sortable[data-name="' + oldName + '"]').replaceWith($(preview));
-                $('.acb-elements-form-container').find('.acb-element-form[data-name="' + oldName + '"]').remove();
-                $('[data-form-container-name="' + baseName + '"]').append($(elementForm));
-                calculatePosition();
+                if (canCalculatePosition !== false) {
+                    calculatePosition();
+                }
 
                 container.trigger('elementMoved');
             }
         });
     }
 
-    function replacePlaceholderEditData(content, name, formId, formIndex) {
-        return content.replace(/__field_name__/g, name).replace(/field_name__/g, formId).replace(/__name__/g, formIndex);
+    function getCounterFromContainer(container) {
+        return typeof container.data('widget-counter') !== 'undefined' ?
+            parseInt(container.data('widget-counter')) :
+            container.find('> .acb-sortable').length;
+    }
+
+    function replacePlaceholderEditData(content, name, formIndex) {
+        return content.replace(/__field_name__/g, name).replace(/__name__/g, formIndex);
     }
     function replacePlaceholderNewData(content, baseName, counter) {
         let name = baseName + '[__name__]';
@@ -743,21 +724,80 @@ jQuery(function ($) {
 
         return content;
     }
+    function escapeNameForRegExp(name) {
+        return name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+    }
 
     function buildCustomLayoutFormData(formData, data, prefix) {
+        if (typeof prefix === 'undefined') {
+            prefix = '__field_name__';
+        }
         for (const [key, value] of Object.entries(data)) {
             if (Array.isArray(value)) {
                 for (let i = 0; i < value.length; i++) {
                     formData = buildCustomLayoutFormData(formData, value[i], prefix + '[' + key + ']' + '[' + i + ']');
                 }
-            } else if (typeof value === 'object') {
+            } else if (typeof value === 'object' && value !== null) {
                 formData = buildCustomLayoutFormData(formData, value, prefix + '[' + key + ']');
             } else {
-                formData.append(prefix + '[' + key + ']', value);
+                if (value !== false) {
+                    let newValue = value;
+                    if (newValue === true) {
+                        newValue = 1;
+                    } else if (newValue === null) {
+                        newValue = '';
+                    }
+                    formData.append(prefix + '[' + key + ']', newValue);
+                }
             }
         }
 
         return formData;
+    }
+
+    function getFormData(targetName, currentName, data) {
+        if (typeof currentName === 'undefined') {
+            currentName = $('#content-data-json').attr('name');
+        }
+        if (typeof data === 'undefined') {
+            data = JSON.parse($('#content-data-json').val());
+        }
+        for (const [key, value] of Object.entries(data)) {
+            let name = currentName + '[' + key + ']';
+            if (name === targetName) {
+                return value;
+            }
+            if (targetName.match(new RegExp('^' + escapeNameForRegExp(name)))) {
+                return getFormData(targetName, name, data[key]);
+            }
+        }
+    }
+    function replaceJsonData(data, path, value) {
+        const [head, ...rest] = path.split('.');
+
+        if (head) {
+            return {
+                ...data,
+                [head]: rest.length
+                    ? replaceJsonData(data[head], rest.join('.'), value)
+                    : value
+            }
+        }
+
+        return {
+            ...data,
+            ...value
+        }
+    }
+    function updateFormData(name, value) {
+        let field = $('#content-data-json');
+        let targetName = name.replace(field.attr('name'), '');
+        targetName = targetName.replace(/(\]\[)/g, '.')
+            .replace(/[\[\]]/g, '.')
+            .replace(/\.$/g, '')
+            .replace(/^\./g, '');
+        let newData = replaceJsonData(JSON.parse(field.val()), targetName, value);
+        field.val(JSON.stringify(newData));
     }
 
     slide.element.on('slideContentUpdated', updateExampleContainer);
