@@ -241,85 +241,75 @@ jQuery(function ($) {
             // Then remove columns 3 and 4
             // And finally change size of columns 1 and 2
             let targetColumnContainer = $(currentColumns[colNumber - 1]).find('.acb-sortable-group');
-            let elementsToMove = [];
-            let elementsMoved = 0;
+            let counter = getCounterFromContainer(targetColumnContainer);
             currentColumns.each(function (index, element) {
                 if (index >= colNumber) {
                     let columnElements = $(element).find('.acb-sortable-group > .acb-sortable');
                     columnElements.each(function (fieldIndex, field) {
                         let previewRow = $(field).closest('.acb-row');
-                        let fieldName = previewRow.data('name');
-                        previewRow.appendTo(targetColumnContainer);
+                        getNewPreview(previewRow, targetColumnContainer, counter).appendTo(targetColumnContainer);
+                        updateFormData(targetColumnContainer.data('base-name') + '[' + counter + ']', getFormData(previewRow.data('name')));
 
-                        elementsToMove.push({
-                            'formData': buildCustomLayoutFormData(new FormData(), getFormData(fieldName)),
-                            'duplicateUrl': $(field).find('.acb-element-toolbar').data('duplicate-url'),
-                            'fieldName': fieldName
-                        });
+                        counter++;
                     });
                     deleteElement($(element), false);
                 } else {
                     updateFormData($(element).data('name') + '[config][size]', colSize);
                 }
             });
-            if (elementsToMove.length > 0) {
-                targetColumnContainer.on('elementMoved', function () {
-                    elementsMoved++;
-                    if (elementsMoved === elementsToMove.length) {
-                        targetColumnContainer.off('elementMoved');
-                        // When all elements have been moved to the last column
-                        // Update row data and display updated preview
-                        updateRowAfterLayoutUpdate(row);
-                    }
-                });
-                for (let i = 0; i < elementsToMove.length; i++) {
-                    moveElementToList(
-                        elementsToMove[i].formData,
-                        elementsToMove[i].duplicateUrl,
-                        'POST',
-                        targetColumnContainer.data('base-name'),
-                        elementsToMove[i].fieldName,
-                        false,
-                        true
-                    );
-                }
-            } else {
-                updateRowAfterLayoutUpdate(row);
-            }
+            targetColumnContainer.data('widget-counter', counter);
+            calculatePosition(targetColumnContainer);
+            updateRowAfterLayoutUpdate(row);
         } else if (currentColNumber < colNumber) {
             // I currently have 2 columns
             // I want to use 3 columns
             // I need to add a third column
             // Then change size of all columns
 
-            let columnsToAdd = colNumber - currentColNumber;
-            let columnsAdded = 0;
-
-            row.on('elementAdded', function () {
-                columnsAdded++;
-                if (columnsAdded === columnsToAdd) {
-                    row.off('elementAdded');
-
-                    currentColumns.each(function (index, element) {
-                        updateFormData($(element).data('name') + '[config][size]', colSize);
-                    });
-                    // When all columns have been added
-                    // Update row data and display updated preview
-                    updateRowAfterLayoutUpdate(row);
+            let position = 0;
+            currentColumns.each(function (index, element) {
+                updateFormData($(element).data('name') + '[config][size]', colSize);
+                let currentPosition = parseInt(getFormData($(element).data('name') + '[position]'));
+                if (currentPosition > position) {
+                    position = currentPosition;
                 }
             });
+            position++;
+
+            let columnsToAdd = colNumber - currentColNumber;
+            let counter = getCounterFromContainer(row);
             for (let i = 0; i < columnsToAdd; i++) {
-                addColumnToRow(colSize, row);
+                updateFormData(row.data('base-name') + '[' + counter + ']', {
+                    'elementType': 'column',
+                    'position': position,
+                    'config': {
+                        'size': colSize
+                    }
+                });
+
+                counter++;
+                position++;
             }
+            row.data('widget-counter', counter);
+
+            // When all columns have been added
+            // Update row data and display updated preview
+            updateRowAfterLayoutUpdate(row);
         } else {
             // I currently have 2 columns
             // I want to use 2 columns
             // I need to change size of existing columns
 
+            let shouldUpdateRow = false;
             currentColumns.each(function (index, element) {
-                updateFormData($(element).data('name') + '[config][size]', colSize);
+                if (parseInt(getFormData($(element).data('name') + '[config][size]')) !== colSize) {
+                    updateFormData($(element).data('name') + '[config][size]', colSize);
+                    shouldUpdateRow = true;
+                }
             });
-            updateRowAfterLayoutUpdate(row);
+            if (shouldUpdateRow) {
+                updateRowAfterLayoutUpdate(row);
+            }
         }
     });
 
@@ -352,7 +342,6 @@ jQuery(function ($) {
         usedAddFieldBlock = $(this).closest('.acb-row');
         usedContainer = null;
         let addAfter = !$(this).hasClass('btn-new-field-before');
-        usedContainer = null;
 
         if (usedAddFieldBlock.hasClass('acb-layout-column')) {
             // We want to add a new field before or after a column
@@ -633,17 +622,14 @@ jQuery(function ($) {
 
                     counter++;
                     container.data('widget-counter', counter);
-                    let mainElement;
 
                     if (usedAddFieldBlock) {
-                        mainElement = usedAddFieldBlock;
                         if (addAfter) {
                             usedAddFieldBlock.after(preview);
                         } else {
                             usedAddFieldBlock.before(preview);
                         }
                     } else {
-                        mainElement = container;
                         if (addAfter) {
                             container.append(preview);
                         } else {
@@ -656,8 +642,6 @@ jQuery(function ($) {
                     if (isSlideOpened) {
                         slide.close();
                     }
-
-                    mainElement.trigger('elementAdded');
                 }
             } else {
                 if (isSlideOpened) {
@@ -667,37 +651,6 @@ jQuery(function ($) {
                         saveNewFieldData(this, baseName);
                     });
                 }
-            }
-        });
-    }
-
-    function moveElementToList(formData, action, method, baseName, oldName, canDeleteOldElement, canCalculatePosition) {
-        $.ajax({
-            url: action,
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: method
-        }).done(function (data) {
-            if (data.success) {
-                let container = $('.acb-sortable-group[data-base-name="' + baseName + '"]');
-                let counter = getCounterFromContainer(container);
-
-                let preview = replacePlaceholderNewData(data.preview, baseName, counter);
-                updateFormData(baseName + '[' + counter + ']', JSON.parse($(data.form).val()));
-                if (canDeleteOldElement !== false) {
-                    updateFormData(oldName, undefined);
-                }
-
-                counter++;
-                container.data('widget-counter', counter);
-
-                $('.acb-sortable[data-name="' + oldName + '"]').replaceWith($(preview));
-                if (canCalculatePosition !== false) {
-                    calculatePosition();
-                }
-
-                container.trigger('elementMoved');
             }
         });
     }
