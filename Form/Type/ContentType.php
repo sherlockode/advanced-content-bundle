@@ -85,24 +85,6 @@ class ContentType extends AbstractType
                 $form->remove('slug');
                 $form->remove('locale');
             }
-
-            if ($content === null || empty($content->getData())) {
-                $emptyRowCol = [
-                    'elementType' => 'row',
-                    'position' => 0,
-                    'elements' => [
-                        [
-                            'elementType' => 'column',
-                            'position' => 0,
-                            'config' => [
-                                'size' => 12,
-                            ],
-                            'elements' => [],
-                        ],
-                    ],
-                ];
-                $form->get('data')->setData([$emptyRowCol]);
-            }
         });
 
         $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
