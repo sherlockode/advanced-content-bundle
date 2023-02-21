@@ -5,6 +5,8 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
+use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
+use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 use Symfony\Component\Form\FormView;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -33,28 +35,36 @@ class ContentExtension extends AbstractExtension
     private $urlBuilderManager;
 
     /**
+     * @var UserProviderInterface
+     */
+    private $userProvider;
+
+    /**
      * @var string
      */
     private $baseFormTheme;
 
     /**
-     * @param ElementManager    $elementManager
-     * @param Environment       $twig
-     * @param EntityManager     $em
-     * @param UrlBuilderManager $urlBuilderManager
-     * @param string            $baseFormTheme
+     * @param ElementManager        $elementManager
+     * @param Environment           $twig
+     * @param EntityManager         $em
+     * @param UrlBuilderManager     $urlBuilderManager
+     * @param UserProviderInterface $userProvider
+     * @param string                $baseFormTheme
      */
     public function __construct(
         ElementManager $elementManager,
         Environment $twig,
         EntityManager $em,
         UrlBuilderManager $urlBuilderManager,
+        UserProviderInterface $userProvider,
         $baseFormTheme
     ) {
         $this->elementManager = $elementManager;
         $this->twig = $twig;
         $this->em = $em;
         $this->urlBuilderManager = $urlBuilderManager;
+        $this->userProvider = $userProvider;
         $this->baseFormTheme = $baseFormTheme;
     }
 
@@ -77,6 +87,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
             new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
             new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
+            new TwigFunction('acb_get_content_version_user_name', [$this, 'getContentVersionUserName']),
         ];
     }
 
@@ -356,5 +367,15 @@ class ContentExtension extends AbstractExtension
         }
 
         return $json;
+    }
+
+    /**
+     * @param ContentVersionInterface $contentVersion
+     *
+     * @return string
+     */
+    public function getContentVersionUserName(ContentVersionInterface $contentVersion): string
+    {
+        return $this->userProvider->getUserName($contentVersion->getUserId());
     }
 }

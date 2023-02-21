@@ -296,5 +296,14 @@ configuration:
             container: Container
             content: Content
 content_version:
+    list:
+        title: Version history
+        id: ID
+        date: Creation date
+        user: User
+        status: Status
+        statuses:
+            draft: Draft
+            published: Published
     user:
         anonymous: Anonymous

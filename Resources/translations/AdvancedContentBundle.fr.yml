@@ -296,5 +296,14 @@ configuration:
             container: Contenant
             content: Contenu
 content_version:
+    list:
+        title: Historique des versions
+        id: ID
+        date: Date de création
+        user: Utilisateur
+        status: Statut
+        statuses:
+            draft: Brouillon
+            published: Publié
     user:
         anonymous: Anonyme
