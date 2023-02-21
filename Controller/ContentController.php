@@ -106,9 +106,13 @@ class ContentController extends AbstractController
             'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
             'csrf_protection' => false,
             'label' => $element->getFormFieldLabel(),
-            'is_post_json' => $request->query->has('edit'),
         ]);
         $form = $formBuilder->getForm();
+        if ($request->query->get('edit')) {
+            // decode JSON data before the handleRequest call
+            $data = $request->request->get('__field_name__');
+            $request->request->set('__field_name__', json_decode($data, true));
+        }
         $form->handleRequest($request);
 
         if (!$request->query->get('edit') && $form->isSubmitted()) {
