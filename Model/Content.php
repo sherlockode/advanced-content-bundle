@@ -2,6 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 abstract class Content implements ContentInterface
 {
     /**
@@ -35,11 +38,22 @@ abstract class Content implements ContentInterface
     protected $locale;
 
     /**
+     * @var ContentVersionInterface|null
+     */
+    protected $contentVersion;
+
+    /**
+     * @var Collection
+     */
+    protected $versions;
+
+    /**
      * Content constructor
      */
     public function __construct()
     {
         $this->data = [];
+        $this->versions = new ArrayCollection();
     }
 
     public function __clone()
@@ -100,12 +114,7 @@ abstract class Content implements ContentInterface
      */
     public function getData()
     {
-        $data = $this->data ?? [];
-        uasort($data, function ($a, $b) {
-            return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
-        });
-
-        return $data;
+        return $this->data;
     }
 
     /**
@@ -116,6 +125,7 @@ abstract class Content implements ContentInterface
     public function setData(array $data)
     {
         $this->data = $data;
+        $this->contentVersion = null;
 
         return $this;
     }
@@ -156,6 +166,59 @@ abstract class Content implements ContentInterface
     public function setLocale($locale)
     {
         $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return ContentVersionInterface|null
+     */
+    public function getContentVersion(): ?ContentVersionInterface
+    {
+        return $this->contentVersion;
+    }
+
+    /**
+     * @param ContentVersionInterface|null $contentVersion
+     *
+     * @return $this
+     */
+    public function setContentVersion(?ContentVersionInterface $contentVersion)
+    {
+        $this->contentVersion = $contentVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getVersions()
+    {
+        return $this->versions;
+    }
+
+    /**
+     * @param ContentVersionInterface $contentVersion
+     *
+     * @return $this
+     */
+    public function addVersion(ContentVersionInterface $contentVersion)
+    {
+        $contentVersion->setContent($this);
+        $this->versions->add($contentVersion);
+
+        return $this;
+    }
+
+    /**
+     * @param ContentVersionInterface $contentVersion
+     *
+     * @return $this
+     */
+    public function removeVersion(ContentVersionInterface $contentVersion)
+    {
+        $this->versions->removeElement($contentVersion);
 
         return $this;
     }

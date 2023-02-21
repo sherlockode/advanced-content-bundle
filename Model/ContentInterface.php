@@ -2,8 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-use Doctrine\Common\Collections\Collection;
-
 interface ContentInterface
 {
     /**
@@ -42,12 +40,15 @@ interface ContentInterface
     public function setSlug($slug);
 
     /**
-     * Get content's field values
-     *
      * @return array
      */
     public function getData();
 
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
     public function setData(array $data);
 
     /**
@@ -75,4 +76,16 @@ interface ContentInterface
      * @return $this
      */
     public function setLocale($locale);
+
+    /**
+     * @return ContentVersionInterface|null
+     */
+    public function getContentVersion(): ?ContentVersionInterface;
+
+    /**
+     * @param ContentVersionInterface|null $contentVersion
+     *
+     * @return $this
+     */
+    public function setContentVersion(?ContentVersionInterface $contentVersion);
 }

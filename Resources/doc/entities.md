@@ -5,6 +5,7 @@ Entities
 
 We implemented the following models:
 - Content
+- ContentVersion
 - PageType
 - Page
 - PageMeta
@@ -23,8 +24,10 @@ Here are basic example implementations for the entity classes:
 
 namespace App\Entity;
 
-use Sherlockode\AdvancedContentBundle\Model\Content as BaseContent;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Sherlockode\AdvancedContentBundle\Model\Content as BaseContent;
+use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
 
 /**
  * @ORM\Entity
@@ -44,7 +47,57 @@ class Content extends BaseContent
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $page;
+
+    /**
+     * @var ContentVersionInterface
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\ContentVersion")
+     * @ORM\JoinColumn(name="content_version_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $contentVersion;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\ContentVersion", mappedBy="content", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"createdAt": "DESC"})
+     */
+    protected $versions;
 }
+
+```
+
+```php
+<?php
+// src/Entity/ContentVersion.php
+
+namespace App\Entity;
+
+use Sherlockode\AdvancedContentBundle\Model\ContentVersion as BaseContentVersion;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="content_version")
+ */
+class ContentVersion extends BaseContentVersion
+{
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Content", inversedBy="versions")
+     * @ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $content;
+}
+
 
 ```
 
