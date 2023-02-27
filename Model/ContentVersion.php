@@ -30,11 +30,17 @@ abstract class ContentVersion implements ContentVersionInterface
     protected $createdAt;
 
     /**
+     * @var bool
+     */
+    protected $autoSave;
+
+    /**
      * ContentVersion constructor
      */
     public function __construct()
     {
         $this->data = [];
+        $this->autoSave = false;
     }
 
     /**
@@ -126,6 +132,26 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoSave(): bool
+    {
+        return $this->autoSave;
+    }
+
+    /**
+     * @param bool $autoSave
+     *
+     * @return $this
+     */
+    public function setAutoSave(bool $autoSave): self
+    {
+        $this->autoSave = $autoSave;
 
         return $this;
     }

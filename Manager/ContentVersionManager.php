@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContentVersionManager
 {
@@ -19,13 +20,23 @@ class ContentVersionManager
     private $userProvider;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * @param ConfigurationManager  $configurationManager
      * @param UserProviderInterface $userProvider
+     * @param RequestStack          $requestStack
      */
-    public function __construct(ConfigurationManager $configurationManager, UserProviderInterface $userProvider)
-    {
+    public function __construct(
+        ConfigurationManager $configurationManager,
+        UserProviderInterface $userProvider,
+        RequestStack $requestStack
+    ) {
         $this->configurationManager = $configurationManager;
         $this->userProvider = $userProvider;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -35,6 +46,16 @@ class ContentVersionManager
      */
     public function getContentData(ContentInterface $content): array
     {
+        if ($mainRequest = $this->requestStack->getMainRequest()) {
+            if ($contentVersionId = $mainRequest->get('versionId')) {
+                foreach ($content->getVersions() as $version) {
+                    if ($version->getId() === (int)$contentVersionId) {
+                        return $version->getData();
+                    }
+                }
+            }
+        }
+
         if ($content->getContentVersion() !== null && !empty($content->getContentVersion()->getData())) {
             return $content->getContentVersion()->getData();
         }
@@ -87,6 +108,7 @@ class ContentVersionManager
             $lastDraft = new ($this->configurationManager->getEntityClass('content_version'));
             $lastDraft->setContent($content);
             $lastDraft->setUserId($userId);
+            $lastDraft->setAutoSave(true);
         }
         $lastDraft->setCreatedAt(new \DateTimeImmutable());
 
@@ -108,6 +130,9 @@ class ContentVersionManager
                 continue;
             }
             if ($version->getUserId() !== $userId) {
+                continue;
+            }
+            if (!$version->isAutoSave()) {
                 continue;
             }
             if ($lastDraft === null || $lastDraft->getCreatedAt() < $version->getCreatedAt()) {

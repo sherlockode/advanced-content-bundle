@@ -356,18 +356,34 @@ jQuery(function ($) {
             type: 'POST'
         }).done(function (data) {
             if (data.success) {
-                let existingLine = history.find('tbody').find('[data-version-id="' + data.id + '"]');
-                if (existingLine.length === 0) {
-                    history.find('tbody').prepend(data.html);
-                } else {
-                    existingLine.replaceWith(data.html);
-                }
+                $('.version-history').replaceWith(data.html);
             } else {
                 hasFormChanged = true;
             }
             isAddingVersion = false;
         });
     }, 20 * 1000);
+    $('body').on('click', '.version-history .see-all', function () {
+        $(this).remove();
+    });
+    $('body').on('click', '.version-history .acb-version-load', function() {
+        window.location = $(this).closest('.version-history-table').data('load-version-url') + '?versionId=' + $(this).closest('tr').data('version-id');
+    });
+    $('body').on('click', '.version-history .acb-version-remove', function() {
+        let history = $(this).closest('.version-history-table');
+        let versionLine = $(this).closest('tr');
+        if (confirm($(this).data('confirm-delete'))) {
+            $.ajax({
+                url: history.data('remove-version-url'),
+                data: {'versionId': versionLine.data('version-id')},
+                type: 'POST'
+            }).done(function (data) {
+                if (data.success) {
+                    $('.version-history').replaceWith(data.html);
+                }
+            });
+        }
+    });
 
     $('body').on('click', '.btn-new-field', function () {
         let baseName = $(this).parents('.acb-sortable').parents('.acb-sortable-group').data('base-name');

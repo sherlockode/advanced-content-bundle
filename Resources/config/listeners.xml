@@ -9,5 +9,8 @@
             <tag name="doctrine.event_listener" event="preRemove" lazy="1"/>
             <tag name="doctrine.event_listener" event="postRemove" lazy="1"/>
         </service>
+        <service id="sherlockode_advanced_content.content_version_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentVersionListener">
+            <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
+        </service>
     </services>
 </container>
