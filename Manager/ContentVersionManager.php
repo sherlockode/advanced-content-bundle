@@ -60,22 +60,7 @@ class ContentVersionManager
             return $content->getContentVersion()->getData();
         }
 
-        $emptyRowCol = [
-            'elementType' => 'row',
-            'position' => 0,
-            'elements' => [
-                [
-                    'elementType' => 'column',
-                    'position' => 0,
-                    'config' => [
-                        'size' => 12,
-                    ],
-                    'elements' => [],
-                ],
-            ],
-        ];
-
-        return [$emptyRowCol];
+        return [];
     }
 
     /**
