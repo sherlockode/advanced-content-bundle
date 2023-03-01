@@ -67,6 +67,7 @@
 
         <service id="sherlockode_advanced_content.content_version_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.user_provider"/>
         </service>
         <service id="sherlockode_advanced_content.content_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentListener">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
@@ -74,5 +75,10 @@
             <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
             <tag name="doctrine.event_listener" event="onFlush" lazy="1"/>
         </service>
+
+        <service id="sherlockode_advanced_content.user_provider" class="Sherlockode\AdvancedContentBundle\User\AnonymousUserProvider">
+            <argument type="service" id="translator"/>
+        </service>
+        <service id="Sherlockode\AdvancedContentBundle\User\UserProviderInterface" alias="sherlockode_advanced_content.user_provider"/>
     </services>
 </container>

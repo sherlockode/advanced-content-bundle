@@ -4,6 +4,7 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
+use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 
 class ContentVersionManager
 {
@@ -13,11 +14,18 @@ class ContentVersionManager
     private $configurationManager;
 
     /**
-     * @param ConfigurationManager $configurationManager
+     * @var UserProviderInterface
      */
-    public function __construct(ConfigurationManager $configurationManager)
+    private $userProvider;
+
+    /**
+     * @param ConfigurationManager  $configurationManager
+     * @param UserProviderInterface $userProvider
+     */
+    public function __construct(ConfigurationManager $configurationManager, UserProviderInterface $userProvider)
     {
         $this->configurationManager = $configurationManager;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -59,6 +67,7 @@ class ContentVersionManager
         $contentVersion = new ($this->configurationManager->getEntityClass('content_version'));
         $contentVersion->setData($content->getData());
         $contentVersion->setCreatedAt(new \DateTimeImmutable());
+        $contentVersion->setUserId($this->userProvider->getUserId());
         $content->addVersion($contentVersion);
         $content->setContentVersion($contentVersion);
 
