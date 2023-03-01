@@ -31,8 +31,9 @@
 {% endblock %}
 
 {% macro acb_button_add_field(baseName) %}
+    {% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
     <div class="acb-add-field-container" data-base-name="{{ baseName }}">
-        <button type="button" class="btn btn-light btn-append-field">
+        <button type="button" class="{{ classes.button }} btn-append-field">
             <i class="fa-solid fa-plus"></i>
             <span>{{ 'content.add_field'|trans }}</span>
         </button>

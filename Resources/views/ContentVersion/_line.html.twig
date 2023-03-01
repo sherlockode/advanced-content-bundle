@@ -1,5 +1,7 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
+{% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
+
 {% set isCurrentVersion = false %}
 {% if version.content.contentVersion.id == version.id %}
     {% set isCurrentVersion = true %}
@@ -18,13 +20,13 @@
     </td>
     <td>
         <button type="button"
-                class="btn acb-version-load"
+                class="{{ classes.buttonIcon }} acb-version-load"
                 title="{{ 'content_version.list.actions.load_draft'|trans }}"
         >
             <i class="fa-solid fa-eye"></i>
         </button>
         {% if not isCurrentVersion %}
-            <button type="button" class="btn acb-version-remove" title="{{ 'content_version.list.actions.delete_draft'|trans }}" data-confirm-delete="{{ 'content_version.list.actions.delete_confirm'|trans }}">
+            <button type="button" class="{{ classes.buttonIcon }} acb-version-remove" title="{{ 'content_version.list.actions.delete_draft'|trans }}" data-confirm-delete="{{ 'content_version.list.actions.delete_confirm'|trans }}">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         {% endif %}
