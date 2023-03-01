@@ -3,9 +3,11 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Sherlockode\AdvancedContentBundle\Form\Type\ElementsType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ElementType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
+use Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -51,6 +53,11 @@ class ContentController extends AbstractController
     private $translator;
 
     /**
+     * @var ContentVersionManager
+     */
+    private $contentVersionManager;
+
+    /**
      * ContentController constructor.
      *
      * @param EntityManagerInterface $em
@@ -59,6 +66,7 @@ class ContentController extends AbstractController
      * @param ConfigurationManager   $configurationManager
      * @param FormFactoryInterface   $formFactory
      * @param TranslatorInterface    $translator
+     * @param ContentVersionManager  $contentVersionManager
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -66,7 +74,8 @@ class ContentController extends AbstractController
         ElementManager         $elementManager,
         ConfigurationManager   $configurationManager,
         FormFactoryInterface   $formFactory,
-        TranslatorInterface    $translator
+        TranslatorInterface    $translator,
+        ContentVersionManager  $contentVersionManager
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
@@ -74,6 +83,7 @@ class ContentController extends AbstractController
         $this->configurationManager = $configurationManager;
         $this->formFactory = $formFactory;
         $this->translator = $translator;
+        $this->contentVersionManager = $contentVersionManager;
     }
 
     /**
@@ -228,5 +238,49 @@ class ContentController extends AbstractController
         $this->em->flush();
 
         return new RedirectResponse($request->server->get('HTTP_REFERER', '/'));
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function saveDraftAction(Request $request)
+    {
+        $id = $request->get('id');
+        $content = $this->contentManager->getContentById($id);
+
+        if ($content === null) {
+            return new JsonResponse([
+                'success' => false,
+            ]);
+        }
+
+        $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementsType::class, [], [
+            'csrf_protection' => false,
+        ]);
+        $form = $formBuilder->getForm();
+        // decode JSON data before the handleRequest call
+        $data = $request->request->get('__field_name__');
+        $request->request->set('__field_name__', json_decode($data, true));
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $contentVersion = $this->contentVersionManager->getDraftContentVersion($content);
+            $contentVersion->setData($form->getData());
+            $this->em->persist($contentVersion);
+            $this->em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'id' => $contentVersion->getId(),
+                'html' => $this->renderView('@SherlockodeAdvancedContent/ContentVersion/_line.html.twig', [
+                    'version' => $contentVersion,
+                ]),
+            ]);
+        }
+
+        return new JsonResponse([
+            'success' => false,
+        ]);
     }
 }

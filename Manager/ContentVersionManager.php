@@ -73,4 +73,48 @@ class ContentVersionManager
 
         return $contentVersion;
     }
+
+    /**
+     * @param ContentInterface $content
+     *
+     * @return ContentVersionInterface
+     */
+    public function getDraftContentVersion(ContentInterface $content): ContentVersionInterface
+    {
+        $userId = $this->userProvider->getUserId();
+        $lastDraft = $this->getLastDraftVersionForUser($content, $userId);
+        if ($lastDraft === null || $lastDraft->getCreatedAt() < new \DateTimeImmutable('-1hour')) {
+            $lastDraft = new ($this->configurationManager->getEntityClass('content_version'));
+            $lastDraft->setContent($content);
+            $lastDraft->setUserId($userId);
+        }
+        $lastDraft->setCreatedAt(new \DateTimeImmutable());
+
+        return $lastDraft;
+    }
+
+    /**
+     * @param ContentInterface $content
+     * @param int|null         $userId
+     *
+     * @return ContentVersionInterface|null
+     */
+    private function getLastDraftVersionForUser(ContentInterface $content, ?int $userId): ?ContentVersionInterface
+    {
+        $currentContentVersionId = $content->getContentVersion() === null ? null : $content->getContentVersion()->getId();
+        $lastDraft = null;
+        foreach ($content->getVersions() as $version) {
+            if ($currentContentVersionId === $version->getId()) {
+                continue;
+            }
+            if ($version->getUserId() !== $userId) {
+                continue;
+            }
+            if ($lastDraft === null || $lastDraft->getCreatedAt() < $version->getCreatedAt()) {
+                $lastDraft = $version;
+            }
+        }
+
+        return $lastDraft;
+    }
 }

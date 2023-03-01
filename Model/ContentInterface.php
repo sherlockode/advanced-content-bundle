@@ -2,6 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 interface ContentInterface
 {
     /**
@@ -89,4 +92,9 @@ interface ContentInterface
      * @return $this
      */
     public function setContentVersion(?ContentVersionInterface $contentVersion);
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getVersions();
 }

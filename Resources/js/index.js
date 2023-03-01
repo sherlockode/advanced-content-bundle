@@ -327,10 +327,6 @@ jQuery(function ($) {
         );
     }
 
-    ////////////////
-    // Standalone //
-    ////////////////
-
     let slide = new Slide();
     slide.element.on('click', '.form-button', function () {
         $($(this).data('target')).submit();
@@ -339,6 +335,39 @@ jQuery(function ($) {
     let usedAddFieldBlock = null;
     let usedContainer = null;
     let includeNewFieldInRowCol = false;
+    let isFormUpdating = false;
+    let hasFormChanged = false;
+    let isAddingVersion = false;
+
+    setInterval(function() {
+        if (isFormUpdating !== false || isAddingVersion !== false || hasFormChanged === false) {
+            return;
+        }
+        let history = $('.version-history-table');
+        if (history.length === 0) {
+            return;
+        }
+
+        hasFormChanged = false;
+        isAddingVersion = true;
+        $.ajax({
+            url: history.data('save-draft-url'),
+            data: {'__field_name__': $('#content-data-json').val()},
+            type: 'POST'
+        }).done(function (data) {
+            if (data.success) {
+                let existingLine = history.find('tbody').find('[data-version-id="' + data.id + '"]');
+                if (existingLine.length === 0) {
+                    history.find('tbody').prepend(data.html);
+                } else {
+                    existingLine.replaceWith(data.html);
+                }
+            } else {
+                hasFormChanged = true;
+            }
+            isAddingVersion = false;
+        });
+    }, 20 * 1000);
 
     $('body').on('click', '.btn-new-field', function () {
         let baseName = $(this).parents('.acb-sortable').parents('.acb-sortable-group').data('base-name');
@@ -746,6 +775,7 @@ jQuery(function ($) {
         }
     }
     function updateFormData(name, value) {
+        isFormUpdating = true;
         let field = $('#content-data-json');
         let targetName = name.replace(field.attr('name'), '');
         targetName = targetName.replace(/(\]\[)/g, '.')
@@ -754,6 +784,8 @@ jQuery(function ($) {
             .replace(/^\./g, '');
         let newData = replaceJsonData(JSON.parse(field.val()), targetName, value);
         field.val(JSON.stringify(newData));
+        hasFormChanged = true;
+        isFormUpdating = false;
     }
 
     slide.element.on('slideContentUpdated', updateExampleContainer);

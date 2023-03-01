@@ -2,7 +2,7 @@
 
 <h4>{{ 'content_version.list.title'|trans }}</h4>
 
-<table class="table">
+<table class="table version-history-table" {% if content.id is not null %}data-save-draft-url="{{ path('sherlockode_acb_content_save_draft', {id: content.id}) }}"{% endif %}>
     <thead>
     <tr>
         <th>{{ 'content_version.list.id'|trans }}</th>
