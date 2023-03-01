@@ -119,13 +119,16 @@ abstract class Content implements ContentInterface
 
     /**
      * @param array $data
+     * @param bool  $resetContentVersion
      *
      * @return $this
      */
-    public function setData(array $data)
+    public function setData(array $data, bool $resetContentVersion = true)
     {
         $this->data = $data;
-        $this->contentVersion = null;
+        if ($resetContentVersion) {
+            $this->contentVersion = null;
+        }
 
         return $this;
     }

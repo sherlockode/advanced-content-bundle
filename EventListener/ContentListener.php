@@ -41,7 +41,7 @@ class ContentListener
             return;
         }
 
-        $entity->setData($this->contentVersionManager->getContentData($entity));
+        $entity->setData($this->contentVersionManager->getContentData($entity), false);
     }
 
     /**

@@ -46,10 +46,11 @@ interface ContentInterface
 
     /**
      * @param array $data
+     * @param bool  $resetContentVersion
      *
      * @return $this
      */
-    public function setData(array $data);
+    public function setData(array $data, bool $resetContentVersion = true);
 
     /**
      * Get content's content page

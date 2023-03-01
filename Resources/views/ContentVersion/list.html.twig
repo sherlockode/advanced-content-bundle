@@ -1,0 +1,19 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+<h4>{{ 'content_version.list.title'|trans }}</h4>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>{{ 'content_version.list.id'|trans }}</th>
+        <th>{{ 'content_version.list.date'|trans }}</th>
+        <th>{{ 'content_version.list.user'|trans }}</th>
+        <th>{{ 'content_version.list.status'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for version in content.versions %}
+        {{ include('@SherlockodeAdvancedContent/ContentVersion/_line.html.twig', {'version': version}) }}
+    {% endfor %}
+    </tbody>
+</table>
