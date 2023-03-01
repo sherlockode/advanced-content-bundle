@@ -107,6 +107,7 @@ and fill the corresponding configuration :
 sherlockode_advanced_content:
     entity_class:
         content: App\Entity\Content
+        content_version: App\Entity\ContentVersion
         page_type: App\Entity\PageType
         page: App\Entity\Page
         page_meta: App\Entity\PageMeta
