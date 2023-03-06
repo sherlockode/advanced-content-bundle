@@ -4,15 +4,18 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentType extends AbstractType
 {
@@ -27,13 +30,31 @@ class ContentType extends AbstractType
     private $urlGenerator;
 
     /**
+     * @var ScopeHandlerInterface
+     */
+    private $scopeHandler;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @param ConfigurationManager  $configurationManager
      * @param UrlGeneratorInterface $urlGenerator
+     * @param ScopeHandlerInterface $scopeHandler
+     * @param TranslatorInterface   $translator
      */
-    public function __construct(ConfigurationManager $configurationManager, UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        ConfigurationManager $configurationManager,
+        UrlGeneratorInterface $urlGenerator,
+        ScopeHandlerInterface $scopeHandler,
+        TranslatorInterface $translator
+    ) {
         $this->configurationManager = $configurationManager;
         $this->urlGenerator = $urlGenerator;
+        $this->scopeHandler = $scopeHandler;
+        $this->translator = $translator;
     }
 
     /**
@@ -113,6 +134,24 @@ class ContentType extends AbstractType
         $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
             $event->setData(json_decode($event->getData(), true));
         }, 1);
+
+        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
+            $form = $event->getForm();
+            if ($form->has('slug')) {
+                $content = $event->getData();
+                if (!$this->scopeHandler->isContentSlugValid($content)) {
+                    if ($this->configurationManager->isScopesEnabled()) {
+                        $form->addError(new FormError(
+                            $this->translator->trans('content.errors.duplicate_slug_scopes', [], 'AdvancedContentBundle')
+                        ));
+                    } else {
+                        $form->addError(new FormError(
+                            $this->translator->trans('content.errors.duplicate_slug_no_scope', [], 'AdvancedContentBundle')
+                        ));
+                    }
+                }
+            }
+        });
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options)

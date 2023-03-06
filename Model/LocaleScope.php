@@ -36,4 +36,12 @@ class LocaleScope extends Scope implements LocaleScopeInterface
     {
         return (string)$this->locale;
     }
+
+    /**
+     * @return string
+     */
+    public function getUnicityIdentifier()
+    {
+        return (string)$this->locale;
+    }
 }

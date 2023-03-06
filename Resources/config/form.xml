@@ -4,6 +4,8 @@
         <service id="sherlockode_advanced_content.form.content" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="router"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
+            <argument type="service" id="translator"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.content_create" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentCreateType">

@@ -20,6 +20,9 @@ content:
         validate: Validate
     delete:
         validate: Delete this content?
+    errors:
+        duplicate_slug_no_scope: Another content exists with the same slug.
+        duplicate_slug_scopes: Another content exists with the same slug for the same scope.
 field_type:
     text:
         label: Text
