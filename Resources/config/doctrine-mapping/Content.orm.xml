@@ -3,9 +3,5 @@
     <mapped-superclass name="Sherlockode\AdvancedContentBundle\Model\Content">
         <field name="name" type="string" column="name"/>
         <field name="slug" type="string" column="slug"/>
-        <field name="locale" type="string" column="locale" nullable="true"/>
-        <unique-constraints>
-            <unique-constraint columns="slug,locale"></unique-constraint>
-        </unique-constraints>
     </mapped-superclass>
 </doctrine-mapping>

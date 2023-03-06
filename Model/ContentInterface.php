@@ -70,18 +70,6 @@ interface ContentInterface
     public function setPage(PageInterface $page = null);
 
     /**
-     * @return string|null
-     */
-    public function getLocale();
-
-    /**
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale($locale);
-
-    /**
      * @return ContentVersionInterface|null
      */
     public function getContentVersion(): ?ContentVersionInterface;

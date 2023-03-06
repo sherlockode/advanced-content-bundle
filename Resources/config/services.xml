@@ -26,7 +26,6 @@
             <argument>form_div_layout.html.twig</argument>
             <tag name="twig.extension"/>
         </service>
-
         <service id="sherlockode_advanced_content.import_command" class="Sherlockode\AdvancedContentBundle\Command\ImportCommand" public="true">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
@@ -42,30 +41,24 @@
             <argument>%kernel.project_dir%</argument>
             <tag name="console.command"/>
         </service>
-
         <service id="sherlockode_advanced_content.locale_provider" class="Sherlockode\AdvancedContentBundle\Locale\LocaleProvider"/>
         <service id="Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface" alias="sherlockode_advanced_content.locale_provider"/>
-
         <service id="sherlockode_advanced_content.translation_listener" class="Sherlockode\AdvancedContentBundle\EventListener\TranslationListener">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
             <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
         </service>
-
         <service id="Sherlockode\AdvancedContentBundle\Manager\UploadManager" alias="sherlockode_advanced_content.upload_manager"/>
-
         <service id="sherlockode_advanced_content.slug_provider" class="Sherlockode\AdvancedContentBundle\Slug\SlugProvider">
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface" alias="sherlockode_advanced_content.slug_provider"/>
-
         <service id="sherlockode_advanced_content.url_builder_manager" class="Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager">
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
             <argument type="service" id="assets.packages"/>
             <argument type="service" id="request_stack"/>
         </service>
-
         <service id="sherlockode_advanced_content.content_version_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.user_provider"/>
@@ -77,10 +70,11 @@
             <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
             <tag name="doctrine.event_listener" event="onFlush" lazy="1"/>
         </service>
-
         <service id="sherlockode_advanced_content.user_provider" class="Sherlockode\AdvancedContentBundle\User\AnonymousUserProvider">
             <argument type="service" id="translator"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\User\UserProviderInterface" alias="sherlockode_advanced_content.user_provider"/>
+        <service id="sherlockode_advanced_content.scope_handler" class="Sherlockode\AdvancedContentBundle\Scope\LocaleScopeHandler"/>
+        <service id="Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface" alias="sherlockode_advanced_content.scope_handler"/>
     </services>
 </container>

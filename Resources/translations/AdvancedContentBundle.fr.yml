@@ -11,6 +11,7 @@ content:
         locale: Locale
         data: Champs
         position: Ordre
+        scopes: Scopes
     duplicate:
         other_locales: Nouveau
         select_source_language: Choisissez la langue à copier

@@ -50,9 +50,6 @@ class ContentType extends AbstractType
                 'attr' => ['class' => 'acb-content-name', 'data-slug-token' => $token],
             ])
             ->add('slug', TextType::class)
-            ->add('locale', TextType::class, [
-                'label' => 'content.form.locale',
-            ])
             ->add('data', ElementsType::class, [
                 'label' => false,
                 'row_attr' => [
@@ -63,6 +60,9 @@ class ContentType extends AbstractType
                 'attr' => [
                     'class' => 'acb-elements-form-container',
                 ],
+            ])
+            ->add('scopes', ScopeChoiceType::class, [
+                'label' => 'content.form.scopes',
             ])
         ;
 
@@ -83,7 +83,6 @@ class ContentType extends AbstractType
             if ($form->getParent()) {
                 $form->remove('name');
                 $form->remove('slug');
-                $form->remove('locale');
             }
 
             if ($content === null || empty($content->getData())) {

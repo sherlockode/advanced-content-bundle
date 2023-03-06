@@ -5,7 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-abstract class Content implements ContentInterface
+abstract class Content implements ContentInterface, ScopableInterface
 {
     /**
      * @var int
@@ -48,12 +48,18 @@ abstract class Content implements ContentInterface
     protected $versions;
 
     /**
+     * @var Collection
+     */
+    protected $scopes;
+
+    /**
      * Content constructor
      */
     public function __construct()
     {
         $this->data = [];
         $this->versions = new ArrayCollection();
+        $this->scopes = new ArrayCollection();
     }
 
     public function __clone()
@@ -154,26 +160,6 @@ abstract class Content implements ContentInterface
     }
 
     /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    /**
      * @return ContentVersionInterface|null
      */
     public function getContentVersion(): ?ContentVersionInterface
@@ -222,6 +208,38 @@ abstract class Content implements ContentInterface
     public function removeVersion(ContentVersionInterface $contentVersion)
     {
         $this->versions->removeElement($contentVersion);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Collection|ScopeInterface[]
+     */
+    public function getScopes()
+    {
+        return $this->scopes;
+    }
+
+    /**
+     * @param ScopeInterface $scope
+     *
+     * @return $this
+     */
+    public function addScope(ScopeInterface $scope)
+    {
+        $this->scopes->add($scope);
+
+        return $this;
+    }
+
+    /**
+     * @param ScopeInterface $scope
+     *
+     * @return $this
+     */
+    public function removeScope(ScopeInterface $scope)
+    {
+        $this->scopes->removeElement($scope);
 
         return $this;
     }

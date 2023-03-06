@@ -29,12 +29,10 @@
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="form.type"/>
         </service>
-
         <service id="sherlockode_advanced_content.form.content_translation" class="Sherlockode\AdvancedContentBundle\Form\Type\ContentTranslationType">
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="form.type"/>
         </service>
-
         <service id="sherlockode_advanced_content.form.page_meta_translation" class="Sherlockode\AdvancedContentBundle\Form\Type\PageMetaTranslationType">
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="form.type"/>
@@ -43,7 +41,6 @@
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
-
         <service id="sherlockode_advanced_content.form.file" class="Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType">
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
             <tag name="form.type"/>
@@ -55,6 +52,11 @@
         <service id="sherlockode_advanced_content.form.field_type_content" class="Sherlockode\AdvancedContentBundle\Form\Type\AcbContentType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.scope" class="Sherlockode\AdvancedContentBundle\Form\Type\ScopeChoiceType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
             <tag name="form.type"/>
         </service>
     </services>
