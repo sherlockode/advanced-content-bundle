@@ -56,9 +56,13 @@
             <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
             <tag name="form.type"/>
         </service>
-        <service id="sherlockode_advanced_content.form.scope" class="Sherlockode\AdvancedContentBundle\Form\Type\ScopeChoiceType">
+        <service id="sherlockode_advanced_content.form.scope_choice" class="Sherlockode\AdvancedContentBundle\Form\Type\ScopeChoiceType">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
+            <tag name="form.type"/>
+        </service>
+        <service id="sherlockode_advanced_content.form.scope" class="Sherlockode\AdvancedContentBundle\Form\Type\ScopeType">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <tag name="form.type"/>
         </service>
     </services>

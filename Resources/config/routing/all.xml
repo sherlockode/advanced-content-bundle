@@ -3,4 +3,5 @@
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/base.xml"/>
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/page_crud.xml"/>
     <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/content_crud.xml"/>
+    <import resource="@SherlockodeAdvancedContentBundle/Resources/config/routing/scope_crud.xml"/>
 </routes>
