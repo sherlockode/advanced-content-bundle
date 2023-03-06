@@ -12,6 +12,7 @@ content:
         data: Fields
         position: Sort order
         scopes: Scopes
+        scopes_select_all: Select / Unselect all
     duplicate:
         other_locales: New
         select_source_language: Choose a locale to duplicate from

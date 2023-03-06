@@ -8,6 +8,8 @@
     {{ form_row(form.slug) }}
     {% if form.scopes is defined %}
         {{ form_row(form.scopes) }}
+        <input type="checkbox" id="acb-scopes-select-all">
+        <label for="acb-scopes-select-all">{{ 'content.form.scopes_select_all'|trans }}</label>
     {% endif %}
 
     {{ form_row(form.data) }}
