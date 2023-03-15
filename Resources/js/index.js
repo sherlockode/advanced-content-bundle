@@ -4,6 +4,7 @@ import 'jquery-ui/ui/widgets/sortable.js';
 import './slug.js';
 import './export.js';
 import './page.js';
+import { notifAlert, notifConfirm } from './acb-notification.js';
 
 jQuery(function ($) {
     ////////////
@@ -161,7 +162,7 @@ jQuery(function ($) {
     }
 
     function ajaxFailCallback(jqXhr) {
-        alert('An error occurred.');
+        notifAlert('An error occurred.');
     }
 
     $('body').on('click', '.acb-collapse-row', function() {
@@ -170,9 +171,9 @@ jQuery(function ($) {
     });
 
     $('body').on('click', '.acb-remove-row', function (e) {
-        if (confirm($(this).data('confirm-delete'))) {
-            deleteElement($(this).closest('.acb-row'));
-        }
+        notifConfirm($(this).data('confirm-delete'), function() {
+          deleteElement($(this).closest('.acb-row'));
+        }.bind(this));
     });
 
     function deleteElement(element, canCalculatePosition) {
@@ -372,7 +373,7 @@ jQuery(function ($) {
     $('body').on('click', '.version-history .acb-version-remove', function() {
         let history = $(this).closest('.version-history-table');
         let versionLine = $(this).closest('tr');
-        if (confirm($(this).data('confirm-delete'))) {
+        notifConfirm($(this).data('confirm-delete'), function() {
             $.ajax({
                 url: history.data('remove-version-url'),
                 data: {'versionId': versionLine.data('version-id')},
@@ -382,7 +383,7 @@ jQuery(function ($) {
                     $('.version-history').replaceWith(data.html);
                 }
             });
-        }
+        });
     });
 
     $('body').on('change', '#acb-scopes-select-all', function() {
