@@ -43,12 +43,6 @@
         </service>
         <service id="sherlockode_advanced_content.locale_provider" class="Sherlockode\AdvancedContentBundle\Locale\LocaleProvider"/>
         <service id="Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface" alias="sherlockode_advanced_content.locale_provider"/>
-        <service id="sherlockode_advanced_content.translation_listener" class="Sherlockode\AdvancedContentBundle\EventListener\TranslationListener">
-            <argument type="service" id="request_stack"/>
-            <argument type="service" id="sherlockode_advanced_content.locale_provider"/>
-            <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
-            <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
-        </service>
         <service id="Sherlockode\AdvancedContentBundle\Manager\UploadManager" alias="sherlockode_advanced_content.upload_manager"/>
         <service id="sherlockode_advanced_content.slug_provider" class="Sherlockode\AdvancedContentBundle\Slug\SlugProvider">
             <argument type="service" id="doctrine.orm.entity_manager"/>

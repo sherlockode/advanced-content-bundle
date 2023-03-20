@@ -46,9 +46,6 @@ class PageMetaType extends AbstractType
                 'label' => 'page.form.meta_description',
                 'required' => false,
             ])
-            ->add('locale', TextType::class, [
-                'label' => 'content.form.locale',
-            ])
         ;
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
@@ -65,9 +62,6 @@ class PageMetaType extends AbstractType
                     'attr' => ['class' => $slugClass, 'data-slug-token' => $token],
                 ])
             ;
-            if ($form->getParent()) {
-                $form->remove('locale');
-            }
         });
     }
 

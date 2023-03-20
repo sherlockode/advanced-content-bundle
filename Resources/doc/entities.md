@@ -43,7 +43,7 @@ class Content extends BaseContent
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="contents")
+     * @ORM\OneToOne(targetEntity="App\Entity\Page", inversedBy="content")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $page;
@@ -168,9 +168,9 @@ class Page extends BasePage
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Content", mappedBy="page", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Content", mappedBy="page", cascade={"persist", "remove"})
      */
-    protected $contents;
+    protected $content;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PageType")
@@ -179,9 +179,9 @@ class Page extends BasePage
     protected $pageType;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PageMeta", mappedBy="page", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\PageMeta", mappedBy="page", cascade={"persist", "remove"})
      */
-    protected $pageMetas;
+    protected $pageMeta;
 }
 ```
 
@@ -232,7 +232,7 @@ class PageMeta extends BasePageMeta
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="pageMetas")
+     * @ORM\OneToOne(targetEntity="App\Entity\Page", inversedBy="pageMeta")
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $page;

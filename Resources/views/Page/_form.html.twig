@@ -6,23 +6,24 @@
     {{ form_errors(form) }}
     {{ form_row(form.pageIdentifier) }}
     {{ form_row(form.pageType) }}
-
     {% if form.status is defined %}
         {{ form_row(form.status) }}
     {% endif %}
+
+    {% if form.scopes is defined %}
+        <hr>
+        {{ form_row(form.scopes) }}
+        <input type="checkbox" id="acb-scopes-select-all">
+        <label for="acb-scopes-select-all">{{ 'form.form.scopes_select_all'|trans({}, 'messages') }}</label>
+    {% endif %}
+
     {% if form.pageMeta is defined %}
         <hr>
         {{ form_row(form.pageMeta) }}
-    {% elseif form.pageMetas is defined %}
-        <hr>
-        {{ form_row(form.pageMetas) }}
     {% endif %}
     {% if form.content is defined %}
         <hr>
         {{ form_row(form.content) }}
-    {% elseif form.contents is defined %}
-        <hr>
-        {{ form_row(form.contents) }}
     {% endif %}
 
     <div class="buttons">

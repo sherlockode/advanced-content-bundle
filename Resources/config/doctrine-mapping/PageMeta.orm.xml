@@ -5,9 +5,5 @@
         <field name="slug" type="string" column="slug"/>
         <field name="metaTitle" type="text" column="meta_title" nullable="true"/>
         <field name="metaDescription" type="text" column="meta_description" nullable="true"/>
-        <field name="locale" type="string" column="locale"/>
-        <unique-constraints>
-            <unique-constraint columns="slug,locale"></unique-constraint>
-        </unique-constraints>
     </mapped-superclass>
 </doctrine-mapping>
