@@ -4,14 +4,17 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
+use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageType extends AbstractType
 {
@@ -21,11 +24,28 @@ class PageType extends AbstractType
     private $configurationManager;
 
     /**
-     * @param ConfigurationManager $configurationManager
+     * @var ScopeHandlerInterface
      */
-    public function __construct(ConfigurationManager $configurationManager)
-    {
+    private $scopeHandler;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @param ConfigurationManager  $configurationManager
+     * @param ScopeHandlerInterface $scopeHandler
+     * @param TranslatorInterface   $translator
+     */
+    public function __construct(
+        ConfigurationManager $configurationManager,
+        ScopeHandlerInterface $scopeHandler,
+        TranslatorInterface $translator
+    ) {
         $this->configurationManager = $configurationManager;
+        $this->scopeHandler = $scopeHandler;
+        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -91,6 +111,30 @@ class PageType extends AbstractType
             if (!$content->getId()) {
                 $content->setName('page-' . $page->getPageIdentifier() . '-' . bin2hex(random_bytes(6)));
                 $content->setSlug($page->getPageMeta()->getSlug() . '-' . bin2hex(random_bytes(6)));
+            }
+
+            $form = $event->getForm();
+            if (!$this->scopeHandler->isPageSlugValid($page)) {
+                if ($this->configurationManager->isScopesEnabled()) {
+                    $form->get('pageMeta')->get('slug')->addError(new FormError(
+                        $this->translator->trans('page.errors.duplicate_slug_scopes', [], 'AdvancedContentBundle')
+                    ));
+                } else {
+                    $form->get('pageMeta')->get('slug')->addError(new FormError(
+                        $this->translator->trans('page.errors.duplicate_slug_no_scope', [], 'AdvancedContentBundle')
+                    ));
+                }
+            }
+            if (!$this->scopeHandler->isPageIdentifierValid($page)) {
+                if ($this->configurationManager->isScopesEnabled()) {
+                    $form->get('pageIdentifier')->addError(new FormError(
+                        $this->translator->trans('page.errors.duplicate_identifier_scopes', [], 'AdvancedContentBundle')
+                    ));
+                } else {
+                    $form->get('pageIdentifier')->addError(new FormError(
+                        $this->translator->trans('page.errors.duplicate_identifier_no_scope', [], 'AdvancedContentBundle')
+                    ));
+                }
             }
         });
     }

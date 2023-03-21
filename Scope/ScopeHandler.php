@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Scope;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
 
 abstract class ScopeHandler implements ScopeHandlerInterface
@@ -39,15 +40,58 @@ abstract class ScopeHandler implements ScopeHandlerInterface
         $existingContents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
             'slug' => $content->getSlug(),
         ]);
-        /** @var ContentInterface|ScopableInterface $existingContent */
-        foreach ($existingContents as $existingContent) {
-            if ($existingContent->getId() === $content->getId()) {
+
+        return $this->validateScopableEntity($content, $existingContents);
+    }
+
+    /**
+     * @param PageInterface $page
+     *
+     * @return bool
+     */
+    public function isPageSlugValid(PageInterface $page): bool
+    {
+        $existingPageMetas = $this->em->getRepository($this->configurationManager->getEntityClass('page_meta'))->findBy([
+            'slug' => $page->getPageMeta()->getSlug(),
+        ]);
+        $existingPages = [];
+        foreach ($existingPageMetas as $existingPageMeta) {
+            $existingPages[] = $existingPageMeta->getPage();
+        }
+
+        return $this->validateScopableEntity($page, $existingPages);
+    }
+
+    /**
+     * @param PageInterface $page
+     *
+     * @return bool
+     */
+    public function isPageIdentifierValid(PageInterface $page): bool
+    {
+        $existingPages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findBy([
+            'pageIdentifier' => $page->getPageIdentifier(),
+        ]);
+
+        return $this->validateScopableEntity($page, $existingPages);
+    }
+
+    /**
+     * @param ScopableInterface|ContentInterface|PageInterface             $scopable
+     * @param array|ScopableInterface[]|ContentInterface[]|PageInterface[] $existingEntities
+     *
+     * @return bool
+     */
+    private function validateScopableEntity(ScopableInterface $scopable, array $existingEntities): bool
+    {
+        foreach ($existingEntities as $existingEntity) {
+            if ($existingEntity->getId() === $scopable->getId()) {
                 continue;
             }
             if (!$this->configurationManager->isScopesEnabled()) {
                 return false;
             }
-            $result = array_uintersect($content->getScopes()->toArray(), $existingContent->getScopes()->toArray(), function ($a, $b) {
+            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), function ($a, $b) {
                 return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
             });
 
