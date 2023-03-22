@@ -53,14 +53,14 @@
             <argument type="service" id="assets.packages"/>
             <argument type="service" id="request_stack"/>
         </service>
-        <service id="sherlockode_advanced_content.content_version_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager">
+        <service id="sherlockode_advanced_content.version_manager" class="Sherlockode\AdvancedContentBundle\Manager\VersionManager">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.user_provider"/>
             <argument type="service" id="request_stack"/>
         </service>
         <service id="sherlockode_advanced_content.content_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentListener">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="sherlockode_advanced_content.content_version_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.version_manager"/>
             <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
             <tag name="doctrine.event_listener" event="onFlush" lazy="1"/>
         </service>

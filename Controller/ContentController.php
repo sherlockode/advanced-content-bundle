@@ -7,7 +7,7 @@ use Sherlockode\AdvancedContentBundle\Form\Type\ElementsType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ElementType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
-use Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager;
+use Sherlockode\AdvancedContentBundle\Manager\VersionManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -53,9 +53,9 @@ class ContentController extends AbstractController
     private $translator;
 
     /**
-     * @var ContentVersionManager
+     * @var VersionManager
      */
-    private $contentVersionManager;
+    private $versionManager;
 
     /**
      * ContentController constructor.
@@ -66,7 +66,7 @@ class ContentController extends AbstractController
      * @param ConfigurationManager   $configurationManager
      * @param FormFactoryInterface   $formFactory
      * @param TranslatorInterface    $translator
-     * @param ContentVersionManager  $contentVersionManager
+     * @param VersionManager         $versionManager
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -75,7 +75,7 @@ class ContentController extends AbstractController
         ConfigurationManager   $configurationManager,
         FormFactoryInterface   $formFactory,
         TranslatorInterface    $translator,
-        ContentVersionManager  $contentVersionManager
+        VersionManager $versionManager
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
@@ -83,7 +83,7 @@ class ContentController extends AbstractController
         $this->configurationManager = $configurationManager;
         $this->formFactory = $formFactory;
         $this->translator = $translator;
-        $this->contentVersionManager = $contentVersionManager;
+        $this->versionManager = $versionManager;
     }
 
     /**
@@ -265,7 +265,7 @@ class ContentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $contentVersion = $this->contentVersionManager->getDraftContentVersion($content);
+            $contentVersion = $this->versionManager->getDraftContentVersion($content);
             $contentVersion->setData($form->getData());
             $this->em->persist($contentVersion);
             $this->em->flush();

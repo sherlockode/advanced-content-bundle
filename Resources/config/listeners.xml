@@ -2,7 +2,11 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="sherlockode_advanced_content.page_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageListener">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.version_manager"/>
+            <tag name="doctrine.event_listener" event="postLoad" lazy="1"/>
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
+            <tag name="doctrine.event_listener" event="onFlush" lazy="1"/>
         </service>
         <service id="sherlockode_advanced_content.page_type_listener" class="Sherlockode\AdvancedContentBundle\EventListener\PageTypeListener">
             <argument type="service" id="sherlockode_advanced_content.page_manager"/>
