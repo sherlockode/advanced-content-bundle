@@ -42,9 +42,20 @@ abstract class Page implements PageInterface, ScopableInterface
      */
     protected $scopes;
 
+    /**
+     * @var PageVersionInterface
+     */
+    protected $pageVersion;
+
+    /**
+     * @var Collection|PageVersionInterface[]
+     */
+    protected $versions;
+
     public function __construct()
     {
         $this->scopes = new ArrayCollection();
+        $this->versions = new ArrayCollection();
     }
 
     public function __clone()
@@ -203,6 +214,59 @@ abstract class Page implements PageInterface, ScopableInterface
     public function removeScope(ScopeInterface $scope)
     {
         $this->scopes->removeElement($scope);
+
+        return $this;
+    }
+
+    /**
+     * @return PageVersionInterface|null
+     */
+    public function getPageVersion(): ?PageVersionInterface
+    {
+        return $this->pageVersion;
+    }
+
+    /**
+     * @param PageVersionInterface|null $pageVersion
+     *
+     * @return $this
+     */
+    public function setPageVersion(?PageVersionInterface $pageVersion)
+    {
+        $this->pageVersion = $pageVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Collection|PageVersionInterface[]
+     */
+    public function getVersions()
+    {
+        return $this->versions;
+    }
+
+    /**
+     * @param PageVersionInterface $pageVersion
+     *
+     * @return $this
+     */
+    public function addVersion(PageVersionInterface $pageVersion)
+    {
+        $pageVersion->setPage($this);
+        $this->versions->add($pageVersion);
+
+        return $this;
+    }
+
+    /**
+     * @param PageVersionInterface $pageVersion
+     *
+     * @return $this
+     */
+    public function removeVersion(PageVersionInterface $pageVersion)
+    {
+        $this->versions->removeElement($pageVersion);
 
         return $this;
     }
