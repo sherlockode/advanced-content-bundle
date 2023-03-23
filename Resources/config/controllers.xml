@@ -45,6 +45,8 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.page_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.version_manager"/>
+            <argument type="service" id="form.factory"/>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
                 <argument type="service" id="Psr\Container\ContainerInterface" />

@@ -36,3 +36,10 @@
 {{ form_rest(form) }}
 {{ form_end(form) }}
 <span class="acb-page-change-type" style="display: none;">{{ 'page.errors.alert_change_type'|trans }}</span>
+
+{% if form.vars.value is not null and form.vars.value.versions|length > 0 %}
+    <div class="mt-5 pb-5">
+        <h4>{{ 'version.list.title'|trans }}</h4>
+        {{ include('@SherlockodeAdvancedContent/Version/page_list.html.twig', {'page': form.vars.value}) }}
+    </div>
+{% endif %}

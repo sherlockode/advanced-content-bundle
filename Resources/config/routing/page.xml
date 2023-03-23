@@ -3,4 +3,10 @@
     <route id="sherlockode_acb_page_duplicate" path="/page/duplicate">
         <default key="_controller">sherlockode_advanced_content.controller.page::duplicateAction</default>
     </route>
+    <route id="sherlockode_acb_page_save_draft" path="/page/save-draft">
+        <default key="_controller">sherlockode_advanced_content.controller.page::saveDraftAction</default>
+    </route>
+    <route id="sherlockode_acb_page_delete_version" path="/page/delete-version">
+        <default key="_controller">sherlockode_advanced_content.controller.page::deleteVersionAction</default>
+    </route>
 </routes>

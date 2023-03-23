@@ -35,16 +35,30 @@ class PageMetaType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'page.form.title',
-                'attr' => ['class' => 'acb-pagemeta-title', 'data-slug-token' => $token],
+                'attr' => [
+                    'class' => 'acb-pagemeta-title',
+                    'data-slug-token' => $token,
+                    'data-page-draft' => 'title',
+                ],
             ])
-            ->add('slug', TextType::class)
+            ->add('slug', TextType::class, [
+                'attr' => [
+                    'data-page-draft' => 'slug',
+                ],
+            ])
             ->add('metaTitle', TextType::class, [
                 'label' => 'page.form.meta_title',
                 'required' => false,
+                'attr' => [
+                    'data-page-draft' => 'metaTitle',
+                ],
             ])
             ->add('metaDescription', TextType::class, [
                 'label' => 'page.form.meta_description',
                 'required' => false,
+                'attr' => [
+                    'data-page-draft' => 'metaDescription',
+                ],
             ])
         ;
 
@@ -59,7 +73,11 @@ class PageMetaType extends AbstractType
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'page.form.slug',
-                    'attr' => ['class' => $slugClass, 'data-slug-token' => $token],
+                    'attr' => [
+                        'class' => $slugClass,
+                        'data-slug-token' => $token,
+                        'data-page-draft' => 'slug',
+                    ],
                 ])
             ;
         });

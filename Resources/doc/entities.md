@@ -328,13 +328,13 @@ class PageVersion extends BasePageVersion
     protected $page;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ContentVersion")
+     * @ORM\OneToOne(targetEntity="App\Entity\ContentVersion", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="content_version_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $contentVersion;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\PageMetaVersion")
+     * @ORM\OneToOne(targetEntity="App\Entity\PageMetaVersion", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="page_meta_version_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $pageMetaVersion;
