@@ -2,22 +2,12 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-abstract class ContentVersion implements ContentVersionInterface
+abstract class ContentVersion extends Version implements ContentVersionInterface
 {
-    /**
-     * @var int
-     */
-    protected $id;
-
     /**
      * @var ContentInterface
      */
     protected $content;
-
-    /**
-     * @var int|null
-     */
-    protected $userId;
 
     /**
      * @var array
@@ -25,30 +15,12 @@ abstract class ContentVersion implements ContentVersionInterface
     protected $data;
 
     /**
-     * @var \DateTimeInterface
-     */
-    protected $createdAt;
-
-    /**
-     * @var bool
-     */
-    protected $autoSave;
-
-    /**
      * ContentVersion constructor
      */
     public function __construct()
     {
         $this->data = [];
-        $this->autoSave = false;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
+        parent::__construct();
     }
 
     /**
@@ -67,26 +39,6 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setContent(ContentInterface $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param int|null $userId
-     *
-     * @return $this
-     */
-    public function setUserId(?int $userId): self
-    {
-        $this->userId = $userId;
 
         return $this;
     }
@@ -112,46 +64,6 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setData(array $data)
     {
         $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAutoSave(): bool
-    {
-        return $this->autoSave;
-    }
-
-    /**
-     * @param bool $autoSave
-     *
-     * @return $this
-     */
-    public function setAutoSave(bool $autoSave): self
-    {
-        $this->autoSave = $autoSave;
 
         return $this;
     }

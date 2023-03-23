@@ -5,22 +5,12 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-abstract class PageMetaVersion implements PageMetaVersionInterface
+abstract class PageMetaVersion extends Version implements PageMetaVersionInterface
 {
-    /**
-     * @var int
-     */
-    protected $id;
-
     /**
      * @var PageMetaInterface
      */
     protected $pageMeta;
-
-    /**
-     * @var int|null
-     */
-    protected $userId;
 
     /**
      * @var string
@@ -43,29 +33,6 @@ abstract class PageMetaVersion implements PageMetaVersionInterface
     protected $metaDescription;
 
     /**
-     * @var \DateTimeInterface
-     */
-    protected $createdAt;
-
-    /**
-     * @var bool
-     */
-    protected $autoSave;
-
-    public function __construct()
-    {
-        $this->autoSave = false;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @return PageMetaInterface
      */
     public function getPageMeta(): PageMetaInterface
@@ -81,26 +48,6 @@ abstract class PageMetaVersion implements PageMetaVersionInterface
     public function setPageMeta(PageMetaInterface $pageMeta): self
     {
         $this->pageMeta = $pageMeta;
-
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param int|null $userId
-     *
-     * @return $this
-     */
-    public function setUserId(?int $userId): self
-    {
-        $this->userId = $userId;
 
         return $this;
     }
@@ -181,46 +128,6 @@ abstract class PageMetaVersion implements PageMetaVersionInterface
     public function setMetaDescription($metaDescription)
     {
         $this->metaDescription = $metaDescription;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAutoSave(): bool
-    {
-        return $this->autoSave;
-    }
-
-    /**
-     * @param bool $autoSave
-     *
-     * @return $this
-     */
-    public function setAutoSave(bool $autoSave): self
-    {
-        $this->autoSave = $autoSave;
 
         return $this;
     }
