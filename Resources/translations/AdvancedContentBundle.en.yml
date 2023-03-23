@@ -304,7 +304,7 @@ configuration:
             title: Display example
             container: Container
             content: Content
-content_version:
+version:
     list:
         title: Version history
         id: Version ID

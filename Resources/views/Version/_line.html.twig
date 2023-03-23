@@ -1,0 +1,33 @@
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
+
+{% set editVersion = app.request.query.get('versionId') == version.id %}
+
+<tr data-version-id="{{ version.id }}">
+    <td>{{ version.id }}{% if isCurrentVersion %}<i class="fa-solid fa-check current-version"></i>{% endif %}</td>
+    <td>{{ version.createdAt|format_datetime() }}</td>
+    <td>
+        {{ acb_get_version_user_name(version) }}
+        {% if isCurrentVersion %}
+            ({{ 'version.list.statuses.published'|trans }})
+        {% elseif version.isAutoSave %}
+            ({{ 'version.list.statuses.auto_save'|trans }})
+        {% endif %}
+    </td>
+    <td>
+        {% if not editVersion %}
+            <button type="button"
+                    class="{{ classes.buttonIcon }} acb-version-load"
+                    title="{{ 'version.list.actions.load_draft'|trans }}"
+            >
+                <i class="fa-solid fa-eye"></i>
+            </button>
+            {% if not isCurrentVersion %}
+                <button type="button" class="{{ classes.buttonIcon }} acb-version-remove" title="{{ 'version.list.actions.delete_draft'|trans }}" data-confirm-delete="{{ 'content_version.list.actions.delete_confirm'|trans }}">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>

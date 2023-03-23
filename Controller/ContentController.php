@@ -276,7 +276,7 @@ class ContentController extends AbstractController
 
             return new JsonResponse([
                 'success' => true,
-                'html' => $this->renderView('@SherlockodeAdvancedContent/ContentVersion/list.html.twig', [
+                'html' => $this->renderView('@SherlockodeAdvancedContent/Version/content_list.html.twig', [
                     'content' => $content,
                 ]),
             ]);
@@ -315,7 +315,7 @@ class ContentController extends AbstractController
 
                 return new JsonResponse([
                     'success' => true,
-                    'html' => $this->renderView('@SherlockodeAdvancedContent/ContentVersion/list.html.twig', [
+                    'html' => $this->renderView('@SherlockodeAdvancedContent/Version/content_list.html.twig', [
                         'content' => $content,
                     ]),
                 ]);
