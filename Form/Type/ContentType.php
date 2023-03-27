@@ -54,7 +54,7 @@ class ContentType extends AbstractType
                 'label' => 'content.form.locale',
             ])
             ->add('data', ElementsType::class, [
-                'label' => 'content.form.data',
+                'label' => false,
                 'row_attr' => [
                     'class' => 'acb-elements-container',
                     'data-edit-url' => $this->urlGenerator->generate('sherlockode_acb_content_field_form'),
@@ -84,6 +84,24 @@ class ContentType extends AbstractType
                 $form->remove('name');
                 $form->remove('slug');
                 $form->remove('locale');
+            }
+
+            if ($content === null || empty($content->getData())) {
+                $emptyRowCol = [
+                    'elementType' => 'row',
+                    'position' => 0,
+                    'elements' => [
+                        [
+                            'elementType' => 'column',
+                            'position' => 0,
+                            'config' => [
+                                'size' => 12,
+                            ],
+                            'elements' => [],
+                        ],
+                    ],
+                ];
+                $form->get('data')->setData([$emptyRowCol]);
             }
         });
 
