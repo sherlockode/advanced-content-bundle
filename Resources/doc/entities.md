@@ -63,6 +63,17 @@ class Content extends BaseContent
      * @ORM\OrderBy({"createdAt": "DESC"})
      */
     protected $versions;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Scope")
+     * @ORM\JoinTable(name="content_scope",
+     *      joinColumns={@ORM\JoinColumn(name="content_id", referencedColumnName="id", onDelete="cascade")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="scope_id", referencedColumnName="id", onDelete="cascade")}
+     * )
+     */
+    protected $scopes;
 }
 
 ```
@@ -99,6 +110,39 @@ class ContentVersion extends BaseContentVersion
 }
 
 
+```
+
+```php
+<?php
+// src/Entity/Scope.php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Sherlockode\AdvancedContentBundle\Model\LocaleScope;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="scope")
+ */
+class Scope extends LocaleScope
+{
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer")
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="locale", type="string")
+     */
+    protected $locale;
+}
 ```
 
 ```php

@@ -6,8 +6,8 @@
     {{ form_errors(form) }}
     {{ form_row(form.name) }}
     {{ form_row(form.slug) }}
-    {% if form.locale is defined %}
-        {{ form_row(form.locale) }}
+    {% if form.scopes is defined %}
+        {{ form_row(form.scopes) }}
     {% endif %}
 
     {{ form_row(form.data) }}
