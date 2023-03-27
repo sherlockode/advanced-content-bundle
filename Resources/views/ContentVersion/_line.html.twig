@@ -3,7 +3,7 @@
 {% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
 
 {% set isCurrentVersion = false %}
-{% if version.content.contentVersion.id == version.id %}
+{% if version.content.contentVersion is not null and version.content.contentVersion.id == version.id %}
     {% set isCurrentVersion = true %}
 {% endif %}
 
@@ -12,7 +12,7 @@
     <td>{{ version.createdAt|format_datetime() }}</td>
     <td>
         {{ acb_get_content_version_user_name(version) }}
-        {% if version.content.contentVersion.id == version.id %}
+        {% if isCurrentVersion %}
             ({{ 'content_version.list.statuses.published'|trans }})
         {% elseif version.isAutoSave %}
             ({{ 'content_version.list.statuses.auto_save'|trans }})

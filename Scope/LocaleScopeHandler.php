@@ -2,7 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Scope;
 
-class LocaleScopeHandler implements ScopeHandlerInterface
+class LocaleScopeHandler extends ScopeHandler
 {
     /**
      * @return string|null

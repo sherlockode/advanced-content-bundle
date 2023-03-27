@@ -13,4 +13,9 @@ interface ScopeInterface
      * @return string
      */
     public function getOptionTitle();
+
+    /**
+     * @return string
+     */
+    public function getUnicityIdentifier();
 }

@@ -74,7 +74,10 @@
             <argument type="service" id="translator"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\User\UserProviderInterface" alias="sherlockode_advanced_content.user_provider"/>
-        <service id="sherlockode_advanced_content.scope_handler" class="Sherlockode\AdvancedContentBundle\Scope\LocaleScopeHandler"/>
+        <service id="sherlockode_advanced_content.scope_handler" class="Sherlockode\AdvancedContentBundle\Scope\LocaleScopeHandler">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+        </service>
         <service id="Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface" alias="sherlockode_advanced_content.scope_handler"/>
     </services>
 </container>
