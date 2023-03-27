@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <route id="sherlockode_acb_scope_list" path="/scope/crud/list">
+        <default key="_controller">sherlockode_advanced_content.controller.scope_crud::listAction</default>
+    </route>
+    <route id="sherlockode_acb_scope_delete" path="/scope/crud/delete/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.scope_crud::deleteAction</default>
+    </route>
+</routes>

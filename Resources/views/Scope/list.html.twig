@@ -1,0 +1,54 @@
+{% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+{% trans_default_domain 'AdvancedContentBundle' %}
+
+{% form_theme form '@SherlockodeAdvancedContent/Form/content.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container">
+        <div class="row page-info">
+            <div class="col-md-12">
+                <h1>{{ 'scope.label'|trans }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_start(form) }}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{{ 'scope.locale'|trans }}</th>
+                        <th>{{ 'actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for scope in scopes %}
+                        <tr>
+                            <td>{{ scope.id }}</td>
+                            <td>{{ scope.locale }}</td>
+                            <td>
+                                <a href="{{ path('sherlockode_acb_scope_delete', {id: scope.id}) }}">{{ 'delete'|trans }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td>
+                            {{ form_row(form.locale) }}
+                            {{ form_errors(form) }}
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success">
+                                {{ 'scope.add'|trans }}
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

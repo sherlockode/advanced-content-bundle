@@ -317,3 +317,9 @@ content_version:
             delete_confirm: Etes-vous sûr de vouloir supprimer cette version ?
     user:
         anonymous: Anonyme
+scope:
+    label: Scopes
+    locale: Locale
+    add: Ajouter une locale
+    errors:
+        unique_locale: Il existe déjà une locale avec cette valeur.
