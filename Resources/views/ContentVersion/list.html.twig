@@ -1,10 +1,10 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
-<div class="version-history">
-    <h4>{{ 'content_version.list.title'|trans }}</h4>
+{% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
 
+<div class="version-history">
     <table
-        class="table version-history-table"
+        class="{{ classes.table() }} version-history-table"
         {% if content.id is not null %}data-save-draft-url="{{ path('sherlockode_acb_content_save_draft', {id: content.id}) }}"{% endif %}
         data-load-version-url="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}"
         data-remove-version-url="{{ path('sherlockode_acb_content_delete_version', {id: content.id}) }}"

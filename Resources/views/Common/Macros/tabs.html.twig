@@ -1,0 +1,33 @@
+{% macro buildTabs(tabsData, extraClass) %}
+    <ul class="nav nav-tabs {{ extraClass }}" role="tablist">
+        {% for tabData in tabsData %}
+            <li class="nav-item" role="presentation">
+                <button type="button"
+                        class="nav-link {% if tabData.active %}active{% endif %}"
+                        id="{{ tabData.id }}-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#{{ tabData.id }}"
+                        role="tab"
+                        aria-controls="{{ tabData.id }}"
+                        aria-selected="true"
+                >{{ tabData.label }}</button>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content pt-3">
+        {% for tabData in tabsData %}
+            <div class="tab-pane fade show {% if tabData.active %}active{% endif %}"
+                 id="{{ tabData.id }}"
+                 role="tabpanel"
+                 aria-labelledby="{{ tabData.id }}-tab"
+            >
+                {{ tabData.content }}
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro buildEditElementsTabs(tabsData) %}
+    {% import _self as tabs %}
+    {{ tabs.buildTabs(tabsData, '') }}
+{% endmacro %}

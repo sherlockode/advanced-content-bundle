@@ -1,4 +1,6 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
-<button type="button" class="btn btn-primary form-button" data-target="#{{ form.vars.id }}">{{ 'save'|trans }}</button>
-<button type="button" class="btn btn-secondary btn-cancel">{{ 'cancel'|trans }}</button>
+{% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
+
+<button type="button" class="{{ classes.buttonPrimary }} form-button" data-target="#{{ form.vars.id }}">{{ 'save'|trans }}</button>
+<button type="button" class="{{ classes.button }} btn-cancel">{{ 'cancel'|trans }}</button>
