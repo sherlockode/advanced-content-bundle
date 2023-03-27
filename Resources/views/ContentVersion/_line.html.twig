@@ -1,14 +1,32 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
+{% set isCurrentVersion = false %}
+{% if version.content.contentVersion.id == version.id %}
+    {% set isCurrentVersion = true %}
+{% endif %}
+
 <tr data-version-id="{{ version.id }}">
-    <td>{{ version.id }}</td>
+    <td>{{ version.id }}{% if isCurrentVersion %}<i class="fa-solid fa-check current-version"></i>{% endif %}</td>
     <td>{{ version.createdAt|format_datetime() }}</td>
-    <td>{{ acb_get_content_version_user_name(version) }}</td>
     <td>
+        {{ acb_get_content_version_user_name(version) }}
         {% if version.content.contentVersion.id == version.id %}
-            {{ 'content_version.list.statuses.published'|trans }}
-        {% else %}
-            {{ 'content_version.list.statuses.draft'|trans }}
+            ({{ 'content_version.list.statuses.published'|trans }})
+        {% elseif version.isAutoSave %}
+            ({{ 'content_version.list.statuses.auto_save'|trans }})
+        {% endif %}
+    </td>
+    <td>
+        <button type="button"
+                class="btn acb-version-load"
+                title="{{ 'content_version.list.actions.load_draft'|trans }}"
+        >
+            <i class="fa-solid fa-eye"></i>
+        </button>
+        {% if not isCurrentVersion %}
+            <button type="button" class="btn acb-version-remove" title="{{ 'content_version.list.actions.delete_draft'|trans }}" data-confirm-delete="{{ 'content_version.list.actions.delete_confirm'|trans }}">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
         {% endif %}
     </td>
 </tr>

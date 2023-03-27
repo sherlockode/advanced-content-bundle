@@ -298,12 +298,17 @@ configuration:
 content_version:
     list:
         title: Version history
-        id: ID
+        id: Version ID
         date: Creation date
         user: User
-        status: Status
+        display_all: Display all versions
         statuses:
-            draft: Draft
+            auto_save: Automatic save
             published: Published
+        actions:
+            title: Actions
+            delete_draft: Delete this version
+            load_draft: Edit this version
+            delete_confirm: Are you sure you want to delete this version?
     user:
         anonymous: Anonymous

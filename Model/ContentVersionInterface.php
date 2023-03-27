@@ -58,4 +58,16 @@ interface ContentVersionInterface
      * @return $this
      */
     public function setCreatedAt(\DateTimeInterface $createdAt);
+
+    /**
+     * @return bool
+     */
+    public function isAutoSave(): bool;
+
+    /**
+     * @param bool $autoSave
+     *
+     * @return $this
+     */
+    public function setAutoSave(bool $autoSave);
 }

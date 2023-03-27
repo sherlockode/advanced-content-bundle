@@ -1,0 +1,22 @@
+.version-history-table {
+    tr.see-all {
+        td {
+            text-align: center;
+            cursor: pointer;
+            i {
+                margin-right: 5px;
+            }
+        }
+        ~ tr {
+            display: none;
+        }
+    }
+    .current-version {
+        margin-left: 5px;
+        color: #6bd54c;
+        font-size: 16px;
+    }
+    td {
+        vertical-align: middle;
+    }
+}

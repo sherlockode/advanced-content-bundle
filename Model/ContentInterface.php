@@ -94,7 +94,7 @@ interface ContentInterface
     public function setContentVersion(?ContentVersionInterface $contentVersion);
 
     /**
-     * @return ArrayCollection|Collection
+     * @return ArrayCollection|Collection|ContentVersionInterface[]
      */
     public function getVersions();
 }

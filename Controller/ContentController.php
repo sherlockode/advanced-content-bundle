@@ -269,14 +269,57 @@ class ContentController extends AbstractController
             $contentVersion->setData($form->getData());
             $this->em->persist($contentVersion);
             $this->em->flush();
+            // reload content to retrieve new versions list
+            $this->em->clear($this->configurationManager->getEntityClass('content'));
+            $this->em->clear($this->configurationManager->getEntityClass('content_version'));
+            $content = $this->contentManager->getContentById($id);
 
             return new JsonResponse([
                 'success' => true,
-                'id' => $contentVersion->getId(),
-                'html' => $this->renderView('@SherlockodeAdvancedContent/ContentVersion/_line.html.twig', [
-                    'version' => $contentVersion,
+                'html' => $this->renderView('@SherlockodeAdvancedContent/ContentVersion/list.html.twig', [
+                    'content' => $content,
                 ]),
             ]);
+        }
+
+        return new JsonResponse([
+            'success' => false,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function deleteVersionAction(Request $request)
+    {
+        $id = $request->get('id');
+        $content = $this->contentManager->getContentById($id);
+
+        if ($content === null) {
+            return new JsonResponse([
+                'success' => false,
+            ]);
+        }
+
+        $versionId = (int)$request->get('versionId');
+        foreach ($content->getVersions() as $version) {
+            if ($versionId === $version->getId()) {
+                $this->em->remove($version);
+                $this->em->flush();
+                // reload content to retrieve new versions list
+                $this->em->clear($this->configurationManager->getEntityClass('content'));
+                $this->em->clear($this->configurationManager->getEntityClass('content_version'));
+                $content = $this->contentManager->getContentById($id);
+
+                return new JsonResponse([
+                    'success' => true,
+                    'html' => $this->renderView('@SherlockodeAdvancedContent/ContentVersion/list.html.twig', [
+                        'content' => $content,
+                    ]),
+                ]);
+            }
         }
 
         return new JsonResponse([

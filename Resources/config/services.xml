@@ -69,6 +69,7 @@
         <service id="sherlockode_advanced_content.content_version_manager" class="Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="sherlockode_advanced_content.user_provider"/>
+            <argument type="service" id="request_stack"/>
         </service>
         <service id="sherlockode_advanced_content.content_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentListener">
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>

@@ -4,5 +4,6 @@
         <field name="userId" type="integer" column="user_id" nullable="true"/>
         <field name="data" type="json" column="data"/>
         <field name="createdAt" type="datetime" column="created_at"/>
+        <field name="autoSave" type="boolean" column="auto_save"/>
     </mapped-superclass>
 </doctrine-mapping>

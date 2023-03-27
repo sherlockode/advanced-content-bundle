@@ -298,12 +298,17 @@ configuration:
 content_version:
     list:
         title: Historique des versions
-        id: ID
+        id: N° de version
         date: Date de création
         user: Utilisateur
-        status: Statut
+        display_all: Voir toutes les versions
         statuses:
-            draft: Brouillon
+            auto_save: Sauvegarde automatique
             published: Publié
+        actions:
+            title: Actions
+            delete_draft: Supprimer cette version
+            load_draft: Editer cette version
+            delete_confirm: Etes-vous sûr de vouloir supprimer cette version ?
     user:
         anonymous: Anonyme
