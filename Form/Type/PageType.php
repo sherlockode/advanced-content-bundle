@@ -2,7 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,18 +21,11 @@ class PageType extends AbstractType
     private $configurationManager;
 
     /**
-     * @var LocaleProviderInterface
+     * @param ConfigurationManager $configurationManager
      */
-    private $localeProvider;
-
-    /**
-     * @param ConfigurationManager    $configurationManager
-     * @param LocaleProviderInterface $localeProvider
-     */
-    public function __construct(ConfigurationManager $configurationManager, LocaleProviderInterface $localeProvider)
+    public function __construct(ConfigurationManager $configurationManager)
     {
         $this->configurationManager = $configurationManager;
-        $this->localeProvider = $localeProvider;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -50,25 +42,21 @@ class PageType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'acb-page-page-type'],
             ])
+            ->add('pageMeta', PageMetaType::class, [
+                'label'       => 'page.form.page_meta',
+            ])
         ;
+        if ($this->configurationManager->isScopesEnabled()) {
+            $builder->add('scopes', ScopeChoiceType::class, [
+                'label' => 'page.form.scopes',
+                'attr' => ['class' => 'acb-scopes'],
+            ]);
+        }
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
             $form = $event->getForm();
             /** @var PageInterface $page */
             $page = $event->getData();
-
-            if ($this->localeProvider->isMultilangEnabled()) {
-                $form
-                    ->add('pageMetas', PageMetaTranslationType::class, [
-                        'label' => 'page.form.page_meta',
-                    ]);
-            } else {
-                $form
-                    ->add('pageMeta', PageMetaType::class, [
-                        'label'       => 'page.form.page_meta',
-                    ])
-                ;
-            }
 
             if ($page instanceof PageInterface && $page->getId()) {
                 $form
@@ -83,18 +71,11 @@ class PageType extends AbstractType
                     ])
                 ;
 
-                if ($this->localeProvider->isMultilangEnabled()) {
-                    $form
-                        ->add('contents', ContentTranslationType::class, [
-                            'label' => 'page.form.content',
-                        ]);
-                } else {
-                    $form
-                        ->add('content', ContentType::class, [
-                            'label' => 'page.form.content',
-                        ])
-                    ;
-                }
+                $form
+                    ->add('content', ContentType::class, [
+                        'label' => 'page.form.content',
+                    ])
+                ;
             }
         });
 
@@ -102,11 +83,14 @@ class PageType extends AbstractType
         $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
             /** @var PageInterface $page */
             $page = $event->getData();
-            foreach ($page->getContents() as $content) {
-                if (!$content->getId()) {
-                    $content->setName('page-' . $page->getPageIdentifier() . '-' . bin2hex(random_bytes(6)));
-                    $content->setSlug($page->getPageMeta($content->getLocale())->getSlug() . '-' . bin2hex(random_bytes(6)));
-                }
+            $content = $page->getContent();
+            if ($content === null) {
+                $content = new ($this->configurationManager->getEntityClass('content'));
+                $page->setContent($content);
+            }
+            if (!$content->getId()) {
+                $content->setName('page-' . $page->getPageIdentifier() . '-' . bin2hex(random_bytes(6)));
+                $content->setSlug($page->getPageMeta()->getSlug() . '-' . bin2hex(random_bytes(6)));
             }
         });
     }

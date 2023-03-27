@@ -2,9 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-use Sherlockode\AdvancedContentBundle\Locale\TranslatableInterface;
-
-abstract class PageMeta implements PageMetaInterface, TranslatableInterface
+abstract class PageMeta implements PageMetaInterface
 {
     /**
      * @var int
@@ -30,11 +28,6 @@ abstract class PageMeta implements PageMetaInterface, TranslatableInterface
      * @var string
      */
     protected $metaDescription;
-
-    /**
-     * @var string
-     */
-    protected $locale;
 
     /**
      * @var PageInterface
@@ -130,26 +123,6 @@ abstract class PageMeta implements PageMetaInterface, TranslatableInterface
     public function setMetaDescription($metaDescription)
     {
         $this->metaDescription = $metaDescription;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
 
         return $this;
     }

@@ -68,16 +68,4 @@ interface PageMetaInterface
      * @return $this
      */
     public function setPage(PageInterface $page);
-
-    /**
-     * @return string|null
-     */
-    public function getLocale();
-
-    /**
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale($locale);
 }
