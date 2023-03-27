@@ -12,6 +12,7 @@ content:
         data: Champs
         position: Ordre
         scopes: Scopes
+        scopes_select_all: Tout sélectionner / désélectionner
     duplicate:
         other_locales: Nouveau
         select_source_language: Choisissez la langue à copier

@@ -102,6 +102,14 @@ class ConfigurationManager
     }
 
     /**
+     * @return bool
+     */
+    public function isScopesEnabled()
+    {
+        return $this->config['scopes']['enabled'];
+    }
+
+    /**
      * @param string $option
      *
      * @return mixed

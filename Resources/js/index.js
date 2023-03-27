@@ -385,6 +385,10 @@ jQuery(function ($) {
         }
     });
 
+    $('body').on('change', '#acb-scopes-select-all', function() {
+        $('.acb-scopes').find('option').prop('selected', $(this).is(':checked'));
+    });
+
     $('body').on('click', '.btn-new-field', function () {
         let baseName = $(this).parents('.acb-sortable').parents('.acb-sortable-group').data('base-name');
         usedAddFieldBlock = $(this).closest('.acb-row');

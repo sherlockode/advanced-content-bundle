@@ -61,10 +61,13 @@ class ContentType extends AbstractType
                     'class' => 'acb-elements-form-container',
                 ],
             ])
-            ->add('scopes', ScopeChoiceType::class, [
-                'label' => 'content.form.scopes',
-            ])
         ;
+        if ($this->configurationManager->isScopesEnabled()) {
+            $builder->add('scopes', ScopeChoiceType::class, [
+                'label' => 'content.form.scopes',
+                'attr' => ['class' => 'acb-scopes'],
+            ]);
+        }
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
             $form = $event->getForm();
@@ -83,6 +86,9 @@ class ContentType extends AbstractType
             if ($form->getParent()) {
                 $form->remove('name');
                 $form->remove('slug');
+                if ($form->has('scopes')) {
+                    $form->remove('scopes');
+                }
             }
 
             if ($content === null || empty($content->getData())) {
