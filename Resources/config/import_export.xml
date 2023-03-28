@@ -10,11 +10,13 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
         </service>
         <service id="sherlockode_advanced_content.content_import" class="Sherlockode\AdvancedContentBundle\Import\ContentImport">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
             <argument type="service" id="translator"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
             <argument type="service" id="sherlockode_advanced_content.element_import"/>
         </service>
         <service id="sherlockode_advanced_content.element_import" class="Sherlockode\AdvancedContentBundle\Import\ElementImport">
@@ -30,13 +32,20 @@
             <argument type="service" id="sherlockode_advanced_content.page_export"/>
             <argument type="service" id="sherlockode_advanced_content.content_export"/>
         </service>
-        <service id="sherlockode_advanced_content.page_export" class="Sherlockode\AdvancedContentBundle\Export\PageExport"/>
+        <service id="sherlockode_advanced_content.page_export" class="Sherlockode\AdvancedContentBundle\Export\PageExport">
+            <argument type="service" id="sherlockode_advanced_content.scope_export"/>
+        </service>
         <service id="sherlockode_advanced_content.content_export" class="Sherlockode\AdvancedContentBundle\Export\ContentExport">
             <argument type="service" id="sherlockode_advanced_content.element_export"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_export"/>
         </service>
         <service id="sherlockode_advanced_content.element_export" class="Sherlockode\AdvancedContentBundle\Export\ElementExport">
             <argument type="service" id="sherlockode_advanced_content.element_manager"/>
             <argument type="service" id="translator"/>
+        </service>
+        <service id="sherlockode_advanced_content.scope_export" class="Sherlockode\AdvancedContentBundle\Export\ScopeExport">
+            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
         </service>
     </services>
 </container>

@@ -11,4 +11,18 @@ interface ScopableInterface
      * @return ArrayCollection|Collection|ScopeInterface[]
      */
     public function getScopes();
+
+    /**
+     * @param ScopeInterface $scope
+     *
+     * @return $this
+     */
+    public function addScope(ScopeInterface $scope);
+
+    /**
+     * @param ScopeInterface $scope
+     *
+     * @return $this
+     */
+    public function removeScope(ScopeInterface $scope);
 }

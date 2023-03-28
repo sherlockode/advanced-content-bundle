@@ -12,11 +12,18 @@ class ContentExport
     private $elementExport;
 
     /**
-     * @param ElementExport $elementExport
+     * @var ScopeExport
      */
-    public function __construct(ElementExport $elementExport)
+    private $scopeExport;
+
+    /**
+     * @param ElementExport $elementExport
+     * @param ScopeExport   $scopeExport
+     */
+    public function __construct(ElementExport $elementExport, ScopeExport $scopeExport)
     {
         $this->elementExport = $elementExport;
+        $this->scopeExport = $scopeExport;
     }
 
     /**
@@ -28,9 +35,7 @@ class ContentExport
     {
         $data = [];
         $data['name'] = $content->getName();
-        if ($content->getLocale()) {
-            $data['locale'] = $content->getLocale();
-        }
+        $data = array_merge($data, $this->scopeExport->getEntityScopes($content));
 
         $elements = $content->getData() ?? [];
         $data['children'] = $this->exportElements($elements);
@@ -51,6 +56,9 @@ class ContentExport
      */
     public function exportElements($elements)
     {
+        if (!is_array($elements)) {
+            return [];
+        }
         if (count($elements) === 0) {
             return [];
         }

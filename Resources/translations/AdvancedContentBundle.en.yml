@@ -164,8 +164,11 @@ init:
         element_file_not_found: File "%file%" not found for element
         unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
         file_not_found: File %file% was not found in directory "%dir%"
-        content_entity_not_found: Content with slug "%slug%" and locale "%locale%" was not found
+        content_entity_not_found: Content with slug "%slug%" was not found
         cannot_create_directory: Unable to create directory "%path%"
+        unknown_scope: The scope "%scope%" does not exist.
+        scopes_disabled: Scope management is not enabled. Please remove scopes entry from your files.
+        multiple_entities_same_scope: Multiple entities are linked to the same scope. Impossible to determine which entity should be updated.
     export_success: Files were successfully exported in "%dir%"
 tools:
     label: Tools

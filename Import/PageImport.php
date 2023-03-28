@@ -20,15 +20,21 @@ class PageImport extends AbstractImport
      */
     protected function importEntity($pageIdentifier, $pageData)
     {
-        if (empty($pageData['metas'])) {
+        if (empty($pageData['meta'])) {
             $this->errors[] = $this->translator->trans('init.errors.page_missing_metas', [], 'AdvancedContentBundle');
 
             return;
         }
 
-        $page = $this->em->getRepository($this->entityClasses['page'])->findOneBy([
-            'pageIdentifier' => $pageIdentifier,
-        ]);
+        try {
+            $scopes = $this->getScopesForEntity($pageData['scopes'] ?? []);
+            $page = $this->getExistingScopableEntity($this->entityClasses['page'], ['pageIdentifier' => $pageIdentifier], $scopes);
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
+
+            return;
+        }
+
         if (!$page instanceof PageInterface) {
             $page = new $this->entityClasses['page'];
         } elseif (!$this->allowUpdate) {
@@ -38,6 +44,7 @@ class PageImport extends AbstractImport
 
         $page->setPageIdentifier($pageIdentifier);
         $page->setStatus($pageData['status'] ?? PageInterface::STATUS_DRAFT);
+        $this->updateEntityScopes($page, $scopes);
 
         $pageType = null;
         if (isset($pageData['pageType'])) {
@@ -63,66 +70,62 @@ class PageImport extends AbstractImport
         }
         $page->setPageType($pageType);
 
-        foreach ($page->getContents() as $content) {
-            $page->removeContent($content);
-            $this->em->remove($content);
-            $this->em->flush();
-        }
-
-        if (!empty($pageData['contents'])) {
-            $existingContents = [];
-            foreach ($page->getContents() as $content) {
-                $existingContents[$content->getLocale()] = $content;
+        if (!empty($pageData['content'])) {
+            $contentData = $pageData['content'];
+            $content = $page->getContent();
+            if ($content === null) {
+                /** @var ContentInterface $content */
+                $content = new $this->entityClasses['content'];
+                $content->setName($page->getPageIdentifier());
+                $content->setSlug($page->getPageIdentifier());
+                $page->setContent($content);
+                $this->em->persist($content);
             }
-            foreach ($pageData['contents'] as $locale => $contentData) {
-                if (isset($existingContents[$locale])) {
-                    $content = $existingContents[$locale];
-                } else {
-                    /** @var ContentInterface $content */
-                    $content = new $this->entityClasses['content'];
-                    $content->setName($page->getPageIdentifier());
-                    $content->setSlug($page->getPageIdentifier());
-                    $content->setLocale($locale);
-                    $page->addContent($content);
-                    $this->em->persist($content);
-                }
 
-                $this->contentImport
-                    ->resetErrors()
-                    ->createElements($contentData, $content);
-                $errors = $this->contentImport->getErrors();
-                foreach ($errors as $error) {
-                    $this->errors[] = $error;
-                }
+            $this->contentImport
+                ->resetErrors()
+                ->createElements($contentData, $content);
+            $errors = $this->contentImport->getErrors();
+            foreach ($errors as $error) {
+                $this->errors[] = $error;
             }
         }
 
-        $existingPageMetas = [];
-        foreach ($page->getPageMetas() as $pageMeta) {
-            $existingPageMetas[$pageMeta->getLocale()] = $pageMeta;
+        $pageMeta = $page->getPageMeta();
+        $metaData = $pageData['meta'];
+        if (!isset($metaData['title']) || !isset($metaData['slug'])) {
+            $this->errors[] = $this->translator->trans('init.errors.page_missing_data', [], 'AdvancedContentBundle');
+
+            return;
         }
-        foreach ($pageData['metas'] as $locale => $metaData) {
-            if (!isset($metaData['title']) || !isset($metaData['slug'])) {
-                $this->errors[] = $this->translator->trans('init.errors.page_missing_data', [], 'AdvancedContentBundle');
 
-                continue;
-            }
+        $title = $metaData['title'];
+        $slug = $metaData['slug'];
+        if ($pageMeta === null) {
+            /** @var PageMetaInterface $pageMeta */
+            $pageMeta = new $this->entityClasses['page_meta'];
+            $page->setPageMeta($pageMeta);
+        }
+        $pageMeta->setTitle($title);
+        $pageMeta->setSlug($slug);
+        $pageMeta->setMetaTitle($metaData['meta_title'] ?? null);
+        $pageMeta->setMetaDescription($metaData['meta_description'] ?? null);
 
-            $title = $metaData['title'];
-            $slug = $metaData['slug'];
-
-            if (isset($existingPageMetas[$locale])) {
-                $pageMeta = $existingPageMetas[$locale];
+        if (!$this->scopeHandler->isPageIdentifierValid($page)) {
+            if ($this->configurationManager->isScopesEnabled()) {
+                $this->errors[] = $this->translator->trans('page.errors.duplicate_identifier_scopes', [], 'AdvancedContentBundle');
             } else {
-                /** @var PageMetaInterface $pageMeta */
-                $pageMeta = new $this->entityClasses['page_meta'];
-                $pageMeta->setLocale($locale);
-                $page->addPageMeta($pageMeta);
+                $this->errors[] = $this->translator->trans('page.errors.duplicate_identifier_no_scope', [], 'AdvancedContentBundle');
             }
-            $pageMeta->setTitle($title);
-            $pageMeta->setSlug($slug);
-            $pageMeta->setMetaTitle($metaData['meta_title'] ?? null);
-            $pageMeta->setMetaDescription($metaData['meta_description'] ?? null);
+            return;
+        }
+        if (!$this->scopeHandler->isPageSlugValid($page)) {
+            if ($this->configurationManager->isScopesEnabled()) {
+                $this->errors[] = $this->translator->trans('page.errors.duplicate_slug_scopes', [], 'AdvancedContentBundle');
+            } else {
+                $this->errors[] = $this->translator->trans('page.errors.duplicate_slug_no_scope', [], 'AdvancedContentBundle');
+            }
+            return;
         }
 
         $this->em->persist($page);
