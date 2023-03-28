@@ -42,8 +42,7 @@
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
         <service id="sherlockode_acb.field_type.content" class="Sherlockode\AdvancedContentBundle\FieldType\Content">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
     </services>

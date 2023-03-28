@@ -71,6 +71,7 @@
         <service id="sherlockode_advanced_content.scope_handler" class="Sherlockode\AdvancedContentBundle\Scope\LocaleScopeHandler">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="request_stack"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface" alias="sherlockode_advanced_content.scope_handler"/>
     </services>

@@ -2,11 +2,10 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
-use Doctrine\ORM\EntityRepository;
-use Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AcbContentType extends AbstractType
@@ -17,18 +16,18 @@ class AcbContentType extends AbstractType
     private $configurationManager;
 
     /**
-     * @var LocaleProviderInterface
+     * @var EntityManagerInterface
      */
-    private $localeProvider;
+    private $em;
 
     /**
-     * @param ConfigurationManager    $configurationManager
-     * @param LocaleProviderInterface $localeProvider
+     * @param ConfigurationManager   $configurationManager
+     * @param EntityManagerInterface $em
      */
-    public function __construct(ConfigurationManager $configurationManager, LocaleProviderInterface $localeProvider)
+    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
     {
         $this->configurationManager = $configurationManager;
-        $this->localeProvider = $localeProvider;
+        $this->em = $em;
     }
 
     /**
@@ -37,22 +36,18 @@ class AcbContentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('content', EntityType::class, [
-                'label' => false,
-                'class' => $this->configurationManager->getEntityClass('content'),
-                'query_builder' => function (EntityRepository $repository) {
-                    return $repository->createQueryBuilder('content')
-                        ->where('content.page IS NULL');
-                },
-                'choice_label' => function (ContentInterface $content) {
-                    $label = $content->getName();
-                    if ($this->localeProvider->isMultilangEnabled()) {
-                        $label .= ' - ' . $content->getLocale();
-                    }
+        $contents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
+            'page' => null,
+        ], ['slug' => 'ASC']);
+        $slugs = [];
+        foreach ($contents as $content) {
+            $slugs[$content->getSlug()] = $content->getSlug();
+        }
 
-                    return $label;
-                },
+        $builder
+            ->add('content', ChoiceType::class, [
+                'label' => false,
+                'choices' => $slugs,
             ])
         ;
     }

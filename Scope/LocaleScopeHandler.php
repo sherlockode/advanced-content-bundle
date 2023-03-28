@@ -2,8 +2,34 @@
 
 namespace Sherlockode\AdvancedContentBundle\Scope;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
+use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
+use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+
 class LocaleScopeHandler extends ScopeHandler
 {
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @param EntityManagerInterface $em
+     * @param ConfigurationManager   $configurationManager
+     * @param RequestStack           $requestStack
+     */
+    public function __construct(
+        EntityManagerInterface $em,
+        ConfigurationManager $configurationManager,
+        RequestStack $requestStack
+    ) {
+        parent::__construct($em, $configurationManager);
+
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * @return string|null
      */
@@ -38,5 +64,38 @@ class LocaleScopeHandler extends ScopeHandler
         return [
             'locale' => $scope->getLocale(),
         ];
+    }
+
+    /**
+     * @param array|ScopableInterface[] $entities
+     *
+     * @return ScopableInterface|null
+     */
+    public function filterEntityForCurrentScope(array $entities): ?ScopableInterface
+    {
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            // SF >= 5.3
+            $mainRequest = $this->requestStack->getMainRequest();
+        } else {
+            // compat SF < 5.3
+            $mainRequest = $this->requestStack->getMasterRequest();
+        }
+        if ($mainRequest === null) {
+            return null;
+        }
+
+        if (!$mainRequest->getLocale()) {
+            return null;
+        }
+
+        foreach ($entities as $entity) {
+            foreach ($entity->getScopes() as $scope) {
+                if ($scope->getLocale() === $mainRequest->getLocale()) {
+                    return $entity;
+                }
+            }
+        }
+
+        return null;
     }
 }
