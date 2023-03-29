@@ -4,7 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
-use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 use Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface;
 
@@ -64,18 +63,6 @@ class PageManager
     }
 
     /**
-     * Get page meta by its id
-     *
-     * @param int $id
-     *
-     * @return null|PageMetaInterface
-     */
-    public function getPageMetaById($id)
-    {
-        return $this->em->getRepository($this->configurationManager->getEntityClass('page_meta'))->find($id);
-    }
-
-    /**
      * @param PageInterface $page
      *
      * @return PageInterface
@@ -83,28 +70,16 @@ class PageManager
     public function duplicate(PageInterface $page): PageInterface
     {
         $newPage = clone $page;
-        $newPage->setPageIdentifier($this->slugProvider->getValidSlug(
-            $newPage->getPageIdentifier(),
-            $this->configurationManager->getEntityClass('page'),
-            'pageIdentifier',
-        ));
+        $this->slugProvider->setPageValidIdentifier($newPage);
 
-        foreach ($newPage->getPageMetas() as $pageMeta) {
-            $pageMeta->setSlug($this->slugProvider->getValidSlug(
-                $pageMeta->getSlug(),
-                $this->configurationManager->getEntityClass('page_meta'),
-                'slug',
-                ['locale' => $pageMeta->getLocale()],
-            ));
+        $pageMeta = $newPage->getPageMeta();
+        if ($pageMeta !== null) {
+            $this->slugProvider->setPageValidSlug($newPage);
         }
 
-        foreach ($newPage->getContents() as $content) {
-            $content->setSlug($this->slugProvider->getValidSlug(
-                $content->getSlug(),
-                $this->configurationManager->getEntityClass('content'),
-                'slug',
-                $content->getLocale() === null ? [] : ['locale' => $content->getLocale()],
-            ));
+        $content = $newPage->getContent();
+        if ($content !== null) {
+            $this->slugProvider->setContentValidSlug($content);
         }
 
         return $newPage;

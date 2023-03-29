@@ -65,6 +65,8 @@ abstract class Content implements ContentInterface, ScopableInterface
     public function __clone()
     {
         $this->id = null;
+        $this->versions = new ArrayCollection();
+        $this->contentVersion = null;
     }
 
     /**

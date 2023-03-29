@@ -45,7 +45,7 @@
         <service id="Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface" alias="sherlockode_advanced_content.locale_provider"/>
         <service id="Sherlockode\AdvancedContentBundle\Manager\UploadManager" alias="sherlockode_advanced_content.upload_manager"/>
         <service id="sherlockode_advanced_content.slug_provider" class="Sherlockode\AdvancedContentBundle\Slug\SlugProvider">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface" alias="sherlockode_advanced_content.slug_provider"/>
         <service id="sherlockode_advanced_content.url_builder_manager" class="Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager">

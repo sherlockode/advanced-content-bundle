@@ -50,6 +50,7 @@ abstract class PageMeta implements PageMetaInterface
     public function __clone()
     {
         $this->id = null;
+        $this->versions = new ArrayCollection();
     }
 
     /**
