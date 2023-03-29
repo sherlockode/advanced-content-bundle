@@ -33,11 +33,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     protected $page;
 
     /**
-     * @var string
-     */
-    protected $locale;
-
-    /**
      * @var ContentVersionInterface|null
      */
     protected $contentVersion;

@@ -41,9 +41,6 @@ class SherlockodeAdvancedContentExtension extends Extension
 
         $container->getDefinition('sherlockode_advanced_content.element_manager')->setArgument(0, $config['field_types']);
 
-        $localeProvider = $container->getDefinition('sherlockode_advanced_content.locale_provider');
-        $localeProvider->setArgument(0, $config['locales']);
-
         $container->setParameter('sherlockode_advanced_content.templates.tools', $config['templates']['tools']);
     }
 
