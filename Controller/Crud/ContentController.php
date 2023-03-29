@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\Type\ContentType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,8 +89,18 @@ class ContentController extends AbstractController
      */
     public function createAction(Request $request)
     {
-        $contentEntityClass = $this->configurationManager->getEntityClass('content');
-        $content = new $contentEntityClass;
+        if ($id = $request->get('duplicateId')) {
+            $contentToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
+            if (!$contentToDuplicate instanceof ContentInterface) {
+                throw $this->createNotFoundException(
+                    sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
+                );
+            }
+            $content = $this->contentManager->duplicate($contentToDuplicate);
+        } else {
+            $contentEntityClass = $this->configurationManager->getEntityClass('content');
+            $content = new $contentEntityClass;
+        }
 
         $form = $this->createForm(ContentType::class, $content, [
             'action' => $this->generateUrl('sherlockode_acb_content_create'),
