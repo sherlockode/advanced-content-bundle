@@ -138,6 +138,10 @@ page:
         page_meta: Meta
     errors:
         alert_change_type: Warning, changing the page type will lead to content deletion. Are you sure you want to continue?
+        duplicate_slug_no_scope: Another page exists with the same slug.
+        duplicate_slug_scopes: Another page exists with the same slug for the same scope.
+        duplicate_identifier_no_scope: Another page exists with the same identifier.
+        duplicate_identifier_scopes: Another page exists with the same identifier for the same scope.
     duplicate:
         validate: Validate
     delete:

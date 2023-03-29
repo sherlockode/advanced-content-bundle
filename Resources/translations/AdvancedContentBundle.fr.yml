@@ -138,6 +138,10 @@ page:
         page_meta: Méta
     errors:
         alert_change_type: Attention, changer le type de la page va provoquer la suppression du contenu. Voulez-vous continuer ?
+        duplicate_slug_no_scope: Il existe déjà une page avec ce slug.
+        duplicate_slug_scopes: Il existe déjà une page avec ce slug pour le même scope.
+        duplicate_identifier_no_scope: Il existe déjà une page avec cet identifiant.
+        duplicate_identifier_scopes: Il existe déjà une page avec cet identifiant pour le même scope.
     duplicate:
         validate: Valider
     delete:
