@@ -65,6 +65,9 @@ class PageType extends AbstractType
             ->add('pageMeta', PageMetaType::class, [
                 'label'       => 'page.form.page_meta',
             ])
+            ->add('content', ContentType::class, [
+                'label' => 'page.form.content',
+            ])
         ;
         if ($this->configurationManager->isScopesEnabled()) {
             $builder->add('scopes', ScopeChoiceType::class, [
@@ -88,12 +91,6 @@ class PageType extends AbstractType
                             'page.form.statuses.trash' => PageInterface::STATUS_TRASH,
                         ],
                         'translation_domain' => 'AdvancedContentBundle',
-                    ])
-                ;
-
-                $form
-                    ->add('content', ContentType::class, [
-                        'label' => 'page.form.content',
                     ])
                 ;
             }
