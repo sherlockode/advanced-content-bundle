@@ -13,8 +13,6 @@
             <argument/>
         </service>
         <service id="sherlockode_advanced_content.page_manager" class="Sherlockode\AdvancedContentBundle\Manager\PageManager">
-            <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.slug_provider"/>
         </service>
         <service id="sherlockode_advanced_content.content_extension" class="Sherlockode\AdvancedContentBundle\Twig\Extension\ContentExtension">

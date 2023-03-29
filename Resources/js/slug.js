@@ -10,6 +10,17 @@ function initContentSlug() {
         }
     });
 }
+function initPageSlug() {
+    let pageTitle = $('.acb-pagemeta-title');
+    if (pageTitle.length > 0) {
+        pageTitle.each(function(){
+            let pageSlug = $('.acb-pagemeta-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
+            if (pageSlug.length > 0) {
+                applySlug($(this), pageSlug);
+            }
+        });
+    }
+}
 
 function applySlug(refField, slugField) {
     var timer;
@@ -64,4 +75,5 @@ jQuery(function ($) {
     });
 
     initContentSlug();
+    initPageSlug();
 });
