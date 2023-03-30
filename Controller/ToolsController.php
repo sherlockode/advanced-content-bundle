@@ -2,11 +2,17 @@
 
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\Type\ExportType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ImportType;
+use Sherlockode\AdvancedContentBundle\Form\Type\PageTypeType;
+use Sherlockode\AdvancedContentBundle\Form\Type\ScopeType;
+use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ExportManager;
 use Sherlockode\AdvancedContentBundle\Manager\ImportManager;
+use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -30,29 +36,45 @@ class ToolsController extends AbstractController
     private $translator;
 
     /**
+     * @var ConfigurationManager
+     */
+    private $configurationManager;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
      * @var string
      */
     private $template;
 
     /**
-     * @param ImportManager       $importManager
-     * @param ExportManager       $exportManager
-     * @param TranslatorInterface $translator
-     * @param string              $template
+     * @param ImportManager          $importManager
+     * @param ExportManager          $exportManager
+     * @param TranslatorInterface    $translator
+     * @param ConfigurationManager   $configurationManager
+     * @param EntityManagerInterface $em
+     * @param string                 $template
      */
     public function __construct(
         ImportManager $importManager,
         ExportManager $exportManager,
         TranslatorInterface $translator,
+        ConfigurationManager $configurationManager,
+        EntityManagerInterface $em,
         $template
     ) {
         $this->importManager = $importManager;
         $this->exportManager = $exportManager;
         $this->translator = $translator;
+        $this->configurationManager = $configurationManager;
+        $this->em = $em;
         $this->template = $template;
     }
 
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $importForm = $this->createForm(ImportType::class, null, [
             'action' => $this->generateUrl('sherlockode_acb_tools_import'),
@@ -62,9 +84,59 @@ class ToolsController extends AbstractController
             'action' => $this->generateUrl('sherlockode_acb_tools_export'),
         ]);
 
+        $pageTypeClass = $this->configurationManager->getEntityClass('page_type');
+        $pageTypes = $this->em->getRepository($pageTypeClass)->findAll();
+        $pageType = new $pageTypeClass;
+        $pageTypeForm = $this->createForm(PageTypeType::class, $pageType, [
+            'action' => $this->generateUrl('sherlockode_acb_tools_index'),
+        ]);
+        $pageTypeForm->handleRequest($request);
+        if ($pageTypeForm->isSubmitted() && $pageTypeForm->isValid()) {
+            $existingPageTypes = $this->em->getRepository($pageTypeClass)->findBy([
+                'name' => $pageType->getName(),
+            ]);
+            if (count($existingPageTypes) === 0) {
+                $this->em->persist($pageType);
+                $this->em->flush();
+
+                return $this->redirectToRoute('sherlockode_acb_tools_index');
+            } else {
+                $pageTypeForm->addError(new FormError(
+                    $this->translator->trans('page_type.errors.unique_name', [], 'AdvancedContentBundle')
+                ));
+            }
+        }
+
+        $scopeClass = $this->configurationManager->getEntityClass('scope');
+        $scopes = $this->em->getRepository($scopeClass)->findAll();
+        $scope = new $scopeClass;
+        $scopeForm = $this->createForm(ScopeType::class, $scope, [
+            'action' => $this->generateUrl('sherlockode_acb_tools_index'),
+        ]);
+        $scopeForm->handleRequest($request);
+        if ($scopeForm->isSubmitted() && $scopeForm->isValid()) {
+            $existingScopes = $this->em->getRepository($scopeClass)->findBy([
+                'locale' => $scope->getLocale(),
+            ]);
+            if (count($existingScopes) === 0) {
+                $this->em->persist($scope);
+                $this->em->flush();
+
+                return $this->redirectToRoute('sherlockode_acb_tools_index');
+            } else {
+                $scopeForm->addError(new FormError(
+                    $this->translator->trans('scope.errors.unique_locale', [], 'AdvancedContentBundle')
+                ));
+            }
+        }
+
         return $this->render($this->template, [
             'importForm' => $importForm->createView(),
             'exportForm' => $exportForm->createView(),
+            'pageTypes' => $pageTypes,
+            'pageTypeForm' => $pageTypeForm->createView(),
+            'scopes' => $scopes,
+            'scopeForm' => $scopeForm->createView(),
         ]);
     }
 
@@ -134,6 +206,27 @@ class ToolsController extends AbstractController
                 $this->addFlash('error', $e->getMessage());
             }
         }
+
+        return $this->redirectToRoute('sherlockode_acb_tools_index');
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function deletePageTypeAction($id)
+    {
+        $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
+
+        if (!$pageType instanceof PageTypeInterface) {
+            throw $this->createNotFoundException(
+                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id)
+            );
+        }
+
+        $this->em->remove($pageType);
+        $this->em->flush();
 
         return $this->redirectToRoute('sherlockode_acb_tools_index');
     }

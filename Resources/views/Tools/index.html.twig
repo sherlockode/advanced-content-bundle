@@ -1,58 +1,101 @@
 {% extends '@SherlockodeAdvancedContent/layout.html.twig' %}
+{% import "@SherlockodeAdvancedContent/Common/Macros/tabs.html.twig" as tabUtils %}
 {% trans_default_domain 'AdvancedContentBundle' %}
 
-{% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h3>{{ 'tools.import.title'|trans }}</h3>
-                <p>{{ 'tools.import.description'|trans }}</p>
-                <div class="acb-tools-import">
-                    {{ form_start(importForm) }}
-                    {{ form_errors(importForm) }}
-                    {{ form_row(importForm.file) }}
-                    <button class="btn btn-success" type="submit">{{ 'tools.import.btn'|trans }}</button>
-                    {{ form_end(importForm) }}
-                </div>
+{% form_theme exportForm '@SherlockodeAdvancedContent/Form/theme.html.twig' %}
+{% form_theme importForm '@SherlockodeAdvancedContent/Form/theme.html.twig' %}
+
+{% set tabs = [] %}
+{% set importExportContent %}
+    <div class="row">
+        <div class="col">
+            <h3>{{ 'tools.import.title'|trans }}</h3>
+            <p>{{ 'tools.import.description'|trans }}</p>
+            <div class="acb-tools-import">
+                {{ form_start(importForm) }}
+                {{ form_errors(importForm) }}
+                {{ form_row(importForm.file) }}
+                <button class="btn btn-success" type="submit">{{ 'tools.import.btn'|trans }}</button>
+                {{ form_end(importForm) }}
             </div>
         </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col">
+            <h3>{{ 'tools.export.title'|trans }}</h3>
+            <p>{{ 'tools.export.description'|trans }}</p>
+            <div class="acb-tools-export">
+                {{ form_start(exportForm) }}
+                {{ form_errors(exportForm) }}
+                <div class="row">
+                    <div class="col-6">
+                        <div class="acb-export-entities">
+                            {{ form_row(exportForm.page) }}
+                            {% if exportForm.page.vars.choices is not empty %}
+                                {{ form_row(exportForm.pageAll) }}
+                            {% else %}
+                                {{ 'tools.export.empty_list.page'|trans }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="acb-export-entities">
+                            {{ form_row(exportForm.content) }}
+                            {% if exportForm.content.vars.choices is not empty %}
+                                {{ form_row(exportForm.contentAll) }}
+                            {% else %}
+                                {{ 'tools.export.empty_list.content'|trans }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-success" type="submit">{{ 'tools.export.btn'|trans }}</button>
+                {% if exportForm._token is defined %}
+                    {{ form_widget(exportForm._token) }}
+                {% endif %}
+                {{ form_end(exportForm, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endset %}
+{% set tabs = tabs|merge([{
+    'id': 'import-export',
+    'active': true,
+    'label': 'tools.import_export'|trans,
+    'content': importExportContent
+}]) %}
+
+{% set configurationContent %}
+    <div class="row">
+        <div class="col">
+            <h3>{{ 'page_type.label'|trans }}</h3>
+            <p>{{ 'page_type.description'|trans }}</p>
+
+            {{ include('@SherlockodeAdvancedContent/Tools/_pageTypes.html.twig', {'pageTypes': pageTypes, 'form': pageTypeForm}) }}
+        </div>
+    </div>
+    {% if acb_is_scopes_enabled() %}
         <hr>
         <div class="row">
             <div class="col">
-                <h3>{{ 'tools.export.title'|trans }}</h3>
-                <p>{{ 'tools.export.description'|trans }}</p>
-                <div class="acb-tools-export">
-                    {{ form_start(exportForm) }}
-                    {{ form_errors(exportForm) }}
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="acb-export-entities">
-                                {{ form_row(exportForm.page) }}
-                                {% if exportForm.page.vars.choices is not empty %}
-                                    {{ form_row(exportForm.pageAll) }}
-                                {% else %}
-                                    {{ 'tools.export.empty_list.page'|trans }}
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="acb-export-entities">
-                                {{ form_row(exportForm.content) }}
-                                {% if exportForm.content.vars.choices is not empty %}
-                                    {{ form_row(exportForm.contentAll) }}
-                                {% else %}
-                                    {{ 'tools.export.empty_list.content'|trans }}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-success" type="submit">{{ 'tools.export.btn'|trans }}</button>
-                    {% if exportForm._token is defined %}
-                        {{ form_widget(exportForm._token) }}
-                    {% endif %}
-                    {{ form_end(exportForm, {'render_rest': false}) }}
-                </div>
+                <h3>{{ 'scope.label'|trans }}</h3>
+                <p>{{ 'scope.description'|trans }}</p>
+
+                {{ include('@SherlockodeAdvancedContent/Tools/_scopes.html.twig', {'scopes': scopes, 'form': scopeForm}) }}
             </div>
         </div>
+    {% endif %}
+{% endset %}
+{% set tabs = tabs|merge([{
+    'id': 'configuration',
+    'active': false,
+    'label': 'tools.configuration'|trans,
+    'content': configurationContent
+}]) %}
+
+{% block body %}
+    <div class="container my-5">
+        {{ tabUtils.buildTabs(tabs) }}
     </div>
 {% endblock %}

@@ -1,0 +1,13 @@
+.acb-export-entity {
+    &, & .fields {
+        display: grid !important;
+        grid-template-columns: repeat(3, auto);
+        grid-gap: 10px;
+    }
+}
+
+.acb-tools-import, .acb-tools-export {
+    button[type="submit"] {
+        float: right;
+    }
+}

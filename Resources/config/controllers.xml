@@ -27,15 +27,9 @@
             <argument type="service" id="sherlockode_advanced_content.import_manager"/>
             <argument type="service" id="sherlockode_advanced_content.export_manager"/>
             <argument type="service" id="translator"/>
-            <argument>%sherlockode_advanced_content.templates.tools%</argument>
-            <tag name="container.service_subscriber"/>
-            <call method="setContainer">
-                <argument type="service" id="Psr\Container\ContainerInterface" />
-            </call>
-        </service>
-        <service id="sherlockode_advanced_content.controller.page_type_crud" class="Sherlockode\AdvancedContentBundle\Controller\Crud\PageTypeController" public="true">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument>%sherlockode_advanced_content.templates.tools%</argument>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
                 <argument type="service" id="Psr\Container\ContainerInterface" />
@@ -64,7 +58,6 @@
         <service id="sherlockode_advanced_content.controller.scope_crud" class="Sherlockode\AdvancedContentBundle\Controller\Crud\ScopeController" public="true">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.configuration_manager"/>
-            <argument type="service" id="translator"/>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
                 <argument type="service" id="Psr\Container\ContainerInterface" />

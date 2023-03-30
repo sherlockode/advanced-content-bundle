@@ -102,10 +102,14 @@ add_element_after: Add element after
 add_element_before: Add element before
 page_type:
     label: Page Type
+    description: Typing pages allows you to categorize them and use different layouts.
     create: Create Page Type
     edit: Edit Page Type
     form:
         name: Name
+        submit: Add page type
+    errors:
+        unique_name: Another page type exists with the same name.
 page:
     label: Page
     create: Create Page
@@ -165,6 +169,8 @@ init:
     export_success: Files were successfully exported in "%dir%"
 tools:
     label: Tools
+    import_export: Import / Export
+    configuration: Configuration
     import:
         title: Import
         description: Upload a yaml file containing ContentTypes, Pages and/or Contents
@@ -321,5 +327,6 @@ scope:
     label: Scopes
     locale: Locale
     add: Add a locale
+    description: Add locales you want to use.
     errors:
         unique_locale: A locale already exists with this value.
