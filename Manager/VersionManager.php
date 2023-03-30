@@ -10,6 +10,7 @@ use Sherlockode\AdvancedContentBundle\Model\PageMetaVersionInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageVersionInterface;
 use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class VersionManager
@@ -52,7 +53,7 @@ class VersionManager
     public function getContentData(ContentInterface $content): array
     {
         if ($content->getPage() === null) {
-            if ($mainRequest = $this->requestStack->getMainRequest()) {
+            if ($mainRequest = $this->getRequest()) {
                 if ($contentVersionId = $mainRequest->get('versionId')) {
                     foreach ($content->getVersions() as $version) {
                         if ($version->getId() === (int)$contentVersionId) {
@@ -236,7 +237,7 @@ class VersionManager
      */
     public function getPageVersionToLoad(PageInterface $page): ?PageVersionInterface
     {
-        if ($mainRequest = $this->requestStack->getMainRequest()) {
+        if ($mainRequest = $this->getRequest()) {
             if ($pageVersionId = $mainRequest->get('versionId')) {
                 foreach ($page->getVersions() as $version) {
                     if ($version->getId() === (int)$pageVersionId) {
@@ -251,5 +252,19 @@ class VersionManager
         }
 
         return null;
+    }
+
+    /**
+     * @return Request|null
+     */
+    private function getRequest(): ?Request
+    {
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            // SF >= 5.3
+            return $this->requestStack->getMainRequest();
+        }
+
+        // compat SF < 5.3
+        return $this->requestStack->getMasterRequest();
     }
 }
