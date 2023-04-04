@@ -56,4 +56,6 @@ class Slide
     }
 }
 
-export default Slide;
+let slide = new Slide();
+
+export default slide;
