@@ -426,3 +426,39 @@
         }
     }
 }
+
+.acb-lateral-slide {
+    button {
+        cursor: pointer;
+    }
+    .acb-sortable-group {
+        border: none;
+
+        .acb-sortable {
+            border: 1px solid #ccc;
+            padding: 12px;
+            .panel-heading {
+                display: flex;
+                justify-content: space-between;
+                .field-actions {
+                    float: none;
+                    margin: 0;
+                    display: block;
+                }
+            }
+            .acb-sortable-group {
+                .acb-sortable {
+                    border-color: #e5e5e5;
+                }
+            }
+        }
+    }
+    .acb-edit-field-form {
+        .acb-field-element-compound {
+            > div.acb-sortable-group {
+                border: none;
+                padding: 0;
+            }
+        }
+    }
+}
