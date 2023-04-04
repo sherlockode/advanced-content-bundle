@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentType extends AbstractType
@@ -69,8 +70,15 @@ class ContentType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'content.form.name',
                 'attr' => ['class' => 'acb-content-name', 'data-slug-token' => $token],
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
             ])
-            ->add('slug', TextType::class)
+            ->add('slug', TextType::class, [
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
+            ])
             ->add('data', ElementsType::class, [
                 'label' => false,
                 'row_attr' => [
@@ -102,6 +110,9 @@ class ContentType extends AbstractType
                 ->add('slug', TextType::class, [
                     'label' => 'content.form.slug',
                     'attr' => ['class' => $slugClass, 'data-slug-token' => $token],
+                    'constraints' => [
+                        new NotBlank(null, null, null, null, $options['validation_groups']),
+                    ],
                 ])
             ;
             if ($form->getParent()) {

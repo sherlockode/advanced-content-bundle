@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TitleType extends AbstractType
 {
@@ -20,6 +21,9 @@ class TitleType extends AbstractType
         $builder
             ->add('text', TextType::class, [
                 'label' => 'field_type.title.text',
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
             ])
             ->add('level', ChoiceType::class, [
                 'choices' => $choices,

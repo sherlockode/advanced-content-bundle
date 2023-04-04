@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PageTypeType extends AbstractType
 {
@@ -26,7 +27,12 @@ class PageTypeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'page_type.form.name'])
+            ->add('name', TextType::class, [
+                'label' => 'page_type.form.name',
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
+            ])
         ;
     }
 

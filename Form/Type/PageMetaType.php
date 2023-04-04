@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PageMetaType extends AbstractType
 {
@@ -40,10 +41,16 @@ class PageMetaType extends AbstractType
                     'data-slug-token' => $token,
                     'data-page-draft' => 'title',
                 ],
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
             ])
             ->add('slug', TextType::class, [
                 'attr' => [
                     'data-page-draft' => 'slug',
+                ],
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
                 ],
             ])
             ->add('metaTitle', TextType::class, [
@@ -77,6 +84,9 @@ class PageMetaType extends AbstractType
                         'class' => $slugClass,
                         'data-slug-token' => $token,
                         'data-page-draft' => 'slug',
+                    ],
+                    'constraints' => [
+                        new NotBlank(null, null, null, null, $options['validation_groups']),
                     ],
                 ])
             ;
