@@ -1,7 +1,10 @@
-Entities
-========
+# Entities
 
-## Basics
+-----
+
+# Basics
+
+----
 
 We implemented the following models:
 - Content
@@ -11,12 +14,17 @@ We implemented the following models:
 - PageVersion
 - PageMeta
 - PageMetaVersion
+- Scope
 
 See the list of available field types [here](field_types.md)
 
-When you create a new Page you will be able to fill in your Content inside.
+# Implementation examples
 
-## Implementation examples
+----
+
+## Entities
+
+----
 
 Here are basic example implementations for the entity classes:
 
@@ -339,4 +347,160 @@ class PageVersion extends BasePageVersion
      */
     protected $pageMetaVersion;
 }
+```
+
+## Repositories
+
+----
+
+Additionally, you can also setup the following repositories:
+
+```php
+<?php
+// src/Repository/PageRepository.php
+
+namespace App\Repository;
+
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
+use Sherlockode\AdvancedContentBundle\Model\PageInterface;
+use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
+
+class PageRepository
+{
+    /**
+     * @param string              $identifier
+     * @param ScopeInterface|null $scope
+     *
+     * @return PageInterface|null
+     *
+     * @throws NonUniqueResultException
+     */
+    public function findOneByPageIdentifier(string $identifier, ?ScopeInterface $scope): ?PageInterface
+    {
+        return $this->getByScopeQueryBuilder($scope)
+            ->andWhere('page.pageIdentifier = :pageIdentifier')
+            ->setParameter('pageIdentifier', $identifier)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param string              $slug
+     * @param ScopeInterface|null $scope
+     *
+     * @return PageInterface|null
+     *
+     * @throws NonUniqueResultException
+     */
+    public function findOneBySlug(string $slug, ?ScopeInterface $scope): ?PageInterface
+    {
+        return $this->getByScopeQueryBuilder($scope)
+            ->join('page.pageVersion', 'page_version')
+            ->join('page_version.pageMetaVersion', 'page_meta_version')
+            ->andWhere('page_meta_version.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param ScopeInterface|null $scope
+     *
+     * @return QueryBuilder
+     */
+    private function getByScopeQueryBuilder(?ScopeInterface $scope): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('page');
+        if ($scope !== null) {
+            $qb->join('page.scopes', 'scope')
+                ->andWhere('scope.locale = :locale')
+                ->setParameters([
+                    'locale'  => $scope->getLocale(),
+                ]);
+        }
+
+        return $qb;
+    }
+}
+```
+
+```php
+<?php
+// src/Repository/ContentRepository.php
+
+namespace App\Repository;
+
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
+
+class ContentRepository
+{
+    /**
+     * @param string              $slug
+     * @param ScopeInterface|null $scope
+     *
+     * @return ContentInterface|null
+     *
+     * @throws NonUniqueResultException
+     */
+    public function findOneBySlug(string $slug, ?ScopeInterface $scope): ?ContentInterface
+    {
+        return $this->getByScopeQueryBuilder($scope)
+            ->andWhere('content.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param ScopeInterface|null $scope
+     *
+     * @return QueryBuilder
+     */
+    private function getByScopeQueryBuilder(?ScopeInterface $scope): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('content');
+        if ($scope !== null) {
+            $qb->join('content.scopes', 'scope')
+                ->andWhere('scope.channel = :channel')
+                ->andWhere('scope.locale = :locale')
+                ->setParameters([
+                    'channel' => $scope->getChannel(),
+                    'locale'  => $scope->getLocale(),
+                ]);
+        }
+
+        return $qb;
+    }
+}
+```
+
+Don't forget to also update your entities with the repository class path:
+
+in src/Entity/Page.php:
+
+```php
+ * @ORM\Entity
+```
+becomes
+
+```php
+ * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
+```
+
+in src/Entity/Content.php:
+
+```php
+ * @ORM\Entity
+```
+becomes
+
+```php
+ * @ORM\Entity(repositoryClass="App\Repository\ContentRepository")
 ```

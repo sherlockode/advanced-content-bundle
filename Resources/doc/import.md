@@ -1,16 +1,17 @@
-Import
-======
+# Import
 
-The import command will create your page types, pages and their content.
+----
+
+The import command will create your pages and contents.
 
 ## Configuration
+
+----
 
 If you want to use our import command, you can configure the directory in which to find the source files.
 If not defined, the import will parse var/acb directory.
 
 By default, only creation is available. If you want to be able to update your entities, you can change the flag `allow_update`
-
-By default, if not defined at field level, fields will be created as optional. If you want your fields to be mandatory by default, you can change the flag `field_default_required`
 
 To import files to your contents, you need to configure the directory in which to find the source files. 
 If not defined, the import will parse var/acb/files directory.
@@ -23,7 +24,6 @@ sherlockode_advanced_content:
     init_command:
         directory: custom/dir
         allow_update: true
-        field_default_required: true
         files_directory: custom/dir/files
 ```
 
@@ -43,6 +43,8 @@ sherlockode_advanced_content:
 ```
 
 ## Command
+
+----
 
 ```bash
 $ php bin/console sherlockode:acb:import
@@ -66,26 +68,31 @@ $ php bin/console sherlockode:acb:import --dir=specific/dir #import all types / 
 
 ## Source files
 
+----
+
 ### Basics
 
+----
+
 Source files must be in yaml format.
-There must be one file per content type / per page.
+There must be one file per content / per page.
 There is no restriction on the file naming. All files of the source directories will be parsed.
 
 ### Pages
 
-You need to define an identifier for your Page and metas for at least one language
+----
+
+You need to define an identifier and meta information for your Page.
 
 ```yaml
 # var/acb/Page/custom_page.yaml
 pages:
     page-identifier:
-        metas:
-            en:
-                title: Custom Page
-                slug: custom-page
-                meta_title: 'Meta Title' # optional
-                meta_description: 'Meta Description' # optional
+        meta:
+            title: Custom Page
+            slug: custom-page
+            meta_title: 'Meta Title' # optional
+            meta_description: 'Meta Description' # optional
 ```
 
 You can also define other optional information: 
@@ -94,26 +101,26 @@ You can also define other optional information:
 pages:
     page-identifier:
         status: 10 # (0: Draft (default) / 10: Published / 20: Trash)
-        pageType: Custom Page Type (if defined, will automatically retrieve the ContentType linked to the PageType)
-        contents:
-            en: # locale of the content
-                #list of elements of the Content linked to this Page
-                - type: text
-                  value: hello
-            fr:
-                - type: text
-                  value: bonjour
-        metas:
-            en:
-                title: Custom Page
-                slug: custom-page-en
-                meta_title: 'Meta Title'
-                meta_description: 'Meta Description'
-            fr:
-                title: Page personnalisée
-                slug: page-personnalisee
-                meta_title: 'Méta Titre'
-                meta_description: 'Méta Description'
+        pageType: Custom Page Type
+        content:
+            #list of elements of the Content linked to this Page
+            -
+                type: row
+                elements:
+                    -
+                        type: column
+                        elements: 
+                            -
+                                type: text
+                                value: hello
+                            -
+                                type: text
+                                value: How are you?
+        meta:
+            title: Custom Page
+            slug: custom-page-en
+            meta_title: 'Meta Title'
+            meta_description: 'Meta Description'
 ```
 
 Each element declaration has the following structure:
@@ -128,25 +135,69 @@ You can find a Page import file example here [doc](import/Page/custom_page.yaml)
 
 ### Contents
 
-You need to define the name of your Content, slug and locale: 
+----
+
+You need to define the name of your Content, its slug and its children elements: 
 
 ```yaml
 # var/acb/Content/content.yaml
 contents:
     content-slug:
         name: Custom Content
-        locale: en
+        children:
+            -
+                type: row
+                elements:
+                    -
+                        type: column
+                        elements:
+                            -
+                                type: heading
+                                value: 
+                                    text: Hello
+                                    level: 1
+                            -
+                                type: text
+                                value: How are you?
 ```
-
-Then, as for the content of your Pages, you need to define your elements under `children`
 
 You can find a Content import file example here [doc](import/Content/standalone_content.yaml)
 These example files also show you how to create and populate File and Image field types.
 
+### Scopes
+
+----
+
+If you want to link scopes on your entities, you can use the following template:
+
+```yaml
+# var/acb/Page/custom_page.yaml
+pages:
+    page-identifier:
+        scopes:
+            -
+                locale: en_GB
+            -
+                locale: en_US
+
+# var/acb/Content/content.yaml
+contents:
+    content-slug:
+        name: Custom Content
+        scopes:
+            -
+                locale: en_GB
+            -
+                locale: en_US
+```
 
 ### Specific field types
 
+----
+
 #### File / Image FieldType
+
+----
 
 When you export the content of File / Image FieldType for which you have already imported a resource,
 you will obtain the following structure.

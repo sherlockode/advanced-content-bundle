@@ -1,17 +1,49 @@
 # Sherlockode AdvancedContentBundle
 
+----
+
+[ ![](https://img.shields.io/packagist/l/sherlockode/advanced-content-bundle)](https://packagist.org/packages/sherlockode/advanced-content-bundle "License")
+[ ![](https://img.shields.io/packagist/v/sherlockode/advanced-content-bundle)](https://packagist.org/packages/sherlockode/advanced-content-bundle "Version")
+[ ![](https://poser.pugx.org/sherlockode/advanced-content-bundle/downloads)](https://packagist.org/packages/sherlockode/advanced-content-bundle "Total Downloads")
+[ ![Support](https://img.shields.io/badge/support-contact%20author-blue])](https://www.sherlockode.fr/contactez-nous/?utm_source=github&utm_medium=referral&utm_campaign=plugins_acb)
+
+![image](https://user-images.githubusercontent.com/22291441/230099691-0fad8407-9883-4f0c-bdbd-9d6a8245a8db.png)
+
+## Table of Content
+
+---- 
+
+* [Overview](#overview)
+* [Installation](#installation)
+* [Terminology](#terminology)
+* [Configuration](#configuration)
+    * [Assets](#assets)
+    * [Twig](#twig)
+    * [Entities](#entities)
+    * [Upload](#upload-configuration)
+    * [Routing](#routing)
+* [Advanced documentation](#advanced-documentation)
+* [Dependencies](#dependencies)
+* [License](#license)
+* [Contact](#contact)
+
+# Overview 
+
+---- 
+
 This bundle provides advanced CMS features for end user contribution.
 
-Users are able to create pages with standard and custom building blocks.
-These blocks are used by back-office contributors to create actual contents without coding after the setup is done.
+Users can build their website pages quickly and effortlessly thanks to our intuitive interface.
+Several standard elements are included, such as text block, heading, image, image carousel, video player, ...
+Responsive layouts can be shaped as needed with row and column elements.
+Drafts are saved automatically and it's easy to rollback to a previous version.
+Custom elements can be added simply with a few lines of code.
 
-[![Total Downloads](https://poser.pugx.org/sherlockode/advanced-content-bundle/downloads)](https://packagist.org/packages/sherlockode/advanced-content-bundle)
-[![Latest Stable Version](https://poser.pugx.org/sherlockode/advanced-content-bundle/v/stable)](https://packagist.org/packages/sherlockode/advanced-content-bundle)
+# Installation
 
-Installation
-------------
+----
 
-### Get the bundle using composer
+## Get the bundle using composer
 
 The best way to install this bundle is to rely on [Composer](https://getcomposer.org/):
 
@@ -19,7 +51,7 @@ The best way to install this bundle is to rely on [Composer](https://getcomposer
 $ composer require sherlockode/advanced-content-bundle
 ```
 
-### Enable the bundle
+## Enable the bundle
 
 Register the bundle in your application's kernel:
 
@@ -34,10 +66,44 @@ return [
 
 ```
 
-Configuration
--------------
+# Terminology
 
-### Assets
+----
+
+## Entities
+
+----
+
+A Page is linked to a PageMeta and to a Content.\
+It can optionally be linked to a PageType too.
+
+Content can be used independently as well.\
+For example, if several Pages include the same layer, you can create a single Content with this layer and then include the Content within the Pages.\
+As a result, if the layer has to change, you only have to change a single Content instead of all the Pages.
+
+You can also create a Content to make some parts of your website dynamic.\
+For example, you can create a Content which includes your footer links. This way you don't have to change your template everytime the footer has to be updated.
+
+Pages, PageMetas and Contents are all versionable, hence the PageVersion, PageMetaVersion and ContentVersion entities.
+
+Finally, if you enabled the scope management, you will be able to associate each Page and Content to one or multiple Scopes.
+
+## Elements
+
+----
+
+Content data is an array of Elements.\
+Elements can either be a Layout or a FieldType.\
+Layouts include rows and columns.\
+FieldTypes include the field types we defined (text, image, video, ...) and you custom field types.
+
+# Configuration
+
+----
+
+## Assets
+
+----
 
 jQuery and jQuery UI are mandatory and should be required in `package.json` in order for the assets build to work.
 
@@ -83,7 +149,9 @@ composer require symfony/webpack-encore-bundle
 {{ encore_entry_script_tags('app') }}
 ```
 
-### Twig
+## Twig
+
+----
 
 The bundle automatically uses Bootstrap 5 (or Bootstrap 4 for Symfony < 5.3) as the base form theme for all forms.
 
@@ -96,9 +164,11 @@ you can override the bundle's base form theme file `Form/base_theme.html.twig`
 {% extends 'form_div_layout.html.twig' %}
 ```
 
-### Entities
+## Entities
 
-`SherlockodeAdvancedContentBundle` provides 4 entity models : Content, PageType, Page, PageMeta.
+----
+
+`SherlockodeAdvancedContentBundle` provides 8 entity models.
 To be able to use them, you need to create your own entities, see examples in the [doc](Resources/doc/entities.md),
 and fill the corresponding configuration :
 
@@ -108,13 +178,18 @@ sherlockode_advanced_content:
     entity_class:
         content: App\Entity\Content
         content_version: App\Entity\ContentVersion
-        page_type: App\Entity\PageType
         page: App\Entity\Page
         page_meta: App\Entity\PageMeta
+        page_meta_version: App\Entity\PageMetaVersion
+        page_type: App\Entity\PageType
+        page_version: App\Entity\PageVersion
+        scope: App\Entity\Scope
 ```
 
 
-### Upload configuration
+## Upload configuration
+
+----
 
 If you want to use the `Image` or `File` field type, you need to configure the directory in which the images will be saved.
 
@@ -131,17 +206,20 @@ sherlockode_advanced_content:
         uri_prefix: /uploads/acb_images
 ```
 
-### Routing
+## Routing
+
+----
 
 The routing is split into several files for better import rules.
 
-* tools.xml : Routes for tooling pages, like import/export
 * content.xml : Utility routes for editing contents
-* page_meta.xml : Utility routes for editing pages
-* page.xml : basic CRUD routes for Pages (demo purpose)
 * content_crud.xml : basic CRUD routes for Content (demo purpose)
+* page.xml : Utility routes for editing pages
+* page_crud.xml : basic CRUD routes for Pages (demo purpose)
+* scope_crud.xml : basic CRUD routes for Scopes (demo purpose)
+* tools.xml : Routes for tooling pages, like import/export, Page Type CRUD
 * all.xml : includes all the above
-* base.xml : includes tools.xml, content.xml and page_meta.xml
+* base.xml : includes tools.xml, content.xml and page.xml
 
 The base.xml file is sufficient if you plan to manage all your CRUD operations in custom controllers
 (like if you use an external admin system).
@@ -155,22 +233,37 @@ sherlockode_advanced_content:
     # resource: '@SherlockodeAdvancedContentBundle/Resources/config/routing/all.xml'
 ```
 
-## Advanced Documentation
+# Advanced Documentation
+
+----
 
 - [Entities](Resources/doc/entities.md)
-- [Field Types](Resources/doc/field_types.md)
+- [Elements](Resources/doc/elements.md)
 - [Tools](Resources/doc/tools.md)
 - [Import](Resources/doc/import.md)
 - [Export](Resources/doc/export.md)
 - [Usage](Resources/doc/usage.md)
 
-## Dependencies
+
+# Dependencies
+
+----
 
 This bundle is compatible with webpack.
 jQuery library is mandatory.
 jQuery ui sortable is advised but not required.
 Some field types, such as the image carousel, use Bootstrap 5 for their display. 
 
-## License
+
+# License
+
+----
 
 This bundle is under the MIT license. Check the details in the [dedicated file](LICENSE)
+
+
+# Contact
+
+----
+
+If you want to contact us, the best way is to fill the form on [our website](https://www.sherlockode.fr/contactez-nous/?utm_source=github&utm_medium=referral&utm_campaign=plugins_acb) or send us an e-mail to contact@sherlockode.fr with your question(s). We guarantee that we answer as soon as we can!
