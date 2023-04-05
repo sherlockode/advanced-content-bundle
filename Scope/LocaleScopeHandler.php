@@ -67,12 +67,14 @@ class LocaleScopeHandler extends ScopeHandler
     }
 
     /**
-     * @param array|ScopableInterface[] $entities
-     *
-     * @return ScopableInterface|null
+     * @return ScopeInterface|null
      */
-    public function filterEntityForCurrentScope(array $entities): ?ScopableInterface
+    public function getCurrentScope(): ?ScopeInterface
     {
+        if (!$this->configurationManager->isScopesEnabled()) {
+            return null;
+        }
+
         if (method_exists($this->requestStack, 'getMainRequest')) {
             // SF >= 5.3
             $mainRequest = $this->requestStack->getMainRequest();
@@ -88,14 +90,8 @@ class LocaleScopeHandler extends ScopeHandler
             return null;
         }
 
-        foreach ($entities as $entity) {
-            foreach ($entity->getScopes() as $scope) {
-                if ($scope->getLocale() === $mainRequest->getLocale()) {
-                    return $entity;
-                }
-            }
-        }
-
-        return null;
+        return $this->em->getRepository($this->configurationManager->getEntityClass('scope'))->findOneBy([
+            'locale' => $mainRequest->getLocale(),
+        ]);
     }
 }

@@ -5,7 +5,9 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
+use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
+use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 use Symfony\Component\Form\FormView;
 use Twig\Environment;
@@ -40,6 +42,11 @@ class ContentExtension extends AbstractExtension
     private $userProvider;
 
     /**
+     * @var ScopeHandlerInterface
+     */
+    private $scopeHandler;
+
+    /**
      * @var string
      */
     private $baseFormTheme;
@@ -50,6 +57,7 @@ class ContentExtension extends AbstractExtension
      * @param EntityManager         $em
      * @param UrlBuilderManager     $urlBuilderManager
      * @param UserProviderInterface $userProvider
+     * @param ScopeHandlerInterface $scopeHandler
      * @param string                $baseFormTheme
      */
     public function __construct(
@@ -58,6 +66,7 @@ class ContentExtension extends AbstractExtension
         EntityManager $em,
         UrlBuilderManager $urlBuilderManager,
         UserProviderInterface $userProvider,
+        ScopeHandlerInterface $scopeHandler,
         $baseFormTheme
     ) {
         $this->elementManager = $elementManager;
@@ -65,6 +74,7 @@ class ContentExtension extends AbstractExtension
         $this->em = $em;
         $this->urlBuilderManager = $urlBuilderManager;
         $this->userProvider = $userProvider;
+        $this->scopeHandler = $scopeHandler;
         $this->baseFormTheme = $baseFormTheme;
     }
 
@@ -88,6 +98,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
             new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
             new TwigFunction('acb_get_version_user_name', [$this, 'getVersionUserName']),
+            new TwigFunction('acb_get_content_by_slug', [$this, 'getContentBySlug']),
         ];
     }
 
@@ -377,5 +388,15 @@ class ContentExtension extends AbstractExtension
     public function getVersionUserName(VersionInterface $version): string
     {
         return $this->userProvider->getUserName($version->getUserId());
+    }
+
+    /**
+     * @param string $slug
+     *
+     * @return ContentInterface|null
+     */
+    public function getContentBySlug(string $slug): ?ContentInterface
+    {
+        return $this->scopeHandler->getEntityForCurrentScope('content', ['slug' => $slug]);
     }
 }

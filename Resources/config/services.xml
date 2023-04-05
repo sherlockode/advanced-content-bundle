@@ -21,6 +21,7 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sherlockode_advanced_content.url_builder_manager"/>
             <argument type="service" id="sherlockode_advanced_content.user_provider"/>
+            <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
             <argument>form_div_layout.html.twig</argument>
             <tag name="twig.extension"/>
         </service>
