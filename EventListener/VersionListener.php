@@ -5,8 +5,10 @@ namespace Sherlockode\AdvancedContentBundle\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
+use Sherlockode\AdvancedContentBundle\Model\PageVersionInterface;
+use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
 
-class ContentVersionListener
+class VersionListener
 {
     /**
      * @param LifecycleEventArgs $args
@@ -15,15 +17,20 @@ class ContentVersionListener
     {
         $entity = $args->getEntity();
 
-        if (!$entity instanceof ContentVersionInterface) {
+        if (!$entity instanceof VersionInterface || !$entity->isAutoSave()) {
             return;
         }
-        if (!$entity->isAutoSave()) {
+
+        if ($entity instanceof ContentVersionInterface && $entity->getContent()->getPage() === null) {
+            $versions = $entity->getContent()->getVersions();
+        } elseif ($entity instanceof PageVersionInterface) {
+            $versions = $entity->getPage()->getVersions();
+        } else {
             return;
         }
 
         $count = 0;
-        foreach ($entity->getContent()->getVersions() as $version) {
+        foreach ($versions as $version) {
             if (!$version->isAutoSave()) {
                 continue;
             }

@@ -8,6 +8,7 @@ use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageMetaVersionInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageVersionInterface;
+use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -50,11 +51,13 @@ class VersionManager
      */
     public function getContentData(ContentInterface $content): array
     {
-        if ($mainRequest = $this->requestStack->getMainRequest()) {
-            if ($contentVersionId = $mainRequest->get('versionId')) {
-                foreach ($content->getVersions() as $version) {
-                    if ($version->getId() === (int)$contentVersionId) {
-                        return $version->getData();
+        if ($content->getPage() === null) {
+            if ($mainRequest = $this->requestStack->getMainRequest()) {
+                if ($contentVersionId = $mainRequest->get('versionId')) {
+                    foreach ($content->getVersions() as $version) {
+                        if ($version->getId() === (int)$contentVersionId) {
+                            return $version->getData();
+                        }
                     }
                 }
             }
@@ -95,7 +98,7 @@ class VersionManager
     public function getDraftContentVersion(ContentInterface $content): ContentVersionInterface
     {
         $userId = $this->userProvider->getUserId();
-        $lastDraft = $this->getLastDraftVersionForUser($content, $userId);
+        $lastDraft = $this->getLastDraftVersionForUser($content->getVersions()->toArray(), $content->getContentVersion(), $userId);
         if ($lastDraft === null || $lastDraft->getCreatedAt() < new \DateTimeImmutable('-1hour')) {
             $lastDraft = new ($this->configurationManager->getEntityClass('content_version'));
             $lastDraft->setContent($content);
@@ -108,17 +111,18 @@ class VersionManager
     }
 
     /**
-     * @param ContentInterface $content
-     * @param int|null         $userId
+     * @param array|VersionInterface[] $versions
+     * @param VersionInterface|null    $currentVersion
+     * @param int|null                 $userId
      *
-     * @return ContentVersionInterface|null
+     * @return VersionInterface|null
      */
-    private function getLastDraftVersionForUser(ContentInterface $content, ?int $userId): ?ContentVersionInterface
+    private function getLastDraftVersionForUser(array $versions, ?VersionInterface $currentVersion, ?int $userId): ?VersionInterface
     {
-        $currentContentVersionId = $content->getContentVersion() === null ? null : $content->getContentVersion()->getId();
+        $currentVersionId = $currentVersion === null ? null : $currentVersion->getId();
         $lastDraft = null;
-        foreach ($content->getVersions() as $version) {
-            if ($currentContentVersionId === $version->getId()) {
+        foreach ($versions as $version) {
+            if ($currentVersionId === $version->getId()) {
                 continue;
             }
             if ($version->getUserId() !== $userId) {
@@ -183,10 +187,65 @@ class VersionManager
     /**
      * @param PageInterface $page
      *
+     * @return PageVersionInterface
+     */
+    public function getDraftPageVersion(PageInterface $page): PageVersionInterface
+    {
+        $userId = $this->userProvider->getUserId();
+        /** @var PageVersionInterface $lastDraft */
+        $lastDraft = $this->getLastDraftVersionForUser($page->getVersions()->toArray(), $page->getPageVersion(), $userId);
+        if ($lastDraft === null || $lastDraft->getCreatedAt() < new \DateTimeImmutable('-1hour')) {
+            $lastDraft = new ($this->configurationManager->getEntityClass('page_version'));
+            $lastDraft->setPage($page);
+            $lastDraft->setUserId($userId);
+            $lastDraft->setAutoSave(true);
+        }
+        $lastDraft->setCreatedAt(new \DateTimeImmutable());
+
+        if ($page->getContent() !== null) {
+            $contentVersion = $lastDraft->getContentVersion();
+            if ($contentVersion === null) {
+                $contentVersion = $this->getNewContentVersion($page->getContent(), false);
+                $contentVersion->setAutoSave(true);
+                $lastDraft->setContentVersion($contentVersion);
+            }
+            $contentVersion->setCreatedAt(new \DateTimeImmutable());
+            $contentVersion->setData($page->getContent()->getData());
+        }
+        if ($page->getPageMeta() !== null) {
+            $pageMetaVersion = $lastDraft->getPageMetaVersion();
+            if ($pageMetaVersion === null) {
+                $pageMetaVersion = $this->getNewPageMetaVersion($page->getPageMeta());
+                $pageMetaVersion->setAutoSave(true);
+                $lastDraft->setPageMetaVersion($pageMetaVersion);
+            }
+            $pageMetaVersion->setCreatedAt(new \DateTimeImmutable());
+            $pageMetaVersion->setTitle($page->getPageMeta()->getTitle());
+            $pageMetaVersion->setSlug($page->getPageMeta()->getSlug());
+            $pageMetaVersion->setMetaTitle($page->getPageMeta()->getMetaTitle());
+            $pageMetaVersion->setMetaDescription($page->getPageMeta()->getMetaDescription());
+        }
+
+        return $lastDraft;
+    }
+
+    /**
+     * @param PageInterface $page
+     *
      * @return PageVersionInterface|null
      */
     public function getPageVersionToLoad(PageInterface $page): ?PageVersionInterface
     {
+        if ($mainRequest = $this->requestStack->getMainRequest()) {
+            if ($pageVersionId = $mainRequest->get('versionId')) {
+                foreach ($page->getVersions() as $version) {
+                    if ($version->getId() === (int)$pageVersionId) {
+                        return $version;
+                    }
+                }
+            }
+        }
+
         if ($page->getPageVersion() !== null) {
             return $page->getPageVersion();
         }

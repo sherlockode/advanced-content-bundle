@@ -339,6 +339,12 @@ jQuery(function ($) {
     let isFormUpdating = false;
     let hasFormChanged = false;
     let isAddingVersion = false;
+    let pageDraftFields = $('[data-page-draft]');
+    if (pageDraftFields.length > 0) {
+        pageDraftFields.on('change', function() {
+            hasFormChanged = true;
+        });
+    }
 
     setInterval(function() {
         if (isFormUpdating !== false || isAddingVersion !== false || hasFormChanged === false) {
@@ -349,15 +355,24 @@ jQuery(function ($) {
             return;
         }
 
+        let dataToPost = {'__field_name__': $('#content-data-json').val()};
+        if (pageDraftFields.length > 0) {
+            let pageDraftData = {};
+            pageDraftFields.each(function (index, element) {
+                pageDraftData[$(element).data('page-draft')] = $(element).val();
+            });
+            dataToPost['__page_meta__'] = pageDraftData;
+        }
+
         hasFormChanged = false;
         isAddingVersion = true;
         $.ajax({
             url: history.data('save-draft-url'),
-            data: {'__field_name__': $('#content-data-json').val()},
+            data: dataToPost,
             type: 'POST'
         }).done(function (data) {
             if (data.success) {
-                $('.version-history').replaceWith(data.html);
+                $('.version-history > table tbody').replaceWith($(data.html).find('table tbody'));
             } else {
                 hasFormChanged = true;
             }
@@ -380,7 +395,7 @@ jQuery(function ($) {
                 type: 'POST'
             }).done(function (data) {
                 if (data.success) {
-                    $('.version-history').replaceWith(data.html);
+                  $('.version-history > table tbody').replaceWith($(data.html).find('table tbody'));
                 }
             });
         });

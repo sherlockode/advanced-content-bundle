@@ -13,7 +13,7 @@
             <tag name="doctrine.event_listener" event="preRemove" lazy="1"/>
             <tag name="doctrine.event_listener" event="postRemove" lazy="1"/>
         </service>
-        <service id="sherlockode_advanced_content.content_version_listener" class="Sherlockode\AdvancedContentBundle\EventListener\ContentVersionListener">
+        <service id="sherlockode_advanced_content.version_listener" class="Sherlockode\AdvancedContentBundle\EventListener\VersionListener">
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
         </service>
     </services>
