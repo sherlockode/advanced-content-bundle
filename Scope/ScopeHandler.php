@@ -51,13 +51,23 @@ abstract class ScopeHandler implements ScopeHandlerInterface
      */
     public function isPageSlugValid(PageInterface $page): bool
     {
-        $existingPageMetas = $this->em->getRepository($this->configurationManager->getEntityClass('page_meta'))->findBy([
-            'slug' => $page->getPageMeta()->getSlug(),
-        ]);
-        $existingPages = [];
-        foreach ($existingPageMetas as $existingPageMeta) {
-            $existingPages[] = $existingPageMeta->getPage();
+        $existingPages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
+        /** @var PageInterface $existingPage */
+        foreach ($existingPages as $key => $existingPage) {
+            if ($existingPage->getPageVersion() === null) {
+                unset($existingPages[$key]);
+                continue;
+            }
+            if ($existingPage->getPageVersion()->getPageMetaVersion() === null) {
+                unset($existingPages[$key]);
+                continue;
+            }
+            if ($existingPage->getPageVersion()->getPageMetaVersion()->getSlug() !== $page->getPageMeta()->getSlug()) {
+                unset($existingPages[$key]);
+                continue;
+            }
         }
+        $existingPages = array_values($existingPages);
 
         return $this->validateScopableEntity($page, $existingPages);
     }

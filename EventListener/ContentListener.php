@@ -5,7 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Manager\ContentVersionManager;
+use Sherlockode\AdvancedContentBundle\Manager\VersionManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentListener
@@ -16,18 +16,18 @@ class ContentListener
     private $configurationManager;
 
     /**
-     * @var ContentVersionManager
+     * @var VersionManager
      */
-    private $contentVersionManager;
+    private $versionManager;
 
     /**
-     * @param ConfigurationManager  $configurationManager
-     * @param ContentVersionManager $contentVersionManager
+     * @param ConfigurationManager $configurationManager
+     * @param VersionManager       $versionManager
      */
-    public function __construct(ConfigurationManager $configurationManager, ContentVersionManager $contentVersionManager)
+    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
     {
         $this->configurationManager = $configurationManager;
-        $this->contentVersionManager = $contentVersionManager;
+        $this->versionManager = $versionManager;
     }
 
     /**
@@ -40,8 +40,11 @@ class ContentListener
         if (!$entity instanceof ContentInterface) {
             return;
         }
+        if ($entity->getPage() !== null) {
+            return;
+        }
 
-        $entity->setData($this->contentVersionManager->getContentData($entity), false);
+        $entity->setData($this->versionManager->getContentData($entity), false);
     }
 
     /**
@@ -63,8 +66,11 @@ class ContentListener
             if (!$entity instanceof ContentInterface) {
                 continue;
             }
+            if ($entity->getPage() !== null) {
+                continue;
+            }
 
-            $contentVersion = $this->contentVersionManager->getNewContentVersion($entity);
+            $contentVersion = $this->versionManager->getNewContentVersion($entity);
             $em->persist($contentVersion);
             $uow->computeChangeSet($contentVersionClassMetadata, $contentVersion);
             $uow->recomputeSingleEntityChangeSet($contentClassMetadata, $entity);

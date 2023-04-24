@@ -137,6 +137,14 @@ class PageType extends AbstractType
                 }
             }
         });
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event) {
+            $form = $event->getForm();
+            if ($form->isValid()) {
+                // Reset page version to make sure that page is flagged as to be updated
+                $event->getData()->setPageVersion(null);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
