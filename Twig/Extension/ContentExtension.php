@@ -5,7 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
-use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
+use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 use Symfony\Component\Form\FormView;
 use Twig\Environment;
@@ -87,7 +87,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
             new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
             new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
-            new TwigFunction('acb_get_content_version_user_name', [$this, 'getContentVersionUserName']),
+            new TwigFunction('acb_get_version_user_name', [$this, 'getVersionUserName']),
         ];
     }
 
@@ -370,12 +370,12 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * @param ContentVersionInterface $contentVersion
+     * @param VersionInterface $version
      *
      * @return string
      */
-    public function getContentVersionUserName(ContentVersionInterface $contentVersion): string
+    public function getVersionUserName(VersionInterface $version): string
     {
-        return $this->userProvider->getUserName($contentVersion->getUserId());
+        return $this->userProvider->getUserName($version->getUserId());
     }
 }

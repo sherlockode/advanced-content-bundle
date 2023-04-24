@@ -34,6 +34,6 @@ class AnonymousUserProvider implements UserProviderInterface
      */
     public function getUserName(?int $userId): string
     {
-        return $this->translator->trans('content_version.user.anonymous', [], 'AdvancedContentBundle');
+        return $this->translator->trans('version.user.anonymous', [], 'AdvancedContentBundle');
     }
 }
