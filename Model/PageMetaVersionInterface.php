@@ -2,15 +2,38 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
-interface PageMetaInterface
+interface PageMetaVersionInterface
 {
     /**
+     * Get page meta version id
+     *
      * @return int
      */
     public function getId();
+
+    /**
+     * @return PageMetaInterface
+     */
+    public function getPageMeta();
+
+    /**
+     * @param PageMetaInterface $pageMeta
+     *
+     * @return $this
+     */
+    public function setPageMeta(PageMetaInterface $pageMeta);
+
+    /**
+     * @return int|null
+     */
+    public function getUserId();
+
+    /**
+     * @param int|null $userId
+     *
+     * @return $this
+     */
+    public function setUserId(?int $userId);
 
     /**
      * @return string
@@ -61,19 +84,26 @@ interface PageMetaInterface
     public function setMetaDescription($metaDescription);
 
     /**
-     * @return PageInterface|null
+     * @return \DateTimeInterface
      */
-    public function getPage();
+    public function getCreatedAt();
 
     /**
-     * @param PageInterface $page
+     * @param \DateTimeInterface $createdAt
      *
      * @return $this
      */
-    public function setPage(PageInterface $page);
+    public function setCreatedAt(\DateTimeInterface $createdAt);
 
     /**
-     * @return ArrayCollection|Collection|PageMetaVersionInterface[]
+     * @return bool
      */
-    public function getVersions();
+    public function isAutoSave(): bool;
+
+    /**
+     * @param bool $autoSave
+     *
+     * @return $this
+     */
+    public function setAutoSave(bool $autoSave);
 }

@@ -5,12 +5,22 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-abstract class PageMeta implements PageMetaInterface
+abstract class PageMetaVersion implements PageMetaVersionInterface
 {
     /**
      * @var int
      */
     protected $id;
+
+    /**
+     * @var PageMetaInterface
+     */
+    protected $pageMeta;
+
+    /**
+     * @var int|null
+     */
+    protected $userId;
 
     /**
      * @var string
@@ -33,23 +43,18 @@ abstract class PageMeta implements PageMetaInterface
     protected $metaDescription;
 
     /**
-     * @var PageInterface
+     * @var \DateTimeInterface
      */
-    protected $page;
+    protected $createdAt;
 
     /**
-     * @var Collection|PageMetaVersionInterface[]
+     * @var bool
      */
-    protected $versions;
+    protected $autoSave;
 
     public function __construct()
     {
-        $this->versions = new ArrayCollection();
-    }
-
-    public function __clone()
-    {
-        $this->id = null;
+        $this->autoSave = false;
     }
 
     /**
@@ -58,6 +63,46 @@ abstract class PageMeta implements PageMetaInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return PageMetaInterface
+     */
+    public function getPageMeta(): PageMetaInterface
+    {
+        return $this->pageMeta;
+    }
+
+    /**
+     * @param PageMetaInterface $pageMeta
+     *
+     * @return $this
+     */
+    public function setPageMeta(PageMetaInterface $pageMeta): self
+    {
+        $this->pageMeta = $pageMeta;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int|null $userId
+     *
+     * @return $this
+     */
+    public function setUserId(?int $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 
     /**
@@ -141,54 +186,41 @@ abstract class PageMeta implements PageMetaInterface
     }
 
     /**
-     * @return PageInterface
+     * @return \DateTimeInterface
      */
-    public function getPage()
+    public function getCreatedAt(): \DateTimeInterface
     {
-        return $this->page;
+        return $this->createdAt;
     }
 
     /**
-     * @param PageInterface $page
+     * @param \DateTimeInterface $createdAt
      *
      * @return $this
      */
-    public function setPage(PageInterface $page)
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->page = $page;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
     /**
-     * @return ArrayCollection|Collection|PageMetaVersionInterface[]
+     * @return bool
      */
-    public function getVersions()
+    public function isAutoSave(): bool
     {
-        return $this->versions;
+        return $this->autoSave;
     }
 
     /**
-     * @param PageMetaVersionInterface $pageMetaVersion
+     * @param bool $autoSave
      *
      * @return $this
      */
-    public function addVersion(PageMetaVersionInterface $pageMetaVersion)
+    public function setAutoSave(bool $autoSave): self
     {
-        $pageMetaVersion->setPageMeta($this);
-        $this->versions->add($pageMetaVersion);
-
-        return $this;
-    }
-
-    /**
-     * @param PageMetaVersionInterface $pageMetaVersion
-     *
-     * @return $this
-     */
-    public function removeVersion(PageMetaVersionInterface $pageMetaVersion)
-    {
-        $this->versions->removeElement($pageMetaVersion);
+        $this->autoSave = $autoSave;
 
         return $this;
     }
