@@ -5,13 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 interface PageMetaVersionInterface
 {
     /**
-     * Get page meta version id
-     *
-     * @return int
-     */
-    public function getId();
-
-    /**
      * @return PageMetaInterface
      */
     public function getPageMeta();
@@ -22,18 +15,6 @@ interface PageMetaVersionInterface
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta);
-
-    /**
-     * @return int|null
-     */
-    public function getUserId();
-
-    /**
-     * @param int|null $userId
-     *
-     * @return $this
-     */
-    public function setUserId(?int $userId);
 
     /**
      * @return string
@@ -82,28 +63,4 @@ interface PageMetaVersionInterface
      * @return $this
      */
     public function setMetaDescription($metaDescription);
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt();
-
-    /**
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt);
-
-    /**
-     * @return bool
-     */
-    public function isAutoSave(): bool;
-
-    /**
-     * @param bool $autoSave
-     *
-     * @return $this
-     */
-    public function setAutoSave(bool $autoSave);
 }

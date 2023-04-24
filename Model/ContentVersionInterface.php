@@ -5,13 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 interface ContentVersionInterface
 {
     /**
-     * Get content id
-     *
-     * @return int
-     */
-    public function getId();
-
-    /**
      * @return ContentInterface
      */
     public function getContent();
@@ -24,18 +17,6 @@ interface ContentVersionInterface
     public function setContent(ContentInterface $content);
 
     /**
-     * @return int|null
-     */
-    public function getUserId();
-
-    /**
-     * @param int|null $userId
-     *
-     * @return $this
-     */
-    public function setUserId(?int $userId);
-
-    /**
      * @return array
      */
     public function getData();
@@ -46,28 +27,4 @@ interface ContentVersionInterface
      * @return $this
      */
     public function setData(array $data);
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getCreatedAt();
-
-    /**
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt);
-
-    /**
-     * @return bool
-     */
-    public function isAutoSave(): bool;
-
-    /**
-     * @param bool $autoSave
-     *
-     * @return $this
-     */
-    public function setAutoSave(bool $autoSave);
 }
