@@ -1,9 +1,12 @@
-Export
-======
+# Export
 
-The export command will generate yaml files of your existing page types, pages and their content.
+----
+
+The export command will generate yaml files of your existing pages and their content.
 
 ## Configuration
+
+----
 
 If you want to use our export command, you can configure the directory in which to write the files.
 If not defined, the export will write into var/acb directory.
@@ -16,6 +19,8 @@ sherlockode_advanced_content:
 ```
 
 ## Command
+
+----
 
 ```bash
 $ php bin/console sherlockode:acb:export

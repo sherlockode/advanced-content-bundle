@@ -1,21 +1,34 @@
 contents:
     standalone-content:
         name: Standalone Content
-        locale: en
         children:
-            -
-                type: text
-                value: Hello world
-            -
-                type: boolean
-                value: 1
-            -
-                type: image
-                value:
-                    _file: background.png
-                    alt: Content Background
-            -
-                type: file
-                value:
-                    _file: document.pdf
-                    title: File title
+            -   type: row
+                elements:
+                    -   type: column
+                        elements:
+                            -
+                                type: heading
+                                value:
+                                    text: Content title
+                                    level: 2
+                                extra:
+                                    advanced:
+                                        id: content-title
+                            -
+                                type: text
+                                value: Hello world
+                                extra:
+                                    advanced:
+                                        hide_on:
+                                            - lg
+                                            - xl
+                            -
+                                type: image
+                                value:
+                                    _file: background.png
+                                    alt: Content Background
+                            -
+                                type: file
+                                value:
+                                    _file: document.pdf
+                                    title: File title

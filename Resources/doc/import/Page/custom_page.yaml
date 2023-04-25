@@ -2,27 +2,46 @@ pages:
     custom-identifier:
         status: 10
         pageType: Custom Page Type
-        contents:
-            en:
-                -
-                    type: text
-                    value: Text value
-                -
-                    type: my-custom-field
-                    value:
-                        block1:
-                            title: Title value
-                        block2:
-                            title: Title layout value
-                            elements:
-                                -
-                                    name: First group of repeater - title
-                                    description: '<strong>First</strong> group of repeater - description'
-                                -
-                                    name: Second group of repeater - title
-                                    description: 'Second group of repeater <br/> description'
-        metas:
-            en:
-                title: Custom Title
-                slug: custom-page
-                meta_description: "Custom Meta Description"
+        content:
+            -   type: row
+                elements:
+                    -   type: column
+                        elements:
+                            -
+                                type: text
+                                value: Text value
+                                extra:
+                                    design:
+                                        background_color: '#d9d9d9'
+                                        background_color_select: pick
+                            -
+                                type: separator
+                                value:
+                            -
+                                type: content
+                                value: 
+                                    content: slug-of-the-content
+                        config:
+                            size: 6
+                    -   type: column
+                        elements:
+                            -
+                                type: my-custom-field
+                                value:
+                                    block1:
+                                        title: Title value
+                                    block2:
+                                        title: Title layout value
+                                        elements:
+                                            -
+                                                name: First group of repeater - title
+                                                description: '<strong>First</strong> group of repeater - description'
+                                            -
+                                                name: Second group of repeater - title
+                                                description: 'Second group of repeater <br/> description'
+                        config:
+                            size: 6
+        meta:
+            title: Custom Title
+            slug: custom-page
+            meta_description: "Custom Meta Description"
