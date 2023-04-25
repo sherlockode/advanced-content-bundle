@@ -78,14 +78,6 @@ class ConfigurationManager
     }
 
     /**
-     * @return bool
-     */
-    public function getFieldDefaultRequired()
-    {
-        return $this->config['init_command']['field_default_required'];
-    }
-
-    /**
      * @return string
      */
     public function getDefaultWysiwygToolbar()
