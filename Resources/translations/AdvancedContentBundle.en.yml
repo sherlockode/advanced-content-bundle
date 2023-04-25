@@ -4,7 +4,6 @@ content:
     edit: Edit content
     create: Create content
     add_field: Add field
-    edit_field: Edit field
     form:
         name: Name
         slug: Slug
@@ -12,8 +11,6 @@ content:
         position: Sort order
         scopes: Scopes
         scopes_select_all: Select / Unselect all
-    delete:
-        validate: Delete this content?
     errors:
         duplicate_slug_no_scope: Another content exists with the same slug.
         duplicate_slug_scopes: Another content exists with the same slug for the same scope.
@@ -26,12 +23,6 @@ field_type:
         label: Image
         name: Image
         alt: Alt text
-    repeater:
-        field_list: Field list
-        label: Repeater
-    flexible:
-        layout_list: Group list
-        label: Flexible
     textarea:
         label: Textarea
     iframe:
@@ -82,11 +73,6 @@ field_type:
         choice: Choice
         layout: Layout
     missing_preview: Missing preview
-    errors:
-        empty_collection: Please add at least one option
-        empty_collection_field: Please add at least one option for the field "%fieldName%"
-        duplicated_slug: Please use a unique slug for each of your fields
-        duplicated_slug_detail: The slug "%slug%" is used for several fields
 yes: Yes
 no: No
 actions: Actions
@@ -100,6 +86,9 @@ show: Show
 duplicate: Duplicate
 add_element_after: Add element after
 add_element_before: Add element before
+move: Move
+change_display: Change display
+collapse: Collapse
 page_type:
     label: Page Type
     description: Typing pages allows you to categorize them and use different layouts.
@@ -139,25 +128,17 @@ page:
         duplicate_slug_scopes: Another page exists with the same slug for the same scope.
         duplicate_identifier_no_scope: Another page exists with the same identifier.
         duplicate_identifier_scopes: Another page exists with the same identifier for the same scope.
-    duplicate:
-        validate: Validate
     delete:
         validate: Delete this meta?
 init:
     title: 'Start importing %entity%'
     errors:
         init_dir: Init directory %dir% does not exist
-        entity_not_found: '%entity% "%name%" was not found'
-        field_missing_data: You need to define the name / the type of the Field
-        layout_missing_name: You need to define the name of the Layout
         page_missing_data: You need to define the name / the slug of the Page
         page_missing_metas: You need to define the page metas
         element_missing_type: You need to define the type of the element
         content_missing_name: You need to define the name of the content
         page_type_too_many_matches: Only one PageType should match name "%name%"
-        field_options_not_array: Options should be an array for field "%slug%"
-        field_invalid_type: Field "%slug%" has an unknown type "%type%"
-        field_invalid_option: Field "%slug%" has an unknown option "%option%". Allowed options are %options%.
         element_file_not_found: File "%file%" not found for element
         unknown_entity_type: Entity type "%type%" is unknown. Available entities are %list%.
         file_not_found: File %file% was not found in directory "%dir%"

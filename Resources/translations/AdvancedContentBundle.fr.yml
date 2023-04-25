@@ -4,7 +4,6 @@ content:
     edit: Modifier le contenu
     create: Créer un contenu
     add_field: Ajouter un champ
-    edit_field: Modifier le champ
     form:
         name: Nom
         slug: Slug
@@ -12,8 +11,6 @@ content:
         position: Ordre
         scopes: Scopes
         scopes_select_all: Tout sélectionner / désélectionner
-    delete:
-        validate: Supprimer ce contenu ?
     errors:
         duplicate_slug_no_scope: Il existe déjà un contenu avec ce slug.
         duplicate_slug_scopes: Il existe déjà un contenu avec ce slug pour le même scope.
@@ -26,12 +23,6 @@ field_type:
         label: Image
         name: Image
         alt: Texte alternatif
-    repeater:
-        field_list: Liste des champs
-        label: Répéteur
-    flexible:
-        layout_list: Liste des groupes
-        label: Flexible
     textarea:
         label: Zone de texte
     iframe:
@@ -82,11 +73,6 @@ field_type:
         choice: Choix
         layout: Agencement
     missing_preview: Pas d'aperçu disponible
-    errors:
-        empty_collection: Veuillez ajouter au moins une option
-        empty_collection_field: Veuillez ajouter au moins une option pour le champ "%fieldName%"
-        duplicated_slug: Veuillez utiliser un slug unique pour chacun de vos champs
-        duplicated_slug_detail: Le slug "%slug%" est utilisé pour plusieurs champs
 yes: Oui
 no: Non
 actions: Actions
@@ -100,6 +86,9 @@ show: Voir
 duplicate: Dupliquer
 add_element_after: Ajouter un élément après
 add_element_before: Ajouter un élément avant
+move: Déplacer
+change_display: Changer l'agencement
+collapse: Réduire
 page_type:
     label: Types de page
     description: Typer les pages vous permet de les catégoriser et d'utiliser des mises en page différentes.
@@ -137,25 +126,17 @@ page:
         duplicate_slug_scopes: Il existe déjà une page avec ce slug pour le même scope.
         duplicate_identifier_no_scope: Il existe déjà une page avec cet identifiant.
         duplicate_identifier_scopes: Il existe déjà une page avec cet identifiant pour le même scope.
-    duplicate:
-        validate: Valider
     delete:
         validate: Supprimer ce méta ?
 init:
     title: 'Import de %entity%'
     errors:
         init_dir: Le dossier %dir% n'existe pas
-        entity_not_found: "%entity% '%name%' n'existe pas"
-        field_missing_data: Vous devez définir le nom / le type du champ
-        layout_missing_name: Vous devez définir le nom du layout
         page_missing_data: Vous devez définir le nom / le slug de la page
         page_missing_metas: Vous devez définir les métas de la page
         element_missing_type: Vous devez définir le type du champ du contenu
         content_missing_name: Vous devez définir le nom du contenu
         page_type_too_many_matches: Un seul type de page doit correspondre au nom "%name%"
-        field_options_not_array: Les options du champ "%slug%" doivent être un tableau
-        field_invalid_type: Le champ "%slug%" a un type inconnu "%type%"
-        field_invalid_option: Le champ "%slug%" a une option inconnue "%option%". Les options autorisées sont %options%.
         element_file_not_found: Le fichier "%file%" n'a pas été trouvé pour la valeur du champ
         unknown_entity_type: Le type "%type%" est inconnu. Les types d'entité disponibles sont %list%.
         file_not_found: Le fichier %file% n'a pas été trouvé dans le dossier "%dir%"
