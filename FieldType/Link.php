@@ -2,10 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Sherlockode\AdvancedContentBundle\Form\Type\LinkType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\FormBuilderInterface;
 
 class Link extends AbstractFieldType
 {
@@ -14,7 +12,7 @@ class Link extends AbstractFieldType
      */
     public function getFormFieldType()
     {
-        return FormType::class;
+        return LinkType::class;
     }
 
     protected function getDefaultIconClass()
@@ -27,21 +25,11 @@ class Link extends AbstractFieldType
         return '@SherlockodeAdvancedContent/Field/front/link.html.twig';
     }
 
-    /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
-     *
-     * @return void
-     */
-    public function buildContentElement(FormBuilderInterface $builder)
+    public function getFormElementOptions()
     {
-        parent::buildContentElement($builder);
-
-        $builder->get('value')
-            ->add('url', $this->getUrlFormType(), ['label' => 'field_type.link.url'])
-            ->add('title', TextType::class, ['label' => 'field_type.link.title'])
-        ;
+        return [
+            'url_form_type' => $this->getUrlFormType(),
+        ];
     }
 
     /**

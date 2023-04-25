@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ScopeType extends AbstractType
 {
@@ -26,7 +27,12 @@ class ScopeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('locale', TextType::class, ['label' => false])
+            ->add('locale', TextType::class, [
+                'label' => false,
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
+            ])
         ;
     }
 

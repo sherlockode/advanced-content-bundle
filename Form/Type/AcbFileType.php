@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AcbFileType extends AbstractType
 {
@@ -33,25 +34,30 @@ class AcbFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, ['label' => 'field_type.file.title'])
+            ->add('title', TextType::class, [
+                'label' => 'field_type.file.title',
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
+            ])
         ;
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $event) {
+            function (FormEvent $event) use ($options) {
                 $form = $event->getForm();
                 $data = $event->getData();
                 if (!is_array($data)) {
                     $data = [];
                 }
 
-                $this->updateForm($form, $data);
+                $this->updateForm($form, $data, $options);
             }
         );
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event) use ($options) {
                 $data = $event->getData();
                 $form = $event->getForm();
                 if (!empty($data['delete'])) {
@@ -64,10 +70,10 @@ class AcbFileType extends AbstractType
 
                 if (!empty($data['file'])) {
                     $data['src'] = $this->uploadManager->upload($data['file']);
-                    $this->updateForm($form, $data);
+                    $this->updateForm($form, $data, $options);
                     unset($data['file']);
                 } elseif (isset($data['src'])) {
-                    $this->updateForm($form, $data);
+                    $this->updateForm($form, $data, $options);
                 }
 
                 $event->setData($data);
@@ -78,20 +84,25 @@ class AcbFileType extends AbstractType
     /**
      * @param FormInterface $form
      * @param array         $data
+     * @param array         $options
      *
      * @return void
      */
-    public function updateForm(FormInterface $form, $data)
+    public function updateForm(FormInterface $form, $data, $options)
     {
         if (!isset($data['src'])) {
             $data['src'] = '';
         }
         $isFileUploaded = $this->uploadManager->isFileUploaded($data['src']);
         $form
-            ->add('file', FileType::class, [
+            ->add('file', FileType::class, array_merge([
                 'label' => 'field_type.file.file',
                 'required' => !$isFileUploaded,
-            ])
+            ], $isFileUploaded ? [] : [
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
+            ]))
         ;
 
         if ($isFileUploaded) {

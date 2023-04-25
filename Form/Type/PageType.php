@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageType extends AbstractType
@@ -53,6 +54,9 @@ class PageType extends AbstractType
         $builder
             ->add('pageIdentifier', TextType::class, [
                 'label' => 'page.form.page_identifier',
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
             ])
             ->add('pageType', EntityType::class, [
                 'label' => 'page.form.page_type',

@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class VideoType extends AbstractType
 {
@@ -15,6 +16,9 @@ class VideoType extends AbstractType
         $builder
             ->add('url', UrlType::class, [
                 'label' => 'field_type.video.url',
+                'constraints' => [
+                    new NotBlank(null, null, null, null, $options['validation_groups']),
+                ],
             ])
             ->add('muted', CheckboxType::class, [
                 'label' => 'field_type.video.muted',
