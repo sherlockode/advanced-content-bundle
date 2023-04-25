@@ -60,7 +60,6 @@ class PageType extends AbstractType
                 'choice_label' => 'name',
                 'choice_translation_domain' => false,
                 'required' => false,
-                'attr' => ['class' => 'acb-page-page-type'],
             ])
             ->add('pageMeta', PageMetaType::class, [
                 'label'       => 'page.form.page_meta',
