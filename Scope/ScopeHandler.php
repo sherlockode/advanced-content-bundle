@@ -13,12 +13,12 @@ abstract class ScopeHandler implements ScopeHandlerInterface
     /**
      * @var EntityManagerInterface
      */
-    private $em;
+    protected $em;
 
     /**
      * @var ConfigurationManager
      */
-    private $configurationManager;
+    protected $configurationManager;
 
     /**
      * @param EntityManagerInterface $em

@@ -136,22 +136,16 @@ class ElementImport
                 $data = $result;
             }
         }
-        if (isset($data['_content'])) {
-            $slug = $data['_content']['slug'] ?? null;
-            $locale = $data['_content']['locale'] ?? null;
+        if (isset($data['content'])) {
+            $slug = $data['content'];
             $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findOneBy([
                 'slug' => $slug,
-                'locale' => $locale,
             ]);
             if ($content === null) {
                 throw new \Exception($this->translator->trans('init.errors.content_entity_not_found', [
                     '%slug%' => $slug,
-                    '%locale%' => $locale,
                 ], 'AdvancedContentBundle'));
             }
-            $data = [
-                'content' => $content->getId(),
-            ];
         }
 
         // browse array

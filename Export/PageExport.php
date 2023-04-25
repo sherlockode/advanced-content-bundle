@@ -13,6 +13,19 @@ class PageExport
     private $contentExport;
 
     /**
+     * @var ScopeExport
+     */
+    private $scopeExport;
+
+    /**
+     * @param ScopeExport $scopeExport
+     */
+    public function __construct(ScopeExport $scopeExport)
+    {
+        $this->scopeExport = $scopeExport;
+    }
+
+    /**
      * @param PageInterface $page
      *
      * @return array
@@ -24,26 +37,19 @@ class PageExport
         if ($page->getPageType() instanceof PageTypeInterface) {
             $data['pageType'] = $page->getPageType()->getName();
         }
-        $contentData = [];
-        foreach ($page->getContents() as $content) {
-            $contentData[$content->getLocale()] = $this->contentExport->exportElements($content->getData());
-        }
-        if (count($contentData) > 0) {
-            $data['contents'] = $contentData;
+        $data = array_merge($data, $this->scopeExport->getEntityScopes($page));
+        if ($page->getContent() !== null) {
+            $data['content'] = $this->contentExport->exportElements($page->getContent()->getData());
         }
 
-        $metaData = [];
-        foreach ($page->getPageMetas() as $pageMeta) {
-            $localeMeta = [];
-            $localeMeta['title'] = $pageMeta->getTitle();
-            $localeMeta['slug'] = $pageMeta->getSlug();
-            $localeMeta['meta_title'] = $pageMeta->getMetaTitle();
-            $localeMeta['meta_description'] = $pageMeta->getMetaDescription();
-
-            $metaData[$pageMeta->getLocale()] = $localeMeta;
-        }
-        if (count($metaData) > 0) {
-            $data['metas'] = $metaData;
+        $pageMeta = $page->getPageMeta();
+        if ($pageMeta !== null) {
+            $data['meta'] = [
+                'title'            => $pageMeta->getTitle(),
+                'slug'             => $pageMeta->getSlug(),
+                'meta_title'       => $pageMeta->getMetaTitle(),
+                'meta_description' => $pageMeta->getMetaDescription(),
+            ];
         }
 
         $data = [

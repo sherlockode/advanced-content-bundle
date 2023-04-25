@@ -5,6 +5,9 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
+use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
+use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
+use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractImport
@@ -23,6 +26,11 @@ abstract class AbstractImport
      * @var TranslatorInterface
      */
     protected $translator;
+
+    /**
+     * @var ScopeHandlerInterface
+     */
+    protected $scopeHandler;
 
     /**
      * @var array
@@ -48,15 +56,18 @@ abstract class AbstractImport
      * @param EntityManagerInterface $em
      * @param ConfigurationManager   $configurationManager
      * @param TranslatorInterface    $translator
+     * @param ScopeHandlerInterface  $scopeHandler
      */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        ScopeHandlerInterface $scopeHandler
     ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
         $this->translator = $translator;
+        $this->scopeHandler = $scopeHandler;
         $this->init();
     }
 
@@ -125,6 +136,106 @@ abstract class AbstractImport
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * @param array $scopesData
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected function getScopesForEntity(array $scopesData): array
+    {
+        if (!$this->configurationManager->isScopesEnabled()) {
+            if (count($scopesData) > 0) {
+                throw new \Exception($this->translator->trans(
+                    'init.errors.scopes_disabled',
+                    [],
+                    'AdvancedContentBundle'
+                ));
+            }
+            return [];
+        }
+
+        $scopes = [];
+        foreach ($scopesData as $scopeData) {
+            $scope = $this->scopeHandler->getScopeFromData($scopeData);
+            if ($scope === null) {
+                throw new \Exception($this->translator->trans(
+                    'init.errors.unknown_scope',
+                    ['%scope%' => json_encode($scopeData)],
+                    'AdvancedContentBundle'
+                ));
+            }
+            $scopes[] = $scope;
+        }
+
+        return $scopes;
+    }
+
+    /**
+     * @param string $entityClass
+     * @param array  $criteria
+     * @param array  $scopes
+     *
+     * @return ScopableInterface|null
+     *
+     * @throws \Exception
+     */
+    protected function getExistingScopableEntity(string $entityClass, array $criteria, array $scopes): ?ScopableInterface
+    {
+        $existingEntities = $this->em->getRepository($entityClass)->findBy($criteria);
+        if (count($existingEntities) === 0) {
+            return null;
+        }
+        if (count($existingEntities) === 1) {
+            return reset($existingEntities);
+        }
+
+        $entity = null;
+        foreach ($existingEntities as $existingEntity) {
+            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), function ($a, $b) {
+                return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
+            });
+
+            if (count($result) === count($scopes)) {
+                return $existingEntity;
+            }
+
+            if (count($result) > 0) {
+                if ($entity !== null) {
+                    throw new \Exception($this->translator->trans(
+                        'init.errors.multiple_entities_same_scope',
+                        [],
+                        'AdvancedContentBundle'
+                    ));
+                }
+                $entity = $existingEntity;
+            }
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @param ScopableInterface      $entity
+     * @param array|ScopeInterface[] $scopes
+     */
+    protected function updateEntityScopes(ScopableInterface $entity, array $scopes): void
+    {
+        foreach ($entity->getScopes() as $existingScope) {
+            foreach ($scopes as $key => $scope) {
+                if ($scope->getUnicityIdentifier() === $existingScope->getUnicityIdentifier()) {
+                    unset($scopes[$key]);
+                    continue 2;
+                }
+            }
+            $entity->removeScope($existingScope);
+        }
+        foreach ($scopes as $scope) {
+            $entity->addScope($scope);
+        }
     }
 
     /**

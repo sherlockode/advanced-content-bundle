@@ -75,13 +75,8 @@ class ElementExport
             }
         }
         if ($element instanceof Content) {
-            if (is_array($raw) && isset($raw['entity'])) {
-                $raw['_content'] = [
-                    'slug' => $raw['entity']->getSlug(),
-                    'locale' => $raw['entity']->getLocale(),
-                ];
+            if (array_key_exists('entity', $raw)) {
                 unset($raw['entity']);
-                unset($raw['content']);
             }
         }
 

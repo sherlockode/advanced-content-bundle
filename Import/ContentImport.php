@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
+use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentImport extends AbstractImport
@@ -18,15 +19,17 @@ class ContentImport extends AbstractImport
      * @param EntityManagerInterface $em
      * @param ConfigurationManager   $configurationManager
      * @param TranslatorInterface    $translator
+     * @param ScopeHandlerInterface  $scopeHandler
      * @param ElementImport          $elementImport
      */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
+        ScopeHandlerInterface $scopeHandler,
         ElementImport $elementImport
     ) {
-        parent::__construct($em, $configurationManager, $translator);
+        parent::__construct($em, $configurationManager, $translator, $scopeHandler);
 
         $this->elementImport = $elementImport;
     }
@@ -43,10 +46,14 @@ class ContentImport extends AbstractImport
             return;
         }
 
-        $content = $this->em->getRepository($this->entityClasses['content'])->findOneBy([
-            'slug' => $slug,
-            'locale' => $contentData['locale'] ?? null,
-        ]);
+        try {
+            $scopes = $this->getScopesForEntity($contentData['scopes'] ?? []);
+            $content = $this->getExistingScopableEntity($this->entityClasses['content'], ['slug' => $slug], $scopes);
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
+
+            return;
+        }
 
         if (!$content instanceof ContentInterface) {
             $content = new $this->entityClasses['content'];
@@ -57,9 +64,18 @@ class ContentImport extends AbstractImport
 
         $content->setSlug($slug);
         $content->setName($contentData['name']);
-        $content->setLocale($contentData['locale'] ?? null);
+        $this->updateEntityScopes($content, $scopes);
         if (isset($contentData['children'])) {
             $this->createElements($contentData['children'], $content);
+        }
+
+        if (!$this->scopeHandler->isContentSlugValid($content)) {
+            if ($this->configurationManager->isScopesEnabled()) {
+                $this->errors[] = $this->translator->trans('content.errors.duplicate_slug_scopes', [], 'AdvancedContentBundle');
+            } else {
+                $this->errors[] = $this->translator->trans('content.errors.duplicate_slug_no_scope', [], 'AdvancedContentBundle');
+            }
+            return;
         }
 
         $this->em->persist($content);
