@@ -70,12 +70,7 @@ class ContentManager
     public function duplicate(ContentInterface $content): ContentInterface
     {
         $newContent = clone $content;
-        $newContent->setSlug($this->slugProvider->getValidSlug(
-            $newContent->getSlug(),
-            $this->configurationManager->getEntityClass('content'),
-            'slug',
-            $newContent->getLocale() === null ? [] : ['locale' => $newContent->getLocale()],
-        ));
+        $this->slugProvider->setContentValidSlug($newContent);
         $newContent->setPage(null);
 
         return $newContent;
