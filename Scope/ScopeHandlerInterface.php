@@ -63,4 +63,9 @@ interface ScopeHandlerInterface
      * @return ScopableInterface|null
      */
     public function filterEntityForCurrentScope(array $entities): ?ScopableInterface;
+
+    /**
+     * @return ScopeInterface|null
+     */
+    public function getCurrentScope(): ?ScopeInterface;
 }

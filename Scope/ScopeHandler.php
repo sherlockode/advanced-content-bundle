@@ -125,4 +125,31 @@ abstract class ScopeHandler implements ScopeHandlerInterface
             $this->em->getRepository($this->configurationManager->getEntityClass($entityCode))->findBy($criteria)
         );
     }
+
+    /**
+     * @param array|ScopableInterface[] $entities
+     *
+     * @return ScopableInterface|null
+     */
+    public function filterEntityForCurrentScope(array $entities): ?ScopableInterface
+    {
+        if (!$this->configurationManager->isScopesEnabled()) {
+            return count($entities) > 0 ? reset($entities) : null;
+        }
+
+        $currentScope = $this->getCurrentScope();
+        if ($currentScope === null) {
+            return null;
+        }
+
+        foreach ($entities as $entity) {
+            foreach ($entity->getScopes() as $scope) {
+                if ($scope->getId() === $currentScope->getId()) {
+                    return $entity;
+                }
+            }
+        }
+
+        return null;
+    }
 }
