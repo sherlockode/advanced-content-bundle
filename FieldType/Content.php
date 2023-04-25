@@ -2,33 +2,23 @@
 
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbContentType;
-use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
+use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 
 class Content extends AbstractFieldType
 {
     /**
-     * @var ConfigurationManager
+     * @var ScopeHandlerInterface
      */
-    private $configurationManager;
+    private $scopeHandler;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @param ConfigurationManager   $configurationManager
-     * @param EntityManagerInterface $em
+     * @param ScopeHandlerInterface $scopeHandler
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        EntityManagerInterface $em
+        ScopeHandlerInterface $scopeHandler
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->em = $em;
+        $this->scopeHandler = $scopeHandler;
     }
 
     /**
@@ -58,17 +48,12 @@ class Content extends AbstractFieldType
     {
         $element['entity'] = null;
 
-        $contentId = $element['content'] ?? null;
-        if ($contentId === null) {
+        $contentSlug = $element['content'] ?? null;
+        if ($contentSlug === null) {
             return $element;
         }
 
-        $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($contentId);
-        if ($content === null) {
-            return $element;
-        }
-
-        $element['entity'] = $content;
+        $element['entity'] = $this->scopeHandler->getEntityForCurrentScope('content', ['slug' => $contentSlug]);
 
         return $element;
     }

@@ -48,4 +48,19 @@ interface ScopeHandlerInterface
      * @return array
      */
     public function getDataFromScope(ScopeInterface $scope): array;
+
+    /**
+     * @param string $entityCode
+     * @param array  $criteria
+     *
+     * @return ScopableInterface|null
+     */
+    public function getEntityForCurrentScope(string $entityCode, array $criteria): ?ScopableInterface;
+
+    /**
+     * @param array|ScopableInterface[] $entities
+     *
+     * @return ScopableInterface|null
+     */
+    public function filterEntityForCurrentScope(array $entities): ?ScopableInterface;
 }

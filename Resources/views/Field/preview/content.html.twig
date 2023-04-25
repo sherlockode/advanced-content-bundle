@@ -1,10 +1,3 @@
-{% if entity is not null %}
-    <em>{{ entity.name }}</em>
-    <hr>
-    {% for element in entity.data %}
-        {{ acb_element_preview(element) }}
-        {% if not loop.last %}
-            <hr>
-        {% endif %}
-    {% endfor %}
+{% if content is not null %}
+    <em>{{ content }}</em>
 {% endif %}
