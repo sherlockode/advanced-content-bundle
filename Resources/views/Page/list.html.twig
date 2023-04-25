@@ -28,7 +28,7 @@
                             <td>
                                 <a href="{{ path('sherlockode_acb_page_edit', {id: page.id}) }}">{{ 'edit'|trans }}</a>
                                 | <a href="{{ path('sherlockode_acb_page_delete', {id: page.id}) }}">{{ 'delete'|trans }}</a>
-                                | <a href="{{ path('sherlockode_acb_page_duplicate', {id: page.id}) }}">{{ 'duplicate'|trans }}</a>
+                                | <a href="{{ path('sherlockode_acb_page_create', {duplicateId: page.id}) }}">{{ 'duplicate'|trans }}</a>
                             </td>
                         </tr>
                     {% endfor %}

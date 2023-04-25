@@ -70,6 +70,9 @@ abstract class Page implements PageInterface, ScopableInterface
         $newContent = clone $this->content;
         $newContent->setPage($this);
         $this->content = $newContent;
+
+        $this->versions = new ArrayCollection();
+        $this->pageVersion = null;
     }
 
     /**
