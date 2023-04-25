@@ -8,16 +8,10 @@ content:
     form:
         name: Nom
         slug: Slug
-        locale: Locale
         data: Champs
         position: Ordre
         scopes: Scopes
         scopes_select_all: Tout sélectionner / désélectionner
-    duplicate:
-        other_locales: Nouveau
-        select_source_language: Choisissez la langue à copier
-        select_target_language: Choisissez la langue à générer
-        validate: Valider
     delete:
         validate: Supprimer ce contenu ?
     errors:

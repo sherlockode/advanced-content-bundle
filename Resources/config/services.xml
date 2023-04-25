@@ -41,8 +41,7 @@
             <argument>%kernel.project_dir%</argument>
             <tag name="console.command"/>
         </service>
-        <service id="sherlockode_advanced_content.locale_provider" class="Sherlockode\AdvancedContentBundle\Locale\LocaleProvider"/>
-        <service id="Sherlockode\AdvancedContentBundle\Locale\LocaleProviderInterface" alias="sherlockode_advanced_content.locale_provider"/>
+
         <service id="Sherlockode\AdvancedContentBundle\Manager\UploadManager" alias="sherlockode_advanced_content.upload_manager"/>
         <service id="sherlockode_advanced_content.slug_provider" class="Sherlockode\AdvancedContentBundle\Slug\SlugProvider">
             <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
