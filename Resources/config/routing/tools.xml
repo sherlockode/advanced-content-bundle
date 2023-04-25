@@ -9,4 +9,7 @@
     <route id="sherlockode_acb_tools_export" path="/tools/export">
         <default key="_controller">sherlockode_advanced_content.controller.tools::exportAction</default>
     </route>
+    <route id="sherlockode_acb_tools_page_type_delete" path="/tools/page-type/delete/{id}">
+        <default key="_controller">sherlockode_advanced_content.controller.tools::deletePageTypeAction</default>
+    </route>
 </routes>

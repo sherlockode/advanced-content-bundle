@@ -101,11 +101,13 @@ duplicate: Dupliquer
 add_element_after: Ajouter un élément après
 add_element_before: Ajouter un élément avant
 page_type:
-    label: Type de page
-    create: Créer un type de page
-    edit: Modifier le type de page
+    label: Types de page
+    description: Typer les pages vous permet de les catégoriser et d'utiliser des mises en page différentes.
     form:
         name: Nom
+        submit: Ajouter un type de page
+    errors: 
+        unique_name: Il existe déjà un type de page avec ce nom.
 page:
     label: Page
     create: Créer une page
@@ -165,6 +167,8 @@ init:
     export_success: Les fichiers ont bien été exportés dans "%dir%"
 tools:
     label: Outils
+    import_export: Import / Export
+    configuration: Configuration
     import:
         title: Import
         description: Importez un fichier au format yaml incluant des types de contenus, des pages et/ou des contenus
@@ -321,5 +325,6 @@ scope:
     label: Scopes
     locale: Locale
     add: Ajouter une locale
+    description: Ajouter les locales que vous souhaitez utiliser.
     errors:
         unique_locale: Il existe déjà une locale avec cette valeur.
