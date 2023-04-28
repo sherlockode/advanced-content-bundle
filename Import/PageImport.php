@@ -128,6 +128,8 @@ class PageImport extends AbstractImport
             return;
         }
 
+        // Force page save when only page meta or content has changed
+        $page->setPageVersion(null);
         $this->em->persist($page);
         $this->em->flush();
     }
