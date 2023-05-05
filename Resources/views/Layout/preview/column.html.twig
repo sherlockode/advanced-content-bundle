@@ -21,7 +21,7 @@
             {% for key, element in elements %}
                 {% set childForm = form.children.elements.children[key]|default(null) %}
                 {% if childForm is not null %}
-                    <div class="acb-field field-row acb-row acb-sortable" data-name="{{ childForm.vars.full_name }}">
+                    <div class="acb-field field-row acb-row acb-sortable" data-name="{{ childForm.vars.full_name }}" {% if childForm.vars.valid == false %}style="border: 1px solid red;" {% endif %}>
                         {{ common.acb_element_toolbar(childForm) }}
                         {{ acb_element_preview(element, childForm) }}
                     </div>
