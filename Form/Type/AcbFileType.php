@@ -36,7 +36,7 @@ class AcbFileType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'field_type.file.title',
-                'constraints' => [
+                'constraints' => !$options['required'] ? [] : [
                     new NotBlank(null, null, null, null, $options['validation_groups']),
                 ],
             ])
@@ -97,8 +97,8 @@ class AcbFileType extends AbstractType
         $form
             ->add('file', FileType::class, array_merge([
                 'label' => 'field_type.file.file',
-                'required' => !$isFileUploaded,
-            ], $isFileUploaded ? [] : [
+                'required' => !$isFileUploaded && $options['required'],
+            ], $isFileUploaded || !$options['required'] ? [] : [
                 'constraints' => [
                     new NotBlank(null, null, null, null, $options['validation_groups']),
                 ],
@@ -111,7 +111,9 @@ class AcbFileType extends AbstractType
                     'label' => 'field_type.file.delete',
                     'required' => false,
                 ]);
-            $form->add('src', HiddenType::class);
+            $form->add('src', HiddenType::class, [
+                'required' => $options['required'],
+            ]);
         }
     }
 
