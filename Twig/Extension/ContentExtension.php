@@ -368,16 +368,25 @@ class ContentExtension extends AbstractExtension
      */
     public function getJsonForm(FormView $form)
     {
-        $json = [];
-        if ($form->vars['compound'] && !in_array('acb_advanced_hide_on', $form->vars['block_prefixes'])) {
+        // Looping on multiple choice type children will return an array of all available choices,
+        // using the form value allows us to retrieve only the selected choices
+        $useValueForSerialization = (
+            isset($form->vars['choices'])
+            && isset($form->vars['multiple'])
+            && true === $form->vars['multiple']
+        );
+
+        if ($form->vars['compound'] && !$useValueForSerialization) {
             foreach ($form->children as $child) {
                 $json[$child->vars['name']] = $this->getJsonForm($child);
             }
-        } else {
-            return in_array('acb_advanced_hide_on', $form->vars['block_prefixes']) ? $form->vars['value'] : $form->vars['data'];
+
+            return $json ?? [];
+        } elseif ($useValueForSerialization || is_object($form->vars['data'])) {
+            return $form->vars['value'];
         }
 
-        return $json;
+        return $form->vars['data'];
     }
 
     /**

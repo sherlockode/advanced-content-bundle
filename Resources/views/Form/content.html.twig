@@ -274,7 +274,7 @@
     </table>
 {% endblock %}
 
-{% block acb_advanced_hide_on_widget %}
+{% block element_hide_on_widget %}
     <div {{ block('widget_container_attributes') }}>
         <div class="{% if required %}required {% endif %} acb-advanced-hide-on">
             {%- for child in form %}
