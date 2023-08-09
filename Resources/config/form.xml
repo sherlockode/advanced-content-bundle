@@ -35,6 +35,7 @@
         </service>
         <service id="sherlockode_advanced_content.form.file" class="Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType">
             <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+            <argument type="service" id="event_dispatcher"/>
             <tag name="form.type"/>
         </service>
         <service id="sherlockode_advanced_content.form.wysiwyg" class="Sherlockode\AdvancedContentBundle\Form\Type\WysiwygType">

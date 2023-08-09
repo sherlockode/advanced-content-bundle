@@ -3,6 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Sherlockode\AdvancedContentBundle\Event\AcbFilePostValidate;
 use Sherlockode\AdvancedContentBundle\Form\Type\ElementsType;
 use Sherlockode\AdvancedContentBundle\Form\Type\ElementType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -10,6 +11,7 @@ use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Manager\VersionManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -58,15 +60,19 @@ class ContentController extends AbstractController
     private $versionManager;
 
     /**
-     * ContentController constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param ContentManager         $contentManager
-     * @param ElementManager         $elementManager
-     * @param ConfigurationManager   $configurationManager
-     * @param FormFactoryInterface   $formFactory
-     * @param TranslatorInterface    $translator
-     * @param VersionManager         $versionManager
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcherInterface;
+
+    /**
+     * @param EntityManagerInterface   $em
+     * @param ContentManager           $contentManager
+     * @param ElementManager           $elementManager
+     * @param ConfigurationManager     $configurationManager
+     * @param FormFactoryInterface     $formFactory
+     * @param TranslatorInterface      $translator
+     * @param VersionManager           $versionManager
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -75,7 +81,8 @@ class ContentController extends AbstractController
         ConfigurationManager   $configurationManager,
         FormFactoryInterface   $formFactory,
         TranslatorInterface    $translator,
-        VersionManager $versionManager
+        VersionManager $versionManager,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
@@ -84,6 +91,7 @@ class ContentController extends AbstractController
         $this->formFactory = $formFactory;
         $this->translator = $translator;
         $this->versionManager = $versionManager;
+        $this->eventDispatcherInterface = $eventDispatcher;
     }
 
     /**
@@ -123,10 +131,12 @@ class ContentController extends AbstractController
             $data = $request->request->get('__field_name__');
             $request->request->set('__field_name__', json_decode($data, true));
         }
+
         $form->handleRequest($request);
 
         if (!$request->query->get('edit') && $form->isSubmitted()) {
             if ($form->isValid()) {
+                $this->eventDispatcherInterface->dispatch(new AcbFilePostValidate(), AcbFilePostValidate::NAME);
                 // Rebuild form for row and columns
                 // Because data is being rearranged on submit
                 // Otherwise posted elements cannot be matched with form children

@@ -11,5 +11,9 @@
         <service id="sherlockode_advanced_content.version_listener" class="Sherlockode\AdvancedContentBundle\EventListener\VersionListener">
             <tag name="doctrine.event_listener" event="prePersist" lazy="1"/>
         </service>
+        <service id="sherlockode_advanced_content.acb_file_listener" class="Sherlockode\AdvancedContentBundle\EventListener\AcbFileListener">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="sherlockode_advanced_content.upload_manager"/>
+        </service>
     </services>
 </container>
