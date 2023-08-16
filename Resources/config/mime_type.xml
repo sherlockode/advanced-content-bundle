@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="sherlockode_advanced_content.mime_type_group" type="collection">
+            <parameter key="sherlockode_advanced_content.mime_type_group.image" type="collection">
+                <parameter>image/*</parameter>
+            </parameter>
+            <parameter key="sherlockode_advanced_content.mime_type_group.pdf" type="collection">
+                <parameter>application/pdf</parameter>
+            </parameter>
+            <parameter key="sherlockode_advanced_content.mime_type_group.executable" type="collection">
+                <parameter>application/vnd.microsoft.portable-executable</parameter>
+            </parameter>
+            <parameter key="sherlockode_advanced_content.mime_type_group.archive" type="collection">
+                <parameter>application/zip</parameter>
+                <parameter>application/x-rar-compressed</parameter>
+                <parameter>application/x-tar</parameter>
+                <parameter>application/x-7z-compressed</parameter>
+            </parameter>
+            <parameter key="sherlockode_advanced_content.mime_type_group.text_file" type="collection">
+                <parameter>application/msword</parameter>
+                <parameter>application/vnd.openxmlformats-officedocument.wordprocessingml.document</parameter>
+                <parameter>application/vnd.ms-word.document.macroEnabled.12</parameter>
+                <parameter>application/vnd.ms-powerpoint</parameter>
+                <parameter>application/vnd.openxmlformats-officedocument.presentationml.presentation</parameter>
+                <parameter>application/vnd.openxmlformats-officedocument.wordprocessingml.template</parameter>
+                <parameter>text/plain</parameter>
+                <parameter>application/xml</parameter>
+            </parameter>
+            <parameter key="sherlockode_advanced_content.mime_type_group.spreadsheet" type="collection">
+                <parameter>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</parameter>
+                <parameter>application/vnd.ms-excel</parameter>
+                <parameter>application/msexcel</parameter>
+                <parameter>application/vnd.ms-works</parameter>
+                <parameter>application/x-msworks</parameter>
+                <parameter>application/vnd.ms-excel</parameter>
+                <parameter>application/vnd.ms-excel.sheet.macroEnabled.12</parameter>
+                <parameter>application/vnd.ms-excel.sheet.binary.macroEnabled.12</parameter>
+                <parameter>application/vnd.ms-excel.template.macroEnabled.12</parameter>
+                <parameter>application/rtf</parameter>
+                <parameter>text/csv</parameter>
+            </parameter>
+            <parameter key="sherlockode_advanced_content.mime_type_group.multimedia" type="collection">
+                <parameter>video/mp4</parameter>
+                <parameter>video/mpeg</parameter>
+                <parameter>video/ogg</parameter>
+                <parameter>video/3gpp</parameter>
+                <parameter>video/MP2T</parameter>
+                <parameter>audio/mpeg</parameter>
+                <parameter>audio/mp4</parameter>
+                <parameter>audio/vnd.wa</parameter>
+                <parameter>audio/ogg</parameter>
+            </parameter>
+        </parameter>
+    </parameters>
+</container>

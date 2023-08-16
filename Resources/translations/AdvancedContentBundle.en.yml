@@ -40,6 +40,7 @@ field_type:
         delete: Delete
         file: File
         label: File
+        restriction_type: File type restriction
     relative_link:
         label: Relative Link
     separator:
@@ -73,6 +74,14 @@ field_type:
         choice: Choice
         layout: Layout
     missing_preview: Missing preview
+    mime_type_restriction:
+        pdf: Pdf
+        image: Image
+        multimedia: Multimedia
+        archive: Archive
+        spreadsheet: Spreadsheet
+        text: Text file
+        exe: Executable file
 yes: Yes
 no: No
 actions: Actions

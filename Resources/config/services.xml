@@ -77,5 +77,8 @@
             <argument type="service" id="request_stack"/>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface" alias="sherlockode_advanced_content.scope_handler"/>
+        <service id="sherlockode_advanced_content.mime_type_manager" class="Sherlockode\AdvancedContentBundle\Manager\MimeTypeManager">
+            <argument>%sherlockode_advanced_content.mime_type_group%</argument>
+        </service>
     </services>
 </container>

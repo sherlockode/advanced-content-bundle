@@ -40,6 +40,7 @@ field_type:
         delete: Supprimer
         file: Fichier
         label: Fichier
+        restriction_type: Restriction du type de fichier
     relative_link:
         label: Lien relatif
     separator:
@@ -73,6 +74,14 @@ field_type:
         choice: Choix
         layout: Agencement
     missing_preview: Pas d'aperçu disponible
+    mime_type_restriction:
+        pdf: Pdf
+        image: Image
+        multimedia: Multimédia
+        archive: Archive
+        spreadsheet: Tableur
+        text: Fichier texte
+        exe: Fichier exécutable
 yes: Oui
 no: Non
 actions: Actions
@@ -95,7 +104,7 @@ page_type:
     form:
         name: Nom
         submit: Ajouter un type de page
-    errors: 
+    errors:
         unique_name: Il existe déjà un type de page avec ce nom.
 page:
     label: Page
@@ -240,7 +249,7 @@ configuration:
     design:
         label: Options d'affichage
         border_color: Couleur de la bordure
-        colors: 
+        colors:
             none: Aucune
             transparent: Transparent
             pick: Choisir une couleur
