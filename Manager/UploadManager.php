@@ -27,16 +27,17 @@ class UploadManager
      * Upload file on server
      *
      * @param UploadedFile|null $file
+     * @param string|null       $fileName
      *
      * @return string
      */
-    public function upload(UploadedFile $file = null)
+    public function upload(UploadedFile $file = null,  ?string $fileName = null)
     {
         if ($file === null) {
             return '';
         }
 
-        $fileName = $this->getFileName($file);
+        $fileName =  $fileName ?? $this->getFileName($file);
         $file->move($this->getTargetDir(), $fileName);
 
         return $fileName;
@@ -86,7 +87,7 @@ class UploadManager
      *
      * @return string
      */
-    private function getFileName(File $file)
+    public function getFileName(File $file)
     {
         if ($file instanceof UploadedFile) {
             $extension = $file->getClientOriginalExtension();

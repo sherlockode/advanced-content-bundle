@@ -2,7 +2,9 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\Event\AcbFilePreSubmitEvent;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -24,11 +26,18 @@ class AcbFileType extends AbstractType
     private $uploadManager;
 
     /**
-     * @param UploadManager $uploadManager
+     * @var EventDispatcherInterface
      */
-    public function __construct(UploadManager $uploadManager)
+    private $eventDispatcher;
+
+    /**
+     * @param UploadManager            $uploadManager
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(UploadManager $uploadManager, EventDispatcherInterface $eventDispatcher)
     {
         $this->uploadManager = $uploadManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -60,6 +69,7 @@ class AcbFileType extends AbstractType
             function (FormEvent $event) use ($options) {
                 $data = $event->getData();
                 $form = $event->getForm();
+
                 if (!empty($data['delete'])) {
                     if (!empty($data['src'])) {
                         $this->uploadManager->remove($data['src']);
@@ -69,9 +79,14 @@ class AcbFileType extends AbstractType
                 }
 
                 if (!empty($data['file'])) {
-                    $data['src'] = $this->uploadManager->upload($data['file']);
-                    $this->updateForm($form, $data, $options);
-                    unset($data['file']);
+                    $fileName = $this->uploadManager->getFileName($data['file']);
+                    $this->eventDispatcher->dispatch(
+                        new AcbFilePreSubmitEvent($data['file'], $fileName),
+                        AcbFilePreSubmitEvent::NAME
+                    );
+
+                    $data['src'] = $fileName;
+                    $this->updateForm($form, $data, $options, true);
                 } elseif (isset($data['src'])) {
                     $this->updateForm($form, $data, $options);
                 }
@@ -85,24 +100,36 @@ class AcbFileType extends AbstractType
      * @param FormInterface $form
      * @param array         $data
      * @param array         $options
+     * @param bool          $hasFile
      *
      * @return void
      */
-    public function updateForm(FormInterface $form, $data, $options)
+    private function updateForm(FormInterface $form, $data, $options, $hasFile = false)
     {
         if (!isset($data['src'])) {
             $data['src'] = '';
         }
-        $isFileUploaded = $this->uploadManager->isFileUploaded($data['src']);
+
+        $isFileUploaded = $this->uploadManager->isFileUploaded($data['src']) || $hasFile;
+
+        $hasNotBlankConstraint = false;
+        foreach ($options['file_constraints'] as $constraint) {
+            if ($constraint instanceof NotBlank) {
+                $hasNotBlankConstraint = true;
+                break;
+            }
+        }
+
+        if (false === $hasNotBlankConstraint && true === $options['required'] && false === $isFileUploaded) {
+            $options['file_constraints'][] = new NotBlank(null, null, null, null, $options['validation_groups']);
+        }
+
         $form
-            ->add('file', FileType::class, array_merge([
+            ->add('file', FileType::class, [
                 'label' => 'field_type.file.file',
                 'required' => !$isFileUploaded && $options['required'],
-            ], $isFileUploaded || !$options['required'] ? [] : [
-                'constraints' => [
-                    new NotBlank(null, null, null, null, $options['validation_groups']),
-                ],
-            ]))
+                'constraints' => $options['file_constraints'],
+            ])
         ;
 
         if ($isFileUploaded) {
@@ -110,10 +137,11 @@ class AcbFileType extends AbstractType
                 ->add('delete', CheckboxType::class, [
                     'label' => 'field_type.file.delete',
                     'required' => false,
-                ]);
-            $form->add('src', HiddenType::class, [
-                'required' => $options['required'],
-            ]);
+                ])
+                ->add('src', HiddenType::class, [
+                    'required' => $options['required'],
+                ])
+            ;
         }
     }
 
@@ -124,6 +152,7 @@ class AcbFileType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
+            'file_constraints' => [],
         ]);
     }
 
@@ -136,8 +165,13 @@ class AcbFileType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $fileSrc = $form->getData()['src'] ?? '';
+        if ('' !== $fileSrc && false === $this->uploadManager->isFileUploaded($fileSrc)) {
+            $fileSrc = '';
+        }
+
         $view->vars['uploadManager'] = $this->uploadManager;
-        $view->vars['src'] = $form->getData()['src'] ?? '';
+        $view->vars['src'] = $fileSrc;
     }
 
     /**
