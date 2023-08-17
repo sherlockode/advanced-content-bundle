@@ -52,6 +52,8 @@ class AcbFileType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $mimeTypeChoices = $options['mime_types'] ?? $this->mimeTypeManager->generateMimeTypeChoices();
+
         $builder
             ->add('title', TextType::class, [
                 'label' => 'field_type.file.title',
@@ -62,7 +64,7 @@ class AcbFileType extends AbstractType
             ->add('mime_type', ChoiceType::class, [
                 'label' => 'field_type.file.restriction_type',
                 'multiple' => true,
-                'choices' => $this->mimeTypeManager->generateMimeTypeChoices(),
+                'choices' => is_array($mimeTypeChoices) ? $mimeTypeChoices : [],
             ])
         ;
 
@@ -179,6 +181,7 @@ class AcbFileType extends AbstractType
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
             'file_constraints' => [],
+            'mime_types' => null,
         ]);
     }
 

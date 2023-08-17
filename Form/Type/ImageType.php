@@ -2,6 +2,7 @@
 
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
+use Sherlockode\AdvancedContentBundle\Manager\MimeTypeManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,19 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class ImageType extends AbstractType
 {
+    /**
+     * @var MimeTypeManager
+     */
+    private MimeTypeManager $mimeTypeManager;
+
+    /**
+     * @param MimeTypeManager $mimeTypeManager
+     */
+    public function __construct(MimeTypeManager $mimeTypeManager)
+    {
+        $this->mimeTypeManager = $mimeTypeManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->remove('title');
@@ -45,6 +59,7 @@ class ImageType extends AbstractType
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
             'file_constraints' => [new Image()],
+            'mime_types' => array_flip(array_map('ucfirst', $this->mimeTypeManager->getImageMimeTypesChoices())),
         ]);
     }
 }
