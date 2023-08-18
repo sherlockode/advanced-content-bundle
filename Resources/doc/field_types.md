@@ -86,3 +86,71 @@ class FaqType extends AbstractType
     }
 }
 ```
+
+### AcbFileType and ImageType restrictions
+
+For these form types, you have the possibility to restrict the type of file uploaded.
+By default, bundle have 7 groups :
+
+- image
+  - image/*
+  
+- pdf
+  - application/pdf
+
+- executable
+  - application/vnd.microsoft.portable-executable
+
+- archive
+  - application/zip
+  - application/x-rar-compressed
+  - application/x-tar
+  - application/x-7z-compressed
+
+- text_file
+  - text/plain
+  - application/msword
+  - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+  - application/vnd.ms-word.document.macroEnabled.12
+  - application/vnd.ms-powerpoint
+  - application/vnd.openxmlformats-officedocument.presentationml.presentation
+  - application/vnd.openxmlformats-officedocument.wordprocessingml.template
+  - application/xml
+
+- spreadsheet
+  - text/csv
+  - application/rtf
+  - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  - application/vnd.ms-excel
+  - application/msexcel
+  - application/vnd.ms-works
+  - application/x-msworks
+  - application/vnd.ms-excel
+  - application/vnd.ms-excel.sheet.macroEnabled.12
+  - application/vnd.ms-excel.sheet.binary.macroEnabled.12
+  - application/vnd.ms-excel.template.macroEnabled.12
+  
+- multimedia
+  - video/mp4
+  - video/mpeg
+  - video/ogg
+  - video/3gpp
+  - video/MP2T
+  - audio/mpeg
+  - audio/mp4
+  - audio/vnd.wa
+  - audio/ogg
+
+_For ImageType, only image group restriction is used._
+
+Need to modify something ? Allow only jpeg and webp image file:  
+
+```yaml
+#sherlockode_advanced_content.yaml
+sherlockode_advanced_content:
+    mime_type_group:
+        image:
+            - image/jpeg
+            - image/webp
+```
+This declaration overrides the existing declaration, if you only want to add a mime type in a group, you need to add the default mime types.

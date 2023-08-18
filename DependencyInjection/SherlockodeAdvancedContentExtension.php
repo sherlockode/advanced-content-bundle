@@ -39,6 +39,7 @@ class SherlockodeAdvancedContentExtension extends Extension
         $container->setParameter('sherlockode_advanced_content.entity_class_mapping', $config['entity_class']);
 
         $this->setupUploads($config, $container);
+        $this->setupMimeType($config, $container);
 
         $container->getDefinition('sherlockode_advanced_content.element_manager')->setArgument(0, $config['field_types']);
 
@@ -55,5 +56,29 @@ class SherlockodeAdvancedContentExtension extends Extension
             $targetDir,
             $webPath,
         ]);
+    }
+
+    /**
+     * @param array            $config
+     * @param ContainerBuilder $container
+     *
+     * @return void
+     */
+    private function setupMimeType(array $config, ContainerBuilder $container): void
+    {
+        $mimeTypesConfiguration = $config['mime_type_group'] ?? null;
+        if (null === $mimeTypesConfiguration) {
+            return;
+        }
+
+        $parameters = $container->getParameter('sherlockode_advanced_content.mime_type_group');
+
+        foreach ($mimeTypesConfiguration as $key => $mimeTypeConfiguration) {
+            if (isset($parameters['sherlockode_advanced_content.mime_type_group.'.$key])) {
+                $parameters['sherlockode_advanced_content.mime_type_group.'.$key] = $mimeTypeConfiguration;
+            }
+        }
+
+        $container->setParameter('sherlockode_advanced_content.mime_type_group', $parameters);
     }
 }

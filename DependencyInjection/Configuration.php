@@ -125,6 +125,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('mime_type_group')
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->scalarPrototype()->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
