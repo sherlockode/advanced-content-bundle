@@ -100,4 +100,17 @@ class MimeTypeManager
 
         return array_combine($extensions, $extensions);
     }
+
+    /**
+     * @return array
+     */
+    public function getAllMimeTypes(): array
+    {
+        $mimeTypes = [];
+        foreach ($this->mimeTypes as $item) {
+            $mimeTypes[] = $item;
+        }
+
+        return array_merge([], ...$mimeTypes);
+    }
 }
