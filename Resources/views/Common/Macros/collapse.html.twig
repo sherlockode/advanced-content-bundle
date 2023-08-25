@@ -1,0 +1,8 @@
+{% macro buildAccordion(data) %}
+    {% for item in data %}
+        <details>
+            <summary>{{ item.title|raw }}</summary>
+            {{ item.content|raw }}
+        </details>
+    {% endfor %}
+{% endmacro %}
