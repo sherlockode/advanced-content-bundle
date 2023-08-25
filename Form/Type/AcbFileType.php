@@ -3,10 +3,12 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Event\AcbFilePreSubmitEvent;
+use Sherlockode\AdvancedContentBundle\Manager\MimeTypeManager;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,6 +18,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AcbFileType extends AbstractType
@@ -31,13 +34,20 @@ class AcbFileType extends AbstractType
     private $eventDispatcher;
 
     /**
+     * @var MimeTypeManager
+     */
+    private $mimeTypeManager;
+
+    /**
      * @param UploadManager            $uploadManager
      * @param EventDispatcherInterface $eventDispatcher
+     * @param MimeTypeManager          $mimeTypeManager
      */
-    public function __construct(UploadManager $uploadManager, EventDispatcherInterface $eventDispatcher)
+    public function __construct(UploadManager $uploadManager, EventDispatcherInterface $eventDispatcher, MimeTypeManager $mimeTypeManager)
     {
         $this->uploadManager = $uploadManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->mimeTypeManager = $mimeTypeManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -48,6 +58,11 @@ class AcbFileType extends AbstractType
                 'constraints' => !$options['required'] ? [] : [
                     new NotBlank(null, null, null, null, $options['validation_groups']),
                 ],
+            ])
+            ->add('mime_type', ChoiceType::class, [
+                'label' => 'field_type.file.restriction_type',
+                'multiple' => true,
+                'choices' => $this->mimeTypeManager->generateMimeTypeChoices(),
             ])
         ;
 
@@ -122,6 +137,17 @@ class AcbFileType extends AbstractType
 
         if (false === $hasNotBlankConstraint && true === $options['required'] && false === $isFileUploaded) {
             $options['file_constraints'][] = new NotBlank(null, null, null, null, $options['validation_groups']);
+        }
+
+        if (!empty($data['mime_type'])) {
+            $mimeTypes = [];
+
+            foreach ($data['mime_type'] as $type) {
+                $mimeTypes[] = $this->mimeTypeManager->getMimeTypesByCode($type);
+            }
+
+            $mimeTypes = array_merge([], ...$mimeTypes);
+            $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
         }
 
         $form

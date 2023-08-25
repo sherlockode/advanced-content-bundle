@@ -24,6 +24,7 @@ class SherlockodeAdvancedContentExtension extends Extension
         $loader->load('form.xml');
         $loader->load('import_export.xml');
         $loader->load('listeners.xml');
+        $loader->load('mime_type.xml');
 
         $container->registerForAutoconfiguration(FieldTypeInterface::class)
             ->addTag('sherlockode_advanced_content.fieldtype');
