@@ -149,8 +149,11 @@ class AcbFileType extends AbstractType
             }
 
             $mimeTypes = array_merge([], ...$mimeTypes);
-            $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
+        } else {
+            $mimeTypes = $this->mimeTypeManager->getAllMimeTypes();
         }
+
+        $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
 
         $form
             ->add('file', FileType::class, [
