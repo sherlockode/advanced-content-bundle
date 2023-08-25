@@ -6,17 +6,3 @@
     {% endif %}
     {{ parent() }}
 {% endblock %}
-
-{% block ___field_name___value_mime_type_row %}
-    {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
-
-    {% set content %}
-        {{ form_widget(form) }}
-        {{ form_help(form) }}
-        {{ form_errors(form) }}
-    {% endset %}
-
-    {% set data = [{'title': form_label(form), 'content': content }] %}
-
-    {{ macro.buildAccordion(data) }}
-{% endblock %}
