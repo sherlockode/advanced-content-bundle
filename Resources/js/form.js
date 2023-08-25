@@ -11,21 +11,31 @@ function buildCustomLayoutFormData(formData, data, prefix) {
   for (const [key, value] of Object.entries(data)) {
     if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
-        formData = buildCustomLayoutFormData(formData, value[i], prefix + '[' + key + ']' + '[' + i + ']');
+        if (typeof value[i] === 'object' && value[i] !== null) {
+          formData = buildCustomLayoutFormData(formData, value[i], prefix + '[' + key + ']' + '[' + i + ']');
+        } else {
+          formData = buildScalarFormData(formData, prefix + '[' + key + ']' + '[' + i + ']', value[i]);
+        }
       }
     } else if (typeof value === 'object' && value !== null) {
       formData = buildCustomLayoutFormData(formData, value, prefix + '[' + key + ']');
     } else {
-      if (value !== false) {
-        let newValue = value;
-        if (newValue === true) {
-          newValue = 1;
-        } else if (newValue === null) {
-          newValue = '';
-        }
-        formData.append(prefix + '[' + key + ']', newValue);
-      }
+      formData = buildScalarFormData(formData, prefix + '[' + key + ']', value);
     }
+  }
+
+  return formData;
+}
+
+function buildScalarFormData(formData, name, value) {
+  if (value !== false) {
+    let newValue = value;
+    if (newValue === true) {
+      newValue = 1;
+    } else if (newValue === null) {
+      newValue = '';
+    }
+    formData.append(name, newValue);
   }
 
   return formData;
