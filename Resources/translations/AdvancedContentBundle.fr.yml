@@ -77,6 +77,7 @@ field_type:
     mime_type_restriction:
         pdf: Pdf
         image: Image
+        image_all_types: Tous types d'images
         multimedia: Multimédia
         archive: Archive
         spreadsheet: Tableur

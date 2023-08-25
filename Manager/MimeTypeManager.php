@@ -2,6 +2,8 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 class MimeTypeManager
 {
     const MIME_TYPE_IMAGE = 10;
@@ -18,11 +20,18 @@ class MimeTypeManager
     private $mimeTypes;
 
     /**
-     * @param array $mimeTypes
+     * @var TranslatorInterface
      */
-    public function __construct(array $mimeTypes)
+    private $translator;
+
+    /**
+     * @param array               $mimeTypes
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(array $mimeTypes, TranslatorInterface $translator)
     {
         $this->mimeTypes = $mimeTypes;
+        $this->translator = $translator;
     }
 
     /**
@@ -42,11 +51,11 @@ class MimeTypeManager
     }
 
     /**
-     * @param int $code
+     * @param string $code
      *
      * @return array
      */
-    public function getMimeTypesByCode(int $code): array
+    public function getMimeTypesByCode(string $code): array
     {
         $mimeTypes = [
             self::MIME_TYPE_IMAGE => 'sherlockode_advanced_content.mime_type_group.image',
@@ -59,9 +68,36 @@ class MimeTypeManager
         ];
 
         if (!isset($mimeTypes[$code])) {
-            return [];
+            $imageMimeTypes = $this->getImageMimeTypesChoices();
+
+            if ('*' === $code) {
+                return ['image/*'];
+            }
+
+            return ['image/' . $imageMimeTypes[$code]] ?? [];
         }
 
         return $this->mimeTypes[$mimeTypes[$code]];
+    }
+
+    /**
+     * @return array
+     */
+    public function getImageMimeTypesChoices(): array
+    {
+        $types = $this->getMimeTypesByCode(self::MIME_TYPE_IMAGE);
+        $extensions = [];
+
+        if (count($types) === 1 && $types[0] === 'image/*') {
+            $extensions['*'] = $this->translator->trans('field_type.mime_type_restriction.image_all_types', [], 'AdvancedContentBundle');
+
+            return $extensions;
+        }
+
+        foreach ($types as $type) {
+            $extensions[] = basename($type);
+        }
+
+        return array_combine($extensions, $extensions);
     }
 }
