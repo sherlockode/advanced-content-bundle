@@ -237,6 +237,56 @@ jQuery(function ($) {
     slide.element.on('slideContentUpdated', updateControls);
     slide.element.on('change', '.simplify-controls', updateControls);
 
+    $('body').on('change', '[data-mime-type-restriction]', function (e) {
+        let inputFile = $(this).closest('.acb-widget-container').find('input[type=file]');
+        let errorMessage = $(this).closest('.acb-widget-container').find('.invalid-feedback');
+
+        if (!inputFile.length) {
+            return;
+        }
+
+        inputFile = inputFile[0];
+
+        if (!inputFile.files.length) {
+            errorMessage.removeClass('d-block').addClass('d-none');
+
+            return;
+        }
+
+        let mimeTypeOption = $(this).closest('.acb-widget-container').find('[data-mime-type-restriction-values]').find(':checked');
+
+        if (!mimeTypeOption.length) {
+            return;
+        }
+
+
+        let mimeTypeValues = [];
+        mimeTypeOption.each(function() {
+            $(this).data('mime-type').forEach((element) => mimeTypeValues.push(element));
+        });
+
+        let allImageType = mimeTypeValues.length === 1 && mimeTypeValues[0] === 'image/*';
+        let hasError = true;
+
+        if (allImageType && inputFile.files[0].type.includes('image/')) {
+            hasError = false;
+        } else if (mimeTypeValues.includes(inputFile.files[0].type)) {
+            hasError = false;
+        }
+
+        if (hasError) {
+            let msg = errorMessage.data('error');
+
+            mimeTypeValues = mimeTypeValues.map(type => `"${type}"`);
+            msg = msg.replace('%mime%', inputFile.files[0].type).replace('%allowed_mime%', mimeTypeValues.join(', '));
+
+            errorMessage.html(msg);
+            errorMessage.removeClass('d-none').addClass('d-block');
+        } else {
+            errorMessage.removeClass('d-block').addClass('d-none');
+        }
+    });
+
   function updateRowAfterLayoutUpdate(row) {
     saveExistingField(
       $('.acb-elements-container').data('edit-url') + '?type=row',

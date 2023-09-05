@@ -41,6 +41,7 @@ field_type:
         file: Fichier
         label: Fichier
         restriction_type: Restriction du type de fichier
+        restriction_type_error: Le type du fichier est invalide ("%mime%"). Les types autorisés sont %allowed_mime%.
     relative_link:
         label: Lien relatif
     separator:
