@@ -210,6 +210,8 @@ layout_type:
                 10_column: Dix colonnes - 5/6
                 11_column: Onze colonnes - 11/12
                 12_column: Douze colonnes - 1/1
+                column: Prend toute la largeur disponible
+                column_auto: Prend uniquement la largeur de son contenu
             offsets:
                 no_offset: Pas de décalage
                 1_column: Une colonne - 1/12
