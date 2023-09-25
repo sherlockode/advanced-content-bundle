@@ -243,6 +243,7 @@ sherlockode_advanced_content:
 - [Import](Resources/doc/import.md)
 - [Export](Resources/doc/export.md)
 - [Usage](Resources/doc/usage.md)
+- [Data migration](Resources/doc/data_migration.md)
 
 
 # Dependencies

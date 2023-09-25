@@ -81,5 +81,10 @@
             <argument>%sherlockode_advanced_content.mime_type_group%</argument>
             <argument type="service" id="translator"/>
         </service>
+        <service id="sherlockode_advanced_content.migrations_helper" class="Sherlockode\AdvancedContentBundle\Doctrine\MigrationHelper">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument>%sherlockode_advanced_content.entity_class_mapping%</argument>
+        </service>
+        <service id="Sherlockode\AdvancedContentBundle\Doctrine\MigrationHelperInterface" alias="sherlockode_advanced_content.migrations_helper"/>
     </services>
 </container>
