@@ -188,11 +188,21 @@ jQuery(function ($) {
                 let existingColumns = layout.find('> .acb-sortable');
                 let lastRowSize = 0;
                 existingColumns.each(function() {
-                    lastRowSize += parseInt($(this).data('col-size'));
+                    let colSize = parseInt($(this).data('col-size'));
+
+                    if (Number.isInteger(colSize)) {
+                        lastRowSize += colSize;
+                    } else {
+                        lastRowSize = 0;
+
+                        return false;
+                    }
+
                     if (lastRowSize >= 12) {
                         lastRowSize = 0;
                     }
                 });
+
                 addColumnToRow(12 - lastRowSize, layout);
 
                 return;

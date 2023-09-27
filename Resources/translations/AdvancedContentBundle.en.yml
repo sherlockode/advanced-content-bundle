@@ -212,6 +212,8 @@ layout_type:
                 10_column: Ten columns - 5/6
                 11_column: Eleven columns - 11/12
                 12_column: Twelve columns - 1/1
+                column: Takes all the width available
+                column_auto: Takes only the width of its content
             offsets:
                 no_offset: No offset
                 1_column: One column - 1/12

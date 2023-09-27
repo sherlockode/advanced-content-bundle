@@ -99,6 +99,7 @@ class ContentExtension extends AbstractExtension
             new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
             new TwigFunction('acb_get_version_user_name', [$this, 'getVersionUserName']),
             new TwigFunction('acb_get_content_by_slug', [$this, 'getContentBySlug']),
+            new TwigFunction('acb_get_col_size', [$this, 'getColSize']),
         ];
     }
 
@@ -184,7 +185,7 @@ class ContentExtension extends AbstractExtension
     {
         $classes = [];
         $size = $config['size'] ?? 12;
-        $classes[] = 'col-' . $size;
+        $classes[] = '-' === $size ? 'col' : 'col-' . $size;
         $offset = $config['offset'] ?? 0;
         if (!empty($offset)) {
             $classes[] = 'offset-' . $offset;
@@ -198,7 +199,7 @@ class ContentExtension extends AbstractExtension
         ];
         foreach ($devices as $device) {
             if (isset($config['size_' . $device])) {
-                $classes[] = 'col-' . $device . '-' . $config['size_' . $device];
+                $classes[] = '-' === $size ? 'col' : 'col-' . $device . '-' . $config['size_' . $device];
             }
             if (isset($config['offset_' . $device])) {
                 $classes[] = 'offset-' . $device . '-' . $config['offset_' . $device];
@@ -407,5 +408,48 @@ class ContentExtension extends AbstractExtension
     public function getContentBySlug(string $slug): ?ContentInterface
     {
         return $this->scopeHandler->getEntityForCurrentScope('content', ['slug' => $slug]);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return string
+     */
+    public function getColSize(array $config): string
+    {
+        $colSize = $this->cleanColSize($config['size']);
+        $colOffset = min(11, max(0, $config['offset'] ?? 0));
+
+        $devices = ['sm', 'md', 'lg', 'xl'];
+
+        foreach ($devices as $device) {
+            if (isset($config['size_'.$device])) {
+                $colSize = $this->cleanColSize($config['size_'.$device]);
+            }
+
+            if (isset($config['offset_'.$device])) {
+                $colOffset = $config['offset_' . $device];
+            }
+        }
+
+        if (!is_numeric($colSize)) {
+            return $colSize;
+        }
+
+        return $colSize + $colOffset;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private function cleanColSize(string $value): string
+    {
+        if ('auto' === $value || '-' === $value) {
+            return str_replace('-', '', $value);
+        }
+
+        return min(12, max(1, is_numeric($value) ? $value : 12));
     }
 }

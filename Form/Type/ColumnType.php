@@ -23,6 +23,8 @@ class ColumnType extends AbstractType
             'layout_type.column.config.sizes.10_column' => 10,
             'layout_type.column.config.sizes.11_column' => 11,
             'layout_type.column.config.sizes.12_column' => 12,
+            'layout_type.column.config.sizes.column' => '-',
+            'layout_type.column.config.sizes.column_auto' => 'auto',
         ];
 
         $offsetOptions = [
