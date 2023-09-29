@@ -1,0 +1,12 @@
+{% macro formatDatetime(date, format = 'medium') %}
+    {% if format == 'short' %}
+        {% set format = 'Y/m/d H:i:s' %}
+    {% elseif format == 'long' %}
+        {% set format = 'd F Y H:i:s' %}
+    {% elseif format == 'full' %}
+        {% set format = 'l d F Y H:i:s' %}
+    {% else %}
+        {% set format = 'd M Y, H:i:s' %}
+    {% endif %}
+    {{ date|date(format) }}
+{% endmacro %}
