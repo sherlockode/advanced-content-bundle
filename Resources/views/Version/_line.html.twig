@@ -1,12 +1,13 @@
 {% trans_default_domain 'AdvancedContentBundle' %}
 
 {% import "@SherlockodeAdvancedContent/Common/Macros/classes.html.twig" as classes %}
+{% import "@SherlockodeAdvancedContent/Common/Macros/date.html.twig" as date %}
 
 {% set editVersion = app.request.query.get('versionId') == version.id %}
 
 <tr data-version-id="{{ version.id }}">
     <td>{{ version.id }}{% if isCurrentVersion %}<i class="fa-solid fa-check current-version"></i>{% endif %}</td>
-    <td>{{ version.createdAt|format_datetime() }}</td>
+    <td>{{ date.formatDatetime(version.createdAt) }}</td>
     <td>
         {{ acb_get_version_user_name(version) }}
         {% if isCurrentVersion %}
