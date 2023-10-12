@@ -79,7 +79,7 @@ class ContentType extends AbstractType
                     new NotBlank(null, null, null, null, $options['validation_groups']),
                 ],
             ])
-            ->add('data', ElementsType::class, [
+            ->add('data', ContentDataType::class, [
                 'label' => false,
                 'row_attr' => [
                     'class' => 'acb-elements-container',
