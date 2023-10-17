@@ -17,7 +17,7 @@
     <input type="hidden" id="content-data-json" name="{{ form.vars.full_name }}" value="{{ acb_get_json_form(form)|json_encode() }}">
 {% endblock %}
 
-{% block _content_data_widget %}
+{% block acb_content_data_widget %}
     <div class="acb-sortable-group acb-root-sortable-group" data-base-name="{{ form.vars.full_name }}" data-widget-counter="{{ form.children|length }}">
         {% for child in form.children %}
             {{ _self.acb_render_elements(child) }}
@@ -25,9 +25,6 @@
     </div>
     {{ _self.acb_button_add_field(form.vars.full_name) }}
     {{ block('content_data_json_form') }}
-{% endblock %}
-{% block _acb_page_content_data_widget %}
-    {{ block('_content_data_widget') }}
 {% endblock %}
 
 {% macro acb_button_add_field(baseName) %}
