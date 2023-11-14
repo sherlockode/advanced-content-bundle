@@ -206,6 +206,27 @@ sherlockode_advanced_content:
         uri_prefix: /uploads/acb_images
 ```
 
+The bundle use namers to name uploaded files. A namer is a simple class which implements 
+`Sherlockode\AdvancedContentBundle\Naming\NamerInterface`.
+
+The built-in namers are:
+- `Sherlockode\AdvancedContentBundle\Naming\UniqueNamer`: use a combination of md5 / uniqueid to try 
+to make the filename unique. This is the default namer. His service is 
+`sherlockode_advanced_content.unique_file_namer`;
+- `Sherlockode\AdvancedContentBundle\Naming\ClientOriginalNamer`: keep the original file name.
+His service ID is `̀sherlockode_advanced_content.unique_file_namer`
+
+You can change the namer through the configuration:
+
+```yaml
+# config/packages/sherlockode_advanced_content.yml
+sherlockode_advanced_content:
+    upload:
+        image_directory: '%kernel.project_dir%/public/uploads/acb_images'
+        uri_prefix: /uploads/acb_images
+        file_namer: sherlockode_advanced_content.client_original_file_namer
+```
+
 ## Routing
 
 ----

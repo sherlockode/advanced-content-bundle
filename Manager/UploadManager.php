@@ -2,11 +2,17 @@
 
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
+use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadManager
 {
+    /**
+     * @var NamerInterface
+     */
+    private $fileNamer;
+
     /**
      * @var string
      */
@@ -17,8 +23,9 @@ class UploadManager
      */
     private $webPath;
 
-    public function __construct($targetDir, $webPath)
+    public function __construct(NamerInterface $fileNamer, $targetDir, $webPath)
     {
+        $this->fileNamer = $fileNamer;
         $this->targetDir = $targetDir;
         $this->webPath = $webPath;
     }
@@ -89,19 +96,7 @@ class UploadManager
      */
     public function getFileName(File $file)
     {
-        if ($file instanceof UploadedFile) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName = $file->getClientOriginalName();
-        } else {
-            /** @var File $file */
-            $extension = $file->getExtension();
-            $fileName = $file->getFilename();
-        }
-
-        $fileName = str_replace('.' . $extension, '', $fileName);
-        $fileName = $fileName . '_' . md5(uniqid()) . '.' . $extension;
-
-        return $fileName;
+        return $this->fileNamer->getFilename($file);
     }
 
     /**

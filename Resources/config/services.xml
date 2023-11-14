@@ -11,6 +11,7 @@
         <service id="sherlockode_advanced_content.upload_manager" class="Sherlockode\AdvancedContentBundle\Manager\UploadManager">
             <argument/>
             <argument/>
+            <argument/>
         </service>
         <service id="sherlockode_advanced_content.page_manager" class="Sherlockode\AdvancedContentBundle\Manager\PageManager">
             <argument type="service" id="sherlockode_advanced_content.slug_provider"/>
@@ -86,5 +87,7 @@
             <argument>%sherlockode_advanced_content.entity_class_mapping%</argument>
         </service>
         <service id="Sherlockode\AdvancedContentBundle\Doctrine\MigrationHelperInterface" alias="sherlockode_advanced_content.migrations_helper"/>
+        <service id="sherlockode_advanced_content.unique_file_namer" class="Sherlockode\AdvancedContentBundle\Naming\UniqueNamer"/>
+        <service id="sherlockode_advanced_content.client_original_file_namer" class="Sherlockode\AdvancedContentBundle\Naming\ClientOriginalNamer"/>
     </services>
 </container>
