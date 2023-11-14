@@ -303,13 +303,17 @@
             {%- for child in form %}
                 <div class="checkbox">
                     {{- form_widget(child) -}}
-                    <label for="{{ child.vars.id }}" title="{{ child.vars.label|trans({}, child.vars.translation_domain) }}">
-                        <i class="{{ _self.device_icon_class(child.vars.value)|trim }}"></i>
-                    </label>
                 </div>
             {% endfor -%}
         </div>
     </div>
+{% endblock %}
+
+{% block ___field_name___extra_advanced_hide_on_entry_widget %}
+    <input type="checkbox" class="btn-check" id="{{ id }}" autocomplete="off">
+    <label class="btn" for="{{ id }}">
+        <i class="{{ _self.device_icon_class(value)|trim }}"></i>
+    </label>
 {% endblock %}
 
 {% macro device_icon_class(device) %}
