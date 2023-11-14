@@ -181,85 +181,91 @@
 {% endblock %}
 
 {% block acb_image_widget %}
-<div {{ block('widget_container_attributes') }}>
-    {{ form_row(form.file) }}
-
-    {% set source = '' %}
-    {% if form.vars.src is not empty %}
-        {% set source = uploadManager.webPath ~ '/' ~ form.vars.src %}
-    {% endif %}
-    {% if source != '' %}
-        <div class="form-group">
-            <a href="{{ asset(source) }}">
-                <img src="{{ asset(source) }}" height="50px" alt="image">
-            </a>
+    {%- set attr = attr|merge({ class: attr.class|default('acb-widget-container') }) -%}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="mb-3">
+            {{ form_row(form.file) }}
+            <div class="invalid-feedback d-none" data-error="{{ 'field_type.file.restriction_type_error'|trans }}"></div>
         </div>
-    {% endif %}
 
-    {% if form.delete is defined %}
-        {{ form_row(form.delete) }}
-    {% endif %}
-    {% if form.src is defined %}
-        {{ form_row(form.src) }}
-    {% endif %}
+        {% set source = '' %}
+        {% if form.vars.src is not empty %}
+            {% set source = uploadManager.webPath ~ '/' ~ form.vars.src %}
+        {% endif %}
+        {% if source != '' %}
+            <div class="form-group">
+                <a href="{{ asset(source) }}">
+                    <img src="{{ asset(source) }}" height="50px" alt="image">
+                </a>
+            </div>
+        {% endif %}
 
-    {{ form_row(form.alt) }}
-    {% if form.mime_type is defined %}
-        {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
+        {% if form.delete is defined %}
+            {{ form_row(form.delete) }}
+        {% endif %}
+        {% if form.src is defined %}
+            {{ form_row(form.src) }}
+        {% endif %}
 
-        {% set content %}
-            {{ form_widget(form.mime_type) }}
-            {{ form_help(form.mime_type) }}
-            {{ form_errors(form.mime_type) }}
-        {% endset %}
+        {{ form_row(form.alt) }}
+        {% if form.mime_type is defined %}
+            {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
 
-        {% set data = [{'title': form_label(form.mime_type), 'content': content }] %}
+            {% set content %}
+                {{ form_widget(form.mime_type, {'attr': {'data-mime-type-restriction-values': ''}}) }}
+                {{ form_help(form.mime_type) }}
+                {{ form_errors(form.mime_type) }}
+            {% endset %}
 
-        {{ macro.buildAccordion(data) }}
-    {% endif %}
-    {{ form_rest(form) }}
-</div>
+            {% set data = [{'title': form_label(form.mime_type), 'content': content }] %}
+            {{ macro.buildAccordion(data) }}
+        {% endif %}
+        {{ form_rest(form) }}
+    </div>
 {% endblock %}
 
 {% block acb_file_widget %}
-<div {{ block('widget_container_attributes') }}>
-    {{ form_row(form.file) }}
-
-    {% set source = '' %}
-    {% if form.vars.src is not empty %}
-        {% set source = uploadManager.webPath ~ '/' ~ form.vars.src %}
-    {% endif %}
-    {% if source != '' %}
-        <div class="form-group">
-            <a href="{{ asset(source) }}" download>
-                {{ form.vars.src }}
-            </a>
+    {%- set attr = attr|merge({ class: attr.class|default('acb-widget-container') }) -%}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="mb-3">
+            {{ form_row(form.file) }}
+            <div class="invalid-feedback d-none" data-error="{{ 'field_type.file.restriction_type_error'|trans }}"></div>
         </div>
-    {% endif %}
 
-    {% if form.delete is defined %}
-        {{ form_row(form.delete) }}
-    {% endif %}
-    {% if form.src is defined %}
-        {{ form_row(form.src) }}
-    {% endif %}
+        {% set source = '' %}
+        {% if form.vars.src is not empty %}
+            {% set source = uploadManager.webPath ~ '/' ~ form.vars.src %}
+        {% endif %}
+        {% if source != '' %}
+            <div class="form-group">
+                <a href="{{ asset(source) }}" download>
+                    {{ form.vars.src }}
+                </a>
+            </div>
+        {% endif %}
 
-    {{ form_row(form.title) }}
-    {% if form.mime_type is defined %}
-        {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
+        {% if form.delete is defined %}
+            {{ form_row(form.delete) }}
+        {% endif %}
+        {% if form.src is defined %}
+            {{ form_row(form.src) }}
+        {% endif %}
 
-        {% set content %}
-            {{ form_widget(form.mime_type) }}
-            {{ form_help(form.mime_type) }}
-            {{ form_errors(form.mime_type) }}
-        {% endset %}
+        {{ form_row(form.title) }}
+        {% if form.mime_type is defined %}
+            {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
 
-        {% set data = [{'title': form_label(form.mime_type), 'content': content }] %}
+            {% set content %}
+                {{ form_widget(form.mime_type, {'attr': {'data-mime-type-restriction-values': ''}}) }}
+                {{ form_help(form.mime_type) }}
+                {{ form_errors(form.mime_type) }}
+            {% endset %}
 
-        {{ macro.buildAccordion(data) }}
-    {% endif %}
-    {{ form_rest(form) }}
-</div>
+            {% set data = [{'title': form_label(form.mime_type), 'content': content }] %}
+            {{ macro.buildAccordion(data) }}
+        {% endif %}
+        {{ form_rest(form) }}
+    </div>
 {% endblock %}
 
 {% block acb_column_config_row %}

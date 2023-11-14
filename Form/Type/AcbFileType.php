@@ -65,6 +65,10 @@ class AcbFileType extends AbstractType
                 'label' => 'field_type.file.restriction_type',
                 'multiple' => true,
                 'choices' => is_array($mimeTypeChoices) ? $mimeTypeChoices : [],
+                'choice_attr' => function ($choice): array {
+                    return ['data-mime-type' => json_encode($this->mimeTypeManager->getMimeTypesByCode($choice))];
+                },
+                'attr' => ['data-mime-type-restriction' => '']
             ])
         ;
 
@@ -160,6 +164,7 @@ class AcbFileType extends AbstractType
                 'label' => 'field_type.file.file',
                 'required' => !$isFileUploaded && $options['required'],
                 'constraints' => $options['file_constraints'],
+                'attr' => ['data-mime-type-restriction' => '']
             ])
         ;
 
