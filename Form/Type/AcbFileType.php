@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AcbFileType extends AbstractType
@@ -141,6 +142,14 @@ class AcbFileType extends AbstractType
             }
         }
 
+        $hasImageConstraint = false;
+        foreach ($options['file_constraints'] as $constraint) {
+            if ($constraint instanceof Image) {
+                $hasImageConstraint = true;
+                break;
+            }
+        }
+
         if (false === $hasNotBlankConstraint && true === $options['required'] && false === $isFileUploaded) {
             $options['file_constraints'][] = new NotBlank(null, null, null, null, $options['validation_groups']);
         }
@@ -157,7 +166,9 @@ class AcbFileType extends AbstractType
             $mimeTypes = $this->mimeTypeManager->getAllMimeTypes();
         }
 
-        $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
+        if (false === $hasImageConstraint) {
+            $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
+        }
 
         $form
             ->add('file', FileType::class, [

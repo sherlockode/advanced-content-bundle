@@ -58,7 +58,7 @@ class ImageType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
-            'file_constraints' => [new Image()],
+            'file_constraints' => [new Image(null, null, null, $this->mimeTypeManager->getMimeTypesByCode(MimeTypeManager::MIME_TYPE_IMAGE))],
             'mime_types' => array_flip(array_map('ucfirst', $this->mimeTypeManager->getImageMimeTypesChoices())),
         ]);
     }

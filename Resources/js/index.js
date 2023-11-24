@@ -263,17 +263,20 @@ jQuery(function ($) {
             return;
         }
 
-        let mimeTypeOption = $(this).closest('.acb-widget-container').find('[data-mime-type-restriction-values]').find(':checked');
+        let mimeTypeOption = $(this).closest('.acb-widget-container').find('[data-mime-type-restriction-values]').find(':selected');
+        let mimeTypeValues = [];
 
-        if (!mimeTypeOption.length) {
-            return;
+        if (mimeTypeOption.length) {
+            mimeTypeValues = mimeTypeOption.data('mime-type');
+        } else {
+            $(this).closest('.acb-widget-container').find('[data-mime-type-restriction-values]').find('option').each(function() {
+                mimeTypeValues = $.merge(mimeTypeValues, $(this).data('mime-type'));
+            });
         }
 
-
-        let mimeTypeValues = [];
-        mimeTypeOption.each(function() {
-            $(this).data('mime-type').forEach((element) => mimeTypeValues.push(element));
-        });
+        if (!mimeTypeValues.length) {
+            return;
+        }
 
         let allImageType = mimeTypeValues.length === 1 && mimeTypeValues[0] === 'image/*';
         let hasError = true;
