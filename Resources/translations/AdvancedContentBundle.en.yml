@@ -23,6 +23,9 @@ field_type:
         label: Image
         name: Image
         alt: Alt text
+        picture_main: Main image
+        picture_sources: Alternative images
+        media_query: Media query
     textarea:
         label: Textarea
     iframe:
@@ -100,6 +103,8 @@ add_element_before: Add element before
 move: Move
 change_display: Change display
 collapse: Collapse
+collection_add_item: Add item
+collection_remove_item: Remove item
 page_type:
     label: Page Type
     description: Typing pages allows you to categorize them and use different layouts.

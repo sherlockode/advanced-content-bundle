@@ -1,8 +1,36 @@
 {% extends '@SherlockodeAdvancedContent/Form/base_theme.html.twig' %}
 
+{% trans_default_domain 'AdvancedContentBundle' %}
+
 {% block form_row %}
     {% if form.parent and form.vars.compound and (form.parent.vars.name == 'value' or (form.parent.parent and form.parent.parent.vars.name == 'value')) %}
         {% set row_attr = row_attr|default({})|merge({'class': row_attr.class|default('') ~ ' acb-field-element-compound'}) %}
     {% endif %}
     {{ parent() }}
+{% endblock %}
+
+{% block collection_widget %}
+    <div class="acb-collection-widget">
+        <div class="acb-collection-list" {% if prototype is defined %}data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}"{% endif %}>
+            {% for child in form %}
+                {{ form_widget(child) }}
+            {% endfor %}
+        </div>
+        {% if form.vars.allow_add %}
+            <button type="button" class="btn btn-secondary btn-add-acb-collection" title="{{ 'collection_add_item'|trans }}">
+                <i class="fa fa-plus"></i> {{ 'collection_add_item'|trans }}
+            </button>
+        {% endif %}
+    </div>
+{% endblock collection_widget %}
+
+{% block collection_entry_widget %}
+    <div class="acb-collection-item">
+        {{ form_widget(form) }}
+        {% if form.parent.vars.allow_delete %}
+            <button type="button" class="btn btn-danger btn-remove-acb-collection" title="{{ 'collection_remove_item'|trans }}">
+                <i class="fa fa-trash"></i> {{ 'collection_remove_item'|trans }}
+            </button>
+        {% endif %}
+    </div>
 {% endblock %}

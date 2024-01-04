@@ -6,6 +6,7 @@ use Sherlockode\AdvancedContentBundle\Exception\InvalidElementException;
 use Sherlockode\AdvancedContentBundle\FieldType\Content;
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
+use Sherlockode\AdvancedContentBundle\FieldType\Image;
 use Sherlockode\AdvancedContentBundle\LayoutType\Column;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
@@ -69,7 +70,27 @@ class ElementExport
     {
         $raw = $element->getRawValue($elementData['value'] ?? null);
 
-        if ($element instanceof File) {
+        if ($element instanceof Image) {
+            if (is_array($raw)) {
+                if (isset($raw['image']['url'])) {
+                    unset($raw['image']['url']);
+                }
+                if (isset($raw['sources']) && is_array($raw['sources'])) {
+                    foreach ($raw['sources'] as $key => $source) {
+                        if (is_array($source) && isset($source['url'])) {
+                            unset($raw['sources'][$key]['url']);
+                        }
+                    }
+                }
+                // Root data is only needed as template variables, no need to export them
+                $rootDataToDelete = ['alt', 'src', 'file', 'mime_type', 'url'];
+                foreach ($rootDataToDelete as $key) {
+                    if (array_key_exists($key, $raw)) {
+                        unset($raw[$key]);
+                    }
+                }
+            }
+        } elseif ($element instanceof File) {
             if (is_array($raw) && isset($raw['url'])) {
                 unset($raw['url']);
             }
