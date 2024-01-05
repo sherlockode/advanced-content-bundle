@@ -2,21 +2,21 @@ import jQuery from "jquery";
 import getSlug from "../public/js/speakingurl.min";
 
 function initContentSlug() {
-    let contentName = $('.acb-content-name');
+    let contentName = jQuery('.acb-content-name');
     contentName.each(function(){
-        let contentSlug = $('.acb-content-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
+        let contentSlug = jQuery('.acb-content-slug[data-slug-token="' + jQuery(this).data('slug-token') + '"]');
         if (contentSlug.length > 0) {
-            applySlug($(this), contentSlug);
+            applySlug(jQuery(this), contentSlug);
         }
     });
 }
 function initPageSlug() {
-    let pageTitle = $('.acb-pagemeta-title');
+    let pageTitle = jQuery('.acb-pagemeta-title');
     if (pageTitle.length > 0) {
         pageTitle.each(function(){
-            let pageSlug = $('.acb-pagemeta-slug[data-slug-token="' + $(this).data('slug-token') + '"]');
+            let pageSlug = jQuery('.acb-pagemeta-slug[data-slug-token="' + jQuery(this).data('slug-token') + '"]');
             if (pageSlug.length > 0) {
-                applySlug($(this), pageSlug);
+                applySlug(jQuery(this), pageSlug);
             }
         });
     }
