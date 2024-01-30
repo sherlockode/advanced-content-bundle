@@ -181,7 +181,7 @@
 {% endblock %}
 
 {% block acb_image_widget %}
-    {%- set attr = attr|merge({ class: attr.class|default('acb-widget-container') }) -%}
+    {%- set attr = attr|merge({ class: attr.class|default('') ~ ' acb-widget-container' }) -%}
     <div {{ block('widget_container_attributes') }}>
         <div class="mb-3">
             {{ form_row(form.file) }}
@@ -207,7 +207,9 @@
             {{ form_row(form.src) }}
         {% endif %}
 
-        {{ form_row(form.alt) }}
+        {% if form.alt is defined %}
+            {{ form_row(form.alt) }}
+        {% endif %}
         {% if form.mime_type is defined %}
             {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
 
@@ -225,7 +227,7 @@
 {% endblock %}
 
 {% block acb_file_widget %}
-    {%- set attr = attr|merge({ class: attr.class|default('acb-widget-container') }) -%}
+    {%- set attr = attr|merge({ class: attr.class|default('') ~ ' acb-widget-container' }) -%}
     <div {{ block('widget_container_attributes') }}>
         <div class="mb-3">
             {{ form_row(form.file) }}

@@ -1,5 +1,18 @@
 {% if url is not empty %}
     <p>
+        {% if sources is defined and sources|length > 0 %}
+            <picture>
+            {% for source in sources %}
+                {% if source.url is defined and source.url is not empty and source.media_query is defined and source.media_query is not empty %}
+                    <source srcset="{{ source.url|replace({' ': '%20'}) }}" media="{{ source.media_query }}"/>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
         <img src="{{ url }}" alt="{{ alt is defined ? alt : '' }}"/>
+
+        {% if sources is defined and sources|length > 0 %}
+            </picture>
+        {% endif %}
     </p>
 {% endif %}

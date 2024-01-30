@@ -208,11 +208,12 @@ you will obtain the following structure.
         src: file.pdf
         title: File Title
     image_slug:
-        src: image.jpg
-        alt: Image Alt
+        image:
+            src: image.jpg
+            alt: Image Alt
 ```
 
-If you want to upload a new file for this field values, you need to add a `_file` entry under `value`.
+If you want to upload a new file for this field values, you need to add a `_file` entry under `value` or under `image` for an Image FieldType.
 The file to import must be located in the `files-dir` directory (either in your configuration or in the option of the import command)
 
 For example, if the new files are located in /tmp/new-files, you can launch the command:
@@ -229,6 +230,24 @@ And the field values must contain the following info :
         _file: new-file.pdf # file located in /tmp/new-files/new-file.pdf
         title: File Title
     image_slug:
-        _file: new-image.jpg # file located in /tmp/new-files/new-image.png
-        alt: Image Alt
+        image:
+            _file: new-image.jpg # file located in /tmp/new-files/new-image.png
+            alt: Image Alt
+```
+
+If you want to upload multiple sources for your Image field, you can add them under `sources`
+
+```yaml
+# fields to import
+    image_slug:
+        image:
+            _file: new-image.jpg # file located in /tmp/new-files/new-image.png
+            alt: Image Alt
+        sources:
+            - 
+                _file: new-image-small.jpg # file located in /tmp/new-files/new-image-small.png
+                media_query: '(max-width: 599px)'
+            -
+                _file: new-image-medium.jpg # file located in /tmp/new-files/new-image-medium.png
+                media_query: '(min-width: 600px) and (max-width: 1000px)'
 ```

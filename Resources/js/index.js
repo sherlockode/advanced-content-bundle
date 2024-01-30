@@ -4,6 +4,7 @@ import 'jquery-ui/ui/widgets/sortable.js';
 import './slug.js';
 import './export.js';
 import './history.js';
+import './acb-slide-collection.js';
 import { notifConfirm } from './acb-notification.js';
 import { buildCustomLayoutFormData, getFormData, updateFormData } from './form.js';
 import { initSortables, calculatePosition, deleteElement } from './layout.js';
@@ -248,28 +249,24 @@ jQuery(function ($) {
     slide.element.on('change', '.simplify-controls', updateControls);
 
     $('body').on('change', '[data-mime-type-restriction]', function (e) {
-        let inputFile = $(this).closest('.acb-widget-container').find('input[type=file]');
-        let errorMessage = $(this).closest('.acb-widget-container').find('.invalid-feedback');
+        let inputFiles = $(this).closest('.acb-widget-container').find('input[type=file]');
+        let mimeTypeOptionContainer = $(this).closest('.acb-widget-container');
+        if ($(this).closest('.picture-field').length > 0) {
+            inputFiles = $(this).closest('.picture-field').find('input[type=file]');
+            mimeTypeOptionContainer = $(this).closest('.picture-field');
+        }
 
-        if (!inputFile.length) {
+        if (!inputFiles.length) {
             return;
         }
 
-        inputFile = inputFile[0];
-
-        if (!inputFile.files.length) {
-            errorMessage.removeClass('d-block').addClass('d-none');
-
-            return;
-        }
-
-        let mimeTypeOption = $(this).closest('.acb-widget-container').find('[data-mime-type-restriction-values]').find(':selected');
+        let mimeTypeOption = mimeTypeOptionContainer.find('[data-mime-type-restriction-values]').find(':selected');
         let mimeTypeValues = [];
 
         if (mimeTypeOption.length) {
             mimeTypeValues = mimeTypeOption.data('mime-type');
         } else {
-            $(this).closest('.acb-widget-container').find('[data-mime-type-restriction-values]').find('option').each(function() {
+            mimeTypeOptionContainer.find('[data-mime-type-restriction-values]').find('option').each(function() {
                 mimeTypeValues = $.merge(mimeTypeValues, $(this).data('mime-type'));
             });
         }
@@ -279,26 +276,38 @@ jQuery(function ($) {
         }
 
         let allImageType = mimeTypeValues.length === 1 && mimeTypeValues[0] === 'image/*';
-        let hasError = true;
+        let mimeTypeValuesMessage = mimeTypeValues.map(type => `"${type}"`);
+        mimeTypeValuesMessage = mimeTypeValuesMessage.join(', ');
 
-        if (allImageType && inputFile.files[0].type.includes('image/')) {
-            hasError = false;
-        } else if (mimeTypeValues.includes(inputFile.files[0].type)) {
-            hasError = false;
-        }
+        inputFiles.each(function(index, inputFile) {
+            if (!inputFile.files.length) {
+                updateFileErrorMessage($(inputFile));
 
-        if (hasError) {
-            let msg = errorMessage.data('error');
-
-            mimeTypeValues = mimeTypeValues.map(type => `"${type}"`);
-            msg = msg.replace('%mime%', inputFile.files[0].type).replace('%allowed_mime%', mimeTypeValues.join(', '));
-
-            errorMessage.html(msg);
-            errorMessage.removeClass('d-none').addClass('d-block');
-        } else {
-            errorMessage.removeClass('d-block').addClass('d-none');
-        }
+                return;
+            }
+            if (allImageType && inputFile.files[0].type.includes('image/')) {
+                updateFileErrorMessage($(inputFile));
+            } else if (mimeTypeValues.includes(inputFile.files[0].type)) {
+                updateFileErrorMessage($(inputFile));
+            } else {
+                updateFileErrorMessage($(inputFile), mimeTypeValuesMessage, inputFile.files[0].type);
+            }
+        });
     });
+
+  function updateFileErrorMessage(inputFile, mimeTypes, currentType) {
+    let errorMessage = inputFile.closest('.acb-widget-container').find('.invalid-feedback');
+    if (typeof mimeTypes === 'undefined') {
+      errorMessage.removeClass('d-block').addClass('d-none');
+    } else {
+      let msg = errorMessage.data('error');
+
+      msg = msg.replace('%mime%', currentType).replace('%allowed_mime%', mimeTypes);
+
+      errorMessage.html(msg);
+      errorMessage.removeClass('d-none').addClass('d-block');
+    }
+  }
 
   function updateRowAfterLayoutUpdate(row) {
     saveExistingField(

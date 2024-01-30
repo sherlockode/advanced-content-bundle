@@ -214,7 +214,7 @@ The built-in namers are:
 to make the filename unique. This is the default namer. His service is 
 `sherlockode_advanced_content.unique_file_namer`;
 - `Sherlockode\AdvancedContentBundle\Naming\ClientOriginalNamer`: keep the original file name.
-His service ID is `̀sherlockode_advanced_content.unique_file_namer`
+His service ID is `̀sherlockode_advanced_content.client_original_file_namer`
 
 You can change the namer through the configuration:
 

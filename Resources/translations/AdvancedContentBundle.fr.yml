@@ -23,6 +23,9 @@ field_type:
         label: Image
         name: Image
         alt: Texte alternatif
+        picture_main: Image principale
+        picture_sources: Images alternatives
+        media_query: Requête media
     textarea:
         label: Zone de texte
     iframe:
@@ -100,6 +103,8 @@ add_element_before: Ajouter un élément avant
 move: Déplacer
 change_display: Changer l'agencement
 collapse: Réduire
+collection_add_item: Ajouter un élément
+collection_remove_item: Supprimer l'élément
 page_type:
     label: Types de page
     description: Typer les pages vous permet de les catégoriser et d'utiliser des mises en page différentes.

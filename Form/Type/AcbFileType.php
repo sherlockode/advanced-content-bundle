@@ -115,6 +115,21 @@ class AcbFileType extends AbstractType
                 $event->setData($data);
             }
         );
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+            if ($form->getConfig()->getCompound()) {
+                $cleanData = [];
+                // clean data to prevent saving empty fields
+                foreach ($form as $key => $child) {
+                    if (isset($data[$key])) {
+                        $cleanData[$key] = $data[$key];
+                    }
+                }
+
+                $event->setData($cleanData);
+            }
+        });
     }
 
     /**
