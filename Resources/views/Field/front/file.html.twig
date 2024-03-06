@@ -1,0 +1,7 @@
+{% if url is not empty %}
+    {% set fileTitle = src %}
+    {% if title is defined and title is not empty %}
+        {% set fileTitle = title %}
+    {% endif %}
+    <a href="{{ url }}" title="{{ fileTitle }}" download>{{ src }}</a>
+{% endif %}
