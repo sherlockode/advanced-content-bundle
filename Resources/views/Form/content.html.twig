@@ -210,6 +210,9 @@
         {% if form.alt is defined %}
             {{ form_row(form.alt) }}
         {% endif %}
+        {% if form.link is defined %}
+            {{ form_row(form.link) }}
+        {% endif %}
         {% if form.mime_type is defined %}
             {% import "@SherlockodeAdvancedContent/Common/Macros/collapse.html.twig" as macro %}
 

@@ -5,6 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Form\Type;
 use Sherlockode\AdvancedContentBundle\Manager\MimeTypeManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -29,6 +30,10 @@ class ImageType extends AbstractType
         $builder
             ->add('alt', TextType::class, [
                 'label' => 'field_type.image.alt',
+                'required' => false,
+            ])
+            ->add('link', UrlType::class, [
+                'label' => 'field_type.image.link',
                 'required' => false,
             ])
         ;

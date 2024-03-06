@@ -2,6 +2,10 @@
     {% set attributes = acb_get_element_attributes(extra|default([]), 'inline') %}
     {% set style = attributes.style|default('') %}
 
+    {% if link is defined and link is not empty %}
+        <a href="{{ link }}">
+    {% endif %}
+
     {% if sources is defined and sources|length > 0 %}
         <picture>
         {% for source in sources %}
@@ -20,5 +24,9 @@
 
     {% if sources is defined and sources|length > 0 %}
         </picture>
+    {% endif %}
+
+    {% if link is defined and link is not empty %}
+        </a>
     {% endif %}
 {% endif %}

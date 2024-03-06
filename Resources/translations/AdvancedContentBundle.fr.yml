@@ -26,6 +26,7 @@ field_type:
         picture_main: Image principale
         picture_sources: Images alternatives
         media_query: Requête media
+        link: Lien de l'image
     textarea:
         label: Zone de texte
     iframe:
