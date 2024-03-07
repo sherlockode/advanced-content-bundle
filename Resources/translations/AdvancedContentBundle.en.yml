@@ -72,6 +72,8 @@ field_type:
         image_label: Slide %nb%
         arrow_previous: Previous
         arrow_next: Next
+    html:
+        label: HTML
     group:
         other: Others
         simple: Simple
