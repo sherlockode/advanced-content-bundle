@@ -55,6 +55,7 @@ function getNewFieldForm(url, type, baseName, addAfter = true) {
       e.preventDefault();
       saveNewFieldData(this, baseName, addAfter);
     });
+    slide.enableBackButton(() => openSlideForNewField(baseName, addAfter));
     slide.open();
     initSortables(slide.content);
   });
