@@ -43,6 +43,11 @@ class File extends AbstractFieldType
         return 'file';
     }
 
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/file.svg';
+    }
+
     /**
      * @param array $value
      *

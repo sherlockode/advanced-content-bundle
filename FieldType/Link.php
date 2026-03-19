@@ -50,6 +50,11 @@ class Link extends AbstractFieldType
         return 'link';
     }
 
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/link.svg';
+    }
+
     /**
      * @param mixed $element
      *

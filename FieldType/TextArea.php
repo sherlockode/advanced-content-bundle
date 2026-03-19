@@ -40,4 +40,9 @@ class TextArea extends AbstractInputType
     {
         return 'textarea';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/textarea.svg';
+    }
 }

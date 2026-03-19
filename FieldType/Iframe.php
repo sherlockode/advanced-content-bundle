@@ -44,4 +44,9 @@ class Iframe extends AbstractFieldType
     {
         return 'iframe';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/iframe.svg';
+    }
 }

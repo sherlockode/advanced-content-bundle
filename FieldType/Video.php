@@ -28,4 +28,9 @@ class Video extends AbstractFieldType
     {
         return 'video';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/video.svg';
+    }
 }

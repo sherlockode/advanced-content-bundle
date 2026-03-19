@@ -1,49 +1,68 @@
 
-.acb-field-list-container {
-    .group-name {
-        font-size: 18px;
-    }
+.acb-field-list-container .group-name {
+    font-size: 18px;
+}
 
-    .acb-field-list {
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: start;
-        padding: 0;
+.acb-field-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    padding: 0;
+}
 
-        .acb-field-item {
-            display: block;
-            position: relative;
-            width: 23%;
-            min-width: 120px;
-            margin: 6px 12px 6px 0;
+.acb-field-item {
+    display: block;
+    position: relative;
+    margin: 6px;
+    height: 200px;
 
-            input {
-                position: absolute;
-                visibility: hidden;
+    input {
+        position: absolute;
+        visibility: hidden;
 
-                &:checked + label {
-                    background: #e5e5e5;
-                    box-shadow: 0 0 4px #999;
-                }
-            }
-
-            label {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border: 1px solid #aaa;
-                border-radius: 4px;
-                padding: 16px;
-                text-align: center;
-                cursor: pointer;
-                font-size: 16px;
-
-                i {
-                    margin: 2px 12px 8px;
-                    font-size: 1.5em;
-                }
-            }
+        &:checked + label {
+            background: #e5e5e5;
+            box-shadow: 0 0 4px #999;
         }
     }
+
+    label {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 16px;
+        height: stretch;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        i {
+            font-size: 1.5em;
+        }
+
+        img {
+            width: 100%;
+            min-height: 0;
+            display: block;
+            padding: 16px;
+        }
+    }
+}
+
+.acb-field-item-header {
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    width: 100%;
+    border-bottom: dashed 1px #aaa;
+    padding: 16px;
+    gap: 8px;
 }
