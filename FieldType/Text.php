@@ -23,4 +23,9 @@ class Text extends AbstractInputType
     {
         return 'text';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/text.svg';
+    }
 }

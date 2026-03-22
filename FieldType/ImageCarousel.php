@@ -29,6 +29,11 @@ class ImageCarousel extends File
         return 'image_carousel';
     }
 
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/image_carousel.svg';
+    }
+
     /**
      * @param mixed $element
      *

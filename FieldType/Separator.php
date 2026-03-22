@@ -28,4 +28,9 @@ class Separator extends AbstractFieldType
     {
         return 'separator';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/separator.svg';
+    }
 }

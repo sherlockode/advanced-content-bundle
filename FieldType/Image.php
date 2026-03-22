@@ -19,6 +19,11 @@ class Image extends File
         return 'fa-solid fa-image';
     }
 
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/image.svg';
+    }
+
     /**
      * Get field's code
      *

@@ -28,4 +28,9 @@ class Title extends AbstractFieldType
     {
         return 'title';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/title.svg';
+    }
 }

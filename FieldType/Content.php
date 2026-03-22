@@ -39,6 +39,11 @@ class Content extends AbstractFieldType
         return 'content';
     }
 
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/content.svg';
+    }
+
     /**
      * @param mixed $element
      *

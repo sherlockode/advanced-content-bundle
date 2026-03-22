@@ -49,6 +49,14 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     }
 
     /**
+     * @return string|null
+     */
+    public function getPreviewPicture()
+    {
+        return null;
+    }
+
+    /**
      * Add element's field(s) to content form
      *
      * @param FormBuilderInterface $builder

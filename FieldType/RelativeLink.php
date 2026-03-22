@@ -35,6 +35,11 @@ class RelativeLink extends Link
         return 'relative_link';
     }
 
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/relative_link.svg';
+    }
+
     /**
      * @return string
      */

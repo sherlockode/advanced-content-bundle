@@ -28,4 +28,9 @@ class Wysiwyg extends AbstractFieldType
     {
         return 'wysiwyg';
     }
+
+    public function getPreviewPicture(): ?string
+    {
+        return 'bundles/sherlockodeadvancedcontent/preview_picture/wysiwyg.svg';
+    }
 }
