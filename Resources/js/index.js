@@ -5,11 +5,18 @@ import './slug.js';
 import './export.js';
 import './history.js';
 import './acb-slide-collection.js';
-import { notifConfirm } from './acb-notification.js';
-import { buildCustomLayoutFormData, getFormData, updateFormData } from './form.js';
-import { initSortables, calculatePosition, deleteElement } from './layout.js';
-import { getCounterFromContainer, getNewPreview } from './utils.js';
-import { updateContentPosition, openSlideForNewField, getNewFieldForm, getEditFieldForm, saveExistingField, submitNewRow } from './content.js';
+import {notifConfirm} from './acb-notification.js';
+import {buildCustomLayoutFormData, getFormData, updateFormData} from './form.js';
+import {calculatePosition, deleteElement, initSortables} from './layout.js';
+import {getCounterFromContainer, getNewPreview} from './utils.js';
+import {
+    getEditFieldForm,
+    getNewFieldForm,
+    openSlideForNewField,
+    saveExistingField,
+    submitNewRow,
+    updateContentPosition
+} from './content.js';
 
 jQuery(function ($) {
     initSortables();

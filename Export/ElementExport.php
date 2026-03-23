@@ -7,7 +7,6 @@ use Sherlockode\AdvancedContentBundle\FieldType\Content;
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
 use Sherlockode\AdvancedContentBundle\FieldType\File;
 use Sherlockode\AdvancedContentBundle\FieldType\Image;
-use Sherlockode\AdvancedContentBundle\LayoutType\Column;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Symfony\Contracts\Translation\TranslatorInterface;

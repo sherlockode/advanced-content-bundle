@@ -1,9 +1,14 @@
 import $ from "jquery";
 import slide from "./slide.js";
-import { buildCustomLayoutFormData, getFormData, updateFormData } from "./form";
-import { notifAlert } from "./acb-notification";
-import { updateCKEditorElement, getCounterFromContainer, replacePlaceholderEditData, replacePlaceholderNewData } from './utils.js';
-import { initSortables, calculatePosition } from './layout.js';
+import {buildCustomLayoutFormData, getFormData, updateFormData} from "./form";
+import {notifAlert} from "./acb-notification";
+import {
+    getCounterFromContainer,
+    replacePlaceholderEditData,
+    replacePlaceholderNewData,
+    updateCKEditorElement
+} from './utils.js';
+import {calculatePosition, initSortables} from './layout.js';
 
 let usedAddFieldBlock = null;
 let usedContainer = null;

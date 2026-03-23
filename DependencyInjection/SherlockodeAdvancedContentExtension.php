@@ -4,10 +4,8 @@ namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
-use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;

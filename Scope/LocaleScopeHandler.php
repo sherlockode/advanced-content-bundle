@@ -4,7 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\Scope;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
 use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

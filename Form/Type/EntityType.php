@@ -3,9 +3,9 @@
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Form\DataTransformer\StringToEntity;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType as SymfonyEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType as SymfonyEntityType;
 
 class EntityType extends AbstractType
 {

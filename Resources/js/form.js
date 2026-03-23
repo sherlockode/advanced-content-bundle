@@ -1,5 +1,5 @@
 import $ from "jquery";
-import { escapeNameForRegExp } from './utils.js';
+import {escapeNameForRegExp} from './utils.js';
 
 let formUpdating = false;
 let formChanged = false;
