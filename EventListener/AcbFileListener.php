@@ -8,7 +8,6 @@ use Sherlockode\AdvancedContentBundle\Event\AcbFilePostValidate;
 use Sherlockode\AdvancedContentBundle\Event\AcbFilePreSubmitEvent;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AcbFileListener implements EventSubscriberInterface
 {

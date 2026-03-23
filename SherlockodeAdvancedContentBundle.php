@@ -2,11 +2,11 @@
 
 namespace Sherlockode\AdvancedContentBundle;
 
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Sherlockode\AdvancedContentBundle\DependencyInjection\Compiler\ElementPass;
 use Sherlockode\AdvancedContentBundle\DependencyInjection\Compiler\FormThemePass;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class SherlockodeAdvancedContentBundle extends Bundle
 {

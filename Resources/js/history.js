@@ -1,6 +1,6 @@
 import $ from "jquery";
-import { notifConfirm } from './acb-notification.js';
-import { hasFormChanged, setFormChanged, isFormUpdating } from './form.js';
+import {notifConfirm} from './acb-notification.js';
+import {hasFormChanged, isFormUpdating, setFormChanged} from './form.js';
 
 let isAddingVersion = false;
 let pageDraftFields = $('[data-page-draft]');

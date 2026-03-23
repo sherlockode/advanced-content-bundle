@@ -1,6 +1,6 @@
 import $ from "jquery";
-import { getFormData, updateFormData } from "./form";
-import { getCounterFromContainer, getNewPreview } from './utils.js';
+import {getFormData, updateFormData} from "./form";
+import {getCounterFromContainer, getNewPreview} from './utils.js';
 
 function initSortables(parent) {
   if (typeof $(this).sortable !== 'undefined') {

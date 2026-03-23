@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\LayoutType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\ColumnType;
-use Symfony\Component\Form\FormBuilderInterface;
 
 class Column extends AbstractLayoutType
 {

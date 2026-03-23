@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\OnFlushEventArgs;
 use Sherlockode\AdvancedContentBundle\Model\ContentVersionInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageVersionInterface;
 use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
