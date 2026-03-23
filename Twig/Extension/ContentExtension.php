@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
+use Twig\Attribute\AsTwigFunction;
 use Doctrine\ORM\EntityManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
@@ -11,99 +14,18 @@ use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 use Symfony\Component\Form\FormView;
 use Twig\Environment;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 
-class ContentExtension extends AbstractExtension
+class ContentExtension
 {
     /**
-     * @var ElementManager
-    */
-    private $elementManager;
-
-    /**
-     * @var Environment
-     */
-    private $twig;
-
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
-     * @var UrlBuilderManager
-     */
-    private $urlBuilderManager;
-
-    /**
-     * @var UserProviderInterface
-     */
-    private $userProvider;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    /**
-     * @var string
-     */
-    private $baseFormTheme;
-
-    /**
-     * @param ElementManager        $elementManager
-     * @param Environment           $twig
-     * @param EntityManager         $em
-     * @param UrlBuilderManager     $urlBuilderManager
-     * @param UserProviderInterface $userProvider
-     * @param ScopeHandlerInterface $scopeHandler
      * @param string                $baseFormTheme
      */
-    public function __construct(
-        ElementManager $elementManager,
-        Environment $twig,
-        EntityManager $em,
-        UrlBuilderManager $urlBuilderManager,
-        UserProviderInterface $userProvider,
-        ScopeHandlerInterface $scopeHandler,
-        $baseFormTheme
-    ) {
-        $this->elementManager = $elementManager;
-        $this->twig = $twig;
-        $this->em = $em;
-        $this->urlBuilderManager = $urlBuilderManager;
-        $this->userProvider = $userProvider;
-        $this->scopeHandler = $scopeHandler;
-        $this->baseFormTheme = $baseFormTheme;
-    }
-
-    /**
-     * Add specific twig function
-     *
-     * @return TwigFunction[]
-     */
-    public function getFunctions()
+    public function __construct(private readonly ElementManager $elementManager, private readonly Environment $twig, private readonly EntityManager $em, private readonly UrlBuilderManager $urlBuilderManager, private readonly UserProviderInterface $userProvider, private readonly ScopeHandlerInterface $scopeHandler, private $baseFormTheme)
     {
-        return [
-            new TwigFunction('acb_render_element', [$this, 'renderElement'], ['is_safe' => ['html']]),
-            new TwigFunction('acb_element_preview', [$this, 'renderElementPreview'], ['is_safe' => ['html']]),
-            new TwigFunction('acb_find_entity', [$this, 'findEntity']),
-            new TwigFunction('acb_base_form_theme', [$this, 'getBaseFormTheme']),
-            new TwigFunction('acb_get_file_url', [$this, 'getFileUrl']),
-            new TwigFunction('acb_get_full_url', [$this, 'getFullUrl']),
-            new TwigFunction('acb_get_element_label', [$this, 'getElementLabel']),
-            new TwigFunction('acb_get_column_classes', [$this, 'getColumnClasses']),
-            new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
-            new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
-            new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
-            new TwigFunction('acb_get_version_user_name', [$this, 'getVersionUserName']),
-            new TwigFunction('acb_get_content_by_slug', [$this, 'getContentBySlug']),
-            new TwigFunction('acb_get_col_size', [$this, 'getColSize']),
-        ];
     }
 
-    public function renderElement(array $elementData)
+    #[AsTwigFunction(name: 'acb_render_element', isSafe: ['html'])]
+    public function renderElement(array $elementData): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
         $params = $element->getRawData($elementData);
@@ -112,11 +34,10 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * @param array         $elementData
      * @param FormView|null $form
      *
-     * @return string
      */
+    #[AsTwigFunction(name: 'acb_element_preview', isSafe: ['html'])]
     public function renderElementPreview(array $elementData, FormView $form = null): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
@@ -131,6 +52,7 @@ class ContentExtension extends AbstractExtension
     }
 
 
+    #[AsTwigFunction(name: 'acb_find_entity')]
     public function findEntity($identifier, $class)
     {
         return $this->em->getRepository($class)->find($identifier);
@@ -139,36 +61,25 @@ class ContentExtension extends AbstractExtension
     /**
      * @return string
      */
+    #[AsTwigFunction(name: 'acb_base_form_theme')]
     public function getBaseFormTheme()
     {
         return $this->baseFormTheme;
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
+    #[AsTwigFunction(name: 'acb_get_file_url')]
     public function getFileUrl(string $fileName): string
     {
         return $this->urlBuilderManager->getFileUrl($fileName);
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
+    #[AsTwigFunction(name: 'acb_get_full_url')]
     public function getFullUrl(string $url): string
     {
         return $this->urlBuilderManager->getFullUrl($url);
     }
 
-    /**
-     * @param string $elementType
-     *
-     * @return string
-     */
+    #[AsTwigFunction(name: 'acb_get_element_label')]
     public function getElementLabel(string $elementType): string
     {
         $element = $this->elementManager->getElementByCode($elementType);
@@ -176,11 +87,7 @@ class ContentExtension extends AbstractExtension
         return $element->getFormFieldLabel();
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
+    #[AsTwigFunction(name: 'acb_get_column_classes')]
     public function getColumnClasses(array $config): array
     {
         $classes = [];
@@ -201,6 +108,7 @@ class ContentExtension extends AbstractExtension
             if (isset($config['size_' . $device])) {
                 $classes[] = '-' === $size ? 'col' : 'col-' . $device . '-' . $config['size_' . $device];
             }
+
             if (isset($config['offset_' . $device])) {
                 $classes[] = 'offset-' . $device . '-' . $config['offset_' . $device];
             }
@@ -209,11 +117,7 @@ class ContentExtension extends AbstractExtension
         return $classes;
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
+    #[AsTwigFunction(name: 'acb_get_row_classes')]
     public function getRowClasses(array $config): array
     {
         $classes = [];
@@ -225,12 +129,7 @@ class ContentExtension extends AbstractExtension
         return $classes;
     }
 
-    /**
-     * @param array  $extra
-     * @param string $defaultDisplay
-     *
-     * @return array
-     */
+    #[AsTwigFunction(name: 'acb_get_element_attributes')]
     public function getElementAttributes(array $extra, string $defaultDisplay = 'block'): array
     {
         return [
@@ -240,12 +139,6 @@ class ContentExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @param array  $extra
-     * @param string $defaultDisplay
-     *
-     * @return array
-     */
     private function getElementClasses(array $extra, string $defaultDisplay = 'block'): array
     {
         $classes = [];
@@ -259,7 +152,8 @@ class ContentExtension extends AbstractExtension
         if (!is_array($hideOn)) {
             $hideOn = [$hideOn];
         }
-        if (count($hideOn) > 0) {
+
+        if ($hideOn !== []) {
             $devices = [
                 'xs',
                 'sm',
@@ -275,11 +169,13 @@ class ContentExtension extends AbstractExtension
                     if ($lastHidden === null || ($lastHidden + 1) !== $key) {
                         $classes[] = 'd-' . ($device === 'xs' ? '' : $device . '-') . 'none';
                     }
+
                     $lastHidden = $key;
                 } else {
                     if ($device !== 'xs' && ($lastDisplayed === null || ($lastDisplayed + 1) !== $key)) {
                         $classes[] = 'd-' . $device . '-' . $defaultDisplay;
                     }
+
                     $lastDisplayed = $key;
                 }
             }
@@ -288,11 +184,6 @@ class ContentExtension extends AbstractExtension
         return $classes;
     }
 
-    /**
-     * @param array $extra
-     *
-     * @return array
-     */
     private function getElementStyles(array $extra): array
     {
         $design = $extra['design'] ?? [];
@@ -320,18 +211,13 @@ class ContentExtension extends AbstractExtension
         return $styles;
     }
 
-    /**
-     * @param array  $design
-     * @param string $property
-     *
-     * @return string|null
-     */
     private function getColorForProperty(array $design, string $property): ?string
     {
         $selectColor = $design[$property . '_color_select'] ?? 'none';
         if ($selectColor === 'none') {
             return null;
         }
+
         if ($selectColor === 'transparent') {
             return 'transparent';
         }
@@ -339,9 +225,6 @@ class ContentExtension extends AbstractExtension
         return $design[$property . '_color'] ?? null;
     }
 
-    /**
-     * @return array
-     */
     private function getPixelProperties(): array
     {
         $directions = ['top', 'right', 'bottom', 'left'];
@@ -352,21 +235,19 @@ class ContentExtension extends AbstractExtension
                 $pixelProperties[] = sprintf($property, $direction);
             }
         }
-        $pixelProperties = array_merge($pixelProperties, [
+
+        return array_merge($pixelProperties, [
             'border_top_left_radius',
             'border_top_right_radius',
             'border_bottom_right_radius',
             'border_bottom_left_radius',
         ]);
-
-        return $pixelProperties;
     }
 
     /**
-     * @param FormView $form
-     *
      * @return array|mixed
      */
+    #[AsTwigFunction(name: 'acb_get_json_form')]
     public function getJsonForm(FormView $form)
     {
         // Looping on multiple choice type children will return an array of all available choices,
@@ -376,45 +257,33 @@ class ContentExtension extends AbstractExtension
             && isset($form->vars['multiple'])
             && true === $form->vars['multiple']
         );
-
         if ($form->vars['compound'] && !$useValueForSerialization) {
             foreach ($form->children as $child) {
                 $json[$child->vars['name']] = $this->getJsonForm($child);
             }
-
             return $json ?? [];
-        } elseif ($useValueForSerialization || is_object($form->vars['data'])) {
+        }
+
+        if ($useValueForSerialization || is_object($form->vars['data'])) {
             return $form->vars['value'];
         }
 
         return $form->vars['data'];
     }
 
-    /**
-     * @param VersionInterface $version
-     *
-     * @return string
-     */
+    #[AsTwigFunction(name: 'acb_get_version_user_name')]
     public function getVersionUserName(VersionInterface $version): string
     {
         return $this->userProvider->getUserName($version->getUserId());
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return ContentInterface|null
-     */
+    #[AsTwigFunction(name: 'acb_get_content_by_slug')]
     public function getContentBySlug(string $slug): ?ContentInterface
     {
         return $this->scopeHandler->getEntityForCurrentScope('content', ['slug' => $slug]);
     }
 
-    /**
-     * @param array $config
-     *
-     * @return string
-     */
+    #[AsTwigFunction(name: 'acb_get_col_size')]
     public function getColSize(array $config): string
     {
         $colSize = $this->cleanColSize($config['size']);
@@ -436,20 +305,15 @@ class ContentExtension extends AbstractExtension
             return $colSize;
         }
 
-        return $colSize + $colOffset;
+        return (string) ($colSize + $colOffset);
     }
 
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private function cleanColSize(string $value): string
+    private function cleanColSize(string|int $value): string
     {
         if ('auto' === $value || '-' === $value) {
             return str_replace('-', '', $value);
         }
 
-        return min(12, max(1, is_numeric($value) ? $value : 12));
+        return (string) min(12, max(1, is_numeric($value) ? $value : 12));
     }
 }

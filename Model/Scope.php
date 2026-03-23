@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 abstract class Scope implements ScopeInterface
@@ -9,9 +11,6 @@ abstract class Scope implements ScopeInterface
      */
     protected $id;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;

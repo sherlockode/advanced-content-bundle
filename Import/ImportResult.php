@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 class ImportResult
 {
     const FAILURE = 0;
+
     const SUCCESS = 1;
+
     const UNKNOWN = 2;
 
-    /**
-     * @var int
-     */
-    private $status;
+    private int $status = self::UNKNOWN;
 
     /**
      * @var array
@@ -20,7 +21,6 @@ class ImportResult
 
     public function __construct()
     {
-        $this->status = self::UNKNOWN;
     }
 
     /**
@@ -34,7 +34,7 @@ class ImportResult
     /**
      * @return bool
      */
-    public function isSuccess()
+    public function isSuccess(): bool
     {
         return $this->status == self::SUCCESS;
     }
@@ -42,7 +42,7 @@ class ImportResult
     /**
      * @return $this
      */
-    public function success()
+    public function success(): static
     {
         $this->status = self::SUCCESS;
 
@@ -52,7 +52,7 @@ class ImportResult
     /**
      * @return $this
      */
-    public function failure()
+    public function failure(): static
     {
         $this->status = self::FAILURE;
 
@@ -72,7 +72,7 @@ class ImportResult
      *
      * @return $this
      */
-    public function addMessage($message)
+    public function addMessage($message): static
     {
         $this->messages[] = $message;
 

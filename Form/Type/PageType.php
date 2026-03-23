@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -19,37 +21,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param ConfigurationManager  $configurationManager
-     * @param ScopeHandlerInterface $scopeHandler
-     * @param TranslatorInterface   $translator
-     */
-    public function __construct(
-        ConfigurationManager $configurationManager,
-        ScopeHandlerInterface $scopeHandler,
-        TranslatorInterface $translator
-    ) {
-        $this->configurationManager = $configurationManager;
-        $this->scopeHandler = $scopeHandler;
-        $this->translator = $translator;
+    public function __construct(private readonly ConfigurationManager $configurationManager, private readonly ScopeHandlerInterface $scopeHandler, private readonly TranslatorInterface $translator)
+    {
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('pageIdentifier', TextType::class, [
@@ -79,7 +55,7 @@ class PageType extends AbstractType
             ]);
         }
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event): void {
             $form = $event->getForm();
             /** @var PageInterface $page */
             $page = $event->getData();
@@ -100,7 +76,7 @@ class PageType extends AbstractType
         });
 
         // fill the content name and slug as they are not part of the form in Page context
-        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event): void {
             /** @var PageInterface $page */
             $page = $event->getData();
             $content = $page->getContent();
@@ -108,6 +84,7 @@ class PageType extends AbstractType
                 $content = new ($this->configurationManager->getEntityClass('content'));
                 $page->setContent($content);
             }
+
             if (!$content->getId()) {
                 $content->setName('page-' . $page->getPageIdentifier() . '-' . bin2hex(random_bytes(6)));
                 $content->setSlug($page->getPageMeta()->getSlug() . '-' . bin2hex(random_bytes(6)));
@@ -125,6 +102,7 @@ class PageType extends AbstractType
                     ));
                 }
             }
+
             if (!$this->scopeHandler->isPageIdentifierValid($page)) {
                 if ($this->configurationManager->isScopesEnabled()) {
                     $form->get('pageIdentifier')->addError(new FormError(
@@ -138,7 +116,7 @@ class PageType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event): void {
             $form = $event->getForm();
             if ($form->isValid()) {
                 // Reset page version to make sure that page is flagged as to be updated
@@ -147,7 +125,7 @@ class PageType extends AbstractType
         });
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => $this->configurationManager->getEntityClass('page'),

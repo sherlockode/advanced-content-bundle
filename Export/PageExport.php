@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Export;
 
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
@@ -7,36 +9,23 @@ use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 
 class PageExport
 {
-    /**
-     * @var ContentExport
-     */
-    private $contentExport;
+    private ?ContentExport $contentExport = null;
 
-    /**
-     * @var ScopeExport
-     */
-    private $scopeExport;
-
-    /**
-     * @param ScopeExport $scopeExport
-     */
-    public function __construct(ScopeExport $scopeExport)
+    public function __construct(private readonly ScopeExport $scopeExport)
     {
-        $this->scopeExport = $scopeExport;
     }
 
     /**
-     * @param PageInterface $page
-     *
      * @return array
      */
-    public function exportData(PageInterface $page)
+    public function exportData(PageInterface $page): array
     {
         $data = [];
         $data['status'] = $page->getStatus();
         if ($page->getPageType() instanceof PageTypeInterface) {
             $data['pageType'] = $page->getPageType()->getName();
         }
+
         $data = array_merge($data, $this->scopeExport->getEntityScopes($page));
         if ($page->getContent() !== null) {
             $data['content'] = $this->contentExport->exportElements($page->getContent()->getData());
@@ -52,19 +41,14 @@ class PageExport
             ];
         }
 
-        $data = [
+        return [
             'pages' => [
                 $page->getPageIdentifier() => $data,
             ],
         ];
-
-        return $data;
     }
 
-    /**
-     * @param ContentExport $contentExport
-     */
-    public function setContentExport(ContentExport $contentExport)
+    public function setContentExport(ContentExport $contentExport): void
     {
         $this->contentExport = $contentExport;
     }

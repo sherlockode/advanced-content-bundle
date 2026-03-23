@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
@@ -9,42 +11,27 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploadManager
 {
     /**
-     * @var NamerInterface
+     * @param string $targetDir
+     * @param string $webPath
      */
-    private $fileNamer;
-
-    /**
-     * @var string
-     */
-    private $targetDir;
-
-    /**
-     * @var string
-     */
-    private $webPath;
-
-    public function __construct(NamerInterface $fileNamer, $targetDir, $webPath)
+    public function __construct(private readonly NamerInterface $fileNamer, private $targetDir, private $webPath)
     {
-        $this->fileNamer = $fileNamer;
-        $this->targetDir = $targetDir;
-        $this->webPath = $webPath;
     }
 
     /**
      * Upload file on server
      *
      * @param UploadedFile|null $file
-     * @param string|null       $fileName
      *
      * @return string
      */
     public function upload(UploadedFile $file = null,  ?string $fileName = null)
     {
-        if ($file === null) {
+        if (!$file instanceof UploadedFile) {
             return '';
         }
 
-        $fileName =  $fileName ?? $this->getFileName($file);
+        $fileName ??= $this->getFileName($file);
         $file->move($this->getTargetDir(), $fileName);
 
         return $fileName;
@@ -53,7 +40,6 @@ class UploadManager
     /**
      * Copy file into acb files directory
      *
-     * @param File $file
      *
      * @return string
      */
@@ -63,9 +49,11 @@ class UploadManager
         if (!$file->isReadable()) {
             throw new \Exception(sprintf('Source file %s does not exist', $file->getRealPath()));
         }
-        if (!is_writeable($this->getTargetDir())) {
+
+        if (!is_writable($this->getTargetDir())) {
             throw new \Exception(sprintf('Target directory %s is not writeable', $this->getTargetDir()));
         }
+
         copy($file->getRealPath(), $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName);
 
         return $fileName;
@@ -76,7 +64,7 @@ class UploadManager
      *
      * @param string $fileName
      */
-    public function remove($fileName)
+    public function remove($fileName): void
     {
         $fileName = $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName;
 
@@ -90,11 +78,10 @@ class UploadManager
     /**
      * Get file name
      *
-     * @param UploadedFile|File $file
      *
      * @return string
      */
-    public function getFileName(File $file)
+    public function getFileName(File $file): string
     {
         return $this->fileNamer->getFilename($file);
     }
@@ -104,9 +91,9 @@ class UploadManager
      *
      * @return bool
      */
-    public function isFileUploaded($src)
+    public function isFileUploaded(?string $src)
     {
-        if (empty($src)) {
+        if (in_array($src, [null, '', '0'], true)) {
             return false;
         }
 

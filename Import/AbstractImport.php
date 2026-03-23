@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Cocur\Slugify\Slugify;
@@ -12,25 +14,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractImport
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
-    /**
-     * @var ConfigurationManager
-     */
-    protected $configurationManager;
+    protected ConfigurationManager $configurationManager;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var ScopeHandlerInterface
-     */
-    protected $scopeHandler;
+    protected ScopeHandlerInterface $scopeHandler;
 
     /**
      * @var array
@@ -52,12 +42,6 @@ abstract class AbstractImport
      */
     protected $errors = [];
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param TranslatorInterface    $translator
-     * @param ScopeHandlerInterface  $scopeHandler
-     */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
@@ -107,13 +91,14 @@ abstract class AbstractImport
             foreach ($this->errors as $error) {
                 $result->addMessage($error);
             }
+
             if (count($this->errors) > 0) {
                 $result->failure();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $result
                 ->failure()
-                ->addMessage($e->getMessage())
+                ->addMessage($exception->getMessage())
             ;
         }
 
@@ -139,22 +124,21 @@ abstract class AbstractImport
     }
 
     /**
-     * @param array $scopesData
      *
-     * @return array
      *
      * @throws \Exception
      */
     protected function getScopesForEntity(array $scopesData): array
     {
         if (!$this->configurationManager->isScopesEnabled()) {
-            if (count($scopesData) > 0) {
+            if ($scopesData !== []) {
                 throw new \Exception($this->translator->trans(
                     'init.errors.scopes_disabled',
                     [],
                     'AdvancedContentBundle'
                 ));
             }
+
             return [];
         }
 
@@ -168,6 +152,7 @@ abstract class AbstractImport
                     'AdvancedContentBundle'
                 ));
             }
+
             $scopes[] = $scope;
         }
 
@@ -175,11 +160,7 @@ abstract class AbstractImport
     }
 
     /**
-     * @param string $entityClass
-     * @param array  $criteria
-     * @param array  $scopes
      *
-     * @return ScopableInterface|null
      *
      * @throws \Exception
      */
@@ -189,21 +170,20 @@ abstract class AbstractImport
         if (count($existingEntities) === 0) {
             return null;
         }
+
         if (count($existingEntities) === 1) {
             return reset($existingEntities);
         }
 
         $entity = null;
         foreach ($existingEntities as $existingEntity) {
-            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), function ($a, $b) {
-                return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
-            });
+            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), fn($a, $b): int => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
 
             if (count($result) === count($scopes)) {
                 return $existingEntity;
             }
 
-            if (count($result) > 0) {
+            if ($result !== []) {
                 if ($entity !== null) {
                     throw new \Exception($this->translator->trans(
                         'init.errors.multiple_entities_same_scope',
@@ -211,6 +191,7 @@ abstract class AbstractImport
                         'AdvancedContentBundle'
                     ));
                 }
+
                 $entity = $existingEntity;
             }
         }
@@ -219,7 +200,6 @@ abstract class AbstractImport
     }
 
     /**
-     * @param ScopableInterface      $entity
      * @param array|ScopeInterface[] $scopes
      */
     protected function updateEntityScopes(ScopableInterface $entity, array $scopes): void
@@ -231,8 +211,10 @@ abstract class AbstractImport
                     continue 2;
                 }
             }
+
             $entity->removeScope($existingScope);
         }
+
         foreach ($scopes as $scope) {
             $entity->addScope($scope);
         }

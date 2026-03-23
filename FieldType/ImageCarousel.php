@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\ImageCarouselType;
@@ -53,6 +55,7 @@ class ImageCarousel extends File
             if (isset($imageData['delete'])) {
                 unset($imageData['delete']);
             }
+
             $element['images'][$key] = $imageData;
         }
 

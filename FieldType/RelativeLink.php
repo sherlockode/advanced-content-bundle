@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
@@ -7,17 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RelativeLink extends Link
 {
-    /**
-     * @var UrlBuilderManager
-     */
-    private $urlBuilderManager;
-
-    /**
-     * @param UrlBuilderManager $urlBuilderManager
-     */
-    public function __construct(UrlBuilderManager $urlBuilderManager)
+    public function __construct(private readonly UrlBuilderManager $urlBuilderManager)
     {
-        $this->urlBuilderManager = $urlBuilderManager;
     }
 
     public function getPreviewTemplate()
@@ -40,20 +33,12 @@ class RelativeLink extends Link
         return 'bundles/sherlockodeadvancedcontent/preview_picture/relative_link.svg';
     }
 
-    /**
-     * @return string
-     */
-    protected function getUrlFormType()
+    protected function getUrlFormType(): string
     {
         return TextType::class;
     }
 
-    /**
-     * @param array $value
-     *
-     * @return string
-     */
-    protected function getUrlValue($value)
+    protected function getUrlValue(array $value): string
     {
         return $this->urlBuilderManager->getFullUrl($value['url'] ?? '');
     }

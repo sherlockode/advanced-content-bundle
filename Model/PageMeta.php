@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -150,8 +152,6 @@ abstract class PageMeta implements PageMetaInterface
     }
 
     /**
-     * @param PageInterface $page
-     *
      * @return $this
      */
     public function setPage(PageInterface $page)
@@ -170,8 +170,6 @@ abstract class PageMeta implements PageMetaInterface
     }
 
     /**
-     * @param PageMetaVersionInterface $pageMetaVersion
-     *
      * @return $this
      */
     public function addVersion(PageMetaVersionInterface $pageMetaVersion)
@@ -183,8 +181,6 @@ abstract class PageMeta implements PageMetaInterface
     }
 
     /**
-     * @param PageMetaVersionInterface $pageMetaVersion
-     *
      * @return $this
      */
     public function removeVersion(PageMetaVersionInterface $pageMetaVersion)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -7,31 +9,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MimeTypeManager
 {
     const MIME_TYPE_IMAGE = 10;
+
     const MIME_TYPE_PDF = 20;
+
     const MIME_TYPE_EXE = 30;
+
     const MIME_TYPE_ARCHIVE = 40;
+
     const MIME_TYPE_TEXT = 50;
+
     const MIME_TYPE_SPREADSHEET = 60;
+
     const MIME_TYPE_MULTIMEDIA = 70;
 
-    /**
-     * @var array
-     */
-    private $mimeTypes;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param array               $mimeTypes
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(array $mimeTypes, TranslatorInterface $translator)
+    public function __construct(private array $mimeTypes, private readonly TranslatorInterface $translator)
     {
-        $this->mimeTypes = $mimeTypes;
-        $this->translator = $translator;
     }
 
     /**
@@ -50,12 +42,7 @@ class MimeTypeManager
         ];
     }
 
-    /**
-     * @param string $code
-     *
-     * @return array
-     */
-    public function getMimeTypesByCode(string $code): array
+    public function getMimeTypesByCode(string|int $code): array
     {
         $mimeTypes = [
             self::MIME_TYPE_IMAGE => 'sherlockode_advanced_content.mime_type_group.image',
@@ -80,12 +67,9 @@ class MimeTypeManager
         return $this->mimeTypes[$mimeTypes[$code]];
     }
 
-    /**
-     * @return array
-     */
     public function getImageMimeTypesChoices(): array
     {
-        $types = $this->getMimeTypesByCode(self::MIME_TYPE_IMAGE);
+        $types = $this->getMimeTypesByCode((string) self::MIME_TYPE_IMAGE);
         $extensions = [];
 
         if (count($types) === 1 && $types[0] === 'image/*') {
@@ -95,22 +79,14 @@ class MimeTypeManager
         }
 
         foreach ($types as $type) {
-            $extensions[] = basename($type);
+            $extensions[] = basename((string) $type);
         }
 
         return array_combine($extensions, $extensions);
     }
 
-    /**
-     * @return array
-     */
     public function getAllMimeTypes(): array
     {
-        $mimeTypes = [];
-        foreach ($this->mimeTypes as $item) {
-            $mimeTypes[] = $item;
-        }
-
-        return array_merge([], ...$mimeTypes);
+        return array_merge([], ...array_values($this->mimeTypes));
     }
 }

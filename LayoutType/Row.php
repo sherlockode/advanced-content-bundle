@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\LayoutType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\RowType;
@@ -16,9 +18,6 @@ class Row extends AbstractLayoutType
         return 'fa-solid fa-bars';
     }
 
-    /**
-     * @return string|null
-     */
     protected function getConfigurationFormType(): ?string
     {
         return RowType::class;

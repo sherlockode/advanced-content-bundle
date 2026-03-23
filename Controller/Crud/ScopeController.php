@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
@@ -10,26 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ScopeController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     */
-    public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager
-    ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
+    public function __construct(private readonly EntityManagerInterface $em, private readonly ConfigurationManager $configurationManager)
+    {
     }
 
     /**
@@ -37,7 +22,7 @@ class ScopeController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id): RedirectResponse
     {
         $scope = $this->em->getRepository($this->configurationManager->getEntityClass('scope'))->find($id);
 

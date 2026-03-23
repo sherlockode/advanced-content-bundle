@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\LinkType;
@@ -35,7 +37,7 @@ class Link extends AbstractFieldType
     /**
      * @return string
      */
-    protected function getUrlFormType()
+    protected function getUrlFormType(): string
     {
         return UrlType::class;
     }
@@ -78,7 +80,7 @@ class Link extends AbstractFieldType
      *
      * @return string
      */
-    protected function getUrlValue($value)
+    protected function getUrlValue(array $value)
     {
         return $value['url'] ?? '';
     }

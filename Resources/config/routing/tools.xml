@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     <route id="sherlockode_acb_tools_index" path="/tools">
-        <default key="_controller">sherlockode_advanced_content.controller.tools::indexAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.tools::index</default>
     </route>
     <route id="sherlockode_acb_tools_import" path="/tools/import">
-        <default key="_controller">sherlockode_advanced_content.controller.tools::importAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.tools::import</default>
     </route>
     <route id="sherlockode_acb_tools_export" path="/tools/export">
-        <default key="_controller">sherlockode_advanced_content.controller.tools::exportAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.tools::export</default>
     </route>
     <route id="sherlockode_acb_tools_page_type_delete" path="/tools/page-type/delete/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.tools::deletePageTypeAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.tools::deletePageType</default>
     </route>
 </routes>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,30 +11,12 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class StringToEntity implements DataTransformerInterface
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $entityClass;
-
-    /**
-     * @var string
-     */
-    private $identifierField;
-
-    /**
      * @param EntityManagerInterface $oe
      * @param string                 $entityClass
      * @param string                 $identifierField
      */
-    public function __construct(EntityManagerInterface $em, $entityClass, $identifierField)
+    public function __construct(private readonly EntityManagerInterface $em, private $entityClass, private $identifierField)
     {
-        $this->em = $em;
-        $this->entityClass = $entityClass;
-        $this->identifierField = $identifierField;
     }
 
     /**
@@ -42,17 +26,15 @@ class StringToEntity implements DataTransformerInterface
      *
      * @return object|null
      */
-    public function transform($valueAsString)
+    public function transform($valueAsString): mixed
     {
         if (empty($valueAsString)) {
             return null;
         }
 
-        $entity = $this->em->getRepository($this->entityClass)->findOneBy([
+        return $this->em->getRepository($this->entityClass)->findOneBy([
             $this->identifierField => $valueAsString,
         ]);
-
-        return $entity;
     }
 
     /**
@@ -62,7 +44,7 @@ class StringToEntity implements DataTransformerInterface
      *
      * @return string
      */
-    public function reverseTransform($entity)
+    public function reverseTransform($entity): mixed
     {
         if (empty($entity)) {
             return null;

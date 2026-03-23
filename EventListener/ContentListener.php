@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -10,36 +12,18 @@ use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentListener
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     * @param VersionManager       $versionManager
-     */
-    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager, private readonly VersionManager $versionManager)
     {
-        $this->configurationManager = $configurationManager;
-        $this->versionManager = $versionManager;
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
 
         if (!$entity instanceof ContentInterface) {
             return;
         }
+
         if ($entity->getPage() !== null) {
             return;
         }
@@ -47,10 +31,7 @@ class ContentListener
         $entity->setData($this->versionManager->getContentData($entity), false);
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
@@ -66,6 +47,7 @@ class ContentListener
             if (!$entity instanceof ContentInterface) {
                 continue;
             }
+
             if ($entity->getPage() !== null) {
                 continue;
             }

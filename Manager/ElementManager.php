@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Element\ElementInterface;
@@ -12,33 +14,26 @@ class ElementManager
     /**
      * @var ElementInterface[]
      */
-    private $elements;
+    private array $elements = [];
 
-    /**
-     * @var array
-     */
-    private $fieldsConfiguration;
-
-    public function __construct(array $fieldsConfiguration)
+    public function __construct(private array $fieldsConfiguration)
     {
-        $this->elements = [];
-        $this->fieldsConfiguration = $fieldsConfiguration;
     }
 
     /**
      * Add field type
-     *
-     * @param FieldTypeInterface $fieldType
      */
-    public function addFieldType(FieldTypeInterface $fieldType)
+    public function addFieldType(FieldTypeInterface $fieldType): void
     {
         $enabled = true;
         if (isset($this->fieldsConfiguration[$fieldType->getCode()])) {
             if ($this->fieldsConfiguration[$fieldType->getCode()]['enabled'] === false) {
                 $enabled = false;
             }
+
             $fieldType->setConfigData($this->fieldsConfiguration[$fieldType->getCode()]);
         }
+
         if ($enabled) {
             $this->elements[$fieldType->getCode()] = $fieldType;
         }
@@ -49,7 +44,7 @@ class ElementManager
      *
      * @return array
      */
-    public function getGroupedFieldTypes()
+    public function getGroupedFieldTypes(): array
     {
         $choices = [];
         foreach ($this->elements as $element) {
@@ -58,6 +53,7 @@ class ElementManager
                 if (!isset($choices[$fieldGroup])) {
                     $choices[$fieldGroup] = [];
                 }
+
                 $choices[$fieldGroup][$element->getFormFieldLabel()] = $element;
             }
         }
@@ -67,10 +63,8 @@ class ElementManager
 
     /**
      * Add layout type
-     *
-     * @param LayoutTypeInterface $layoutType
      */
-    public function addLayoutType(LayoutTypeInterface $layoutType)
+    public function addLayoutType(LayoutTypeInterface $layoutType): void
     {
         $this->elements[$layoutType->getCode()] = $layoutType;
     }
@@ -89,6 +83,7 @@ class ElementManager
         if (!isset($this->elements[$elementCode])) {
             throw new InvalidElementException(sprintf('Element "%s" is not handled.', $elementCode));
         }
+
         return $this->elements[$elementCode];
     }
 }

@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.1",
+        "php": "^8.2",
         "cocur/slugify": "^4.0",
-        "symfony/form": "^5.3 || ^6.0",
-        "symfony/framework-bundle": "^5.3 || ^6.0",
-        "symfony/twig-bundle": "^5.3 || ^6.0",
-        "twig/twig": "^2.0 || ^3.0"
+        "symfony/form": "^7.4",
+        "symfony/framework-bundle": "^7.4",
+        "symfony/twig-bundle": "^7.4",
+        "twig/twig": "^3.0"
     },
     "suggest": {
         "friendsofsymfony/ckeditor-bundle": "Required for the WYSIWYG field type",

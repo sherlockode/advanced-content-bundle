@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Element;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,7 +31,6 @@ interface ElementInterface
     /**
      * Add element's field(s) to content form
      *
-     * @param FormBuilderInterface $builder
      *
      * @return void
      */

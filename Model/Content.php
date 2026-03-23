@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,7 +27,7 @@ abstract class Content implements ContentInterface, ScopableInterface
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * @var PageInterface
@@ -52,7 +54,6 @@ abstract class Content implements ContentInterface, ScopableInterface
      */
     public function __construct()
     {
-        $this->data = [];
         $this->versions = new ArrayCollection();
         $this->scopes = new ArrayCollection();
     }
@@ -121,8 +122,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param array $data
-     * @param bool  $resetContentVersion
      *
      * @return $this
      */
@@ -145,8 +144,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param PageInterface $page
-     *
      * @return $this
      */
     public function setPage(PageInterface $page = null)
@@ -156,17 +153,12 @@ abstract class Content implements ContentInterface, ScopableInterface
         return $this;
     }
 
-    /**
-     * @return ContentVersionInterface|null
-     */
     public function getContentVersion(): ?ContentVersionInterface
     {
         return $this->contentVersion;
     }
 
     /**
-     * @param ContentVersionInterface|null $contentVersion
-     *
      * @return $this
      */
     public function setContentVersion(?ContentVersionInterface $contentVersion)
@@ -185,8 +177,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ContentVersionInterface $contentVersion
-     *
      * @return $this
      */
     public function addVersion(ContentVersionInterface $contentVersion)
@@ -198,8 +188,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ContentVersionInterface $contentVersion
-     *
      * @return $this
      */
     public function removeVersion(ContentVersionInterface $contentVersion)
@@ -218,8 +206,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function addScope(ScopeInterface $scope)
@@ -230,8 +216,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function removeScope(ScopeInterface $scope)

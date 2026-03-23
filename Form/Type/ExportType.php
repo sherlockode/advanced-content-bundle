@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
@@ -13,28 +15,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ExportType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('page', EntityType::class, [
                 'label' => 'tools.export.page',
                 'class' => $this->configurationManager->getEntityClass('page'),
-                'choice_label' => function(PageInterface $page) {
-                    return $page->getPageMeta()->getTitle();
-                },
+                'choice_label' => fn(PageInterface $page) => $page->getPageMeta()->getTitle(),
                 'expanded' => true,
                 'multiple' => true,
                 'attr' => ['class' => 'acb-export-entity'],
@@ -53,11 +44,9 @@ class ExportType extends AbstractType
                 'multiple' => true,
                 'attr' => ['class' => 'acb-export-entity'],
                 'required' => false,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')
-                        ->leftJoin('c.page', 'p')
-                        ->where('p.id IS NULL');
-                }
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('c')
+                    ->leftJoin('c.page', 'p')
+                    ->where('p.id IS NULL')
             ])
             ->add('contentAll', CheckboxType::class, [
                 'label' => 'tools.export.all',
@@ -67,7 +56,7 @@ class ExportType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',

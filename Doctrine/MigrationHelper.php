@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Doctrine;
 
 use Doctrine\DBAL\Driver\Exception as DriverException;
@@ -9,30 +11,12 @@ use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 
 class MigrationHelper implements MigrationHelperInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var array
-     */
-    private $mapping;
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param array                  $mapping
-     */
-    public function __construct(EntityManagerInterface $em, array $mapping)
+    public function __construct(private readonly EntityManagerInterface $em, private array $mapping)
     {
-        $this->em = $em;
-        $this->mapping = $mapping;
     }
 
     /**
-     * @param string $slug
      *
-     * @return int|null
      *
      * @throws DriverException
      * @throws DBALException
@@ -44,7 +28,7 @@ class MigrationHelper implements MigrationHelperInterface
             'SELECT c.id FROM %s c WHERE c.page_id IS NULL AND c.slug = :slug',
             $this->getTableName('content')
         ));
-        $stmt = $query->executeQuery(['slug' => $slug]);
+        $stmt = $query->executeQuery();
 
         if (!$stmt->rowCount()) {
             return null;
@@ -56,9 +40,7 @@ class MigrationHelper implements MigrationHelperInterface
     }
 
     /**
-     * @param string $slug
      *
-     * @return array|null
      *
      * @throws DriverException
      * @throws DBALException
@@ -71,24 +53,19 @@ class MigrationHelper implements MigrationHelperInterface
             $this->getTableName('content'),
             $this->getTableName('content_version')
         ));
-        $stmt = $query->executeQuery(['slug' => $slug]);
+        $stmt = $query->executeQuery();
         $row = $stmt->fetchAssociative();
 
-        $raw = isset($row['data']) ? $row['data'] : null;
+        $raw = $row['data'] ?? null;
 
         if ($raw) {
-            return json_decode($raw, true);
+            return json_decode((string) $raw, true);
         }
 
         return null;
     }
 
     /**
-     * @param string      $slug
-     * @param array       $data
-     * @param string|null $name
-     *
-     * @return int
      *
      * @throws DriverException
      * @throws DBALException
@@ -103,7 +80,7 @@ class MigrationHelper implements MigrationHelperInterface
             $connection->insert(
                 $contentTable,
                 [
-                    'name' => isset($name) ? $name : $slug,
+                    'name' => $name ?? $slug,
                     'slug' => $slug,
                 ]
             );
@@ -131,9 +108,7 @@ class MigrationHelper implements MigrationHelperInterface
     }
 
     /**
-     * @param string $slug
      *
-     * @return void
      *
      * @throws DriverException
      * @throws DBALException
@@ -148,9 +123,7 @@ class MigrationHelper implements MigrationHelperInterface
     }
 
     /**
-     * @param string $identifier
      *
-     * @return int|null
      *
      * @throws DriverException
      * @throws DBALException
@@ -162,7 +135,7 @@ class MigrationHelper implements MigrationHelperInterface
             'SELECT p.id FROM %s p WHERE p.page_identifier = :identifier',
             $this->getTableName('page')
         ));
-        $stmt = $query->executeQuery(['identifier' => $identifier]);
+        $stmt = $query->executeQuery();
 
         if (!$stmt->rowCount()) {
             return null;
@@ -174,9 +147,7 @@ class MigrationHelper implements MigrationHelperInterface
     }
 
     /**
-     * @param string $identifier
      *
-     * @return array|null
      *
      * @throws DriverException
      * @throws DBALException
@@ -191,25 +162,20 @@ class MigrationHelper implements MigrationHelperInterface
             $this->getTableName('page_version'),
             $this->getTableName('content_version')
         ));
-        $stmt = $query->executeQuery(['identifier' => $identifier]);
+        $stmt = $query->executeQuery();
         $row = $stmt->fetchAssociative();
 
-        $raw = isset($row['data']) ? $row['data'] : null;
+        $raw = $row['data'] ?? null;
 
         if ($raw) {
-            return json_decode($raw, true);
+            return json_decode((string) $raw, true);
         }
 
         return null;
     }
 
     /**
-     * @param string      $identifier
-     * @param array       $data
-     * @param string|null $name
-     * @param int         $status
      *
-     * @return int
      *
      * @throws DriverException
      * @throws DBALException
@@ -241,12 +207,12 @@ class MigrationHelper implements MigrationHelperInterface
         }
 
         $query = $connection->prepare(sprintf('SELECT c.id FROM %s c WHERE c.page_id = :pageId', $contentTable));
-        $stmt = $query->executeQuery(['pageId' => $pageId]);
+        $stmt = $query->executeQuery();
 
         if (!$stmt->rowCount()) {
             $connection->insert($contentTable, [
                 'page_id' => $pageId,
-                'name' => isset($name) ? $name : $identifier,
+                'name' => $name ?? $identifier,
                 'slug' => $identifier,
             ]);
             $contentId = $connection->lastInsertId();
@@ -264,7 +230,7 @@ class MigrationHelper implements MigrationHelperInterface
         $contentVersionId = $connection->lastInsertId();
 
         $query = $connection->prepare(sprintf('SELECT m.id FROM %s m WHERE m.page_id = :pageId', $pageMetaTable));
-        $stmt = $query->executeQuery(['pageId' => $pageId]);
+        $stmt = $query->executeQuery();
 
         if (!$stmt->rowCount()) {
             $connection->insert($pageMetaTable, ['page_id' => $pageId]);
@@ -276,7 +242,7 @@ class MigrationHelper implements MigrationHelperInterface
 
         $connection->insert($this->getTableName('page_meta_version'), [
             'page_meta_id' => $metaId,
-            'title' => isset($name) ? $name : $identifier,
+            'title' => $name ?? $identifier,
             'slug' => $identifier,
             'created_at' => $now,
             'auto_save' => 0,
@@ -298,9 +264,7 @@ class MigrationHelper implements MigrationHelperInterface
     }
 
     /**
-     * @param string $identifier
      *
-     * @return void
      *
      * @throws DriverException
      * @throws DBALException
@@ -318,7 +282,7 @@ class MigrationHelper implements MigrationHelperInterface
         }
 
         $query = $connection->prepare(sprintf('SELECT c.id FROM %s c WHERE c.page_id = :pageId', $contentTable));
-        $stmt = $query->executeQuery(['pageId' => $pageId]);
+        $stmt = $query->executeQuery();
         if ($stmt->rowCount()) {
             $content = $stmt->fetchAssociative();
             $contentId = $content['id'];
@@ -328,7 +292,7 @@ class MigrationHelper implements MigrationHelperInterface
         }
 
         $query = $connection->prepare(sprintf('SELECT m.id FROM %s m WHERE m.page_id = :pageId', $pageMetaTable));
-        $stmt = $query->executeQuery(['pageId' => $pageId]);
+        $stmt = $query->executeQuery();
         if ($stmt->rowCount()) {
             $content = $stmt->fetchAssociative();
             $metaId = $content['id'];
@@ -342,13 +306,11 @@ class MigrationHelper implements MigrationHelperInterface
     }
 
     /**
-     * @param string $defaultTableName
      *
-     * @return string|null
      *
      * @throws \Exception
      */
-    private function getTableName(string $defaultTableName): ?string
+    private function getTableName(string $defaultTableName): string
     {
         if (!isset($this->mapping[$defaultTableName])) {
             throw new \Exception(sprintf('Could not find corresponding entity for "%s" element', $defaultTableName));

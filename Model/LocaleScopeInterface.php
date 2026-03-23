@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 interface LocaleScopeInterface extends ScopeInterface
@@ -10,8 +12,6 @@ interface LocaleScopeInterface extends ScopeInterface
     public function getLocale(): ?string;
 
     /**
-     * @param string $locale
-     *
      * @return $this
      */
     public function setLocale(string $locale);

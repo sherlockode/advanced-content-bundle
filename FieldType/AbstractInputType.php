@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Symfony\Component\Validator\Constraints\Length;
@@ -22,10 +24,11 @@ abstract class AbstractInputType extends AbstractFieldType
 
         $formFieldOptions = [];
         if (isset($fieldOptions['minLength'])) {
-            $formFieldOptions['constraints'][] = new Length(['min' => $fieldOptions['minLength']]);
+            $formFieldOptions['constraints'][] = new Length(min: $fieldOptions['minLength']);
         }
+
         if (isset($fieldOptions['maxLength'])) {
-            $formFieldOptions['constraints'][] = new Length(['max' => $fieldOptions['maxLength']]);
+            $formFieldOptions['constraints'][] = new Length(max: $fieldOptions['maxLength']);
         }
 
         return $formFieldOptions;

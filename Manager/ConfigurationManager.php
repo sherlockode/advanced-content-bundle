@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 class ConfigurationManager
@@ -14,7 +16,7 @@ class ConfigurationManager
      *
      * @param $config
      */
-    public function setConfig($config)
+    public function setConfig($config): void
     {
         $this->config = $config;
     }
@@ -106,7 +108,7 @@ class ConfigurationManager
      *
      * @return mixed
      */
-    private function getDefaultOptionValue($option)
+    private function getDefaultOptionValue(string $option)
     {
         return $this->config['default_options'][$option];
     }

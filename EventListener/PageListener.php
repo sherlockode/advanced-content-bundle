@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
+use Sherlockode\AdvancedContentBundle\Model\PageVersionInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -12,30 +15,11 @@ use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 
 class PageListener
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     * @param VersionManager       $versionManager
-     */
-    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager, private readonly VersionManager $versionManager)
     {
-        $this->configurationManager = $configurationManager;
-        $this->versionManager = $versionManager;
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
 
@@ -44,7 +28,7 @@ class PageListener
         }
 
         $pageVersion = $this->versionManager->getPageVersionToLoad($entity);
-        if ($pageVersion === null) {
+        if (!$pageVersion instanceof PageVersionInterface) {
             return;
         }
 
@@ -72,10 +56,7 @@ class PageListener
         }
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
 
@@ -88,10 +69,7 @@ class PageListener
         }
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
@@ -107,10 +85,12 @@ class PageListener
                 $pages[$entity->getId()] = $entity;
                 continue;
             }
+
             if ($entity instanceof PageMetaInterface && $entity->getPage() !== null && $entity->getPage()->getId()) {
                 $pages[$entity->getPage()->getId()] = $entity->getPage();
                 continue;
             }
+
             if ($entity instanceof ContentInterface && $entity->getPage() !== null && $entity->getPage()->getId()) {
                 $pages[$entity->getPage()->getId()] = $entity->getPage();
             }
@@ -128,10 +108,12 @@ class PageListener
                 $em->persist($contentVersion);
                 $uow->computeChangeSet($contentVersionClassMetadata, $contentVersion);
             }
+
             if ($pageMetaVersion = $pageVersion->getPageMetaVersion()) {
                 $em->persist($pageMetaVersion);
                 $uow->computeChangeSet($pageMetaVersionClassMetadata, $pageMetaVersion);
             }
+
             $uow->recomputeSingleEntityChangeSet($pageClassMetadata, $page);
         }
     }

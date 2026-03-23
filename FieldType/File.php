@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType;
@@ -7,17 +9,8 @@ use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
 
 class File extends AbstractFieldType
 {
-    /**
-     * @var UrlBuilderManager
-     */
-    private $urlBuilderManager;
-
-    /**
-     * @param UrlBuilderManager $urlBuilderManager
-     */
-    public function __construct(UrlBuilderManager $urlBuilderManager)
+    public function __construct(private readonly UrlBuilderManager $urlBuilderManager)
     {
-        $this->urlBuilderManager = $urlBuilderManager;
     }
 
     /**
@@ -53,7 +46,7 @@ class File extends AbstractFieldType
      *
      * @return string
      */
-    protected function getFilename($value)
+    protected function getFilename(array $value): string
     {
         return $this->urlBuilderManager->getFileUrl($value['src'] ?? '');
     }

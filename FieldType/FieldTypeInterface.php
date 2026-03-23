@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Element\ElementInterface;
@@ -27,8 +29,6 @@ interface FieldTypeInterface extends ElementInterface
     public function getFieldGroup();
 
     /**
-     * @param array $data
-     *
      * @return $this
      */
     public function setConfigData(array $data);

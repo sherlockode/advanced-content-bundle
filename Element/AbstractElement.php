@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Element;
 
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -23,11 +25,10 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Add element's field(s) to content form
      *
-     * @param FormBuilderInterface $builder
      *
      * @return void
      */
-    public function buildContentElement(FormBuilderInterface $builder)
+    public function buildContentElement(FormBuilderInterface $builder): void
     {
         $builder->add('elementType', HiddenType::class);
         $builder->add('position', HiddenType::class);

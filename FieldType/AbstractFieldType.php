@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Element\AbstractElement;
@@ -58,11 +60,10 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     /**
      * Add element's field(s) to content form
      *
-     * @param FormBuilderInterface $builder
      *
      * @return void
      */
-    public function buildContentElement(FormBuilderInterface $builder)
+    public function buildContentElement(FormBuilderInterface $builder): void
     {
         parent::buildContentElement($builder);
 
@@ -77,7 +78,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
                 ->addModelTransformer($modelTransformer);
         }
 
-        $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $data = $event->getData();
             $form = $event->getForm();
             if ($form->getConfig()->getCompound()) {
@@ -104,8 +105,6 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
 
     /**
      * Get model transformer for value field
-     *
-     * @return null
      */
     public function getValueModelTransformer()
     {
@@ -138,11 +137,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     public function getRawData($element)
     {
         $rawValue = $this->getRawValue($element['value'] ?? null);
-        if (is_array($rawValue)) {
-            $rowData = $rawValue;
-        } else {
-            $rowData = ['value' => $rawValue];
-        }
+        $rowData = is_array($rawValue) ? $rawValue : ['value' => $rawValue];
 
         return array_merge($rowData, [
             'extra' => $element['extra'] ?? [],

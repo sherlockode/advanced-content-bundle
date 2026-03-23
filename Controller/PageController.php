@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,57 +17,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PageController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var PageManager
-     */
-    private $pageManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param PageManager            $pageManager
-     * @param VersionManager         $versionManager
-     * @param FormFactoryInterface   $formFactory
-     */
-    public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        PageManager $pageManager,
-        VersionManager $versionManager,
-        FormFactoryInterface $formFactory
-    ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->pageManager = $pageManager;
-        $this->versionManager = $versionManager;
-        $this->formFactory = $formFactory;
+    public function __construct(private readonly EntityManagerInterface $em, private readonly ConfigurationManager $configurationManager, private readonly VersionManager $versionManager, private readonly FormFactoryInterface $formFactory)
+    {
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
-    public function saveDraftAction(Request $request)
+    public function saveDraft(Request $request)
     {
         $id = $request->get('id');
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
@@ -115,11 +74,9 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function deleteVersionAction(Request $request)
+    public function deleteVersion(Request $request)
     {
         $id = $request->get('id');
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);

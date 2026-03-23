@@ -1,37 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Export;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentExport
 {
-    /**
-     * @var ElementExport
-     */
-    private $elementExport;
-
-    /**
-     * @var ScopeExport
-     */
-    private $scopeExport;
-
-    /**
-     * @param ElementExport $elementExport
-     * @param ScopeExport   $scopeExport
-     */
-    public function __construct(ElementExport $elementExport, ScopeExport $scopeExport)
+    public function __construct(private readonly ElementExport $elementExport, private readonly ScopeExport $scopeExport)
     {
-        $this->elementExport = $elementExport;
-        $this->scopeExport = $scopeExport;
     }
 
     /**
-     * @param ContentInterface $content
-     *
      * @return array
      */
-    public function exportData(ContentInterface $content)
+    public function exportData(ContentInterface $content): array
     {
         $data = [];
         $data['name'] = $content->getName();
@@ -40,13 +24,11 @@ class ContentExport
         $elements = $content->getData() ?? [];
         $data['children'] = $this->exportElements($elements);
 
-        $data = [
+        return [
             'contents' => [
                 $content->getSlug() => $data,
             ],
         ];
-
-        return $data;
     }
 
     /**
@@ -54,12 +36,13 @@ class ContentExport
      *
      * @return array
      */
-    public function exportElements($elements)
+    public function exportElements($elements): array
     {
         if (!is_array($elements)) {
             return [];
         }
-        if (count($elements) === 0) {
+
+        if ($elements === []) {
             return [];
         }
 

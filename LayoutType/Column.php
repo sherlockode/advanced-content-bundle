@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\LayoutType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\ColumnType;
@@ -16,9 +18,6 @@ class Column extends AbstractLayoutType
         return 'fa-solid fa-columns';
     }
 
-    /**
-     * @return string|null
-     */
     protected function getConfigurationFormType(): ?string
     {
         return ColumnType::class;

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Form\Type\PageType;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -13,43 +16,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PageController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var PageManager
-     */
-    private $pageManager;
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param PageManager            $pageManager
-     */
-    public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        PageManager $pageManager
-    ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->pageManager = $pageManager;
+    public function __construct(private readonly EntityManagerInterface $em, private readonly ConfigurationManager $configurationManager, private readonly PageManager $pageManager)
+    {
     }
 
     /**
      * @param int     $id
-     * @param Request $request
      *
      * @return Response
      */
-    public function editAction($id, Request $request)
+    public function edit($id, Request $request): RedirectResponse|Response
     {
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
@@ -77,11 +53,9 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function createAction(Request $request)
+    public function create(Request $request): RedirectResponse|Response
     {
         if ($id = $request->get('duplicateId')) {
             $pageToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
@@ -90,6 +64,7 @@ class PageController extends AbstractController
                     sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
                 );
             }
+
             $page = $this->pageManager->duplicate($pageToDuplicate);
         } else {
             $pageEntityClass = $this->configurationManager->getEntityClass('page');
@@ -117,7 +92,7 @@ class PageController extends AbstractController
     /**
      * @return Response
      */
-    public function listAction()
+    public function list(): Response
     {
         $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
 
@@ -131,7 +106,7 @@ class PageController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id): RedirectResponse
     {
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 

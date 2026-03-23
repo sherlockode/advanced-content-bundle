@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -48,8 +50,6 @@ interface ContentInterface
     public function getData();
 
     /**
-     * @param array $data
-     * @param bool  $resetContentVersion
      *
      * @return $this
      */
@@ -69,14 +69,9 @@ interface ContentInterface
      */
     public function setPage(PageInterface $page = null);
 
-    /**
-     * @return ContentVersionInterface|null
-     */
     public function getContentVersion(): ?ContentVersionInterface;
 
     /**
-     * @param ContentVersionInterface|null $contentVersion
-     *
      * @return $this
      */
     public function setContentVersion(?ContentVersionInterface $contentVersion);

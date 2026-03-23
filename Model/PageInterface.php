@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,7 +10,9 @@ use Doctrine\Common\Collections\Collection;
 interface PageInterface
 {
     const STATUS_DRAFT  = 0;
+
     const STATUS_PUBLISHED = 10;
+
     const STATUS_TRASH  = 20;
 
     /**
@@ -70,20 +74,13 @@ interface PageInterface
     public function getPageMeta();
 
     /**
-     * @param PageMetaInterface $pageMeta
-     *
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta);
 
-    /**
-     * @return PageVersionInterface|null
-     */
     public function getPageVersion(): ?PageVersionInterface;
 
     /**
-     * @param PageVersionInterface|null $pageVersion
-     *
      * @return $this
      */
     public function setPageVersion(?PageVersionInterface $pageVersion);
