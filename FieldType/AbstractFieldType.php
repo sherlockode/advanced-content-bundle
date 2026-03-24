@@ -136,11 +136,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     public function getRawData($element)
     {
         $rawValue = $this->getRawValue($element['value'] ?? null);
-        if (is_array($rawValue)) {
-            $rowData = $rawValue;
-        } else {
-            $rowData = ['value' => $rawValue];
-        }
+        $rowData = is_array($rawValue) ? $rawValue : ['value' => $rawValue];
 
         return array_merge($rowData, [
             'extra' => $element['extra'] ?? [],

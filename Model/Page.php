@@ -65,10 +65,12 @@ abstract class Page implements PageInterface, ScopableInterface
 
         $newPageMeta = clone $this->pageMeta;
         $newPageMeta->setPage($this);
+
         $this->pageMeta = $newPageMeta;
 
         $newContent = clone $this->content;
         $newContent->setPage($this);
+
         $this->content = $newContent;
 
         $this->versions = new ArrayCollection();
@@ -136,9 +138,10 @@ abstract class Page implements PageInterface, ScopableInterface
      */
     public function setContent(?ContentInterface $content = null)
     {
-        if (null !== $content) {
+        if ($content instanceof ContentInterface) {
             $content->setPage($this);
         }
+
         $this->content = $content;
 
         return $this;
@@ -175,9 +178,10 @@ abstract class Page implements PageInterface, ScopableInterface
      */
     public function setPageMeta(?PageMetaInterface $pageMeta = null)
     {
-        if (null !== $pageMeta) {
+        if ($pageMeta instanceof PageMetaInterface) {
             $pageMeta->setPage($this);
         }
+
         $this->pageMeta = $pageMeta;
 
         return $this;

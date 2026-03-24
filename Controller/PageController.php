@@ -57,7 +57,7 @@ class PageController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function saveDraftAction(Request $request)
+    public function saveDraft(Request $request)
     {
         $id = $request->get('id');
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
@@ -109,7 +109,7 @@ class PageController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function deleteVersionAction(Request $request)
+    public function deleteVersion(Request $request)
     {
         $id = $request->get('id');
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);

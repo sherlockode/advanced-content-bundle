@@ -168,6 +168,7 @@ class ContentExtension extends AbstractExtension
             if (isset($config['size_'.$device])) {
                 $classes[] = '-' === $size ? 'col' : 'col-'.$device.'-'.$config['size_'.$device];
             }
+
             if (isset($config['offset_'.$device])) {
                 $classes[] = 'offset-'.$device.'-'.$config['offset_'.$device];
             }
@@ -209,7 +210,8 @@ class ContentExtension extends AbstractExtension
         if (!is_array($hideOn)) {
             $hideOn = [$hideOn];
         }
-        if (count($hideOn) > 0) {
+
+        if ([] !== $hideOn) {
             $devices = [
                 'xs',
                 'sm',
@@ -225,11 +227,13 @@ class ContentExtension extends AbstractExtension
                     if (null === $lastHidden || ($lastHidden + 1) !== $key) {
                         $classes[] = 'd-'.('xs' === $device ? '' : $device.'-').'none';
                     }
+
                     $lastHidden = $key;
                 } else {
                     if ('xs' !== $device && (null === $lastDisplayed || ($lastDisplayed + 1) !== $key)) {
                         $classes[] = 'd-'.$device.'-'.$defaultDisplay;
                     }
+
                     $lastDisplayed = $key;
                 }
             }
@@ -271,6 +275,7 @@ class ContentExtension extends AbstractExtension
         if ('none' === $selectColor) {
             return null;
         }
+
         if ('transparent' === $selectColor) {
             return 'transparent';
         }
@@ -288,6 +293,7 @@ class ContentExtension extends AbstractExtension
                 $pixelProperties[] = sprintf($property, $direction);
             }
         }
+
         $pixelProperties = array_merge($pixelProperties, [
             'border_top_left_radius',
             'border_top_right_radius',

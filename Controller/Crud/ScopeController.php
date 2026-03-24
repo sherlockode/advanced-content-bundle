@@ -33,7 +33,7 @@ class ScopeController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id)
     {
         $scope = $this->em->getRepository($this->configurationManager->getEntityClass('scope'))->find($id);
 

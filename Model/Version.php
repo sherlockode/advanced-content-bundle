@@ -22,11 +22,10 @@ abstract class Version implements VersionInterface
     /**
      * @var bool
      */
-    protected $autoSave;
+    protected $autoSave = false;
 
     public function __construct()
     {
-        $this->autoSave = false;
     }
 
     public function getId(): int

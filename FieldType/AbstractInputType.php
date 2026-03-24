@@ -24,6 +24,7 @@ abstract class AbstractInputType extends AbstractFieldType
         if (isset($fieldOptions['minLength'])) {
             $formFieldOptions['constraints'][] = new Length(['min' => $fieldOptions['minLength']]);
         }
+
         if (isset($fieldOptions['maxLength'])) {
             $formFieldOptions['constraints'][] = new Length(['max' => $fieldOptions['maxLength']]);
         }

@@ -83,11 +83,14 @@ class RepeaterType extends AbstractType
                 if (!is_array($item)) {
                     return;
                 }
+
                 if (!isset($item['position'])) {
                     $item['position'] = 0;
                 }
+
                 $orderedData[] = $item;
             }
+
             usort($orderedData, function ($a, $b) {
                 return $a['position'] <=> $b['position'];
             });

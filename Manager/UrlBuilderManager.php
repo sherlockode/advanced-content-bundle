@@ -34,7 +34,7 @@ class UrlBuilderManager
 
     public function getFileUrl(string $fileName): string
     {
-        if (!$fileName) {
+        if ('' === $fileName || '0' === $fileName) {
             return '';
         }
 
@@ -48,13 +48,14 @@ class UrlBuilderManager
 
     public function getFullUrl(string $url): string
     {
-        if (!$url) {
+        if ('' === $url || '0' === $url) {
             return '';
         }
 
         if ('#' === substr($url, 0, 1)) {
             return $url;
         }
+
         if ('http' === substr($url, 0, 4)) {
             return $url;
         }
@@ -66,6 +67,7 @@ class UrlBuilderManager
             // compat SF < 5.3
             $mainRequest = $this->requestStack->getMasterRequest();
         }
+
         if (!$mainRequest) {
             return $url;
         }

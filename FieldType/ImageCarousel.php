@@ -48,6 +48,7 @@ class ImageCarousel extends File
             if (isset($imageData['delete'])) {
                 unset($imageData['delete']);
             }
+
             $element['images'][$key] = $imageData;
         }
 

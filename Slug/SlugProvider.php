@@ -24,6 +24,7 @@ class SlugProvider implements SlugProviderInterface
             if ($this->scopeHandler->isPageIdentifierValid($page)) {
                 break;
             }
+
             $page->setPageIdentifier($this->getNewValue($page->getPageIdentifier()));
         }
     }
@@ -34,6 +35,7 @@ class SlugProvider implements SlugProviderInterface
             if ($this->scopeHandler->isPageSlugValid($page)) {
                 break;
             }
+
             $page->getPageMeta()->setSlug($this->getNewValue($page->getPageMeta()->getSlug()));
         }
     }
@@ -44,6 +46,7 @@ class SlugProvider implements SlugProviderInterface
             if ($this->scopeHandler->isContentSlugValid($content)) {
                 break;
             }
+
             $content->setSlug($this->getNewValue($content->getSlug()));
         }
     }

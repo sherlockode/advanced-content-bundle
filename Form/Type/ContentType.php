@@ -96,6 +96,7 @@ class ContentType extends AbstractType
             if (null !== $content && $content->getId()) {
                 $slugClass = '';
             }
+
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'content.form.slug',
@@ -105,7 +106,7 @@ class ContentType extends AbstractType
                     ],
                 ])
             ;
-            if ($form->getParent()) {
+            if ($form->getParent() instanceof FormInterface) {
                 $form->remove('name');
                 $form->remove('slug');
                 if ($form->has('scopes')) {

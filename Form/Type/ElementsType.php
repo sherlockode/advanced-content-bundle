@@ -72,6 +72,7 @@ class ElementsType extends AbstractType
             foreach ($form as $child) {
                 $form->remove($child->getName());
             }
+
             $form->setData([]);
 
             foreach ($data as $name => $element) {
@@ -89,7 +90,7 @@ class ElementsType extends AbstractType
             $data = $event->getData();
             $data = array_values($data);
 
-            if ($parentForm = $form->getParent()) {
+            if (($parentForm = $form->getParent()) instanceof \Symfony\Component\Form\FormInterface) {
                 $parentElementType = $parentForm->has('elementType') ? $parentForm->get('elementType')->getData() : 'root';
                 foreach ($data as $child) {
                     if ('root' === $parentElementType && 'row' !== $child['elementType']) {
@@ -99,6 +100,7 @@ class ElementsType extends AbstractType
                             'AdvancedContentBundle'
                         )));
                     }
+
                     if ('row' === $parentElementType && 'column' !== $child['elementType']) {
                         $form->addError(new FormError($this->translator->trans(
                             'layout_type.errors.invalid_element_in_row',
@@ -106,6 +108,7 @@ class ElementsType extends AbstractType
                             'AdvancedContentBundle'
                         )));
                     }
+
                     if ('column' === $parentElementType
                         && ('column' === $child['elementType'] || 'row' === $child['elementType'])
                     ) {

@@ -12,14 +12,13 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * ContentVersion constructor.
      */
     public function __construct()
     {
-        $this->data = [];
         parent::__construct();
     }
 

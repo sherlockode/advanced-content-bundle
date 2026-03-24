@@ -73,7 +73,7 @@ class ImportManager
 
         foreach ($data as $entityType => $entities) {
             if (!isset(self::ENTITY_MAPPING[$entityType])) {
-                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $entityType, '%list%' => join(', ', array_keys(self::ENTITY_MAPPING))], 'AdvancedContentBundle'));
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $entityType, '%list%' => implode(', ', array_keys(self::ENTITY_MAPPING))], 'AdvancedContentBundle'));
             }
 
             foreach ($entities as $slug => $entityData) {

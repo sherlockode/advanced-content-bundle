@@ -8,7 +8,9 @@ use Doctrine\Common\Collections\Collection;
 interface PageInterface
 {
     public const STATUS_DRAFT = 0;
+
     public const STATUS_PUBLISHED = 10;
+
     public const STATUS_TRASH = 20;
 
     /**

@@ -42,8 +42,8 @@ class ContentImport extends AbstractImport
         try {
             $scopes = $this->getScopesForEntity($contentData['scopes'] ?? []);
             $content = $this->getExistingScopableEntity($this->entityClasses['content'], ['slug' => $slug], $scopes);
-        } catch (\Exception $e) {
-            $this->errors[] = $e->getMessage();
+        } catch (\Exception $exception) {
+            $this->errors[] = $exception->getMessage();
 
             return;
         }
@@ -87,6 +87,7 @@ class ContentImport extends AbstractImport
                 $this->errors[] = sprintf('%s : %s', $content->getName(), $e->getMessage());
             }
         }
+
         $content->setData($elements);
     }
 

@@ -78,6 +78,7 @@ class ExportManager
         if ($useDatePrefix) {
             $prefix = date('Ymd-His_');
         }
+
         foreach ($this->filesData as $filename => $data) {
             file_put_contents($directory.$prefix.$filename, $data);
         }
@@ -101,6 +102,7 @@ class ExportManager
         foreach (glob($tmpDir.'*') as $file) {
             unlink($file);
         }
+
         rmdir($tmpDir);
 
         return $zipFileName;

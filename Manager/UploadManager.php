@@ -37,7 +37,7 @@ class UploadManager
      */
     public function upload(?UploadedFile $file = null, ?string $fileName = null)
     {
-        if (null === $file) {
+        if (!$file instanceof UploadedFile) {
             return '';
         }
 
@@ -58,9 +58,11 @@ class UploadManager
         if (!$file->isReadable()) {
             throw new \Exception(sprintf('Source file %s does not exist', $file->getRealPath()));
         }
-        if (!is_writeable($this->getTargetDir())) {
+
+        if (!is_writable($this->getTargetDir())) {
             throw new \Exception(sprintf('Target directory %s is not writeable', $this->getTargetDir()));
         }
+
         copy($file->getRealPath(), $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName);
 
         return $fileName;

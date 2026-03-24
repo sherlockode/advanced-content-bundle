@@ -53,7 +53,8 @@ class ContentExport
         if (!is_array($elements)) {
             return [];
         }
-        if (0 === count($elements)) {
+
+        if ([] === $elements) {
             return [];
         }
 

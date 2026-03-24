@@ -24,7 +24,7 @@ class SherlockodeAdvancedContentBundle extends Bundle
             realpath(__DIR__.'/Resources/config/doctrine-mapping') => 'Sherlockode\AdvancedContentBundle\Model',
         ];
 
-        if (class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
+        if (class_exists(DoctrineOrmMappingsPass::class)) {
             $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings));
         }
     }

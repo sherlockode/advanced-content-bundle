@@ -7,11 +7,17 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MimeTypeManager
 {
     public const MIME_TYPE_IMAGE = 10;
+
     public const MIME_TYPE_PDF = 20;
+
     public const MIME_TYPE_EXE = 30;
+
     public const MIME_TYPE_ARCHIVE = 40;
+
     public const MIME_TYPE_TEXT = 50;
+
     public const MIME_TYPE_SPREADSHEET = 60;
+
     public const MIME_TYPE_MULTIMEDIA = 70;
 
     /**

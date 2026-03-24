@@ -43,7 +43,7 @@ class PageController extends AbstractController
      *
      * @return Response
      */
-    public function editAction($id, Request $request)
+    public function edit($id, Request $request)
     {
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
@@ -71,13 +71,14 @@ class PageController extends AbstractController
     /**
      * @return Response
      */
-    public function createAction(Request $request)
+    public function create(Request $request)
     {
         if ($id = $request->get('duplicateId')) {
             $pageToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
             if (!$pageToDuplicate instanceof PageInterface) {
                 throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id));
             }
+
             $page = $this->pageManager->duplicate($pageToDuplicate);
         } else {
             $pageEntityClass = $this->configurationManager->getEntityClass('page');
@@ -105,7 +106,7 @@ class PageController extends AbstractController
     /**
      * @return Response
      */
-    public function listAction()
+    public function list()
     {
         $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
 
@@ -119,7 +120,7 @@ class PageController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id)
     {
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 

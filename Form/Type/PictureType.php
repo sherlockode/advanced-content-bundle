@@ -36,7 +36,7 @@ class PictureType extends AbstractType
                 $data = $event->getData();
                 $globalMimeTypes = $data['image']['mime_type'] ?? [];
                 if (isset($data['sources']) && is_array($data['sources'])) {
-                    foreach ($data['sources'] as $key => $source) {
+                    foreach (array_keys($data['sources']) as $key) {
                         $data['sources'][$key]['mime_type'] = $globalMimeTypes;
                     }
                 }

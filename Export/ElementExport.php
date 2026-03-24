@@ -59,6 +59,7 @@ class ElementExport
                 if (isset($raw['image']['url'])) {
                     unset($raw['image']['url']);
                 }
+
                 if (isset($raw['sources']) && is_array($raw['sources'])) {
                     foreach ($raw['sources'] as $key => $source) {
                         if (is_array($source) && isset($source['url'])) {
@@ -66,6 +67,7 @@ class ElementExport
                         }
                     }
                 }
+
                 // Root data is only needed as template variables, no need to export them
                 $rootDataToDelete = ['alt', 'src', 'file', 'mime_type', 'url'];
                 foreach ($rootDataToDelete as $key) {
@@ -79,10 +81,9 @@ class ElementExport
                 unset($raw['url']);
             }
         }
-        if ($element instanceof Content) {
-            if (array_key_exists('entity', $raw)) {
-                unset($raw['entity']);
-            }
+
+        if ($element instanceof Content && array_key_exists('entity', $raw)) {
+            unset($raw['entity']);
         }
 
         return ['value' => $raw];

@@ -71,6 +71,7 @@ class PageMetaType extends AbstractType
             if (null !== $pageMeta && $pageMeta->getId()) {
                 $slugClass = '';
             }
+
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'page.form.slug',

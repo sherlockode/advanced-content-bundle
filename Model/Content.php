@@ -25,7 +25,7 @@ abstract class Content implements ContentInterface, ScopableInterface
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * @var PageInterface
@@ -52,7 +52,6 @@ abstract class Content implements ContentInterface, ScopableInterface
      */
     public function __construct()
     {
-        $this->data = [];
         $this->versions = new ArrayCollection();
         $this->scopes = new ArrayCollection();
     }

@@ -33,6 +33,7 @@ class ContentListener
         if (!$entity instanceof ContentInterface) {
             return;
         }
+
         if (null !== $entity->getPage()) {
             return;
         }
@@ -56,6 +57,7 @@ class ContentListener
             if (!$entity instanceof ContentInterface) {
                 continue;
             }
+
             if (null !== $entity->getPage()) {
                 continue;
             }

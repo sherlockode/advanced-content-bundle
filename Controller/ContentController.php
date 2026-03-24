@@ -86,7 +86,7 @@ class ContentController extends AbstractController
     /**
      * @return Response
      */
-    public function addFieldAction()
+    public function addField()
     {
         $fields = $this->elementManager->getGroupedFieldTypes();
 
@@ -101,7 +101,7 @@ class ContentController extends AbstractController
     /**
      * @return Response
      */
-    public function fieldFormAction(Request $request)
+    public function fieldForm(Request $request)
     {
         $element = $this->elementManager->getElementByCode($request->get('type'));
         $elementData = [];
@@ -170,7 +170,7 @@ class ContentController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function saveDraftAction(Request $request)
+    public function saveDraft(Request $request)
     {
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);
@@ -216,7 +216,7 @@ class ContentController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function deleteVersionAction(Request $request)
+    public function deleteVersion(Request $request)
     {
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);

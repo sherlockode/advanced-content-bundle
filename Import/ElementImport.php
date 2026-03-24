@@ -96,6 +96,7 @@ class ElementImport
         if (null !== $element->getValueModelTransformer()) {
             $value = [];
         }
+
         if (isset($elementData['value'])) {
             $value = $elementData['value'];
             if (is_array($value)) {
@@ -130,6 +131,7 @@ class ElementImport
                 $data = $result;
             }
         }
+
         if (isset($data['content'])) {
             $slug = $data['content'];
             $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findOneBy([
@@ -143,11 +145,7 @@ class ElementImport
         // browse array
         $newData = [];
         foreach ($data as $key => $valueEntry) {
-            if (is_array($valueEntry)) {
-                $newData[$key] = $this->processValueArray($valueEntry);
-            } else {
-                $newData[$key] = $valueEntry;
-            }
+            $newData[$key] = is_array($valueEntry) ? $this->processValueArray($valueEntry) : $valueEntry;
         }
 
         return $newData;
@@ -180,9 +178,11 @@ class ElementImport
             if (0 !== strpos($filesDirectory, '/')) {
                 $filesDirectory = $this->rootDir.'/'.$filesDirectory;
             }
+
             if (!file_exists($filesDirectory)) {
                 throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $filesDirectory], 'AdvancedContentBundle'));
             }
+
             $this->filesDirectory = $filesDirectory.'/';
         }
 

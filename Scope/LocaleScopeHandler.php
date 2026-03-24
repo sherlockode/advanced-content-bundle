@@ -60,6 +60,7 @@ class LocaleScopeHandler extends ScopeHandler
             // compat SF < 5.3
             $mainRequest = $this->requestStack->getMasterRequest();
         }
+
         if (null === $mainRequest) {
             return null;
         }

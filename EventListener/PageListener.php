@@ -94,10 +94,12 @@ class PageListener
                 $pages[$entity->getId()] = $entity;
                 continue;
             }
+
             if ($entity instanceof PageMetaInterface && null !== $entity->getPage() && $entity->getPage()->getId()) {
                 $pages[$entity->getPage()->getId()] = $entity->getPage();
                 continue;
             }
+
             if ($entity instanceof ContentInterface && null !== $entity->getPage() && $entity->getPage()->getId()) {
                 $pages[$entity->getPage()->getId()] = $entity->getPage();
             }
@@ -115,10 +117,12 @@ class PageListener
                 $em->persist($contentVersion);
                 $uow->computeChangeSet($contentVersionClassMetadata, $contentVersion);
             }
+
             if ($pageMetaVersion = $pageVersion->getPageMetaVersion()) {
                 $em->persist($pageMetaVersion);
                 $uow->computeChangeSet($pageMetaVersionClassMetadata, $pageMetaVersion);
             }
+
             $uow->recomputeSingleEntityChangeSet($pageClassMetadata, $page);
         }
     }

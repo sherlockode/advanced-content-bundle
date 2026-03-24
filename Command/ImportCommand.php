@@ -125,19 +125,21 @@ class ImportCommand extends Command
             $this->addFilesToProcess();
             $this->importManager->setSymfonyStyle($this->symfonyStyle);
             $this->importManager->processData($this->importTypes);
-        } catch (\Exception $e) {
-            $this->symfonyStyle->error($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->symfonyStyle->error($exception->getMessage());
 
             if (defined(sprintf('%s::FAILURE', get_class($this)))) {
                 return self::FAILURE;
             }
 
-            return;
+            return null;
         }
 
         if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
             return self::SUCCESS;
         }
+
+        return null;
     }
 
     private function addFilesToProcess()
@@ -157,6 +159,7 @@ class ImportCommand extends Command
         } else {
             $finder->name(['*.yaml', '*.yml']);
         }
+
         foreach ($finder as $file) {
             try {
                 $this->importManager->addFileToProcess($file);
@@ -175,6 +178,7 @@ class ImportCommand extends Command
         if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
+
         $initDir = $this->getDirFullPath($initDir);
         $this->sourceDirectory = $initDir;
 
@@ -199,9 +203,10 @@ class ImportCommand extends Command
         $importTypes = $input->getOption('type');
         foreach ($importTypes as $importType) {
             if (!in_array($importType, self::AVAILABLE_ENTITIES)) {
-                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => implode(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
             }
         }
+
         $this->importTypes = $importTypes;
 
         $this->filename = $input->getOption('file');
@@ -219,6 +224,7 @@ class ImportCommand extends Command
         if (0 !== strpos($dir, '/')) {
             $dir = $this->rootDir.'/'.$dir;
         }
+
         $dir .= '/';
 
         if (!file_exists($dir)) {

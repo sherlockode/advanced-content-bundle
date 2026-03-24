@@ -49,7 +49,7 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function editAction($id, Request $request)
+    public function edit($id, Request $request)
     {
         $content = $this->contentManager->getContentById($id);
 
@@ -78,13 +78,14 @@ class ContentController extends AbstractController
     /**
      * @return Response
      */
-    public function createAction(Request $request)
+    public function create(Request $request)
     {
         if ($id = $request->get('duplicateId')) {
             $contentToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
             if (!$contentToDuplicate instanceof ContentInterface) {
                 throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
             }
+
             $content = $this->contentManager->duplicate($contentToDuplicate);
         } else {
             $contentEntityClass = $this->configurationManager->getEntityClass('content');
@@ -113,7 +114,7 @@ class ContentController extends AbstractController
     /**
      * @return Response
      */
-    public function listAction()
+    public function list()
     {
         $contents = $this->contentManager->getContents();
 
@@ -127,7 +128,7 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id)
     {
         $content = $this->contentManager->getContentById($id);
 
@@ -146,7 +147,7 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function showAction($id)
+    public function show($id)
     {
         $content = $this->contentManager->getContentById($id);
 

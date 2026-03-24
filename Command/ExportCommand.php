@@ -111,6 +111,7 @@ class ExportCommand extends Command
                 $pages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
                 $this->exportManager->generatePagesData($pages);
             }
+
             if (in_array('Content', $this->exportTypes)) {
                 $contents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
                 $contentsToExport = [];
@@ -118,27 +119,31 @@ class ExportCommand extends Command
                     if ($content->getPage() instanceof PageInterface) {
                         continue;
                     }
+
                     $contentsToExport[] = $content;
                 }
+
                 $this->exportManager->generateContentsData($contentsToExport);
             }
 
             $this->exportManager->generateFiles($this->sourceDirectory);
 
             $this->symfonyStyle->success($this->translator->trans('init.export_success', ['%dir%' => $this->sourceDirectory], 'AdvancedContentBundle'));
-        } catch (\Exception $e) {
-            $this->symfonyStyle->error($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->symfonyStyle->error($exception->getMessage());
 
             if (defined(sprintf('%s::FAILURE', get_class($this)))) {
                 return self::FAILURE;
             }
 
-            return;
+            return null;
         }
 
         if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
             return self::SUCCESS;
         }
+
+        return null;
     }
 
     /**
@@ -150,22 +155,26 @@ class ExportCommand extends Command
         if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
+
         if (0 !== strpos($initDir, '/')) {
             $initDir = $this->rootDir.'/'.$initDir;
         }
+
         $initDir .= '/';
 
         if (!file_exists($initDir)) {
             throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $initDir], 'AdvancedContentBundle'));
         }
+
         $this->sourceDirectory = $initDir;
 
         $exportTypes = $input->getOption('type');
         foreach ($exportTypes as $exportType) {
             if (!in_array($exportType, self::AVAILABLE_ENTITIES)) {
-                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $exportType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $exportType, '%list%' => implode(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
             }
         }
+
         $this->exportTypes = $exportTypes;
     }
 }

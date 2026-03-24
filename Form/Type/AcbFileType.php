@@ -52,9 +52,9 @@ class AcbFileType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'field_type.file.title',
-                'constraints' => !$options['required'] ? [] : [
+                'constraints' => $options['required'] ? [
                     new NotBlank(null, null, null, null, $options['validation_groups']),
-                ],
+                ] : [],
             ])
             ->add('mime_type', ChoiceType::class, [
                 'label' => 'field_type.file.restriction_type',
@@ -91,6 +91,7 @@ class AcbFileType extends AbstractType
                         $this->uploadManager->remove($data['src']);
                         unset($data['src']);
                     }
+
                     unset($data['delete']);
                 }
 
@@ -164,6 +165,7 @@ class AcbFileType extends AbstractType
 
             $mimeTypes = array_merge([], ...$mimeTypes);
         }
+
         $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
 
         $form
