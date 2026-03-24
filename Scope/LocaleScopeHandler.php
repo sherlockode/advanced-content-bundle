@@ -4,7 +4,6 @@ namespace Sherlockode\AdvancedContentBundle\Scope;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
 use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,34 +14,21 @@ class LocaleScopeHandler extends ScopeHandler
      */
     private $requestStack;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param RequestStack           $requestStack
-     */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
-        RequestStack $requestStack
+        RequestStack $requestStack,
     ) {
         parent::__construct($em, $configurationManager);
 
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @return string|null
-     */
     public function getScopeGroupBy(): ?string
     {
         return null;
     }
 
-    /**
-     * @param array $data
-     *
-     * @return ScopeInterface|null
-     */
     public function getScopeFromData(array $data): ?ScopeInterface
     {
         if (empty($data['locale'])) {
@@ -54,11 +40,6 @@ class LocaleScopeHandler extends ScopeHandler
         ]);
     }
 
-    /**
-     * @param ScopeInterface $scope
-     *
-     * @return array
-     */
     public function getDataFromScope(ScopeInterface $scope): array
     {
         return [
@@ -66,9 +47,6 @@ class LocaleScopeHandler extends ScopeHandler
         ];
     }
 
-    /**
-     * @return ScopeInterface|null
-     */
     public function getCurrentScope(): ?ScopeInterface
     {
         if (!$this->configurationManager->isScopesEnabled()) {
@@ -82,7 +60,7 @@ class LocaleScopeHandler extends ScopeHandler
             // compat SF < 5.3
             $mainRequest = $this->requestStack->getMasterRequest();
         }
-        if ($mainRequest === null) {
+        if (null === $mainRequest) {
             return null;
         }
 

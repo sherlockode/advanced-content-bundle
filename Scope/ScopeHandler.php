@@ -20,21 +20,12 @@ abstract class ScopeHandler implements ScopeHandlerInterface
      */
     protected $configurationManager;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     */
     public function __construct(EntityManagerInterface $em, ConfigurationManager $configurationManager)
     {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
     }
 
-    /**
-     * @param ContentInterface $content
-     *
-     * @return bool
-     */
     public function isContentSlugValid(ContentInterface $content): bool
     {
         $existingContents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
@@ -44,21 +35,16 @@ abstract class ScopeHandler implements ScopeHandlerInterface
         return $this->validateScopableEntity($content, $existingContents);
     }
 
-    /**
-     * @param PageInterface $page
-     *
-     * @return bool
-     */
     public function isPageSlugValid(PageInterface $page): bool
     {
         $existingPages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findAll();
         /** @var PageInterface $existingPage */
         foreach ($existingPages as $key => $existingPage) {
-            if ($existingPage->getPageVersion() === null) {
+            if (null === $existingPage->getPageVersion()) {
                 unset($existingPages[$key]);
                 continue;
             }
-            if ($existingPage->getPageVersion()->getPageMetaVersion() === null) {
+            if (null === $existingPage->getPageVersion()->getPageMetaVersion()) {
                 unset($existingPages[$key]);
                 continue;
             }
@@ -72,11 +58,6 @@ abstract class ScopeHandler implements ScopeHandlerInterface
         return $this->validateScopableEntity($page, $existingPages);
     }
 
-    /**
-     * @param PageInterface $page
-     *
-     * @return bool
-     */
     public function isPageIdentifierValid(PageInterface $page): bool
     {
         $existingPages = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->findBy([
@@ -89,8 +70,6 @@ abstract class ScopeHandler implements ScopeHandlerInterface
     /**
      * @param ScopableInterface|ContentInterface|PageInterface             $scopable
      * @param array|ScopableInterface[]|ContentInterface[]|PageInterface[] $existingEntities
-     *
-     * @return bool
      */
     private function validateScopableEntity(ScopableInterface $scopable, array $existingEntities): bool
     {
@@ -113,12 +92,6 @@ abstract class ScopeHandler implements ScopeHandlerInterface
         return true;
     }
 
-    /**
-     * @param string $entityCode
-     * @param array  $criteria
-     *
-     * @return ScopableInterface|null
-     */
     public function getEntityForCurrentScope(string $entityCode, array $criteria): ?ScopableInterface
     {
         return $this->filterEntityForCurrentScope(
@@ -128,8 +101,6 @@ abstract class ScopeHandler implements ScopeHandlerInterface
 
     /**
      * @param array|ScopableInterface[] $entities
-     *
-     * @return ScopableInterface|null
      */
     public function filterEntityForCurrentScope(array $entities): ?ScopableInterface
     {
@@ -138,7 +109,7 @@ abstract class ScopeHandler implements ScopeHandlerInterface
         }
 
         $currentScope = $this->getCurrentScope();
-        if ($currentScope === null) {
+        if (null === $currentScope) {
             return null;
         }
 

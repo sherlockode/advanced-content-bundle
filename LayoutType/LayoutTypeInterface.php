@@ -6,5 +6,4 @@ use Sherlockode\AdvancedContentBundle\Element\ElementInterface;
 
 interface LayoutTypeInterface extends ElementInterface
 {
-
 }

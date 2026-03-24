@@ -4,22 +4,20 @@ namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
-use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class SherlockodeAdvancedContentExtension
+ * Class SherlockodeAdvancedContentExtension.
  */
 class SherlockodeAdvancedContentExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
         $loader->load('controllers.xml');
         $loader->load('field_types.xml');
@@ -62,12 +60,6 @@ class SherlockodeAdvancedContentExtension extends Extension
         ]);
     }
 
-    /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     *
-     * @return void
-     */
     private function setupMimeType(array $config, ContainerBuilder $container): void
     {
         $mimeTypesConfiguration = $config['mime_type_group'] ?? null;

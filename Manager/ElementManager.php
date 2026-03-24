@@ -26,15 +26,13 @@ class ElementManager
     }
 
     /**
-     * Add field type
-     *
-     * @param FieldTypeInterface $fieldType
+     * Add field type.
      */
     public function addFieldType(FieldTypeInterface $fieldType)
     {
         $enabled = true;
         if (isset($this->fieldsConfiguration[$fieldType->getCode()])) {
-            if ($this->fieldsConfiguration[$fieldType->getCode()]['enabled'] === false) {
+            if (false === $this->fieldsConfiguration[$fieldType->getCode()]['enabled']) {
                 $enabled = false;
             }
             $fieldType->setConfigData($this->fieldsConfiguration[$fieldType->getCode()]);
@@ -45,7 +43,7 @@ class ElementManager
     }
 
     /**
-     * Get available field types
+     * Get available field types.
      *
      * @return array
      */
@@ -54,7 +52,7 @@ class ElementManager
         $choices = [];
         foreach ($this->elements as $element) {
             if ($element instanceof FieldTypeInterface) {
-                $fieldGroup = 'field_type.group.' . $element->getFieldGroup();
+                $fieldGroup = 'field_type.group.'.$element->getFieldGroup();
                 if (!isset($choices[$fieldGroup])) {
                     $choices[$fieldGroup] = [];
                 }
@@ -66,9 +64,7 @@ class ElementManager
     }
 
     /**
-     * Add layout type
-     *
-     * @param LayoutTypeInterface $layoutType
+     * Add layout type.
      */
     public function addLayoutType(LayoutTypeInterface $layoutType)
     {
@@ -76,7 +72,7 @@ class ElementManager
     }
 
     /**
-     * Get element
+     * Get element.
      *
      * @param string $elementCode
      *
@@ -89,6 +85,7 @@ class ElementManager
         if (!isset($this->elements[$elementCode])) {
             throw new InvalidElementException(sprintf('Element "%s" is not handled.', $elementCode));
         }
+
         return $this->elements[$elementCode];
     }
 }

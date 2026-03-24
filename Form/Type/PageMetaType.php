@@ -19,17 +19,11 @@ class PageMetaType extends AbstractType
      */
     private $configurationManager;
 
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
     public function __construct(ConfigurationManager $configurationManager)
     {
         $this->configurationManager = $configurationManager;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $token = uniqid('page_meta_');
@@ -69,12 +63,12 @@ class PageMetaType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options, $token) {
             $form = $event->getForm();
             /** @var PageMetaInterface $pageMeta */
             $pageMeta = $event->getData();
             $slugClass = 'acb-pagemeta-slug';
-            if ($pageMeta !== null && $pageMeta->getId()) {
+            if (null !== $pageMeta && $pageMeta->getId()) {
                 $slugClass = '';
             }
             $form
@@ -93,9 +87,6 @@ class PageMetaType extends AbstractType
         });
     }
 
-    /**
-     * @inheritDoc
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

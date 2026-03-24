@@ -5,7 +5,7 @@ namespace Sherlockode\AdvancedContentBundle\Model;
 interface VersionInterface
 {
     /**
-     * Get version id
+     * Get version id.
      *
      * @return int
      */
@@ -17,8 +17,6 @@ interface VersionInterface
     public function getUserId();
 
     /**
-     * @param int|null $userId
-     *
      * @return $this
      */
     public function setUserId(?int $userId);
@@ -29,20 +27,13 @@ interface VersionInterface
     public function getCreatedAt();
 
     /**
-     * @param \DateTimeInterface $createdAt
-     *
      * @return $this
      */
     public function setCreatedAt(\DateTimeInterface $createdAt);
 
-    /**
-     * @return bool
-     */
     public function isAutoSave(): bool;
 
     /**
-     * @param bool $autoSave
-     *
      * @return $this
      */
     public function setAutoSave(bool $autoSave);

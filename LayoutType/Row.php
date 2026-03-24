@@ -16,9 +16,6 @@ class Row extends AbstractLayoutType
         return 'fa-solid fa-bars';
     }
 
-    /**
-     * @return string|null
-     */
     protected function getConfigurationFormType(): ?string
     {
         return RowType::class;

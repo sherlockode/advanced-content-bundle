@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * FormType wrapper for non-compound forms inside RepeaterType
- * Used in order to be able to add the "position" field
+ * Used in order to be able to add the "position" field.
  */
 class RepeatedChildWrappedType extends AbstractType
 {
@@ -38,7 +38,7 @@ class RepeatedChildWrappedType extends AbstractType
     {
         $resolver->setDefaults([
             'position' => 0,
-            'child_options'=> [],
+            'child_options' => [],
         ]);
         $resolver->setRequired(['child_form']);
         $resolver->setNormalizer('child_options', function (Options $options, $value) {

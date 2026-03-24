@@ -10,8 +10,6 @@ interface ContentVersionInterface
     public function getContent();
 
     /**
-     * @param ContentInterface $content
-     *
      * @return $this
      */
     public function setContent(ContentInterface $content);
@@ -22,8 +20,6 @@ interface ContentVersionInterface
     public function getData();
 
     /**
-     * @param array $data
-     *
      * @return $this
      */
     public function setData(array $data);

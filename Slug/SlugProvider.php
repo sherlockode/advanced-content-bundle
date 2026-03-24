@@ -13,17 +13,11 @@ class SlugProvider implements SlugProviderInterface
      */
     private $scopeHandler;
 
-    /**
-     * @param ScopeHandlerInterface $scopeHandler
-     */
     public function __construct(ScopeHandlerInterface $scopeHandler)
     {
         $this->scopeHandler = $scopeHandler;
     }
 
-    /**
-     * @param PageInterface $page
-     */
     public function setPageValidIdentifier(PageInterface $page): void
     {
         while (true) {
@@ -34,9 +28,6 @@ class SlugProvider implements SlugProviderInterface
         }
     }
 
-    /**
-     * @param PageInterface $page
-     */
     public function setPageValidSlug(PageInterface $page): void
     {
         while (true) {
@@ -47,9 +38,6 @@ class SlugProvider implements SlugProviderInterface
         }
     }
 
-    /**
-     * @param ContentInterface $content
-     */
     public function setContentValidSlug(ContentInterface $content): void
     {
         while (true) {
@@ -62,15 +50,13 @@ class SlugProvider implements SlugProviderInterface
 
     /**
      * @param string $value
-     *
-     * @return string
      */
     private function getNewValue($value): string
     {
         if (preg_match('/-(\d+)$/', $value, $matches) && array_key_exists(1, $matches)) {
-            return preg_replace('/' . $matches[1] . '$/', $matches[1] + 1, $value);
+            return preg_replace('/'.$matches[1].'$/', $matches[1] + 1, $value);
         }
 
-        return $value . '-1';
+        return $value.'-1';
     }
 }

@@ -41,7 +41,7 @@ class Link extends AbstractFieldType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */
@@ -55,11 +55,6 @@ class Link extends AbstractFieldType
         return 'bundles/sherlockodeadvancedcontent/preview_picture/link.svg';
     }
 
-    /**
-     * @param mixed $element
-     *
-     * @return mixed
-     */
     public function getRawValue($element)
     {
         $url = $this->getUrlValue($element);

@@ -15,19 +15,12 @@ class ContentImport extends AbstractImport
      */
     private $elementImport;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param TranslatorInterface    $translator
-     * @param ScopeHandlerInterface  $scopeHandler
-     * @param ElementImport          $elementImport
-     */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         ScopeHandlerInterface $scopeHandler,
-        ElementImport $elementImport
+        ElementImport $elementImport,
     ) {
         parent::__construct($em, $configurationManager, $translator, $scopeHandler);
 
@@ -56,7 +49,7 @@ class ContentImport extends AbstractImport
         }
 
         if (!$content instanceof ContentInterface) {
-            $content = new $this->entityClasses['content'];
+            $content = new $this->entityClasses['content']();
         } elseif (!$this->allowUpdate) {
             // Content already exist but update is not allowed by configuration
             return;
@@ -75,6 +68,7 @@ class ContentImport extends AbstractImport
             } else {
                 $this->errors[] = $this->translator->trans('content.errors.duplicate_slug_no_scope', [], 'AdvancedContentBundle');
             }
+
             return;
         }
 
@@ -82,10 +76,6 @@ class ContentImport extends AbstractImport
         $this->em->flush();
     }
 
-    /**
-     * @param array            $elementsData
-     * @param ContentInterface $content
-     */
     public function createElements(array $elementsData, ContentInterface $content)
     {
         $elements = [];

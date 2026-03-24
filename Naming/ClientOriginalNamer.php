@@ -7,11 +7,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ClientOriginalNamer implements NamerInterface
 {
-    /**
-     * @param File $file
-     *
-     * @return string
-     */
     public function getFilename(File $file): string
     {
         $fileName = $file->getFilename();

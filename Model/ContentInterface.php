@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 interface ContentInterface
 {
     /**
-     * Get content id
+     * Get content id.
      *
      * @return int
      */
@@ -27,14 +27,14 @@ interface ContentInterface
     public function setName($name);
 
     /**
-     * Get content's slug
+     * Get content's slug.
      *
      * @return string
      */
     public function getSlug();
 
     /**
-     * Set content's slug
+     * Set content's slug.
      *
      * @param string $slug
      *
@@ -48,35 +48,25 @@ interface ContentInterface
     public function getData();
 
     /**
-     * @param array $data
-     * @param bool  $resetContentVersion
-     *
      * @return $this
      */
     public function setData(array $data, bool $resetContentVersion = true);
 
     /**
-     * Get content's content page
+     * Get content's content page.
      *
      * @return PageInterface|null
      */
     public function getPage();
 
     /**
-     * @param PageInterface|null $page
-     *
      * @return $this
      */
-    public function setPage(PageInterface $page = null);
+    public function setPage(?PageInterface $page = null);
 
-    /**
-     * @return ContentVersionInterface|null
-     */
     public function getContentVersion(): ?ContentVersionInterface;
 
     /**
-     * @param ContentVersionInterface|null $contentVersion
-     *
      * @return $this
      */
     public function setContentVersion(?ContentVersionInterface $contentVersion);

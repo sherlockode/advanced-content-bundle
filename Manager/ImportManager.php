@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Import\ContentImport;
-use Sherlockode\AdvancedContentBundle\Import\ContentTypeImport;
 use Sherlockode\AdvancedContentBundle\Import\ImportResult;
 use Sherlockode\AdvancedContentBundle\Import\PageImport;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -12,7 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportManager
 {
-    const ENTITY_MAPPING = [
+    public const ENTITY_MAPPING = [
         'pages' => 'Page',
         'contents' => 'Content',
     ];
@@ -42,15 +41,10 @@ class ImportManager
      */
     private $symfonyStyle;
 
-    /**
-     * @param PageImport          $pageImport
-     * @param ContentImport       $contentImport
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         PageImport $pageImport,
         ContentImport $contentImport,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->pageImport = $pageImport;
         $this->contentImport = $contentImport;
@@ -70,8 +64,6 @@ class ImportManager
     }
 
     /**
-     * @param \SplFileInfo $file
-     *
      * @throws \Exception
      */
     public function addFileToProcess(\SplFileInfo $file)
@@ -104,7 +96,7 @@ class ImportManager
             }
 
             $nbEntities = count($dataToProcess['data']);
-            if ($nbEntities === 0) {
+            if (0 === $nbEntities) {
                 continue;
             }
 
@@ -147,9 +139,6 @@ class ImportManager
         $this->contentImport->setAllowUpdate($allowUpdate);
     }
 
-    /**
-     * @param SymfonyStyle $symfonyStyle
-     */
     public function setSymfonyStyle(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;

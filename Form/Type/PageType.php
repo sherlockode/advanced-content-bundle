@@ -34,15 +34,10 @@ class PageType extends AbstractType
      */
     private $translator;
 
-    /**
-     * @param ConfigurationManager  $configurationManager
-     * @param ScopeHandlerInterface $scopeHandler
-     * @param TranslatorInterface   $translator
-     */
     public function __construct(
         ConfigurationManager $configurationManager,
         ScopeHandlerInterface $scopeHandler,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->configurationManager = $configurationManager;
         $this->scopeHandler = $scopeHandler;
@@ -66,7 +61,7 @@ class PageType extends AbstractType
                 'required' => false,
             ])
             ->add('pageMeta', PageMetaType::class, [
-                'label'       => 'page.form.page_meta',
+                'label' => 'page.form.page_meta',
             ])
             ->add('content', ContentType::class, [
                 'label' => 'page.form.content',
@@ -79,7 +74,7 @@ class PageType extends AbstractType
             ]);
         }
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
             /** @var PageInterface $page */
             $page = $event->getData();
@@ -100,17 +95,17 @@ class PageType extends AbstractType
         });
 
         // fill the content name and slug as they are not part of the form in Page context
-        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             /** @var PageInterface $page */
             $page = $event->getData();
             $content = $page->getContent();
-            if ($content === null) {
+            if (null === $content) {
                 $content = new ($this->configurationManager->getEntityClass('content'));
                 $page->setContent($content);
             }
             if (!$content->getId()) {
-                $content->setName('page-' . $page->getPageIdentifier() . '-' . bin2hex(random_bytes(6)));
-                $content->setSlug($page->getPageMeta()->getSlug() . '-' . bin2hex(random_bytes(6)));
+                $content->setName('page-'.$page->getPageIdentifier().'-'.bin2hex(random_bytes(6)));
+                $content->setSlug($page->getPageMeta()->getSlug().'-'.bin2hex(random_bytes(6)));
             }
 
             $form = $event->getForm();
@@ -138,7 +133,7 @@ class PageType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             if ($form->isValid()) {
                 // Reset page version to make sure that page is flagged as to be updated

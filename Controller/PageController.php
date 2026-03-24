@@ -40,19 +40,12 @@ class PageController extends AbstractController
      */
     private $formFactory;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param PageManager            $pageManager
-     * @param VersionManager         $versionManager
-     * @param FormFactoryInterface   $formFactory
-     */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         PageManager $pageManager,
         VersionManager $versionManager,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
     ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
@@ -62,7 +55,6 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
     public function saveDraftAction(Request $request)
@@ -70,7 +62,7 @@ class PageController extends AbstractController
         $id = $request->get('id');
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
-        if ($page === null) {
+        if (null === $page) {
             return new JsonResponse([
                 'success' => false,
             ]);
@@ -115,8 +107,6 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse
      */
     public function deleteVersionAction(Request $request)
@@ -124,13 +114,13 @@ class PageController extends AbstractController
         $id = $request->get('id');
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
-        if ($page === null) {
+        if (null === $page) {
             return new JsonResponse([
                 'success' => false,
             ]);
         }
 
-        $versionId = (int)$request->get('versionId');
+        $versionId = (int) $request->get('versionId');
         foreach ($page->getVersions() as $version) {
             if ($versionId === $version->getId()) {
                 $this->em->remove($version);

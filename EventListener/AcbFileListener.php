@@ -2,13 +2,10 @@
 
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
-use FOS\UserBundle\FOSUserEvents;
-use Sherlockode\AdvancedContentBundle\Event\AcbFileEvent;
 use Sherlockode\AdvancedContentBundle\Event\AcbFilePostValidate;
 use Sherlockode\AdvancedContentBundle\Event\AcbFilePreSubmitEvent;
 use Sherlockode\AdvancedContentBundle\Manager\UploadManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AcbFileListener implements EventSubscriberInterface
 {
@@ -22,9 +19,6 @@ class AcbFileListener implements EventSubscriberInterface
      */
     private $uploadManager;
 
-    /**
-     * @param UploadManager $uploadManager
-     */
     public function __construct(UploadManager $uploadManager)
     {
         $this->uploadManager = $uploadManager;
@@ -41,20 +35,11 @@ class AcbFileListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param AcbFilePreSubmitEvent $event
-     *
-     * @return void
-     */
     public function onPreSubmit(AcbFilePreSubmitEvent $event): void
     {
         $this->files = array_merge($this->files, [['file' => $event->getUploadedFile(), 'fileName' => $event->getFileName()]]);
-
     }
 
-    /**
-     * @return void
-     */
     public function onPostValidate(): void
     {
         foreach ($this->files as $file) {

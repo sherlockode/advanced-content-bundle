@@ -19,27 +19,17 @@ class AcbFilePreSubmitEvent extends Event
      */
     private $fileName;
 
-    /**
-     * @param UploadedFile $uploadedFile
-     * @param string       $fileName
-     */
     public function __construct(UploadedFile $uploadedFile, string $fileName)
     {
         $this->uploadedFile = $uploadedFile;
         $this->fileName = $fileName;
     }
 
-    /**
-     * @return UploadedFile
-     */
     public function getUploadedFile(): UploadedFile
     {
         return $this->uploadedFile;
     }
 
-    /**
-     * @return string
-     */
     public function getFileName(): string
     {
         return $this->fileName;

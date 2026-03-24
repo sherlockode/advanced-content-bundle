@@ -24,9 +24,8 @@ class StringToEntity implements DataTransformerInterface
     private $identifierField;
 
     /**
-     * @param EntityManagerInterface $oe
-     * @param string                 $entityClass
-     * @param string                 $identifierField
+     * @param string $entityClass
+     * @param string $identifierField
      */
     public function __construct(EntityManagerInterface $em, $entityClass, $identifierField)
     {
@@ -36,7 +35,7 @@ class StringToEntity implements DataTransformerInterface
     }
 
     /**
-     * Transforms a string into an entity
+     * Transforms a string into an entity.
      *
      * @param string $valueAsString
      *
@@ -56,7 +55,7 @@ class StringToEntity implements DataTransformerInterface
     }
 
     /**
-     * Transforms an entity into a string
+     * Transforms an entity into a string.
      *
      * @param object $entity
      *

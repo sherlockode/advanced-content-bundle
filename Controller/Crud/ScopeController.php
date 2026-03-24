@@ -6,8 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ScopeController extends AbstractController
@@ -22,13 +20,9 @@ class ScopeController extends AbstractController
      */
     private $configurationManager;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     */
     public function __construct(
         EntityManagerInterface $em,
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
     ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
@@ -44,9 +38,7 @@ class ScopeController extends AbstractController
         $scope = $this->em->getRepository($this->configurationManager->getEntityClass('scope'))->find($id);
 
         if (!$scope instanceof ScopeInterface) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('scope'), $id)
-            );
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('scope'), $id));
         }
 
         $this->em->remove($scope);

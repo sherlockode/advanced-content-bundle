@@ -21,9 +21,7 @@ abstract class AbstractElement implements ElementInterface
     }
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
+     * Add element's field(s) to content form.
      *
      * @return void
      */

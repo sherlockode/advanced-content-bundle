@@ -5,7 +5,6 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Exception\InvalidElementException;
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
-use Sherlockode\AdvancedContentBundle\LayoutType\Column;
 use Sherlockode\AdvancedContentBundle\LayoutType\LayoutTypeInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ElementManager;
@@ -51,12 +50,7 @@ class ElementImport
     private $filesDirectory;
 
     /**
-     * @param ElementManager         $elementManager
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param TranslatorInterface    $translator
-     * @param UploadManager          $uploadManager
-     * @param string                 $rootDir
+     * @param string $rootDir
      */
     public function __construct(
         ElementManager $elementManager,
@@ -64,7 +58,7 @@ class ElementImport
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         UploadManager $uploadManager,
-        $rootDir
+        $rootDir,
     ) {
         $this->elementManager = $elementManager;
         $this->em = $em;
@@ -99,7 +93,7 @@ class ElementImport
     private function getFieldTypeImportData(FieldTypeInterface $element, array $elementData)
     {
         $value = '';
-        if ($element->getValueModelTransformer() !== null) {
+        if (null !== $element->getValueModelTransformer()) {
             $value = [];
         }
         if (isset($elementData['value'])) {
@@ -132,7 +126,7 @@ class ElementImport
         if (isset($data['_file'])) {
             // handle file
             $result = $this->processFileUpload($data);
-            if ($result !== false) {
+            if (false !== $result) {
                 $data = $result;
             }
         }
@@ -141,10 +135,8 @@ class ElementImport
             $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findOneBy([
                 'slug' => $slug,
             ]);
-            if ($content === null) {
-                throw new \Exception($this->translator->trans('init.errors.content_entity_not_found', [
-                    '%slug%' => $slug,
-                ], 'AdvancedContentBundle'));
+            if (null === $content) {
+                throw new \Exception($this->translator->trans('init.errors.content_entity_not_found', ['%slug%' => $slug], 'AdvancedContentBundle'));
             }
         }
 
@@ -163,7 +155,7 @@ class ElementImport
 
     private function processFileUpload(array $data)
     {
-        $fileName = $this->getFilesDirectory() . $data['_file'];
+        $fileName = $this->getFilesDirectory().$data['_file'];
         if (!file_exists($fileName)) {
             throw new \Exception($this->translator->trans('init.errors.element_file_not_found', ['%file%' => $fileName], 'AdvancedContentBundle'));
         }
@@ -183,17 +175,15 @@ class ElementImport
      */
     private function getFilesDirectory()
     {
-        if ($this->filesDirectory === null) {
+        if (null === $this->filesDirectory) {
             $filesDirectory = $this->configurationManager->getInitFilesDirectory();
-            if (strpos($filesDirectory, '/') !== 0) {
-                $filesDirectory = $this->rootDir . '/' . $filesDirectory;
+            if (0 !== strpos($filesDirectory, '/')) {
+                $filesDirectory = $this->rootDir.'/'.$filesDirectory;
             }
             if (!file_exists($filesDirectory)) {
-                throw new \Exception(
-                    $this->translator->trans('init.errors.init_dir', ['%dir%' => $filesDirectory], 'AdvancedContentBundle')
-                );
+                throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $filesDirectory], 'AdvancedContentBundle'));
             }
-            $this->filesDirectory = $filesDirectory . '/';
+            $this->filesDirectory = $filesDirectory.'/';
         }
 
         return $this->filesDirectory;

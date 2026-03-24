@@ -12,9 +12,6 @@ class RelativeLink extends Link
      */
     private $urlBuilderManager;
 
-    /**
-     * @param UrlBuilderManager $urlBuilderManager
-     */
     public function __construct(UrlBuilderManager $urlBuilderManager)
     {
         $this->urlBuilderManager = $urlBuilderManager;
@@ -26,7 +23,7 @@ class RelativeLink extends Link
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */

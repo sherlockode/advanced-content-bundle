@@ -2,9 +2,6 @@
 
 namespace Sherlockode\AdvancedContentBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
 abstract class PageMetaVersion extends Version implements PageMetaVersionInterface
 {
     /**
@@ -32,17 +29,12 @@ abstract class PageMetaVersion extends Version implements PageMetaVersionInterfa
      */
     protected $metaDescription;
 
-    /**
-     * @return PageMetaInterface
-     */
     public function getPageMeta(): PageMetaInterface
     {
         return $this->pageMeta;
     }
 
     /**
-     * @param PageMetaInterface $pageMeta
-     *
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta): self

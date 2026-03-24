@@ -51,12 +51,7 @@ class ToolsController extends AbstractController
     private $template;
 
     /**
-     * @param ImportManager          $importManager
-     * @param ExportManager          $exportManager
-     * @param TranslatorInterface    $translator
-     * @param ConfigurationManager   $configurationManager
-     * @param EntityManagerInterface $em
-     * @param string                 $template
+     * @param string $template
      */
     public function __construct(
         ImportManager $importManager,
@@ -64,7 +59,7 @@ class ToolsController extends AbstractController
         TranslatorInterface $translator,
         ConfigurationManager $configurationManager,
         EntityManagerInterface $em,
-        $template
+        $template,
     ) {
         $this->importManager = $importManager;
         $this->exportManager = $exportManager;
@@ -86,7 +81,7 @@ class ToolsController extends AbstractController
 
         $pageTypeClass = $this->configurationManager->getEntityClass('page_type');
         $pageTypes = $this->em->getRepository($pageTypeClass)->findAll();
-        $pageType = new $pageTypeClass;
+        $pageType = new $pageTypeClass();
         $pageTypeForm = $this->createForm(PageTypeType::class, $pageType, [
             'action' => $this->generateUrl('sherlockode_acb_tools_index'),
         ]);
@@ -95,21 +90,20 @@ class ToolsController extends AbstractController
             $existingPageTypes = $this->em->getRepository($pageTypeClass)->findBy([
                 'name' => $pageType->getName(),
             ]);
-            if (count($existingPageTypes) === 0) {
+            if (0 === count($existingPageTypes)) {
                 $this->em->persist($pageType);
                 $this->em->flush();
 
                 return $this->redirectToRoute('sherlockode_acb_tools_index');
-            } else {
-                $pageTypeForm->addError(new FormError(
-                    $this->translator->trans('page_type.errors.unique_name', [], 'AdvancedContentBundle')
-                ));
             }
+            $pageTypeForm->addError(new FormError(
+                $this->translator->trans('page_type.errors.unique_name', [], 'AdvancedContentBundle')
+            ));
         }
 
         $scopeClass = $this->configurationManager->getEntityClass('scope');
         $scopes = $this->em->getRepository($scopeClass)->findAll();
-        $scope = new $scopeClass;
+        $scope = new $scopeClass();
         $scopeForm = $this->createForm(ScopeType::class, $scope, [
             'action' => $this->generateUrl('sherlockode_acb_tools_index'),
         ]);
@@ -118,16 +112,15 @@ class ToolsController extends AbstractController
             $existingScopes = $this->em->getRepository($scopeClass)->findBy([
                 'locale' => $scope->getLocale(),
             ]);
-            if (count($existingScopes) === 0) {
+            if (0 === count($existingScopes)) {
                 $this->em->persist($scope);
                 $this->em->flush();
 
                 return $this->redirectToRoute('sherlockode_acb_tools_index');
-            } else {
-                $scopeForm->addError(new FormError(
-                    $this->translator->trans('scope.errors.unique_locale', [], 'AdvancedContentBundle')
-                ));
             }
+            $scopeForm->addError(new FormError(
+                $this->translator->trans('scope.errors.unique_locale', [], 'AdvancedContentBundle')
+            ));
         }
 
         return $this->render($this->template, [
@@ -141,8 +134,6 @@ class ToolsController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function importAction(Request $request)
@@ -171,8 +162,6 @@ class ToolsController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function exportAction(Request $request)
@@ -220,9 +209,7 @@ class ToolsController extends AbstractController
         $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 
         if (!$pageType instanceof PageTypeInterface) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id)
-            );
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id));
         }
 
         $this->em->remove($pageType);

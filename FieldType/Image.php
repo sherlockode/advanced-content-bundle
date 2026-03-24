@@ -25,7 +25,7 @@ class Image extends File
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */

@@ -48,7 +48,7 @@ abstract class Content implements ContentInterface, ScopableInterface
     protected $scopes;
 
     /**
-     * Content constructor
+     * Content constructor.
      */
     public function __construct()
     {
@@ -121,9 +121,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param array $data
-     * @param bool  $resetContentVersion
-     *
      * @return $this
      */
     public function setData(array $data, bool $resetContentVersion = true)
@@ -145,28 +142,21 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param PageInterface $page
-     *
      * @return $this
      */
-    public function setPage(PageInterface $page = null)
+    public function setPage(?PageInterface $page = null)
     {
         $this->page = $page;
 
         return $this;
     }
 
-    /**
-     * @return ContentVersionInterface|null
-     */
     public function getContentVersion(): ?ContentVersionInterface
     {
         return $this->contentVersion;
     }
 
     /**
-     * @param ContentVersionInterface|null $contentVersion
-     *
      * @return $this
      */
     public function setContentVersion(?ContentVersionInterface $contentVersion)
@@ -185,8 +175,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ContentVersionInterface $contentVersion
-     *
      * @return $this
      */
     public function addVersion(ContentVersionInterface $contentVersion)
@@ -198,8 +186,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ContentVersionInterface $contentVersion
-     *
      * @return $this
      */
     public function removeVersion(ContentVersionInterface $contentVersion)
@@ -218,8 +204,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function addScope(ScopeInterface $scope)
@@ -230,8 +214,6 @@ abstract class Content implements ContentInterface, ScopableInterface
     }
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function removeScope(ScopeInterface $scope)

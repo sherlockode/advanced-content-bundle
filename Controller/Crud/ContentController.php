@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ContentController
+ * Class ContentController.
  */
 class ContentController extends AbstractController
 {
@@ -33,15 +33,11 @@ class ContentController extends AbstractController
 
     /**
      * ContentController constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param ContentManager         $contentManager
-     * @param ConfigurationManager   $configurationManager
      */
     public function __construct(
         EntityManagerInterface $em,
         ContentManager $contentManager,
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
@@ -49,8 +45,7 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param int     $id
-     * @param Request $request
+     * @param int $id
      *
      * @return Response
      */
@@ -58,10 +53,8 @@ class ContentController extends AbstractController
     {
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-            );
+        if (null === $content) {
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
         }
 
         $form = $this->createForm(ContentType::class, $content, [
@@ -77,14 +70,12 @@ class ContentController extends AbstractController
         }
 
         return $this->render('@SherlockodeAdvancedContent/Content/edit_content.html.twig', [
-                'form' => $form->createView(),
-                'data' => $content,
-            ]);
+            'form' => $form->createView(),
+            'data' => $content,
+        ]);
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function createAction(Request $request)
@@ -92,14 +83,12 @@ class ContentController extends AbstractController
         if ($id = $request->get('duplicateId')) {
             $contentToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
             if (!$contentToDuplicate instanceof ContentInterface) {
-                throw $this->createNotFoundException(
-                    sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-                );
+                throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
             }
             $content = $this->contentManager->duplicate($contentToDuplicate);
         } else {
             $contentEntityClass = $this->configurationManager->getEntityClass('content');
-            $content = new $contentEntityClass;
+            $content = new $contentEntityClass();
         }
 
         $form = $this->createForm(ContentType::class, $content, [
@@ -142,10 +131,8 @@ class ContentController extends AbstractController
     {
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-            );
+        if (null === $content) {
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
         }
 
         $this->em->remove($content);
@@ -163,10 +150,8 @@ class ContentController extends AbstractController
     {
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-            );
+        if (null === $content) {
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
         }
 
         return $this->render('@SherlockodeAdvancedContent/Content/show.html.twig', [

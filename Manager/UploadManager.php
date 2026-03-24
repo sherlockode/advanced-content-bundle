@@ -31,29 +31,24 @@ class UploadManager
     }
 
     /**
-     * Upload file on server
-     *
-     * @param UploadedFile|null $file
-     * @param string|null       $fileName
+     * Upload file on server.
      *
      * @return string
      */
-    public function upload(UploadedFile $file = null,  ?string $fileName = null)
+    public function upload(?UploadedFile $file = null, ?string $fileName = null)
     {
-        if ($file === null) {
+        if (null === $file) {
             return '';
         }
 
-        $fileName =  $fileName ?? $this->getFileName($file);
+        $fileName ??= $this->getFileName($file);
         $file->move($this->getTargetDir(), $fileName);
 
         return $fileName;
     }
 
     /**
-     * Copy file into acb files directory
-     *
-     * @param File $file
+     * Copy file into acb files directory.
      *
      * @return string
      */
@@ -66,19 +61,19 @@ class UploadManager
         if (!is_writeable($this->getTargetDir())) {
             throw new \Exception(sprintf('Target directory %s is not writeable', $this->getTargetDir()));
         }
-        copy($file->getRealPath(), $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName);
+        copy($file->getRealPath(), $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName);
 
         return $fileName;
     }
 
     /**
-     * Remove file
+     * Remove file.
      *
      * @param string $fileName
      */
     public function remove($fileName)
     {
-        $fileName = $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName;
+        $fileName = $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName;
 
         if (!file_exists($fileName)) {
             return;
@@ -88,7 +83,7 @@ class UploadManager
     }
 
     /**
-     * Get file name
+     * Get file name.
      *
      * @param UploadedFile|File $file
      *
@@ -110,13 +105,13 @@ class UploadManager
             return false;
         }
 
-        $fileName = $this->getTargetDir() . DIRECTORY_SEPARATOR . $src;
+        $fileName = $this->getTargetDir().DIRECTORY_SEPARATOR.$src;
 
         return file_exists($fileName);
     }
 
     /**
-     * Get target directory
+     * Get target directory.
      *
      * @return string
      */

@@ -9,9 +9,6 @@ class LocaleScope extends Scope implements LocaleScopeInterface
      */
     protected $locale;
 
-    /**
-     * @return string
-     */
     public function getLocale(): ?string
     {
         return $this->locale;
@@ -34,7 +31,7 @@ class LocaleScope extends Scope implements LocaleScopeInterface
      */
     public function getOptionTitle()
     {
-        return (string)$this->locale;
+        return (string) $this->locale;
     }
 
     /**
@@ -42,6 +39,6 @@ class LocaleScope extends Scope implements LocaleScopeInterface
      */
     public function getUnicityIdentifier()
     {
-        return (string)$this->locale;
+        return (string) $this->locale;
     }
 }

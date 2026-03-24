@@ -10,9 +10,7 @@ class ConfigurationManager
     protected $config;
 
     /**
-     * Set bundle configuration
-     *
-     * @param $config
+     * Set bundle configuration.
      */
     public function setConfig($config)
     {
@@ -20,7 +18,7 @@ class ConfigurationManager
     }
 
     /**
-     * Get entity class configuration for given type
+     * Get entity class configuration for given type.
      *
      * @param string $type
      *
@@ -45,9 +43,6 @@ class ConfigurationManager
         return $this->config['entity_class'];
     }
 
-    /**
-     * @return mixed
-     */
     public function getImageDirectory()
     {
         return $this->config['upload']['image_directory'];
@@ -103,8 +98,6 @@ class ConfigurationManager
 
     /**
      * @param string $option
-     *
-     * @return mixed
      */
     private function getDefaultOptionValue($option)
     {

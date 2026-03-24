@@ -25,13 +25,9 @@ class ExportManager
      */
     private $filesData = [];
 
-    /**
-     * @param PageExport        $pageExport
-     * @param ContentExport     $contentExport
-     */
     public function __construct(
         PageExport $pageExport,
-        ContentExport $contentExport
+        ContentExport $contentExport,
     ) {
         $this->pageExport = $pageExport;
         $this->contentExport = $contentExport;
@@ -46,7 +42,7 @@ class ExportManager
         foreach ($pages as $page) {
             /** @var PageInterface $page */
             $data = $this->pageExport->exportData($page);
-            $this->addToFilesData($data, 'page_' . $page->getPageIdentifier());
+            $this->addToFilesData($data, 'page_'.$page->getPageIdentifier());
         }
     }
 
@@ -58,7 +54,7 @@ class ExportManager
         foreach ($contents as $content) {
             /** @var ContentInterface $content */
             $data = $this->contentExport->exportData($content);
-            $this->addToFilesData($data, 'content_' . $content->getSlug());
+            $this->addToFilesData($data, 'content_'.$content->getSlug());
         }
     }
 
@@ -69,7 +65,7 @@ class ExportManager
     private function addToFilesData($data, $filename)
     {
         $data = Yaml::dump($data, 15);
-        $this->filesData[$filename . '.yaml'] = $data;
+        $this->filesData[$filename.'.yaml'] = $data;
     }
 
     /**
@@ -83,7 +79,7 @@ class ExportManager
             $prefix = date('Ymd-His_');
         }
         foreach ($this->filesData as $filename => $data) {
-            file_put_contents($directory . $prefix . $filename, $data);
+            file_put_contents($directory.$prefix.$filename, $data);
         }
     }
 
@@ -92,22 +88,21 @@ class ExportManager
      */
     public function generateZipFile()
     {
-        $tmpDir = '/tmp/acb_export_' . time() . '/';
+        $tmpDir = '/tmp/acb_export_'.time().'/';
         mkdir($tmpDir);
         $this->generateFiles($tmpDir, false);
 
-        $zipFileName = '/tmp/acb_export_' . date('Ymd-His') . '.zip';
+        $zipFileName = '/tmp/acb_export_'.date('Ymd-His').'.zip';
         $zip = new \ZipArchive();
         $zip->open($zipFileName, \ZipArchive::CREATE);
         $zip->addPattern('/.*/', $tmpDir, ['remove_all_path' => true]);
         $zip->close();
 
-        foreach (glob($tmpDir . '*') as $file) {
+        foreach (glob($tmpDir.'*') as $file) {
             unlink($file);
         }
         rmdir($tmpDir);
 
         return $zipFileName;
     }
-
 }

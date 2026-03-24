@@ -32,7 +32,7 @@ class PictureType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($options) {
+            function (FormEvent $event) {
                 $data = $event->getData();
                 $globalMimeTypes = $data['image']['mime_type'] ?? [];
                 if (isset($data['sources']) && is_array($data['sources'])) {
@@ -46,9 +46,6 @@ class PictureType extends AbstractType
         );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExportCommand extends Command
 {
-    const AVAILABLE_ENTITIES = ['Page', 'Content'];
+    public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
     /**
      * @var EntityManagerInterface
@@ -58,12 +58,8 @@ class ExportCommand extends Command
     private $exportTypes = [];
 
     /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param TranslatorInterface    $translator
-     * @param ExportManager          $exportManager
-     * @param string                 $rootDir
-     * @param null|string            $name
+     * @param string      $rootDir
+     * @param string|null $name
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -71,7 +67,7 @@ class ExportCommand extends Command
         TranslatorInterface $translator,
         ExportManager $exportManager,
         $rootDir,
-        $name = null
+        $name = null,
     ) {
         parent::__construct($name);
         $this->em = $em;
@@ -103,9 +99,6 @@ class ExportCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -149,34 +142,28 @@ class ExportCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @throws \Exception
      */
     private function init(InputInterface $input)
     {
         $initDir = $input->getOption('dir');
-        if ($initDir === null) {
+        if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
-        if (strpos($initDir, '/') !== 0) {
-            $initDir = $this->rootDir . '/' . $initDir;
+        if (0 !== strpos($initDir, '/')) {
+            $initDir = $this->rootDir.'/'.$initDir;
         }
         $initDir .= '/';
 
         if (!file_exists($initDir)) {
-            throw new \Exception(
-                $this->translator->trans('init.errors.init_dir', ['%dir%' => $initDir], 'AdvancedContentBundle')
-            );
+            throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $initDir], 'AdvancedContentBundle'));
         }
         $this->sourceDirectory = $initDir;
 
         $exportTypes = $input->getOption('type');
         foreach ($exportTypes as $exportType) {
             if (!in_array($exportType, self::AVAILABLE_ENTITIES)) {
-                throw new \Exception(
-                    $this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $exportType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle')
-                );
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $exportType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
             }
         }
         $this->exportTypes = $exportTypes;

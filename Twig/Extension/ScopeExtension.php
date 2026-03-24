@@ -13,17 +13,14 @@ class ScopeExtension extends AbstractExtension
      */
     private $configurationManager;
 
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
     public function __construct(
-        ConfigurationManager $configurationManager
+        ConfigurationManager $configurationManager,
     ) {
         $this->configurationManager = $configurationManager;
     }
 
     /**
-     * Add specific twig function
+     * Add specific twig function.
      *
      * @return TwigFunction[]
      */
@@ -34,9 +31,6 @@ class ScopeExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @return bool
-     */
     public function isScopesEnabled(): bool
     {
         return $this->configurationManager->isScopesEnabled();

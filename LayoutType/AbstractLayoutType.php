@@ -13,7 +13,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      */
     public function getFormFieldLabel()
     {
-        return 'layout_type.' . $this->getCode() . '.label';
+        return 'layout_type.'.$this->getCode().'.label';
     }
 
     /**
@@ -21,7 +21,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      */
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Layout/front/' . $this->getCode() . '.html.twig';
+        return '@SherlockodeAdvancedContent/Layout/front/'.$this->getCode().'.html.twig';
     }
 
     /**
@@ -29,13 +29,11 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      */
     public function getPreviewTemplate()
     {
-        return '@SherlockodeAdvancedContent/Layout/preview/'. $this->getCode() .'.html.twig';
+        return '@SherlockodeAdvancedContent/Layout/preview/'.$this->getCode().'.html.twig';
     }
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
+     * Add element's field(s) to content form.
      *
      * @return void
      */
@@ -51,7 +49,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
         ]);
 
         $configurationFormType = $this->getConfigurationFormType();
-        if ($configurationFormType !== null) {
+        if (null !== $configurationFormType) {
             $builder->add('config', $configurationFormType, [
                 'label' => false,
             ]);
@@ -78,9 +76,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
     }
 
     /**
-     * Get layout configuration form type
-     *
-     * @return string
+     * Get layout configuration form type.
      */
     abstract protected function getConfigurationFormType(): ?string;
 }

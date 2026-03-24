@@ -20,21 +20,14 @@ class ScopeChoiceType extends AbstractType
      */
     private $scopeHandler;
 
-    /**
-     * @param ConfigurationManager  $configurationManager
-     * @param ScopeHandlerInterface $scopeHandler
-     */
     public function __construct(
         ConfigurationManager $configurationManager,
-        ScopeHandlerInterface $scopeHandler
+        ScopeHandlerInterface $scopeHandler,
     ) {
         $this->configurationManager = $configurationManager;
         $this->scopeHandler = $scopeHandler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -48,9 +41,6 @@ class ScopeChoiceType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?string
     {
         return EntityType::class;

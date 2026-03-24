@@ -38,11 +38,6 @@ class AcbFileType extends AbstractType
      */
     private $mimeTypeManager;
 
-    /**
-     * @param UploadManager            $uploadManager
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param MimeTypeManager          $mimeTypeManager
-     */
     public function __construct(UploadManager $uploadManager, EventDispatcherInterface $eventDispatcher, MimeTypeManager $mimeTypeManager)
     {
         $this->uploadManager = $uploadManager;
@@ -68,7 +63,7 @@ class AcbFileType extends AbstractType
                 'choice_attr' => function ($choice): array {
                     return ['data-mime-type' => json_encode($this->mimeTypeManager->getMimeTypesByCode($choice))];
                 },
-                'attr' => ['data-mime-type-restriction' => '']
+                'attr' => ['data-mime-type-restriction' => ''],
             ])
         ;
 
@@ -133,10 +128,9 @@ class AcbFileType extends AbstractType
     }
 
     /**
-     * @param FormInterface $form
-     * @param array         $data
-     * @param array         $options
-     * @param bool          $hasFile
+     * @param array $data
+     * @param array $options
+     * @param bool  $hasFile
      *
      * @return void
      */
@@ -177,7 +171,7 @@ class AcbFileType extends AbstractType
                 'label' => 'field_type.file.file',
                 'required' => !$isFileUploaded && $options['required'],
                 'constraints' => $options['file_constraints'],
-                'attr' => ['data-mime-type-restriction' => '']
+                'attr' => ['data-mime-type-restriction' => ''],
             ])
         ;
 
@@ -194,9 +188,6 @@ class AcbFileType extends AbstractType
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -208,7 +199,7 @@ class AcbFileType extends AbstractType
     }
 
     /**
-     * Make the image accessible in view
+     * Make the image accessible in view.
      *
      * @param FormView      $view    The view
      * @param FormInterface $form    The form

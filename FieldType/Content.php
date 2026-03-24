@@ -12,11 +12,8 @@ class Content extends AbstractFieldType
      */
     private $scopeHandler;
 
-    /**
-     * @param ScopeHandlerInterface $scopeHandler
-     */
     public function __construct(
-        ScopeHandlerInterface $scopeHandler
+        ScopeHandlerInterface $scopeHandler,
     ) {
         $this->scopeHandler = $scopeHandler;
     }
@@ -30,7 +27,7 @@ class Content extends AbstractFieldType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */
@@ -45,8 +42,6 @@ class Content extends AbstractFieldType
     }
 
     /**
-     * @param mixed $element
-     *
      * @return array
      */
     public function getRawValue($element)
@@ -54,7 +49,7 @@ class Content extends AbstractFieldType
         $element['entity'] = null;
 
         $contentSlug = $element['content'] ?? null;
-        if ($contentSlug === null) {
+        if (null === $contentSlug) {
             return $element;
         }
 

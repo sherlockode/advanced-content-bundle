@@ -3,7 +3,6 @@
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Element\AbstractElement;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -24,7 +23,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
      */
     public function getFormFieldLabel()
     {
-        return 'field_type.' . $this->getCode() . '.label';
+        return 'field_type.'.$this->getCode().'.label';
     }
 
     public function getIconClass()
@@ -37,7 +36,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
      */
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/front/' . $this->getCode() . '.html.twig';
+        return '@SherlockodeAdvancedContent/Field/front/'.$this->getCode().'.html.twig';
     }
 
     /**
@@ -45,7 +44,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
      */
     public function getPreviewTemplate()
     {
-        return '@SherlockodeAdvancedContent/Field/preview/'. $this->getCode() .'.html.twig';
+        return '@SherlockodeAdvancedContent/Field/preview/'.$this->getCode().'.html.twig';
     }
 
     /**
@@ -57,9 +56,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     }
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
+     * Add element's field(s) to content form.
      *
      * @return void
      */
@@ -73,7 +70,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
         ));
 
         $modelTransformer = $this->getValueModelTransformer();
-        if ($modelTransformer !== null) {
+        if (null !== $modelTransformer) {
             $builder->get('value')
                 ->addModelTransformer($modelTransformer);
         }
@@ -104,7 +101,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     }
 
     /**
-     * Get model transformer for value field
+     * Get model transformer for value field.
      *
      * @return null
      */
@@ -114,7 +111,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     }
 
     /**
-     * Get options to apply on element
+     * Get options to apply on element.
      *
      * @return array
      */
@@ -150,18 +147,13 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
         ]);
     }
 
-    /**
-     * @param mixed $element
-     *
-     * @return mixed
-     */
     public function getRawValue($element)
     {
         return $element;
     }
 
     /**
-     * Get form field type
+     * Get form field type.
      *
      * @return string
      */

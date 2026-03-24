@@ -10,8 +10,6 @@ interface PageVersionInterface
     public function getPage();
 
     /**
-     * @param PageInterface $page
-     *
      * @return $this
      */
     public function setPage(PageInterface $page);
@@ -22,8 +20,6 @@ interface PageVersionInterface
     public function getContentVersion();
 
     /**
-     * @param ContentVersionInterface $contentVersion
-     *
      * @return $this
      */
     public function setContentVersion(ContentVersionInterface $contentVersion);
@@ -34,8 +30,6 @@ interface PageVersionInterface
     public function getPageMetaVersion();
 
     /**
-     * @param PageMetaVersionInterface $pageMetaVersion
-     *
      * @return $this
      */
     public function setPageMetaVersion(PageMetaVersionInterface $pageMetaVersion);
