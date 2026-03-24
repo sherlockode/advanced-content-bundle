@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -11,12 +13,13 @@ class ElementHideOnType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getParent()
     {
         return ChoiceType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choices' => [

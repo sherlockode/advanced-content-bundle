@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 abstract class ContentVersion extends Version implements ContentVersionInterface
@@ -43,9 +45,7 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
     public function getData()
     {
         $data = $this->data ?? [];
-        uasort($data, function ($a, $b) {
-            return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
-        });
+        uasort($data, fn ($a, $b) => ($a['position'] ?? 0) <=> ($b['position'] ?? 0));
 
         return $data;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Element\ElementInterface;
@@ -12,22 +14,16 @@ class ElementManager
     /**
      * @var ElementInterface[]
      */
-    private $elements = [];
+    private array $elements = [];
 
-    /**
-     * @var array
-     */
-    private $fieldsConfiguration;
-
-    public function __construct(array $fieldsConfiguration)
+    public function __construct(private array $fieldsConfiguration)
     {
-        $this->fieldsConfiguration = $fieldsConfiguration;
     }
 
     /**
      * Add field type.
      */
-    public function addFieldType(FieldTypeInterface $fieldType)
+    public function addFieldType(FieldTypeInterface $fieldType): void
     {
         $enabled = true;
         if (isset($this->fieldsConfiguration[$fieldType->getCode()])) {
@@ -45,10 +41,8 @@ class ElementManager
 
     /**
      * Get available field types.
-     *
-     * @return array
      */
-    public function getGroupedFieldTypes()
+    public function getGroupedFieldTypes(): array
     {
         $choices = [];
         foreach ($this->elements as $element) {
@@ -68,7 +62,7 @@ class ElementManager
     /**
      * Add layout type.
      */
-    public function addLayoutType(LayoutTypeInterface $layoutType)
+    public function addLayoutType(LayoutTypeInterface $layoutType): void
     {
         $this->elements[$layoutType->getCode()] = $layoutType;
     }

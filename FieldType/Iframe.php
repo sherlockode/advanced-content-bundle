@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -9,20 +11,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class Iframe extends AbstractFieldType
 {
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return FormType::class;
     }
 
     /**
      * Add element's field(s) to content form.
-     *
-     * @return void
      */
-    public function buildContentElement(FormBuilderInterface $builder)
+    #[\Override]
+    public function buildContentElement(FormBuilderInterface $builder): void
     {
         parent::buildContentElement($builder);
 
@@ -35,10 +33,8 @@ class Iframe extends AbstractFieldType
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'iframe';
     }

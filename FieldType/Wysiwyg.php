@@ -1,30 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\WysiwygType;
 
 class Wysiwyg extends AbstractFieldType
 {
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return WysiwygType::class;
     }
 
-    protected function getDefaultIconClass()
+    #[\Override]
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-text-height';
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'wysiwyg';
     }

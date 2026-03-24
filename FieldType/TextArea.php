@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -11,6 +13,7 @@ class TextArea extends AbstractInputType
      *
      * @return array
      */
+    #[\Override]
     public function getFormElementOptions()
     {
         $fieldOptions = [];
@@ -23,20 +26,15 @@ class TextArea extends AbstractInputType
         return $formFieldOptions;
     }
 
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return TextareaType::class;
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'textarea';
     }

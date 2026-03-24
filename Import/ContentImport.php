@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,21 +12,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentImport extends AbstractImport
 {
-    /**
-     * @var ElementImport
-     */
-    private $elementImport;
-
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         ScopeHandlerInterface $scopeHandler,
-        ElementImport $elementImport,
+        private readonly ElementImport $elementImport,
     ) {
         parent::__construct($em, $configurationManager, $translator, $scopeHandler);
-
-        $this->elementImport = $elementImport;
     }
 
     /**
@@ -76,7 +71,7 @@ class ContentImport extends AbstractImport
         $this->em->flush();
     }
 
-    public function createElements(array $elementsData, ContentInterface $content)
+    public function createElements(array $elementsData, ContentInterface $content): void
     {
         $elements = [];
         $position = 0;
@@ -94,7 +89,7 @@ class ContentImport extends AbstractImport
     /**
      * @param string $dir
      */
-    public function setFilesDirectory($dir)
+    public function setFilesDirectory($dir): void
     {
         $this->elementImport->setFilesDirectory($dir);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Export\ContentExport;
@@ -10,34 +12,19 @@ use Symfony\Component\Yaml\Yaml;
 
 class ExportManager
 {
-    /**
-     * @var PageExport
-     */
-    private $pageExport;
-
-    /**
-     * @var ContentExport
-     */
-    private $contentExport;
-
-    /**
-     * @var array
-     */
-    private $filesData = [];
+    private array $filesData = [];
 
     public function __construct(
-        PageExport $pageExport,
-        ContentExport $contentExport,
+        private readonly PageExport $pageExport,
+        private readonly ContentExport $contentExport,
     ) {
-        $this->pageExport = $pageExport;
-        $this->contentExport = $contentExport;
         $this->pageExport->setContentExport($this->contentExport);
     }
 
     /**
      * @param array|PageInterface[] $pages
      */
-    public function generatePagesData($pages)
+    public function generatePagesData($pages): void
     {
         foreach ($pages as $page) {
             /** @var PageInterface $page */
@@ -49,7 +36,7 @@ class ExportManager
     /**
      * @param array|ContentInterface[] $contents
      */
-    public function generateContentsData($contents)
+    public function generateContentsData($contents): void
     {
         foreach ($contents as $content) {
             /** @var ContentInterface $content */
@@ -59,20 +46,18 @@ class ExportManager
     }
 
     /**
-     * @param array  $data
-     * @param string $filename
+     * @param array $data
      */
-    private function addToFilesData($data, $filename)
+    private function addToFilesData($data, string $filename): void
     {
         $data = Yaml::dump($data, 15);
         $this->filesData[$filename.'.yaml'] = $data;
     }
 
     /**
-     * @param string $directory
-     * @param bool   $useDatePrefix
+     * @param bool $useDatePrefix
      */
-    public function generateFiles($directory, $useDatePrefix = true)
+    public function generateFiles(string $directory, $useDatePrefix = true): void
     {
         $prefix = '';
         if ($useDatePrefix) {
@@ -84,10 +69,7 @@ class ExportManager
         }
     }
 
-    /**
-     * @return string
-     */
-    public function generateZipFile()
+    public function generateZipFile(): string
     {
         $tmpDir = '/tmp/acb_export_'.time().'/';
         mkdir($tmpDir);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -12,23 +14,13 @@ use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 
 class PageListener
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
-    {
-        $this->configurationManager = $configurationManager;
-        $this->versionManager = $versionManager;
+    public function __construct(
+        private readonly ConfigurationManager $configurationManager,
+        private readonly VersionManager $versionManager,
+    ) {
     }
 
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
 
@@ -65,7 +57,7 @@ class PageListener
         }
     }
 
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
 
@@ -78,7 +70,7 @@ class PageListener
         }
     }
 
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
@@ -18,7 +20,7 @@ class SherlockodeAdvancedContentBundle extends Bundle
         $container->addCompilerPass(new FormThemePass());
     }
 
-    private function addRegisterMappingsPass(ContainerBuilder $container)
+    private function addRegisterMappingsPass(ContainerBuilder $container): void
     {
         $mappings = [
             realpath(__DIR__.'/Resources/config/doctrine-mapping') => 'Sherlockode\AdvancedContentBundle\Model',

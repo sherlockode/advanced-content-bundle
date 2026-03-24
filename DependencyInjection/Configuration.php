@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -9,10 +11,8 @@ class Configuration implements ConfigurationInterface
 {
     /**
      * Build config tree for bundle.
-     *
-     * @return TreeBuilder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $tb = new TreeBuilder('sherlockode_advanced_content');
         $root = $tb->getRootNode();

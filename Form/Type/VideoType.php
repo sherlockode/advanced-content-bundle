@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -11,7 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class VideoType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('url', UrlType::class, [

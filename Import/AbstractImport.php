@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Cocur\Slugify\Slugify;
@@ -12,26 +14,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractImport
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    protected $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    protected $scopeHandler;
-
     /**
      * @var array
      */
@@ -53,15 +35,11 @@ abstract class AbstractImport
     protected $errors = [];
 
     public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        ScopeHandlerInterface $scopeHandler,
+        protected EntityManagerInterface $em,
+        protected ConfigurationManager $configurationManager,
+        protected TranslatorInterface $translator,
+        protected ScopeHandlerInterface $scopeHandler,
     ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
-        $this->scopeHandler = $scopeHandler;
         $this->init();
     }
 
@@ -175,9 +153,7 @@ abstract class AbstractImport
 
         $entity = null;
         foreach ($existingEntities as $existingEntity) {
-            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), function ($a, $b) {
-                return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
-            });
+            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), fn ($a, $b) => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
 
             if (count($result) === count($scopes)) {
                 return $existingEntity;

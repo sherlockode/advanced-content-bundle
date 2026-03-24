@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,36 +17,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ElementImport
 {
     /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var UploadManager
-     */
-    private $uploadManager;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    /**
      * @var string
      */
     private $filesDirectory;
@@ -53,22 +25,16 @@ class ElementImport
      * @param string $rootDir
      */
     public function __construct(
-        ElementManager $elementManager,
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        UploadManager $uploadManager,
-        $rootDir,
+        private readonly ElementManager $elementManager,
+        private readonly EntityManagerInterface $em,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
+        private readonly UploadManager $uploadManager,
+        private $rootDir,
     ) {
-        $this->elementManager = $elementManager;
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
-        $this->uploadManager = $uploadManager;
-        $this->rootDir = $rootDir;
     }
 
-    public function getElementImportData(array $elementData, int $position = 0)
+    public function getElementImportData(array $elementData, int $position = 0): array
     {
         if (!isset($elementData['type'])) {
             throw new \Exception($this->translator->trans('init.errors.element_missing_type', [], 'AdvancedContentBundle'));
@@ -80,7 +46,7 @@ class ElementImport
         } elseif ($element instanceof LayoutTypeInterface) {
             $data = $this->getLayoutTypeImportData($element, $elementData);
         } else {
-            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in import', get_class($element)));
+            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in import', $element::class));
         }
 
         return array_merge([
@@ -90,7 +56,7 @@ class ElementImport
         ], $data);
     }
 
-    private function getFieldTypeImportData(FieldTypeInterface $element, array $elementData)
+    private function getFieldTypeImportData(FieldTypeInterface $element, array $elementData): array
     {
         $value = '';
         if (null !== $element->getValueModelTransformer()) {
@@ -107,7 +73,7 @@ class ElementImport
         return ['value' => $value];
     }
 
-    private function getLayoutTypeImportData(LayoutTypeInterface $element, array $elementData)
+    private function getLayoutTypeImportData(LayoutTypeInterface $element, array $elementData): array
     {
         $elements = $elementData['elements'] ?? [];
         $elementsData = [];
@@ -122,7 +88,10 @@ class ElementImport
         ];
     }
 
-    private function processValueArray(array $data)
+    /**
+     * @return mixed[]
+     */
+    private function processValueArray(array $data): array
     {
         if (isset($data['_file'])) {
             // handle file
@@ -151,7 +120,7 @@ class ElementImport
         return $newData;
     }
 
-    private function processFileUpload(array $data)
+    private function processFileUpload(array $data): array
     {
         $fileName = $this->getFilesDirectory().$data['_file'];
         if (!file_exists($fileName)) {
@@ -175,7 +144,7 @@ class ElementImport
     {
         if (null === $this->filesDirectory) {
             $filesDirectory = $this->configurationManager->getInitFilesDirectory();
-            if (0 !== strpos($filesDirectory, '/')) {
+            if (!str_starts_with($filesDirectory, '/')) {
                 $filesDirectory = $this->rootDir.'/'.$filesDirectory;
             }
 
@@ -192,7 +161,7 @@ class ElementImport
     /**
      * @param string $dir
      */
-    public function setFilesDirectory($dir)
+    public function setFilesDirectory($dir): void
     {
         $this->filesDirectory = $dir;
     }

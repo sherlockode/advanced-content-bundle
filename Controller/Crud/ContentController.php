@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -8,6 +10,7 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,31 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
 class ContentController extends AbstractController
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ContentManager
-     */
-    private $contentManager;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
      * ContentController constructor.
      */
     public function __construct(
-        EntityManagerInterface $em,
-        ContentManager $contentManager,
-        ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+        private readonly ContentManager $contentManager,
+        private readonly ConfigurationManager $configurationManager,
     ) {
-        $this->em = $em;
-        $this->contentManager = $contentManager;
-        $this->configurationManager = $configurationManager;
     }
 
     /**
@@ -49,7 +34,7 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function edit($id, Request $request)
+    public function edit($id, Request $request): RedirectResponse|Response
     {
         $content = $this->contentManager->getContentById($id);
 
@@ -78,7 +63,7 @@ class ContentController extends AbstractController
     /**
      * @return Response
      */
-    public function create(Request $request)
+    public function create(Request $request): RedirectResponse|Response
     {
         if ($id = $request->get('duplicateId')) {
             $contentToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
@@ -111,10 +96,7 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @return Response
-     */
-    public function list()
+    public function list(): Response
     {
         $contents = $this->contentManager->getContents();
 
@@ -128,7 +110,7 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function delete($id)
+    public function delete($id): RedirectResponse
     {
         $content = $this->contentManager->getContentById($id);
 
@@ -144,10 +126,8 @@ class ContentController extends AbstractController
 
     /**
      * @param int $id
-     *
-     * @return Response
      */
-    public function show($id)
+    public function show($id): Response
     {
         $content = $this->contentManager->getContentById($id);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -11,17 +13,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ScopeType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('locale', TextType::class, [
@@ -33,7 +29,7 @@ class ScopeType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => $this->configurationManager->getEntityClass('scope'),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Symfony\Component\Asset\Packages;
@@ -7,29 +9,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class UrlBuilderManager
 {
-    /**
-     * @var UploadManager
-     */
-    private $uploadManager;
-
-    /**
-     * @var Packages
-     */
-    private $assetPackages;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
-        UploadManager $uploadManager,
-        Packages $assetPackages,
-        RequestStack $requestStack,
+        private readonly UploadManager $uploadManager,
+        private readonly Packages $assetPackages,
+        private readonly RequestStack $requestStack,
     ) {
-        $this->uploadManager = $uploadManager;
-        $this->assetPackages = $assetPackages;
-        $this->requestStack = $requestStack;
     }
 
     public function getFileUrl(string $fileName): string
@@ -52,11 +36,11 @@ class UrlBuilderManager
             return '';
         }
 
-        if ('#' === substr($url, 0, 1)) {
+        if (str_starts_with($url, '#')) {
             return $url;
         }
 
-        if ('http' === substr($url, 0, 4)) {
+        if (str_starts_with($url, 'http')) {
             return $url;
         }
 

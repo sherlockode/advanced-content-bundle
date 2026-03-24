@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,29 +11,14 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class StringToEntity implements DataTransformerInterface
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $entityClass;
-
-    /**
-     * @var string
-     */
-    private $identifierField;
-
-    /**
      * @param string $entityClass
      * @param string $identifierField
      */
-    public function __construct(EntityManagerInterface $em, $entityClass, $identifierField)
-    {
-        $this->em = $em;
-        $this->entityClass = $entityClass;
-        $this->identifierField = $identifierField;
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private $entityClass,
+        private $identifierField,
+    ) {
     }
 
     /**
@@ -41,7 +28,7 @@ class StringToEntity implements DataTransformerInterface
      *
      * @return object|null
      */
-    public function transform($valueAsString)
+    public function transform($valueAsString): mixed
     {
         if (empty($valueAsString)) {
             return null;
@@ -61,7 +48,7 @@ class StringToEntity implements DataTransformerInterface
      *
      * @return string
      */
-    public function reverseTransform($entity)
+    public function reverseTransform($entity): mixed
     {
         if (empty($entity)) {
             return null;

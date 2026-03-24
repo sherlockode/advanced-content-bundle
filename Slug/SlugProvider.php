@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Slug;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -8,14 +10,8 @@ use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 
 class SlugProvider implements SlugProviderInterface
 {
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    public function __construct(ScopeHandlerInterface $scopeHandler)
+    public function __construct(private readonly ScopeHandlerInterface $scopeHandler)
     {
-        $this->scopeHandler = $scopeHandler;
     }
 
     public function setPageValidIdentifier(PageInterface $page): void
@@ -51,10 +47,7 @@ class SlugProvider implements SlugProviderInterface
         }
     }
 
-    /**
-     * @param string $value
-     */
-    private function getNewValue($value): string
+    private function getNewValue(string $value): string
     {
         if (preg_match('/-(\d+)$/', $value, $matches) && array_key_exists(1, $matches)) {
             return preg_replace('/'.$matches[1].'$/', $matches[1] + 1, $value);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,43 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PageController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var PageManager
-     */
-    private $pageManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        PageManager $pageManager,
-        VersionManager $versionManager,
-        FormFactoryInterface $formFactory,
+        private readonly EntityManagerInterface $em,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly PageManager $pageManager,
+        private readonly VersionManager $versionManager,
+        private readonly FormFactoryInterface $formFactory,
     ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->pageManager = $pageManager;
-        $this->versionManager = $versionManager;
-        $this->formFactory = $formFactory;
     }
 
     /**

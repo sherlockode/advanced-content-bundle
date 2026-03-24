@@ -1,19 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\User;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AnonymousUserProvider implements UserProviderInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 
     public function getUserId(): ?int

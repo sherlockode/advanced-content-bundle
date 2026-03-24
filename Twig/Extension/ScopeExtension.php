@@ -1,36 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class ScopeExtension extends AbstractExtension
+class ScopeExtension
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    public function __construct(
-        ConfigurationManager $configurationManager,
-    ) {
-        $this->configurationManager = $configurationManager;
-    }
-
-    /**
-     * Add specific twig function.
-     *
-     * @return TwigFunction[]
-     */
-    public function getFunctions()
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        return [
-            new TwigFunction('acb_is_scopes_enabled', [$this, 'isScopesEnabled']),
-        ];
     }
 
+    #[AsTwigFunction(name: 'acb_is_scopes_enabled')]
     public function isScopesEnabled(): bool
     {
         return $this->configurationManager->isScopesEnabled();

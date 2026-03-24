@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,20 +22,10 @@ class MimeTypeManager
 
     public const MIME_TYPE_MULTIMEDIA = 70;
 
-    /**
-     * @var array
-     */
-    private $mimeTypes;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(array $mimeTypes, TranslatorInterface $translator)
-    {
-        $this->mimeTypes = $mimeTypes;
-        $this->translator = $translator;
+    public function __construct(
+        private array $mimeTypes,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
@@ -89,7 +81,7 @@ class MimeTypeManager
         }
 
         foreach ($types as $type) {
-            $extensions[] = basename($type);
+            $extensions[] = basename((string) $type);
         }
 
         return array_combine($extensions, $extensions);

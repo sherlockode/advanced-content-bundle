@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -11,7 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PictureEntryType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('alt');
         $builder->remove('mime_type');
@@ -26,7 +28,7 @@ class PictureEntryType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
+            function (FormEvent $event): void {
                 $data = $event->getData();
                 if (isset($data['mime_type'])) {
                     // Remove mime type data to prevent form extra fields error
@@ -42,6 +44,7 @@ class PictureEntryType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getParent()
     {
         return ImageType::class;

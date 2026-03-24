@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Scope;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -7,23 +9,14 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
+use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
 
 abstract class ScopeHandler implements ScopeHandlerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    protected $configurationManager;
-
-    public function __construct(EntityManagerInterface $em, ConfigurationManager $configurationManager)
-    {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
+    public function __construct(
+        protected EntityManagerInterface $em,
+        protected ConfigurationManager $configurationManager,
+    ) {
     }
 
     public function isContentSlugValid(ContentInterface $content): bool
@@ -85,9 +78,7 @@ abstract class ScopeHandler implements ScopeHandlerInterface
                 return false;
             }
 
-            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), function ($a, $b) {
-                return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
-            });
+            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), fn ($a, $b) => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
 
             if ([] !== $result) {
                 return false;
@@ -114,7 +105,7 @@ abstract class ScopeHandler implements ScopeHandlerInterface
         }
 
         $currentScope = $this->getCurrentScope();
-        if (!$currentScope instanceof \Sherlockode\AdvancedContentBundle\Model\ScopeInterface) {
+        if (!$currentScope instanceof ScopeInterface) {
             return null;
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
@@ -9,25 +11,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploadManager
 {
     /**
-     * @var NamerInterface
+     * @param string $targetDir
+     * @param string $webPath
      */
-    private $fileNamer;
-
-    /**
-     * @var string
-     */
-    private $targetDir;
-
-    /**
-     * @var string
-     */
-    private $webPath;
-
-    public function __construct(NamerInterface $fileNamer, $targetDir, $webPath)
-    {
-        $this->fileNamer = $fileNamer;
-        $this->targetDir = $targetDir;
-        $this->webPath = $webPath;
+    public function __construct(
+        private readonly NamerInterface $fileNamer,
+        private $targetDir,
+        private $webPath,
+    ) {
     }
 
     /**
@@ -73,7 +64,7 @@ class UploadManager
      *
      * @param string $fileName
      */
-    public function remove($fileName)
+    public function remove($fileName): void
     {
         $fileName = $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName;
 
@@ -88,22 +79,18 @@ class UploadManager
      * Get file name.
      *
      * @param UploadedFile|File $file
-     *
-     * @return string
      */
-    public function getFileName(File $file)
+    public function getFileName(File $file): string
     {
         return $this->fileNamer->getFilename($file);
     }
 
     /**
-     * @param string $src
-     *
      * @return bool
      */
-    public function isFileUploaded($src)
+    public function isFileUploaded(?string $src)
     {
-        if (empty($src)) {
+        if (in_array($src, [null, '', '0'], true)) {
             return false;
         }
 

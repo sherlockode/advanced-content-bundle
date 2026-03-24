@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,40 +19,9 @@ class ExportCommand extends Command
 {
     public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private ?SymfonyStyle $symfonyStyle = null;
 
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var string
-     */
-    private $sourceDirectory;
-
-    /**
-     * @var ExportManager
-     */
-    private $exportManager;
+    private ?string $sourceDirectory = null;
 
     /**
      * @var array
@@ -58,23 +29,17 @@ class ExportCommand extends Command
     private $exportTypes = [];
 
     /**
-     * @param string      $rootDir
-     * @param string|null $name
+     * @param string $rootDir
      */
     public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        ExportManager $exportManager,
-        $rootDir,
-        $name = null,
+        private readonly EntityManagerInterface $em,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
+        private readonly ExportManager $exportManager,
+        private $rootDir,
+        ?string $name = null,
     ) {
         parent::__construct($name);
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->exportManager = $exportManager;
-        $this->translator = $translator;
-        $this->rootDir = $rootDir;
     }
 
     protected function configure()
@@ -101,7 +66,7 @@ class ExportCommand extends Command
     /**
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->symfonyStyle = new SymfonyStyle($input, $output);
         try {
@@ -132,14 +97,14 @@ class ExportCommand extends Command
         } catch (\Exception $exception) {
             $this->symfonyStyle->error($exception->getMessage());
 
-            if (defined(sprintf('%s::FAILURE', get_class($this)))) {
+            if (defined(sprintf('%s::FAILURE', static::class))) {
                 return self::FAILURE;
             }
 
             return null;
         }
 
-        if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
+        if (defined(sprintf('%s::SUCCESS', static::class))) {
             return self::SUCCESS;
         }
 
@@ -149,14 +114,14 @@ class ExportCommand extends Command
     /**
      * @throws \Exception
      */
-    private function init(InputInterface $input)
+    private function init(InputInterface $input): void
     {
         $initDir = $input->getOption('dir');
         if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
 
-        if (0 !== strpos($initDir, '/')) {
+        if (!str_starts_with((string) $initDir, '/')) {
             $initDir = $this->rootDir.'/'.$initDir;
         }
 

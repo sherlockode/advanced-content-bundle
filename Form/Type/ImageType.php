@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\MimeTypeManager;
@@ -10,14 +12,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageType extends AbstractType
 {
-    private MimeTypeManager $mimeTypeManager;
-
-    public function __construct(MimeTypeManager $mimeTypeManager)
+    public function __construct(private readonly MimeTypeManager $mimeTypeManager)
     {
-        $this->mimeTypeManager = $mimeTypeManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->remove('title');
         $builder
@@ -31,6 +30,7 @@ class ImageType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getParent()
     {
         return AcbFileType::class;
@@ -39,16 +39,17 @@ class ImageType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_image';
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
-            'mime_types' => array_flip(array_map('ucfirst', $this->mimeTypeManager->getImageMimeTypesChoices())),
+            'mime_types' => array_flip(array_map(ucfirst(...), $this->mimeTypeManager->getImageMimeTypesChoices())),
             'mime_types_constraint' => $this->mimeTypeManager->getMimeTypesByCode(MimeTypeManager::MIME_TYPE_IMAGE),
         ]);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Export;
 
 use Sherlockode\AdvancedContentBundle\Exception\InvalidElementException;
@@ -13,20 +15,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ElementExport
 {
-    /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(ElementManager $elementManager, TranslatorInterface $translator)
-    {
-        $this->elementManager = $elementManager;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ElementManager $elementManager,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function getElementExportData(array $elementData): array
@@ -41,7 +33,7 @@ class ElementExport
         } elseif ($element instanceof LayoutTypeInterface) {
             $data = $this->getLayoutTypeExportData($element, $elementData);
         } else {
-            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in export', get_class($element)));
+            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in export', $element::class));
         }
 
         return array_merge([

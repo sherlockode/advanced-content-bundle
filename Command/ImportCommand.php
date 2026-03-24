@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Command;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -16,35 +18,12 @@ class ImportCommand extends Command
 {
     public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private ?SymfonyStyle $symfonyStyle = null;
 
     /**
      * @var string
      */
     private $sourceDirectory;
-
-    /**
-     * @var ImportManager
-     */
-    private $importManager;
 
     /**
      * @var array
@@ -57,21 +36,16 @@ class ImportCommand extends Command
     private $filename;
 
     /**
-     * @param string      $rootDir
-     * @param string|null $name
+     * @param string $rootDir
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        ImportManager $importManager,
-        $rootDir,
-        $name = null,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
+        private readonly ImportManager $importManager,
+        private $rootDir,
+        ?string $name = null,
     ) {
         parent::__construct($name);
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
-        $this->importManager = $importManager;
-        $this->rootDir = $rootDir;
     }
 
     protected function configure()
@@ -116,7 +90,7 @@ class ImportCommand extends Command
     /**
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->symfonyStyle = new SymfonyStyle($input, $output);
         try {
@@ -128,21 +102,21 @@ class ImportCommand extends Command
         } catch (\Exception $exception) {
             $this->symfonyStyle->error($exception->getMessage());
 
-            if (defined(sprintf('%s::FAILURE', get_class($this)))) {
+            if (defined(sprintf('%s::FAILURE', static::class))) {
                 return self::FAILURE;
             }
 
             return null;
         }
 
-        if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
+        if (defined(sprintf('%s::SUCCESS', static::class))) {
             return self::SUCCESS;
         }
 
         return null;
     }
 
-    private function addFilesToProcess()
+    private function addFilesToProcess(): void
     {
         $finder = new Finder();
         $finder->files()->in($this->sourceDirectory);
@@ -172,7 +146,7 @@ class ImportCommand extends Command
     /**
      * @throws \Exception
      */
-    private function init(InputInterface $input)
+    private function init(InputInterface $input): void
     {
         $initDir = $input->getOption('dir');
         if (null === $initDir) {
@@ -215,13 +189,11 @@ class ImportCommand extends Command
     /**
      * @param string $dir
      *
-     * @return string
-     *
      * @throws \Exception
      */
-    private function getDirFullPath($dir)
+    private function getDirFullPath($dir): string
     {
-        if (0 !== strpos($dir, '/')) {
+        if (!str_starts_with($dir, '/')) {
             $dir = $this->rootDir.'/'.$dir;
         }
 

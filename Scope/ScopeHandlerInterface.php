@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Scope;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;

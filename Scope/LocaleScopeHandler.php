@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Scope;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,19 +11,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class LocaleScopeHandler extends ScopeHandler
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
-        RequestStack $requestStack,
+        private readonly RequestStack $requestStack,
     ) {
         parent::__construct($em, $configurationManager);
-
-        $this->requestStack = $requestStack;
     }
 
     public function getScopeGroupBy(): ?string

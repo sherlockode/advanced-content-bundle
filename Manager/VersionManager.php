@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -15,39 +17,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class VersionManager
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var UserProviderInterface
-     */
-    private $userProvider;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
-        ConfigurationManager $configurationManager,
-        UserProviderInterface $userProvider,
-        RequestStack $requestStack,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly UserProviderInterface $userProvider,
+        private readonly RequestStack $requestStack,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->userProvider = $userProvider;
-        $this->requestStack = $requestStack;
     }
 
     public function getContentData(ContentInterface $content): array
     {
-        if (null === $content->getPage() && $mainRequest = $this->getRequest()) {
-            if ($contentVersionId = $mainRequest->get('versionId')) {
-                foreach ($content->getVersions() as $version) {
-                    if ($version->getId() === (int) $contentVersionId) {
-                        return $version->getData();
-                    }
+        if (null === $content->getPage() && ($mainRequest = $this->getRequest()) && $contentVersionId = $mainRequest->get('versionId')) {
+            foreach ($content->getVersions() as $version) {
+                if ($version->getId() === (int) $contentVersionId) {
+                    return $version->getData();
                 }
             }
         }

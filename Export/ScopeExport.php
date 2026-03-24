@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Export;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -8,22 +10,10 @@ use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 
 class ScopeExport
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
     public function __construct(
-        ConfigurationManager $configurationManager,
-        ScopeHandlerInterface $scopeHandler,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly ScopeHandlerInterface $scopeHandler,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->scopeHandler = $scopeHandler;
     }
 
     public function getEntityScopes(ScopableInterface $entity): array

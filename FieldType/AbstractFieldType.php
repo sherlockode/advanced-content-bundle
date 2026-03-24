@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Element\AbstractElement;
@@ -26,6 +28,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
         return 'field_type.'.$this->getCode().'.label';
     }
 
+    #[\Override]
     public function getIconClass()
     {
         return $this->configData['icon'] ?? $this->getDefaultIconClass();
@@ -57,10 +60,9 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
 
     /**
      * Add element's field(s) to content form.
-     *
-     * @return void
      */
-    public function buildContentElement(FormBuilderInterface $builder)
+    #[\Override]
+    public function buildContentElement(FormBuilderInterface $builder): void
     {
         parent::buildContentElement($builder);
 
@@ -75,7 +77,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
                 ->addModelTransformer($modelTransformer);
         }
 
-        $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        $builder->get('value')->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $data = $event->getData();
             $form = $event->getForm();
             if ($form->getConfig()->getCompound()) {

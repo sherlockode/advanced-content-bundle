@@ -1,39 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\ImageCarouselType;
 
 class ImageCarousel extends File
 {
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    #[\Override]
+    public function getFormFieldType(): string
     {
         return ImageCarouselType::class;
     }
 
-    protected function getDefaultIconClass()
+    #[\Override]
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-images';
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    #[\Override]
+    public function getCode(): string
     {
         return 'image_carousel';
     }
 
+    #[\Override]
     public function getPreviewPicture(): ?string
     {
         return 'bundles/sherlockodeadvancedcontent/preview_picture/image_carousel.svg';
     }
 
+    #[\Override]
     public function getRawValue($element)
     {
         $images = $element['images'] ?? [];

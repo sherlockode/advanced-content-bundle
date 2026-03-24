@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbContentType;
@@ -7,31 +9,19 @@ use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 
 class Content extends AbstractFieldType
 {
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    public function __construct(
-        ScopeHandlerInterface $scopeHandler,
-    ) {
-        $this->scopeHandler = $scopeHandler;
+    public function __construct(private readonly ScopeHandlerInterface $scopeHandler)
+    {
     }
 
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return AcbContentType::class;
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'content';
     }
@@ -44,6 +34,7 @@ class Content extends AbstractFieldType
     /**
      * @return array
      */
+    #[\Override]
     public function getRawValue($element)
     {
         $element['entity'] = null;

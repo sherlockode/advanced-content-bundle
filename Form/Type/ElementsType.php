@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -9,39 +11,22 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ElementsType extends AbstractType
 {
-    /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     public function __construct(
-        ElementManager $elementManager,
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
+        private readonly ElementManager $elementManager,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->elementManager = $elementManager;
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             $data = $event->getData();
             $form = $event->getForm();
             if (!$data) {
@@ -59,7 +44,7 @@ class ElementsType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
             $form = $event->getForm();
             $data = $event->getData();
             if (!is_array($data)) {
@@ -85,12 +70,12 @@ class ElementsType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $form = $event->getForm();
             $data = $event->getData();
             $data = array_values($data);
 
-            if (($parentForm = $form->getParent()) instanceof \Symfony\Component\Form\FormInterface) {
+            if (($parentForm = $form->getParent()) instanceof FormInterface) {
                 $parentElementType = $parentForm->has('elementType') ? $parentForm->get('elementType')->getData() : 'root';
                 foreach ($data as $child) {
                     if ('root' === $parentElementType && 'row' !== $child['elementType']) {
@@ -125,7 +110,7 @@ class ElementsType extends AbstractType
         });
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
@@ -133,6 +118,7 @@ class ElementsType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_elements';
