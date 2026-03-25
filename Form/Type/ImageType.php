@@ -10,14 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageType extends AbstractType
 {
-    /**
-     * @var MimeTypeManager
-     */
     private MimeTypeManager $mimeTypeManager;
 
-    /**
-     * @param MimeTypeManager $mimeTypeManager
-     */
     public function __construct(MimeTypeManager $mimeTypeManager)
     {
         $this->mimeTypeManager = $mimeTypeManager;
@@ -50,9 +44,6 @@ class ImageType extends AbstractType
         return 'acb_image';
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

@@ -25,47 +25,37 @@ class UrlBuilderManager
     public function __construct(
         UploadManager $uploadManager,
         Packages $assetPackages,
-        RequestStack $requestStack
+        RequestStack $requestStack,
     ) {
         $this->uploadManager = $uploadManager;
         $this->assetPackages = $assetPackages;
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
     public function getFileUrl(string $fileName): string
     {
         if (!$fileName) {
             return '';
         }
 
-        $filePath = $this->uploadManager->getTargetDir() . DIRECTORY_SEPARATOR . $fileName;
+        $filePath = $this->uploadManager->getTargetDir().DIRECTORY_SEPARATOR.$fileName;
         if (!file_exists($filePath)) {
             return '';
         }
 
-        return $this->assetPackages->getUrl($this->uploadManager->getWebPath() . '/' . $fileName);
+        return $this->assetPackages->getUrl($this->uploadManager->getWebPath().'/'.$fileName);
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
     public function getFullUrl(string $url): string
     {
         if (!$url) {
             return '';
         }
 
-        if (substr($url, 0, 1) === '#') {
+        if ('#' === substr($url, 0, 1)) {
             return $url;
         }
-        if (substr($url, 0, 4) === 'http') {
+        if ('http' === substr($url, 0, 4)) {
             return $url;
         }
 
@@ -80,6 +70,6 @@ class UrlBuilderManager
             return $url;
         }
 
-        return $mainRequest->getSchemeAndHttpHost() . '/' . ltrim($url, '/');
+        return $mainRequest->getSchemeAndHttpHost().'/'.ltrim($url, '/');
     }
 }

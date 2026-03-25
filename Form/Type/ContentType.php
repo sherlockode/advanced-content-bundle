@@ -40,17 +40,11 @@ class ContentType extends AbstractType
      */
     private $translator;
 
-    /**
-     * @param ConfigurationManager  $configurationManager
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param ScopeHandlerInterface $scopeHandler
-     * @param TranslatorInterface   $translator
-     */
     public function __construct(
         ConfigurationManager $configurationManager,
         UrlGeneratorInterface $urlGenerator,
         ScopeHandlerInterface $scopeHandler,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->configurationManager = $configurationManager;
         $this->urlGenerator = $urlGenerator;
@@ -58,10 +52,6 @@ class ContentType extends AbstractType
         $this->translator = $translator;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $token = uniqid('content_');
@@ -98,12 +88,12 @@ class ContentType extends AbstractType
             ]);
         }
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options, $token) {
             $form = $event->getForm();
             /** @var ContentInterface $content */
             $content = $event->getData();
             $slugClass = 'acb-content-slug';
-            if ($content !== null && $content->getId()) {
+            if (null !== $content && $content->getId()) {
                 $slugClass = '';
             }
             $form
@@ -123,7 +113,7 @@ class ContentType extends AbstractType
                 }
             }
 
-            if ($content === null || empty($content->getData())) {
+            if (null === $content || empty($content->getData())) {
                 $emptyRowCol = [
                     'elementType' => 'row',
                     'position' => 0,
@@ -142,11 +132,11 @@ class ContentType extends AbstractType
             }
         });
 
-        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
+        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $event->setData(json_decode($event->getData(), true));
         }, 1);
 
-        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             if ($form->has('slug')) {
                 $content = $event->getData();
@@ -171,9 +161,6 @@ class ContentType extends AbstractType
         $view->vars['multipart'] = true;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

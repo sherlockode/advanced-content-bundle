@@ -29,17 +29,12 @@ abstract class PageMetaVersion extends Version implements PageMetaVersionInterfa
      */
     protected $metaDescription;
 
-    /**
-     * @return PageMetaInterface
-     */
     public function getPageMeta(): PageMetaInterface
     {
         return $this->pageMeta;
     }
 
     /**
-     * @param PageMetaInterface $pageMeta
-     *
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta): self

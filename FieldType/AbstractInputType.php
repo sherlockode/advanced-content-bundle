@@ -12,7 +12,7 @@ abstract class AbstractInputType extends AbstractFieldType
     }
 
     /**
-     * Get options to apply on element
+     * Get options to apply on element.
      *
      * @return array
      */

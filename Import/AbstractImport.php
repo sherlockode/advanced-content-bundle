@@ -52,17 +52,11 @@ abstract class AbstractImport
      */
     protected $errors = [];
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param TranslatorInterface    $translator
-     * @param ScopeHandlerInterface  $scopeHandler
-     */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
-        ScopeHandlerInterface $scopeHandler
+        ScopeHandlerInterface $scopeHandler,
     ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
@@ -139,34 +133,23 @@ abstract class AbstractImport
     }
 
     /**
-     * @param array $scopesData
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     protected function getScopesForEntity(array $scopesData): array
     {
         if (!$this->configurationManager->isScopesEnabled()) {
             if (count($scopesData) > 0) {
-                throw new \Exception($this->translator->trans(
-                    'init.errors.scopes_disabled',
-                    [],
-                    'AdvancedContentBundle'
-                ));
+                throw new \Exception($this->translator->trans('init.errors.scopes_disabled', [], 'AdvancedContentBundle'));
             }
+
             return [];
         }
 
         $scopes = [];
         foreach ($scopesData as $scopeData) {
             $scope = $this->scopeHandler->getScopeFromData($scopeData);
-            if ($scope === null) {
-                throw new \Exception($this->translator->trans(
-                    'init.errors.unknown_scope',
-                    ['%scope%' => json_encode($scopeData)],
-                    'AdvancedContentBundle'
-                ));
+            if (null === $scope) {
+                throw new \Exception($this->translator->trans('init.errors.unknown_scope', ['%scope%' => json_encode($scopeData)], 'AdvancedContentBundle'));
             }
             $scopes[] = $scope;
         }
@@ -175,21 +158,15 @@ abstract class AbstractImport
     }
 
     /**
-     * @param string $entityClass
-     * @param array  $criteria
-     * @param array  $scopes
-     *
-     * @return ScopableInterface|null
-     *
      * @throws \Exception
      */
     protected function getExistingScopableEntity(string $entityClass, array $criteria, array $scopes): ?ScopableInterface
     {
         $existingEntities = $this->em->getRepository($entityClass)->findBy($criteria);
-        if (count($existingEntities) === 0) {
+        if (0 === count($existingEntities)) {
             return null;
         }
-        if (count($existingEntities) === 1) {
+        if (1 === count($existingEntities)) {
             return reset($existingEntities);
         }
 
@@ -204,12 +181,8 @@ abstract class AbstractImport
             }
 
             if (count($result) > 0) {
-                if ($entity !== null) {
-                    throw new \Exception($this->translator->trans(
-                        'init.errors.multiple_entities_same_scope',
-                        [],
-                        'AdvancedContentBundle'
-                    ));
+                if (null !== $entity) {
+                    throw new \Exception($this->translator->trans('init.errors.multiple_entities_same_scope', [], 'AdvancedContentBundle'));
                 }
                 $entity = $existingEntity;
             }
@@ -219,7 +192,6 @@ abstract class AbstractImport
     }
 
     /**
-     * @param ScopableInterface      $entity
      * @param array|ScopeInterface[] $scopes
      */
     protected function updateEntityScopes(ScopableInterface $entity, array $scopes): void

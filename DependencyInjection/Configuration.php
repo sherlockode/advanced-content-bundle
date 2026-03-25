@@ -2,17 +2,13 @@
 
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
-use Sherlockode\AdvancedContentBundle\Entity\Content;
-use Sherlockode\AdvancedContentBundle\Entity\Page;
-use Sherlockode\AdvancedContentBundle\Entity\PageMeta;
-use Sherlockode\AdvancedContentBundle\Entity\PageType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
     /**
-     * Build config tree for bundle
+     * Build config tree for bundle.
      *
      * @return TreeBuilder
      */

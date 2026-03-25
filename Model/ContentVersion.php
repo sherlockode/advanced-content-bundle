@@ -15,7 +15,7 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
     protected $data;
 
     /**
-     * ContentVersion constructor
+     * ContentVersion constructor.
      */
     public function __construct()
     {
@@ -23,17 +23,12 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
         parent::__construct();
     }
 
-    /**
-     * @return ContentInterface
-     */
     public function getContent(): ContentInterface
     {
         return $this->content;
     }
 
     /**
-     * @param ContentInterface $content
-     *
      * @return $this
      */
     public function setContent(ContentInterface $content): self
@@ -57,8 +52,6 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
     }
 
     /**
-     * @param array $data
-     *
      * @return $this
      */
     public function setData(array $data)

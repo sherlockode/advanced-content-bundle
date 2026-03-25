@@ -20,7 +20,7 @@ class ImageCarousel extends File
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */
@@ -34,11 +34,6 @@ class ImageCarousel extends File
         return 'bundles/sherlockodeadvancedcontent/preview_picture/image_carousel.svg';
     }
 
-    /**
-     * @param mixed $element
-     *
-     * @return mixed
-     */
     public function getRawValue($element)
     {
         $images = $element['images'] ?? [];

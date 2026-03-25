@@ -20,7 +20,7 @@ class Separator extends AbstractFieldType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */

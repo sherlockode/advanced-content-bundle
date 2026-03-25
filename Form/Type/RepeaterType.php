@@ -65,7 +65,7 @@ class RepeaterType extends AbstractType
                     $form->add($i, RepeatedChildWrappedType::class, [
                         'child_options' => $child->getConfig()->getOptions(),
                         'child_form' => get_class($child->getConfig()->getType()->getInnerType()),
-                        'position' => $i
+                        'position' => $i,
                     ]);
                 }
             }
@@ -100,6 +100,7 @@ class RepeaterType extends AbstractType
                         $item = $item['wrapped_child'];
                     }
                 }
+
                 return $item;
             }, $orderedData);
 

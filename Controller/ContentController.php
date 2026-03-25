@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class ContentController
+ * Class ContentController.
  */
 class ContentController extends AbstractController
 {
@@ -63,25 +63,15 @@ class ContentController extends AbstractController
      */
     private $eventDispatcherInterface;
 
-    /**
-     * @param EntityManagerInterface   $em
-     * @param ContentManager           $contentManager
-     * @param ElementManager           $elementManager
-     * @param ConfigurationManager     $configurationManager
-     * @param FormFactoryInterface     $formFactory
-     * @param TranslatorInterface      $translator
-     * @param VersionManager           $versionManager
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
         EntityManagerInterface $em,
-        ContentManager         $contentManager,
-        ElementManager         $elementManager,
-        ConfigurationManager   $configurationManager,
-        FormFactoryInterface   $formFactory,
-        TranslatorInterface    $translator,
+        ContentManager $contentManager,
+        ElementManager $elementManager,
+        ConfigurationManager $configurationManager,
+        FormFactoryInterface $formFactory,
+        TranslatorInterface $translator,
         VersionManager $versionManager,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
     ) {
         $this->em = $em;
         $this->contentManager = $contentManager;
@@ -109,8 +99,6 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function fieldFormAction(Request $request)
@@ -139,12 +127,12 @@ class ContentController extends AbstractController
                 // Rebuild form for row and columns
                 // Because data is being rearranged on submit
                 // Otherwise posted elements cannot be matched with form children
-                if ($element->getCode() === 'row' || $element->getCode() === 'column') {
+                if ('row' === $element->getCode() || 'column' === $element->getCode()) {
                     $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementType::class, $form->getData(), [
-                        'element_type'    => $element,
-                        'action'          => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
+                        'element_type' => $element,
+                        'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
                         'csrf_protection' => false,
-                        'label'           => $element->getFormFieldLabel(),
+                        'label' => $element->getFormFieldLabel(),
                     ]);
                     $form = $formBuilder->getForm();
                 }
@@ -158,14 +146,14 @@ class ContentController extends AbstractController
                         'form' => $form->createView(),
                     ]),
                 ]);
-            } else {
-                return new JsonResponse([
-                    'success' => false,
-                    'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
-                        'form' => $form->createView(),
-                    ]),
-                ]);
             }
+
+            return new JsonResponse([
+                'success' => false,
+                'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
+                    'form' => $form->createView(),
+                ]),
+            ]);
         }
 
         return new JsonResponse([
@@ -180,7 +168,6 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
     public function saveDraftAction(Request $request)
@@ -188,7 +175,7 @@ class ContentController extends AbstractController
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
+        if (null === $content) {
             return new JsonResponse([
                 'success' => false,
             ]);
@@ -227,8 +214,6 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse
      */
     public function deleteVersionAction(Request $request)
@@ -236,13 +221,13 @@ class ContentController extends AbstractController
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
+        if (null === $content) {
             return new JsonResponse([
                 'success' => false,
             ]);
         }
 
-        $versionId = (int)$request->get('versionId');
+        $versionId = (int) $request->get('versionId');
         foreach ($content->getVersions() as $version) {
             if ($versionId === $version->getId()) {
                 $this->em->remove($version);

@@ -66,8 +66,6 @@ interface PageMetaInterface
     public function getPage();
 
     /**
-     * @param PageInterface $page
-     *
      * @return $this
      */
     public function setPage(PageInterface $page);

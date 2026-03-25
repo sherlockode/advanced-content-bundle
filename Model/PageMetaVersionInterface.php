@@ -10,8 +10,6 @@ interface PageMetaVersionInterface
     public function getPageMeta();
 
     /**
-     * @param PageMetaInterface $pageMeta
-     *
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta);

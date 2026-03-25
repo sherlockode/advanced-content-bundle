@@ -3,7 +3,7 @@
 namespace Sherlockode\AdvancedContentBundle\Exception;
 
 /**
- * Class InvalidFieldTypeException
+ * Class InvalidFieldTypeException.
  */
 class InvalidElementException extends \RuntimeException
 {

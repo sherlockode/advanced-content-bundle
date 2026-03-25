@@ -26,7 +26,7 @@ class PictureEntryType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($options) {
+            function (FormEvent $event) {
                 $data = $event->getData();
                 if (isset($data['mime_type'])) {
                     // Remove mime type data to prevent form extra fields error

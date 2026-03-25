@@ -16,9 +16,6 @@ class Column extends AbstractLayoutType
         return 'fa-solid fa-columns';
     }
 
-    /**
-     * @return string|null
-     */
     protected function getConfigurationFormType(): ?string
     {
         return ColumnType::class;

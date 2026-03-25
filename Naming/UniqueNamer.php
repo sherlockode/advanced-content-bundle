@@ -7,11 +7,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UniqueNamer implements NamerInterface
 {
-    /**
-     * @param File $file
-     *
-     * @return string
-     */
     public function getFilename(File $file): string
     {
         $extension = $file->getExtension();
@@ -22,7 +17,7 @@ class UniqueNamer implements NamerInterface
             $fileName = $file->getClientOriginalName();
         }
 
-        $fileName = str_replace('.' . $extension, '', $fileName);
+        $fileName = str_replace('.'.$extension, '', $fileName);
 
         return sprintf('%s_%s.%s', $fileName, md5(uniqid()), $extension);
     }

@@ -29,28 +29,19 @@ class ElementsType extends AbstractType
      */
     private $translator;
 
-    /**
-     * @param ElementManager       $elementManager
-     * @param ConfigurationManager $configurationManager
-     * @param TranslatorInterface  $translator
-     */
     public function __construct(
         ElementManager $elementManager,
         ConfigurationManager $configurationManager,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->elementManager = $elementManager;
         $this->configurationManager = $configurationManager;
         $this->translator = $translator;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($options) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $data = $event->getData();
             $form = $event->getForm();
             if (!$data) {
@@ -61,14 +52,14 @@ class ElementsType extends AbstractType
             foreach ($data as $name => $element) {
                 $field = $this->elementManager->getElementByCode($element['elementType']);
                 $form->add($i++, ElementType::class, [
-                    'label'      => $field->getFormFieldLabel(),
+                    'label' => $field->getFormFieldLabel(),
                     'element_type' => $field,
                     'property_path' => '['.$name.']',
                 ]);
             }
         });
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($options) {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             $data = $event->getData();
             if (!is_array($data)) {
@@ -93,7 +84,7 @@ class ElementsType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) use ($options) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             $data = $event->getData();
             $data = array_values($data);
@@ -101,22 +92,22 @@ class ElementsType extends AbstractType
             if ($parentForm = $form->getParent()) {
                 $parentElementType = $parentForm->has('elementType') ? $parentForm->get('elementType')->getData() : 'root';
                 foreach ($data as $child) {
-                    if ($parentElementType === 'root' && $child['elementType'] !== 'row') {
+                    if ('root' === $parentElementType && 'row' !== $child['elementType']) {
                         $form->addError(new FormError($this->translator->trans(
                             'layout_type.errors.invalid_element_in_root',
                             [],
                             'AdvancedContentBundle'
                         )));
                     }
-                    if ($parentElementType === 'row' && $child['elementType'] !== 'column') {
+                    if ('row' === $parentElementType && 'column' !== $child['elementType']) {
                         $form->addError(new FormError($this->translator->trans(
                             'layout_type.errors.invalid_element_in_row',
                             [],
                             'AdvancedContentBundle'
                         )));
                     }
-                    if ($parentElementType === 'column' &&
-                        ($child['elementType'] === 'column' || $child['elementType'] === 'row')
+                    if ('column' === $parentElementType
+                        && ('column' === $child['elementType'] || 'row' === $child['elementType'])
                     ) {
                         $form->addError(new FormError($this->translator->trans(
                             'layout_type.errors.invalid_element_in_column',
@@ -131,9 +122,6 @@ class ElementsType extends AbstractType
         });
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

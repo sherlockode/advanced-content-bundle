@@ -28,15 +28,10 @@ class PageController extends AbstractController
      */
     private $pageManager;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     * @param PageManager            $pageManager
-     */
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
-        PageManager $pageManager
+        PageManager $pageManager,
     ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
@@ -44,8 +39,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param int     $id
-     * @param Request $request
+     * @param int $id
      *
      * @return Response
      */
@@ -54,9 +48,7 @@ class PageController extends AbstractController
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
         if (!$page instanceof PageInterface) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
-            );
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id));
         }
 
         $form = $this->createForm(PageType::class, $page, [
@@ -77,8 +69,6 @@ class PageController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function createAction(Request $request)
@@ -86,14 +76,12 @@ class PageController extends AbstractController
         if ($id = $request->get('duplicateId')) {
             $pageToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
             if (!$pageToDuplicate instanceof PageInterface) {
-                throw $this->createNotFoundException(
-                    sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
-                );
+                throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id));
             }
             $page = $this->pageManager->duplicate($pageToDuplicate);
         } else {
             $pageEntityClass = $this->configurationManager->getEntityClass('page');
-            $page = new $pageEntityClass;
+            $page = new $pageEntityClass();
         }
 
         $form = $this->createForm(PageType::class, $page, [
@@ -136,9 +124,7 @@ class PageController extends AbstractController
         $page = $this->em->getRepository($this->configurationManager->getEntityClass('page'))->find($id);
 
         if (!$page instanceof PageInterface) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id)
-            );
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page'), $id));
         }
 
         $this->em->remove($page);

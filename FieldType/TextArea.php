@@ -7,7 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class TextArea extends AbstractInputType
 {
     /**
-     * Get options to apply on element
+     * Get options to apply on element.
      *
      * @return array
      */
@@ -32,7 +32,7 @@ class TextArea extends AbstractInputType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */

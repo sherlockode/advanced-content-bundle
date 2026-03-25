@@ -14,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCommand extends Command
 {
-    const AVAILABLE_ENTITIES = ['Page', 'Content'];
+    public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
     /**
      * @var ConfigurationManager
@@ -57,18 +57,15 @@ class ImportCommand extends Command
     private $filename;
 
     /**
-     * @param ConfigurationManager $configurationManager
-     * @param TranslatorInterface  $translator
-     * @param ImportManager        $importManager
-     * @param string               $rootDir
-     * @param null|string          $name
+     * @param string      $rootDir
+     * @param string|null $name
      */
     public function __construct(
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         ImportManager $importManager,
         $rootDir,
-        $name = null
+        $name = null,
     ) {
         parent::__construct($name);
         $this->configurationManager = $configurationManager;
@@ -117,9 +114,6 @@ class ImportCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -131,7 +125,6 @@ class ImportCommand extends Command
             $this->addFilesToProcess();
             $this->importManager->setSymfonyStyle($this->symfonyStyle);
             $this->importManager->processData($this->importTypes);
-
         } catch (\Exception $e) {
             $this->symfonyStyle->error($e->getMessage());
 
@@ -152,7 +145,7 @@ class ImportCommand extends Command
         $finder = new Finder();
         $finder->files()->in($this->sourceDirectory);
 
-        if ($this->filename !== null) {
+        if (null !== $this->filename) {
             $finder->name($this->filename);
             if (!$finder->hasResults()) {
                 $this->symfonyStyle->warning(
@@ -174,36 +167,30 @@ class ImportCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @throws \Exception
      */
     private function init(InputInterface $input)
     {
         $initDir = $input->getOption('dir');
-        if ($initDir === null) {
+        if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
         $initDir = $this->getDirFullPath($initDir);
         $this->sourceDirectory = $initDir;
 
         $filesDir = $input->getOption('files-dir');
-        if ($filesDir !== null) {
+        if (null !== $filesDir) {
             $filesDir = $this->getDirFullPath($filesDir);
             $this->importManager->setFilesDirectory($filesDir);
         }
 
         $targetDir = $this->configurationManager->getImageDirectory();
-        if (!file_exists($targetDir) && !mkdir($targetDir, 0755)) {
-            throw new \Exception($this->translator->trans(
-                'init.errors.cannot_create_directory',
-                ['%path%' => $targetDir],
-                'AdvancedContentBundle'
-            ));
+        if (!file_exists($targetDir) && !mkdir($targetDir, 0o755)) {
+            throw new \Exception($this->translator->trans('init.errors.cannot_create_directory', ['%path%' => $targetDir], 'AdvancedContentBundle'));
         }
 
         $allowUpdate = $this->configurationManager->initCanUpdate();
-        if ($input->getOption('update') === true) {
+        if (true === $input->getOption('update')) {
             $allowUpdate = true;
         }
 
@@ -212,9 +199,7 @@ class ImportCommand extends Command
         $importTypes = $input->getOption('type');
         foreach ($importTypes as $importType) {
             if (!in_array($importType, self::AVAILABLE_ENTITIES)) {
-                throw new \Exception(
-                    $this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle')
-                );
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
             }
         }
         $this->importTypes = $importTypes;
@@ -231,15 +216,13 @@ class ImportCommand extends Command
      */
     private function getDirFullPath($dir)
     {
-        if (strpos($dir, '/') !== 0) {
-            $dir = $this->rootDir . '/' . $dir;
+        if (0 !== strpos($dir, '/')) {
+            $dir = $this->rootDir.'/'.$dir;
         }
         $dir .= '/';
 
         if (!file_exists($dir)) {
-            throw new \Exception(
-                $this->translator->trans('init.errors.init_dir', ['%dir%' => $dir], 'AdvancedContentBundle')
-            );
+            throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $dir], 'AdvancedContentBundle'));
         }
 
         return $dir;

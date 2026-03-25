@@ -9,9 +9,6 @@ abstract class Scope implements ScopeInterface
      */
     protected $id;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;

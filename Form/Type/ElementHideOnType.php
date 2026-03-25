@@ -16,9 +16,6 @@ class ElementHideOnType extends AbstractType
         return ChoiceType::class;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

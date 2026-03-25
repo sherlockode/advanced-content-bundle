@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 
 interface PageInterface
 {
-    const STATUS_DRAFT  = 0;
-    const STATUS_PUBLISHED = 10;
-    const STATUS_TRASH  = 20;
+    public const STATUS_DRAFT = 0;
+    public const STATUS_PUBLISHED = 10;
+    public const STATUS_TRASH = 20;
 
     /**
      * @return int
@@ -46,11 +46,9 @@ interface PageInterface
     public function getContent();
 
     /**
-     * @param ContentInterface|null $content
-     *
      * @return $this
      */
-    public function setContent(ContentInterface $content = null);
+    public function setContent(?ContentInterface $content = null);
 
     /**
      * @return PageTypeInterface|null
@@ -58,11 +56,9 @@ interface PageInterface
     public function getPageType();
 
     /**
-     * @param PageTypeInterface|null $pageType
-     *
      * @return $this
      */
-    public function setPageType(PageTypeInterface $pageType = null);
+    public function setPageType(?PageTypeInterface $pageType = null);
 
     /**
      * @return PageMetaInterface
@@ -70,20 +66,13 @@ interface PageInterface
     public function getPageMeta();
 
     /**
-     * @param PageMetaInterface $pageMeta
-     *
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta);
 
-    /**
-     * @return PageVersionInterface|null
-     */
     public function getPageVersion(): ?PageVersionInterface;
 
     /**
-     * @param PageVersionInterface|null $pageVersion
-     *
      * @return $this
      */
     public function setPageVersion(?PageVersionInterface $pageVersion);

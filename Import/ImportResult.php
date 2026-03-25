@@ -4,9 +4,9 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 
 class ImportResult
 {
-    const FAILURE = 0;
-    const SUCCESS = 1;
-    const UNKNOWN = 2;
+    public const FAILURE = 0;
+    public const SUCCESS = 1;
+    public const UNKNOWN = 2;
 
     /**
      * @var int
@@ -36,7 +36,7 @@ class ImportResult
      */
     public function isSuccess()
     {
-        return $this->status == self::SUCCESS;
+        return self::SUCCESS == $this->status;
     }
 
     /**

@@ -12,9 +12,6 @@ class File extends AbstractFieldType
      */
     private $urlBuilderManager;
 
-    /**
-     * @param UrlBuilderManager $urlBuilderManager
-     */
     public function __construct(UrlBuilderManager $urlBuilderManager)
     {
         $this->urlBuilderManager = $urlBuilderManager;
@@ -34,7 +31,7 @@ class File extends AbstractFieldType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */
@@ -58,11 +55,6 @@ class File extends AbstractFieldType
         return $this->urlBuilderManager->getFileUrl($value['src'] ?? '');
     }
 
-    /**
-     * @param mixed $element
-     *
-     * @return mixed
-     */
     public function getRawValue($element)
     {
         $element['url'] = $this->getFilename($element);

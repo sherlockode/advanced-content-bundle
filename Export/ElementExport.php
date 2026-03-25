@@ -23,21 +23,12 @@ class ElementExport
      */
     private $translator;
 
-    /**
-     * @param ElementManager      $elementManager
-     * @param TranslatorInterface $translator
-     */
     public function __construct(ElementManager $elementManager, TranslatorInterface $translator)
     {
         $this->elementManager = $elementManager;
         $this->translator = $translator;
     }
 
-    /**
-     * @param array $elementData
-     *
-     * @return array
-     */
     public function getElementExportData(array $elementData): array
     {
         if (!isset($elementData['elementType'])) {
@@ -59,12 +50,6 @@ class ElementExport
         ], $data);
     }
 
-    /**
-     * @param FieldTypeInterface $element
-     * @param array              $elementData
-     *
-     * @return array
-     */
     private function getFieldTypeExportData(FieldTypeInterface $element, array $elementData): array
     {
         $raw = $element->getRawValue($elementData['value'] ?? null);
@@ -104,9 +89,6 @@ class ElementExport
     }
 
     /**
-     * @param LayoutTypeInterface $element
-     * @param array               $elementData
-     *
      * @return array[]
      */
     private function getLayoutTypeExportData(LayoutTypeInterface $element, array $elementData): array

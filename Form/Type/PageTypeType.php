@@ -16,9 +16,6 @@ class PageTypeType extends AbstractType
      */
     private $configurationManager;
 
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
     public function __construct(ConfigurationManager $configurationManager)
     {
         $this->configurationManager = $configurationManager;

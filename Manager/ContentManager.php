@@ -25,15 +25,11 @@ class ContentManager
 
     /**
      * ContentManager constructor.
-     *
-     * @param ConfigurationManager   $configurationManager
-     * @param EntityManagerInterface $em
-     * @param SlugProviderInterface  $slugProvider
      */
     public function __construct(
         ConfigurationManager $configurationManager,
         EntityManagerInterface $em,
-        SlugProviderInterface $slugProvider
+        SlugProviderInterface $slugProvider,
     ) {
         $this->configurationManager = $configurationManager;
         $this->em = $em;
@@ -41,11 +37,11 @@ class ContentManager
     }
 
     /**
-     * Get content by its id
+     * Get content by its id.
      *
      * @param int $id
      *
-     * @return null|ContentInterface
+     * @return ContentInterface|null
      */
     public function getContentById($id)
     {
@@ -53,7 +49,7 @@ class ContentManager
     }
 
     /**
-     * Get all contents
+     * Get all contents.
      *
      * @return array
      */
@@ -62,11 +58,6 @@ class ContentManager
         return $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
     }
 
-    /**
-     * @param ContentInterface $content
-     *
-     * @return ContentInterface
-     */
     public function duplicate(ContentInterface $content): ContentInterface
     {
         $newContent = clone $content;

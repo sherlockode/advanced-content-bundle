@@ -15,7 +15,7 @@ class Text extends AbstractInputType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */

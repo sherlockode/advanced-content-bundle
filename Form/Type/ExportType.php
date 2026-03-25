@@ -18,9 +18,6 @@ class ExportType extends AbstractType
      */
     private $configurationManager;
 
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
     public function __construct(ConfigurationManager $configurationManager)
     {
         $this->configurationManager = $configurationManager;
@@ -32,7 +29,7 @@ class ExportType extends AbstractType
             ->add('page', EntityType::class, [
                 'label' => 'tools.export.page',
                 'class' => $this->configurationManager->getEntityClass('page'),
-                'choice_label' => function(PageInterface $page) {
+                'choice_label' => function (PageInterface $page) {
                     return $page->getPageMeta()->getTitle();
                 },
                 'expanded' => true,
@@ -57,7 +54,7 @@ class ExportType extends AbstractType
                     return $er->createQueryBuilder('c')
                         ->leftJoin('c.page', 'p')
                         ->where('p.id IS NULL');
-                }
+                },
             ])
             ->add('contentAll', CheckboxType::class, [
                 'label' => 'tools.export.all',

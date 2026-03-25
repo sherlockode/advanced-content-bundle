@@ -18,7 +18,7 @@ class ContentExtension extends AbstractExtension
 {
     /**
      * @var ElementManager
-    */
+     */
     private $elementManager;
 
     /**
@@ -52,13 +52,7 @@ class ContentExtension extends AbstractExtension
     private $baseFormTheme;
 
     /**
-     * @param ElementManager        $elementManager
-     * @param Environment           $twig
-     * @param EntityManager         $em
-     * @param UrlBuilderManager     $urlBuilderManager
-     * @param UserProviderInterface $userProvider
-     * @param ScopeHandlerInterface $scopeHandler
-     * @param string                $baseFormTheme
+     * @param string $baseFormTheme
      */
     public function __construct(
         ElementManager $elementManager,
@@ -67,7 +61,7 @@ class ContentExtension extends AbstractExtension
         UrlBuilderManager $urlBuilderManager,
         UserProviderInterface $userProvider,
         ScopeHandlerInterface $scopeHandler,
-        $baseFormTheme
+        $baseFormTheme,
     ) {
         $this->elementManager = $elementManager;
         $this->twig = $twig;
@@ -79,7 +73,7 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * Add specific twig function
+     * Add specific twig function.
      *
      * @return TwigFunction[]
      */
@@ -111,13 +105,7 @@ class ContentExtension extends AbstractExtension
         return $this->twig->render($element->getFrontTemplate(), $params);
     }
 
-    /**
-     * @param array         $elementData
-     * @param FormView|null $form
-     *
-     * @return string
-     */
-    public function renderElementPreview(array $elementData, FormView $form = null): string
+    public function renderElementPreview(array $elementData, ?FormView $form = null): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
 
@@ -129,7 +117,6 @@ class ContentExtension extends AbstractExtension
 
         return $this->twig->render($template, array_merge($params, ['form' => $form]));
     }
-
 
     public function findEntity($identifier, $class)
     {
@@ -144,31 +131,16 @@ class ContentExtension extends AbstractExtension
         return $this->baseFormTheme;
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
     public function getFileUrl(string $fileName): string
     {
         return $this->urlBuilderManager->getFileUrl($fileName);
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
     public function getFullUrl(string $url): string
     {
         return $this->urlBuilderManager->getFullUrl($url);
     }
 
-    /**
-     * @param string $elementType
-     *
-     * @return string
-     */
     public function getElementLabel(string $elementType): string
     {
         $element = $this->elementManager->getElementByCode($elementType);
@@ -176,19 +148,14 @@ class ContentExtension extends AbstractExtension
         return $element->getFormFieldLabel();
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
     public function getColumnClasses(array $config): array
     {
         $classes = [];
         $size = $config['size'] ?? 12;
-        $classes[] = '-' === $size ? 'col' : 'col-' . $size;
+        $classes[] = '-' === $size ? 'col' : 'col-'.$size;
         $offset = $config['offset'] ?? 0;
         if (!empty($offset)) {
-            $classes[] = 'offset-' . $offset;
+            $classes[] = 'offset-'.$offset;
         }
 
         $devices = [
@@ -198,26 +165,21 @@ class ContentExtension extends AbstractExtension
             'xl',
         ];
         foreach ($devices as $device) {
-            if (isset($config['size_' . $device])) {
-                $classes[] = '-' === $size ? 'col' : 'col-' . $device . '-' . $config['size_' . $device];
+            if (isset($config['size_'.$device])) {
+                $classes[] = '-' === $size ? 'col' : 'col-'.$device.'-'.$config['size_'.$device];
             }
-            if (isset($config['offset_' . $device])) {
-                $classes[] = 'offset-' . $device . '-' . $config['offset_' . $device];
+            if (isset($config['offset_'.$device])) {
+                $classes[] = 'offset-'.$device.'-'.$config['offset_'.$device];
             }
         }
 
         return $classes;
     }
 
-    /**
-     * @param array $config
-     *
-     * @return array
-     */
     public function getRowClasses(array $config): array
     {
         $classes = [];
-        $classes[] = 'justify-content-' . ($config['justify_content'] ?? 'start');
+        $classes[] = 'justify-content-'.($config['justify_content'] ?? 'start');
         if ($config['mobile_reverse_columns'] ?? false) {
             $classes[] = 'flex-row-reverse flex-md-row';
         }
@@ -225,12 +187,6 @@ class ContentExtension extends AbstractExtension
         return $classes;
     }
 
-    /**
-     * @param array  $extra
-     * @param string $defaultDisplay
-     *
-     * @return array
-     */
     public function getElementAttributes(array $extra, string $defaultDisplay = 'block'): array
     {
         return [
@@ -240,12 +196,6 @@ class ContentExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @param array  $extra
-     * @param string $defaultDisplay
-     *
-     * @return array
-     */
     private function getElementClasses(array $extra, string $defaultDisplay = 'block'): array
     {
         $classes = [];
@@ -272,13 +222,13 @@ class ContentExtension extends AbstractExtension
 
             foreach ($devices as $key => $device) {
                 if (in_array($device, $hideOn)) {
-                    if ($lastHidden === null || ($lastHidden + 1) !== $key) {
-                        $classes[] = 'd-' . ($device === 'xs' ? '' : $device . '-') . 'none';
+                    if (null === $lastHidden || ($lastHidden + 1) !== $key) {
+                        $classes[] = 'd-'.('xs' === $device ? '' : $device.'-').'none';
                     }
                     $lastHidden = $key;
                 } else {
-                    if ($device !== 'xs' && ($lastDisplayed === null || ($lastDisplayed + 1) !== $key)) {
-                        $classes[] = 'd-' . $device . '-' . $defaultDisplay;
+                    if ('xs' !== $device && (null === $lastDisplayed || ($lastDisplayed + 1) !== $key)) {
+                        $classes[] = 'd-'.$device.'-'.$defaultDisplay;
                     }
                     $lastDisplayed = $key;
                 }
@@ -288,11 +238,6 @@ class ContentExtension extends AbstractExtension
         return $classes;
     }
 
-    /**
-     * @param array $extra
-     *
-     * @return array
-     */
     private function getElementStyles(array $extra): array
     {
         $design = $extra['design'] ?? [];
@@ -300,48 +245,39 @@ class ContentExtension extends AbstractExtension
 
         foreach ($this->getPixelProperties() as $property) {
             if ($design[$property] ?? null) {
-                $styles[] = str_replace('_', '-', $property) . ':' . $design[$property] . 'px';
+                $styles[] = str_replace('_', '-', $property).':'.$design[$property].'px';
             }
         }
 
         $colorProperties = ['border', 'background'];
         foreach ($colorProperties as $colorProperty) {
             $color = $this->getColorForProperty($design, $colorProperty);
-            if ($color !== null) {
-                $styles[] = $colorProperty . '-color:' . $color;
+            if (null !== $color) {
+                $styles[] = $colorProperty.'-color:'.$color;
             }
         }
 
         $borderStyle = $design['border_style'] ?? 'none';
-        if ($borderStyle !== 'none') {
-            $styles[] = 'border-style:' . $borderStyle;
+        if ('none' !== $borderStyle) {
+            $styles[] = 'border-style:'.$borderStyle;
         }
 
         return $styles;
     }
 
-    /**
-     * @param array  $design
-     * @param string $property
-     *
-     * @return string|null
-     */
     private function getColorForProperty(array $design, string $property): ?string
     {
-        $selectColor = $design[$property . '_color_select'] ?? 'none';
-        if ($selectColor === 'none') {
+        $selectColor = $design[$property.'_color_select'] ?? 'none';
+        if ('none' === $selectColor) {
             return null;
         }
-        if ($selectColor === 'transparent') {
+        if ('transparent' === $selectColor) {
             return 'transparent';
         }
 
-        return $design[$property . '_color'] ?? null;
+        return $design[$property.'_color'] ?? null;
     }
 
-    /**
-     * @return array
-     */
     private function getPixelProperties(): array
     {
         $directions = ['top', 'right', 'bottom', 'left'];
@@ -363,8 +299,6 @@ class ContentExtension extends AbstractExtension
     }
 
     /**
-     * @param FormView $form
-     *
      * @return array|mixed
      */
     public function getJsonForm(FormView $form)
@@ -390,31 +324,16 @@ class ContentExtension extends AbstractExtension
         return $form->vars['data'];
     }
 
-    /**
-     * @param VersionInterface $version
-     *
-     * @return string
-     */
     public function getVersionUserName(VersionInterface $version): string
     {
         return $this->userProvider->getUserName($version->getUserId());
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return ContentInterface|null
-     */
     public function getContentBySlug(string $slug): ?ContentInterface
     {
         return $this->scopeHandler->getEntityForCurrentScope('content', ['slug' => $slug]);
     }
 
-    /**
-     * @param array $config
-     *
-     * @return string
-     */
     public function getColSize(array $config): string
     {
         $colSize = $this->cleanColSize($config['size']);
@@ -428,7 +347,7 @@ class ContentExtension extends AbstractExtension
             }
 
             if (isset($config['offset_'.$device])) {
-                $colOffset = $config['offset_' . $device];
+                $colOffset = $config['offset_'.$device];
             }
         }
 
@@ -439,11 +358,6 @@ class ContentExtension extends AbstractExtension
         return $colSize + $colOffset;
     }
 
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
     private function cleanColSize(string $value): string
     {
         if ('auto' === $value || '-' === $value) {

@@ -20,19 +20,12 @@ class ContentListener
      */
     private $versionManager;
 
-    /**
-     * @param ConfigurationManager $configurationManager
-     * @param VersionManager       $versionManager
-     */
     public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
     {
         $this->configurationManager = $configurationManager;
         $this->versionManager = $versionManager;
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
     public function postLoad(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
@@ -40,16 +33,13 @@ class ContentListener
         if (!$entity instanceof ContentInterface) {
             return;
         }
-        if ($entity->getPage() !== null) {
+        if (null !== $entity->getPage()) {
             return;
         }
 
         $entity->setData($this->versionManager->getContentData($entity), false);
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
     public function onFlush(OnFlushEventArgs $args)
     {
         $em = $args->getEntityManager();
@@ -57,7 +47,7 @@ class ContentListener
 
         $entities = [
             ...$uow->getScheduledEntityInsertions(),
-            ...$uow->getScheduledEntityUpdates()
+            ...$uow->getScheduledEntityUpdates(),
         ];
 
         $contentVersionClassMetadata = $em->getClassMetadata($this->configurationManager->getEntityClass('content_version'));
@@ -66,7 +56,7 @@ class ContentListener
             if (!$entity instanceof ContentInterface) {
                 continue;
             }
-            if ($entity->getPage() !== null) {
+            if (null !== $entity->getPage()) {
                 continue;
             }
 

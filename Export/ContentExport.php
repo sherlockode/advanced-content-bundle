@@ -16,10 +16,6 @@ class ContentExport
      */
     private $scopeExport;
 
-    /**
-     * @param ElementExport $elementExport
-     * @param ScopeExport   $scopeExport
-     */
     public function __construct(ElementExport $elementExport, ScopeExport $scopeExport)
     {
         $this->elementExport = $elementExport;
@@ -27,8 +23,6 @@ class ContentExport
     }
 
     /**
-     * @param ContentInterface $content
-     *
      * @return array
      */
     public function exportData(ContentInterface $content)
@@ -59,7 +53,7 @@ class ContentExport
         if (!is_array($elements)) {
             return [];
         }
-        if (count($elements) === 0) {
+        if (0 === count($elements)) {
             return [];
         }
 

@@ -18,9 +18,7 @@ class Iframe extends AbstractFieldType
     }
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
+     * Add element's field(s) to content form.
      *
      * @return void
      */
@@ -36,7 +34,7 @@ class Iframe extends AbstractFieldType
     }
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */
