@@ -32,6 +32,7 @@ class PictureEntryType extends AbstractType
                     // Remove mime type data to prevent form extra fields error
                     unset($data['mime_type']);
                 }
+
                 $event->setData($data);
             },
             1
@@ -41,6 +42,7 @@ class PictureEntryType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getParent()
     {
         return ImageType::class;

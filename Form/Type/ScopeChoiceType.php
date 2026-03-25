@@ -10,22 +10,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ScopeChoiceType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
     public function __construct(
-        ConfigurationManager $configurationManager,
-        ScopeHandlerInterface $scopeHandler,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly ScopeHandlerInterface $scopeHandler,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->scopeHandler = $scopeHandler;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -41,6 +29,7 @@ class ScopeChoiceType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent(): ?string
     {
         return EntityType::class;

@@ -9,20 +9,10 @@ class AcbFilePreSubmitEvent extends Event
 {
     public const NAME = 'acb_file.pre_submit';
 
-    /**
-     * @var UploadedFile
-     */
-    private $uploadedFile;
-
-    /**
-     * @var string
-     */
-    private $fileName;
-
-    public function __construct(UploadedFile $uploadedFile, string $fileName)
-    {
-        $this->uploadedFile = $uploadedFile;
-        $this->fileName = $fileName;
+    public function __construct(
+        private readonly UploadedFile $uploadedFile,
+        private readonly string $fileName,
+    ) {
     }
 
     public function getUploadedFile(): UploadedFile

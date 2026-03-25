@@ -26,6 +26,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
         return 'field_type.'.$this->getCode().'.label';
     }
 
+    #[\Override]
     public function getIconClass()
     {
         return $this->configData['icon'] ?? $this->getDefaultIconClass();
@@ -60,6 +61,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
      *
      * @return void
      */
+    #[\Override]
     public function buildContentElement(FormBuilderInterface $builder)
     {
         parent::buildContentElement($builder);
@@ -136,11 +138,7 @@ abstract class AbstractFieldType extends AbstractElement implements FieldTypeInt
     public function getRawData($element)
     {
         $rawValue = $this->getRawValue($element['value'] ?? null);
-        if (is_array($rawValue)) {
-            $rowData = $rawValue;
-        } else {
-            $rowData = ['value' => $rawValue];
-        }
+        $rowData = is_array($rawValue) ? $rawValue : ['value' => $rawValue];
 
         return array_merge($rowData, [
             'extra' => $element['extra'] ?? [],

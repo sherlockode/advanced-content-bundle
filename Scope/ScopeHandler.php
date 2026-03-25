@@ -20,8 +20,10 @@ abstract class ScopeHandler implements ScopeHandlerInterface
      */
     protected $configurationManager;
 
-    public function __construct(EntityManagerInterface $em, ConfigurationManager $configurationManager)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ConfigurationManager $configurationManager,
+    ) {
         $this->em = $em;
         $this->configurationManager = $configurationManager;
     }
@@ -44,15 +46,18 @@ abstract class ScopeHandler implements ScopeHandlerInterface
                 unset($existingPages[$key]);
                 continue;
             }
+
             if (null === $existingPage->getPageVersion()->getPageMetaVersion()) {
                 unset($existingPages[$key]);
                 continue;
             }
+
             if ($existingPage->getPageVersion()->getPageMetaVersion()->getSlug() !== $page->getPageMeta()->getSlug()) {
                 unset($existingPages[$key]);
                 continue;
             }
         }
+
         $existingPages = array_values($existingPages);
 
         return $this->validateScopableEntity($page, $existingPages);
@@ -77,14 +82,14 @@ abstract class ScopeHandler implements ScopeHandlerInterface
             if ($existingEntity->getId() === $scopable->getId()) {
                 continue;
             }
+
             if (!$this->configurationManager->isScopesEnabled()) {
                 return false;
             }
-            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), function ($a, $b) {
-                return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
-            });
 
-            if (count($result) > 0) {
+            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), fn ($a, $b) => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
+
+            if ([] !== $result) {
                 return false;
             }
         }
@@ -105,7 +110,7 @@ abstract class ScopeHandler implements ScopeHandlerInterface
     public function filterEntityForCurrentScope(array $entities): ?ScopableInterface
     {
         if (!$this->configurationManager->isScopesEnabled()) {
-            return count($entities) > 0 ? reset($entities) : null;
+            return [] !== $entities ? reset($entities) : null;
         }
 
         $currentScope = $this->getCurrentScope();

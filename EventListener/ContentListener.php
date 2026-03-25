@@ -10,20 +10,10 @@ use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentListener
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
-    {
-        $this->configurationManager = $configurationManager;
-        $this->versionManager = $versionManager;
+    public function __construct(
+        private readonly ConfigurationManager $configurationManager,
+        private readonly VersionManager $versionManager,
+    ) {
     }
 
     public function postLoad(LifecycleEventArgs $args)
@@ -33,6 +23,7 @@ class ContentListener
         if (!$entity instanceof ContentInterface) {
             return;
         }
+
         if (null !== $entity->getPage()) {
             return;
         }
@@ -56,6 +47,7 @@ class ContentListener
             if (!$entity instanceof ContentInterface) {
                 continue;
             }
+
             if (null !== $entity->getPage()) {
                 continue;
             }

@@ -6,11 +6,13 @@ use Symfony\Component\Form\AbstractType;
 
 class ContentDataType extends AbstractType
 {
+    #[\Override]
     public function getParent()
     {
         return ElementsType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_content_data';

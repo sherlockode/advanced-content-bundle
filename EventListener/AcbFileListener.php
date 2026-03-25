@@ -14,14 +14,8 @@ class AcbFileListener implements EventSubscriberInterface
      */
     private $files = [];
 
-    /**
-     * @var UploadManager
-     */
-    private $uploadManager;
-
-    public function __construct(UploadManager $uploadManager)
+    public function __construct(private readonly UploadManager $uploadManager)
     {
-        $this->uploadManager = $uploadManager;
     }
 
     /**

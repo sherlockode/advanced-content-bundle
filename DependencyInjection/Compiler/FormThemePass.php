@@ -18,6 +18,7 @@ class FormThemePass implements CompilerPassInterface
         if (Kernel::VERSION_ID < 50300) {
             $theme = 'bootstrap_4_layout.html.twig';
         }
+
         $container->getDefinition('sherlockode_advanced_content.content_extension')->setArgument('$baseFormTheme', $theme);
     }
 }

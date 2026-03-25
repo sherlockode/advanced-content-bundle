@@ -21,55 +21,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ToolsController extends AbstractController
 {
     /**
-     * @var ImportManager
-     */
-    private $importManager;
-
-    /**
-     * @var ExportManager
-     */
-    private $exportManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $template;
-
-    /**
      * @param string $template
      */
     public function __construct(
-        ImportManager $importManager,
-        ExportManager $exportManager,
-        TranslatorInterface $translator,
-        ConfigurationManager $configurationManager,
-        EntityManagerInterface $em,
-        $template,
+        private readonly ImportManager $importManager,
+        private readonly ExportManager $exportManager,
+        private readonly TranslatorInterface $translator,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+        private $template,
     ) {
-        $this->importManager = $importManager;
-        $this->exportManager = $exportManager;
-        $this->translator = $translator;
-        $this->configurationManager = $configurationManager;
-        $this->em = $em;
-        $this->template = $template;
     }
 
-    public function indexAction(Request $request)
+    public function index(Request $request)
     {
         $importForm = $this->createForm(ImportType::class, null, [
             'action' => $this->generateUrl('sherlockode_acb_tools_import'),
@@ -96,6 +60,7 @@ class ToolsController extends AbstractController
 
                 return $this->redirectToRoute('sherlockode_acb_tools_index');
             }
+
             $pageTypeForm->addError(new FormError(
                 $this->translator->trans('page_type.errors.unique_name', [], 'AdvancedContentBundle')
             ));
@@ -118,6 +83,7 @@ class ToolsController extends AbstractController
 
                 return $this->redirectToRoute('sherlockode_acb_tools_index');
             }
+
             $scopeForm->addError(new FormError(
                 $this->translator->trans('scope.errors.unique_locale', [], 'AdvancedContentBundle')
             ));
@@ -136,7 +102,7 @@ class ToolsController extends AbstractController
     /**
      * @return Response
      */
-    public function importAction(Request $request)
+    public function import(Request $request)
     {
         $form = $this->createForm(ImportType::class);
 
@@ -152,6 +118,7 @@ class ToolsController extends AbstractController
                         $this->addFlash('error', $message);
                     }
                 }
+
                 $this->addFlash('success', $this->translator->trans('tools.import.success', [], 'AdvancedContentBundle'));
             } catch (\Exception $e) {
                 $this->addFlash('error', $e->getMessage());
@@ -164,7 +131,7 @@ class ToolsController extends AbstractController
     /**
      * @return Response
      */
-    public function exportAction(Request $request)
+    public function export(Request $request)
     {
         $form = $this->createForm(ExportType::class);
 
@@ -204,7 +171,7 @@ class ToolsController extends AbstractController
      *
      * @return Response
      */
-    public function deletePageTypeAction($id)
+    public function deletePageType($id)
     {
         $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 

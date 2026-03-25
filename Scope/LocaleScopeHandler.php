@@ -9,19 +9,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class LocaleScopeHandler extends ScopeHandler
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
-        RequestStack $requestStack,
+        private readonly RequestStack $requestStack,
     ) {
         parent::__construct($em, $configurationManager);
-
-        $this->requestStack = $requestStack;
     }
 
     public function getScopeGroupBy(): ?string
@@ -60,6 +53,7 @@ class LocaleScopeHandler extends ScopeHandler
             // compat SF < 5.3
             $mainRequest = $this->requestStack->getMasterRequest();
         }
+
         if (null === $mainRequest) {
             return null;
         }

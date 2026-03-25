@@ -14,6 +14,7 @@ class Video extends AbstractFieldType
         return VideoType::class;
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-video';

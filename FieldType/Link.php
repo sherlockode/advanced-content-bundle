@@ -15,16 +15,19 @@ class Link extends AbstractFieldType
         return LinkType::class;
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-link';
     }
 
+    #[\Override]
     public function getFrontTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/front/link.html.twig';
     }
 
+    #[\Override]
     public function getFormElementOptions()
     {
         return [
@@ -55,6 +58,7 @@ class Link extends AbstractFieldType
         return 'bundles/sherlockodeadvancedcontent/preview_picture/link.svg';
     }
 
+    #[\Override]
     public function getRawValue($element)
     {
         $url = $this->getUrlValue($element);

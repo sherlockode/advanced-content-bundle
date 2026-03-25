@@ -45,7 +45,7 @@ class RepeaterType extends AbstractType
                 }, ARRAY_FILTER_USE_BOTH);
                 $prototypeOptions = array_merge($prototypeOptions, [
                     'child_options' => $prototype->getConfig()->getOptions(),
-                    'child_form' => get_class($prototype->getConfig()->getType()->getInnerType()),
+                    'child_form' => $prototype->getConfig()->getType()->getInnerType()::class,
                     'compound' => true,
                 ]);
 
@@ -64,7 +64,7 @@ class RepeaterType extends AbstractType
                 } else {
                     $form->add($i, RepeatedChildWrappedType::class, [
                         'child_options' => $child->getConfig()->getOptions(),
-                        'child_form' => get_class($child->getConfig()->getType()->getInnerType()),
+                        'child_form' => $child->getConfig()->getType()->getInnerType()::class,
                         'position' => $i,
                     ]);
                 }
@@ -83,14 +83,15 @@ class RepeaterType extends AbstractType
                 if (!is_array($item)) {
                     return;
                 }
+
                 if (!isset($item['position'])) {
                     $item['position'] = 0;
                 }
+
                 $orderedData[] = $item;
             }
-            usort($orderedData, function ($a, $b) {
-                return $a['position'] <=> $b['position'];
-            });
+
+            usort($orderedData, fn ($a, $b) => $a['position'] <=> $b['position']);
 
             // unset the position key in the saved data
             $orderedData = array_map(function ($item) {
@@ -108,6 +109,7 @@ class RepeaterType extends AbstractType
         });
     }
 
+    #[\Override]
     public function getParent()
     {
         return CollectionType::class;
@@ -124,6 +126,7 @@ class RepeaterType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_field_collection';

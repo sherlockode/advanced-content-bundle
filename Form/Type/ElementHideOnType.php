@@ -11,6 +11,7 @@ class ElementHideOnType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getParent()
     {
         return ChoiceType::class;

@@ -39,6 +39,7 @@ class ElementType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_element';

@@ -12,14 +12,13 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * ContentVersion constructor.
      */
     public function __construct()
     {
-        $this->data = [];
         parent::__construct();
     }
 
@@ -44,9 +43,7 @@ abstract class ContentVersion extends Version implements ContentVersionInterface
     public function getData()
     {
         $data = $this->data ?? [];
-        uasort($data, function ($a, $b) {
-            return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
-        });
+        uasort($data, fn ($a, $b) => ($a['position'] ?? 0) <=> ($b['position'] ?? 0));
 
         return $data;
     }

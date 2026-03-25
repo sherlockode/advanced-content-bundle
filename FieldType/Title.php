@@ -14,6 +14,7 @@ class Title extends AbstractFieldType
         return TitleType::class;
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-heading';

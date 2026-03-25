@@ -7,14 +7,8 @@ use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
 
 class File extends AbstractFieldType
 {
-    /**
-     * @var UrlBuilderManager
-     */
-    private $urlBuilderManager;
-
-    public function __construct(UrlBuilderManager $urlBuilderManager)
+    public function __construct(private readonly UrlBuilderManager $urlBuilderManager)
     {
-        $this->urlBuilderManager = $urlBuilderManager;
     }
 
     /**
@@ -25,6 +19,7 @@ class File extends AbstractFieldType
         return AcbFileType::class;
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-paperclip';
@@ -55,6 +50,7 @@ class File extends AbstractFieldType
         return $this->urlBuilderManager->getFileUrl($value['src'] ?? '');
     }
 
+    #[\Override]
     public function getRawValue($element)
     {
         $element['url'] = $this->getFilename($element);

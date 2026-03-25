@@ -9,31 +9,13 @@ use Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface;
 class ContentManager
 {
     /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var SlugProviderInterface
-     */
-    private $slugProvider;
-
-    /**
      * ContentManager constructor.
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        EntityManagerInterface $em,
-        SlugProviderInterface $slugProvider,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+        private readonly SlugProviderInterface $slugProvider,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->em = $em;
-        $this->slugProvider = $slugProvider;
     }
 
     /**

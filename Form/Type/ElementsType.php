@@ -14,29 +14,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ElementsType extends AbstractType
 {
-    /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     public function __construct(
-        ElementManager $elementManager,
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
+        private readonly ElementManager $elementManager,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->elementManager = $elementManager;
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -72,6 +54,7 @@ class ElementsType extends AbstractType
             foreach ($form as $child) {
                 $form->remove($child->getName());
             }
+
             $form->setData([]);
 
             foreach ($data as $name => $element) {
@@ -89,7 +72,7 @@ class ElementsType extends AbstractType
             $data = $event->getData();
             $data = array_values($data);
 
-            if ($parentForm = $form->getParent()) {
+            if (($parentForm = $form->getParent()) !== null) {
                 $parentElementType = $parentForm->has('elementType') ? $parentForm->get('elementType')->getData() : 'root';
                 foreach ($data as $child) {
                     if ('root' === $parentElementType && 'row' !== $child['elementType']) {
@@ -99,6 +82,7 @@ class ElementsType extends AbstractType
                             'AdvancedContentBundle'
                         )));
                     }
+
                     if ('row' === $parentElementType && 'column' !== $child['elementType']) {
                         $form->addError(new FormError($this->translator->trans(
                             'layout_type.errors.invalid_element_in_row',
@@ -106,6 +90,7 @@ class ElementsType extends AbstractType
                             'AdvancedContentBundle'
                         )));
                     }
+
                     if ('column' === $parentElementType
                         && ('column' === $child['elementType'] || 'row' === $child['elementType'])
                     ) {
@@ -130,6 +115,7 @@ class ElementsType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_elements';

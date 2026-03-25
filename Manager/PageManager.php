@@ -7,15 +7,8 @@ use Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface;
 
 class PageManager
 {
-    /**
-     * @var SlugProviderInterface
-     */
-    private $slugProvider;
-
-    public function __construct(
-        SlugProviderInterface $slugProvider,
-    ) {
-        $this->slugProvider = $slugProvider;
+    public function __construct(private readonly SlugProviderInterface $slugProvider)
+    {
     }
 
     public function duplicate(PageInterface $page): PageInterface

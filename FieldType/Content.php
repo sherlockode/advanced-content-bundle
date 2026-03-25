@@ -7,15 +7,8 @@ use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 
 class Content extends AbstractFieldType
 {
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    public function __construct(
-        ScopeHandlerInterface $scopeHandler,
-    ) {
-        $this->scopeHandler = $scopeHandler;
+    public function __construct(private readonly ScopeHandlerInterface $scopeHandler)
+    {
     }
 
     /**
@@ -44,6 +37,7 @@ class Content extends AbstractFieldType
     /**
      * @return array
      */
+    #[\Override]
     public function getRawValue($element)
     {
         $element['entity'] = null;

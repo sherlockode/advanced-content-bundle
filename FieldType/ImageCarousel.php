@@ -9,11 +9,13 @@ class ImageCarousel extends File
     /**
      * @return string
      */
+    #[\Override]
     public function getFormFieldType()
     {
         return ImageCarouselType::class;
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-images';
@@ -24,16 +26,19 @@ class ImageCarousel extends File
      *
      * @return string
      */
+    #[\Override]
     public function getCode()
     {
         return 'image_carousel';
     }
 
+    #[\Override]
     public function getPreviewPicture(): ?string
     {
         return 'bundles/sherlockodeadvancedcontent/preview_picture/image_carousel.svg';
     }
 
+    #[\Override]
     public function getRawValue($element)
     {
         $images = $element['images'] ?? [];
@@ -48,6 +53,7 @@ class ImageCarousel extends File
             if (isset($imageData['delete'])) {
                 unset($imageData['delete']);
             }
+
             $element['images'][$key] = $imageData;
         }
 

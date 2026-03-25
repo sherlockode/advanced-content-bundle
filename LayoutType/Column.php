@@ -11,6 +11,7 @@ class Column extends AbstractLayoutType
         return 'column';
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-columns';

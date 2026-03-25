@@ -105,6 +105,7 @@ class ColumnType extends AbstractType
         ;
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_column_config';

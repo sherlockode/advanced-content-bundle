@@ -10,11 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageType extends AbstractType
 {
-    private MimeTypeManager $mimeTypeManager;
-
-    public function __construct(MimeTypeManager $mimeTypeManager)
+    public function __construct(private readonly MimeTypeManager $mimeTypeManager)
     {
-        $this->mimeTypeManager = $mimeTypeManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -31,6 +28,7 @@ class ImageType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getParent()
     {
         return AcbFileType::class;
@@ -39,6 +37,7 @@ class ImageType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_image';
@@ -48,7 +47,7 @@ class ImageType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
-            'mime_types' => array_flip(array_map('ucfirst', $this->mimeTypeManager->getImageMimeTypesChoices())),
+            'mime_types' => array_flip(array_map(ucfirst(...), $this->mimeTypeManager->getImageMimeTypesChoices())),
             'mime_types_constraint' => $this->mimeTypeManager->getMimeTypesByCode(MimeTypeManager::MIME_TYPE_IMAGE),
         ]);
     }

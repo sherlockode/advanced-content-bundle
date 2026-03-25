@@ -12,17 +12,10 @@ class ElementManager
     /**
      * @var ElementInterface[]
      */
-    private $elements;
+    private $elements = [];
 
-    /**
-     * @var array
-     */
-    private $fieldsConfiguration;
-
-    public function __construct(array $fieldsConfiguration)
+    public function __construct(private array $fieldsConfiguration)
     {
-        $this->elements = [];
-        $this->fieldsConfiguration = $fieldsConfiguration;
     }
 
     /**
@@ -35,8 +28,10 @@ class ElementManager
             if (false === $this->fieldsConfiguration[$fieldType->getCode()]['enabled']) {
                 $enabled = false;
             }
+
             $fieldType->setConfigData($this->fieldsConfiguration[$fieldType->getCode()]);
         }
+
         if ($enabled) {
             $this->elements[$fieldType->getCode()] = $fieldType;
         }
@@ -56,6 +51,7 @@ class ElementManager
                 if (!isset($choices[$fieldGroup])) {
                     $choices[$fieldGroup] = [];
                 }
+
                 $choices[$fieldGroup][$element->getFormFieldLabel()] = $element;
             }
         }
