@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Import\ContentImport;
@@ -16,15 +18,9 @@ class ImportManager
         'contents' => 'Content',
     ];
 
-    /**
-     * @var array
-     */
-    private $dataToProcess;
+    private array $dataToProcess;
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private ?SymfonyStyle $symfonyStyle = null;
 
     public function __construct(
         private readonly PageImport $pageImport,
@@ -48,7 +44,7 @@ class ImportManager
     /**
      * @throws \Exception
      */
-    public function addFileToProcess(\SplFileInfo $file)
+    public function addFileToProcess(\SplFileInfo $file): void
     {
         $filePath = $file->getRealPath();
         $data = Yaml::parseFile($filePath);
@@ -69,7 +65,7 @@ class ImportManager
      *
      * @return array|ImportResult[]
      */
-    public function processData($allowedTypes = [])
+    public function processData($allowedTypes = []): array
     {
         $results = [];
         foreach ($this->dataToProcess as $type => $dataToProcess) {
@@ -115,13 +111,13 @@ class ImportManager
     /**
      * @param bool $allowUpdate
      */
-    public function setAllowUpdate($allowUpdate)
+    public function setAllowUpdate($allowUpdate): void
     {
         $this->pageImport->setAllowUpdate($allowUpdate);
         $this->contentImport->setAllowUpdate($allowUpdate);
     }
 
-    public function setSymfonyStyle(SymfonyStyle $symfonyStyle)
+    public function setSymfonyStyle(SymfonyStyle $symfonyStyle): void
     {
         $this->symfonyStyle = $symfonyStyle;
     }
@@ -129,7 +125,7 @@ class ImportManager
     /**
      * @param string $dir
      */
-    public function setFilesDirectory($dir)
+    public function setFilesDirectory($dir): void
     {
         $this->contentImport->setFilesDirectory($dir);
     }

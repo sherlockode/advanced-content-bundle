@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\AcbFileType;
@@ -11,26 +13,21 @@ class File extends AbstractFieldType
     {
     }
 
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return AcbFileType::class;
     }
 
     #[\Override]
-    protected function getDefaultIconClass()
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-paperclip';
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'file';
     }
@@ -40,12 +37,7 @@ class File extends AbstractFieldType
         return 'bundles/sherlockodeadvancedcontent/preview_picture/file.svg';
     }
 
-    /**
-     * @param array $value
-     *
-     * @return string
-     */
-    protected function getFilename($value)
+    protected function getFilename(array $value): string
     {
         return $this->urlBuilderManager->getFileUrl($value['src'] ?? '');
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,15 +19,9 @@ class ExportCommand extends Command
 {
     public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private ?SymfonyStyle $symfonyStyle = null;
 
-    /**
-     * @var string
-     */
-    private $sourceDirectory;
+    private ?string $sourceDirectory = null;
 
     /**
      * @var array
@@ -33,8 +29,7 @@ class ExportCommand extends Command
     private $exportTypes = [];
 
     /**
-     * @param string      $rootDir
-     * @param string|null $name
+     * @param string $rootDir
      */
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -42,7 +37,7 @@ class ExportCommand extends Command
         private readonly TranslatorInterface $translator,
         private readonly ExportManager $exportManager,
         private $rootDir,
-        $name = null,
+        ?string $name = null,
     ) {
         parent::__construct($name);
     }
@@ -71,7 +66,7 @@ class ExportCommand extends Command
     /**
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->symfonyStyle = new SymfonyStyle($input, $output);
         try {
@@ -111,7 +106,7 @@ class ExportCommand extends Command
     /**
      * @throws \Exception
      */
-    private function init(InputInterface $input)
+    private function init(InputInterface $input): void
     {
         $initDir = $input->getOption('dir');
         if (null === $initDir) {

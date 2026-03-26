@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -9,10 +11,7 @@ use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 
 class PageImport extends AbstractImport
 {
-    /**
-     * @var ContentImport
-     */
-    private $contentImport;
+    private ?ContentImport $contentImport = null;
 
     /**
      * @param string $pageIdentifier
@@ -143,7 +142,7 @@ class PageImport extends AbstractImport
     /**
      * @return $this
      */
-    public function setContentImport(ContentImport $contentImport)
+    public function setContentImport(ContentImport $contentImport): static
     {
         $this->contentImport = $contentImport;
 

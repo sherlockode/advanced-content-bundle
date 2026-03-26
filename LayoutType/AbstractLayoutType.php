@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\LayoutType;
 
 use Sherlockode\AdvancedContentBundle\Element\AbstractElement;
@@ -34,11 +36,9 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
 
     /**
      * Add element's field(s) to content form.
-     *
-     * @return void
      */
     #[\Override]
-    public function buildContentElement(FormBuilderInterface $builder)
+    public function buildContentElement(FormBuilderInterface $builder): void
     {
         parent::buildContentElement($builder);
 
@@ -65,7 +65,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
     public function getRawData($element)
     {
         $elements = $element['elements'] ?? [];
-        uasort($elements, fn ($a, $b) => ($a['position'] ?? 0) <=> ($b['position'] ?? 0));
+        uasort($elements, fn ($a, $b): int => ($a['position'] ?? 0) <=> ($b['position'] ?? 0));
 
         return [
             'elements' => $elements,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Event\AcbFilePreSubmitEvent;
@@ -30,7 +32,7 @@ class AcbFileType extends AbstractType
     ) {
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $mimeTypeChoices = $options['mime_types'] ?? $this->mimeTypeManager->generateMimeTypeChoices();
 
@@ -45,14 +47,14 @@ class AcbFileType extends AbstractType
                 'label' => 'field_type.file.restriction_type',
                 'multiple' => true,
                 'choices' => is_array($mimeTypeChoices) ? $mimeTypeChoices : [],
-                'choice_attr' => fn ($choice): array => ['data-mime-type' => json_encode($this->mimeTypeManager->getMimeTypesByCode($choice))],
+                'choice_attr' => fn (string $choice): array => ['data-mime-type' => json_encode($this->mimeTypeManager->getMimeTypesByCode($choice))],
                 'attr' => ['data-mime-type-restriction' => ''],
             ])
         ;
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function (FormEvent $event) use ($options) {
+            function (FormEvent $event) use ($options): void {
                 $form = $event->getForm();
                 $data = $event->getData();
                 if (!is_array($data)) {
@@ -65,7 +67,7 @@ class AcbFileType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($options) {
+            function (FormEvent $event) use ($options): void {
                 $data = $event->getData();
                 $form = $event->getForm();
 
@@ -94,7 +96,7 @@ class AcbFileType extends AbstractType
                 $event->setData($data);
             }
         );
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $data = $event->getData();
             $form = $event->getForm();
             if ($form->getConfig()->getCompound()) {
@@ -111,14 +113,7 @@ class AcbFileType extends AbstractType
         });
     }
 
-    /**
-     * @param array $data
-     * @param array $options
-     * @param bool  $hasFile
-     *
-     * @return void
-     */
-    private function updateForm(FormInterface $form, $data, $options, $hasFile = false)
+    private function updateForm(FormInterface $form, array $data, array $options, bool $hasFile = false): void
     {
         if (!isset($data['src'])) {
             $data['src'] = '';
@@ -173,7 +168,7 @@ class AcbFileType extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',
@@ -190,7 +185,7 @@ class AcbFileType extends AbstractType
      * @param FormInterface $form    The form
      * @param array         $options The options
      */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $fileSrc = $form->getData()['src'] ?? '';
         if ('' !== $fileSrc && false === $this->uploadManager->isFileUploaded($fileSrc)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Export;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -12,10 +14,7 @@ class ContentExport
     ) {
     }
 
-    /**
-     * @return array
-     */
-    public function exportData(ContentInterface $content)
+    public function exportData(ContentInterface $content): array
     {
         $data = [];
         $data['name'] = $content->getName();
@@ -35,10 +34,8 @@ class ContentExport
 
     /**
      * @param array|array[] $elements
-     *
-     * @return array
      */
-    public function exportElements($elements)
+    public function exportElements($elements): array
     {
         if (!is_array($elements)) {
             return [];

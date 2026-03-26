@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +18,7 @@ class AcbContentType extends AbstractType
     ) {
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $contents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
             'page' => null,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -28,7 +30,7 @@ class ContentType extends AbstractType
     ) {
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $token = uniqid('content_');
 
@@ -64,7 +66,7 @@ class ContentType extends AbstractType
             ]);
         }
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options, $token) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options, $token): void {
             $form = $event->getForm();
             /** @var ContentInterface $content */
             $content = $event->getData();
@@ -109,11 +111,11 @@ class ContentType extends AbstractType
             }
         });
 
-        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
             $event->setData(json_decode((string) $event->getData(), true));
         }, 1);
 
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $form = $event->getForm();
             if ($form->has('slug')) {
                 $content = $event->getData();
@@ -132,13 +134,13 @@ class ContentType extends AbstractType
         });
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         // ensure the form is working on the first added image (multipart would not be set in this case)
         $view->vars['multipart'] = true;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',

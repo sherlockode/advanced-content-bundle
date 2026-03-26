@@ -1,31 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\VideoType;
 
 class Video extends AbstractFieldType
 {
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return VideoType::class;
     }
 
     #[\Override]
-    protected function getDefaultIconClass()
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-video';
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'video';
     }

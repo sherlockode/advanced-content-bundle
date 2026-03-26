@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +34,7 @@ class ElementImport
     ) {
     }
 
-    public function getElementImportData(array $elementData, int $position = 0)
+    public function getElementImportData(array $elementData, int $position = 0): array
     {
         if (!isset($elementData['type'])) {
             throw new \Exception($this->translator->trans('init.errors.element_missing_type', [], 'AdvancedContentBundle'));
@@ -54,7 +56,7 @@ class ElementImport
         ], $data);
     }
 
-    private function getFieldTypeImportData(FieldTypeInterface $element, array $elementData)
+    private function getFieldTypeImportData(FieldTypeInterface $element, array $elementData): array
     {
         $value = '';
         if (null !== $element->getValueModelTransformer()) {
@@ -71,7 +73,7 @@ class ElementImport
         return ['value' => $value];
     }
 
-    private function getLayoutTypeImportData(LayoutTypeInterface $element, array $elementData)
+    private function getLayoutTypeImportData(LayoutTypeInterface $element, array $elementData): array
     {
         $elements = $elementData['elements'] ?? [];
         $elementsData = [];
@@ -86,7 +88,10 @@ class ElementImport
         ];
     }
 
-    private function processValueArray(array $data)
+    /**
+     * @return mixed[]
+     */
+    private function processValueArray(array $data): array
     {
         if (isset($data['_file'])) {
             // handle file
@@ -115,7 +120,7 @@ class ElementImport
         return $newData;
     }
 
-    private function processFileUpload(array $data)
+    private function processFileUpload(array $data): array
     {
         $fileName = $this->getFilesDirectory().$data['_file'];
         if (!file_exists($fileName)) {
@@ -156,7 +161,7 @@ class ElementImport
     /**
      * @param string $dir
      */
-    public function setFilesDirectory($dir)
+    public function setFilesDirectory($dir): void
     {
         $this->filesDirectory = $dir;
     }

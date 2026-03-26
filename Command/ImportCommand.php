@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Command;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -16,10 +18,7 @@ class ImportCommand extends Command
 {
     public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private ?SymfonyStyle $symfonyStyle = null;
 
     /**
      * @var string
@@ -37,15 +36,14 @@ class ImportCommand extends Command
     private $filename;
 
     /**
-     * @param string      $rootDir
-     * @param string|null $name
+     * @param string $rootDir
      */
     public function __construct(
         private readonly ConfigurationManager $configurationManager,
         private readonly TranslatorInterface $translator,
         private readonly ImportManager $importManager,
         private $rootDir,
-        $name = null,
+        ?string $name = null,
     ) {
         parent::__construct($name);
     }
@@ -92,7 +90,7 @@ class ImportCommand extends Command
     /**
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->symfonyStyle = new SymfonyStyle($input, $output);
         try {
@@ -110,7 +108,7 @@ class ImportCommand extends Command
         return self::SUCCESS;
     }
 
-    private function addFilesToProcess()
+    private function addFilesToProcess(): void
     {
         $finder = new Finder();
         $finder->files()->in($this->sourceDirectory);
@@ -140,7 +138,7 @@ class ImportCommand extends Command
     /**
      * @throws \Exception
      */
-    private function init(InputInterface $input)
+    private function init(InputInterface $input): void
     {
         $initDir = $input->getOption('dir');
         if (null === $initDir) {
@@ -183,11 +181,9 @@ class ImportCommand extends Command
     /**
      * @param string $dir
      *
-     * @return string
-     *
      * @throws \Exception
      */
-    private function getDirFullPath($dir)
+    private function getDirFullPath($dir): string
     {
         if (!str_starts_with($dir, '/')) {
             $dir = $this->rootDir.'/'.$dir;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +28,7 @@ class StringToEntity implements DataTransformerInterface
      *
      * @return object|null
      */
-    public function transform($valueAsString)
+    public function transform($valueAsString): mixed
     {
         if (empty($valueAsString)) {
             return null;
@@ -46,7 +48,7 @@ class StringToEntity implements DataTransformerInterface
      *
      * @return string
      */
-    public function reverseTransform($entity)
+    public function reverseTransform($entity): mixed
     {
         if (empty($entity)) {
             return null;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Manager\UrlBuilderManager;
@@ -12,18 +14,16 @@ class RelativeLink extends Link
     }
 
     #[\Override]
-    public function getPreviewTemplate()
+    public function getPreviewTemplate(): string
     {
         return '@SherlockodeAdvancedContent/Field/preview/link.html.twig';
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
     #[\Override]
-    public function getCode()
+    public function getCode(): string
     {
         return 'relative_link';
     }
@@ -34,22 +34,17 @@ class RelativeLink extends Link
         return 'bundles/sherlockodeadvancedcontent/preview_picture/relative_link.svg';
     }
 
-    /**
-     * @return string
-     */
     #[\Override]
-    protected function getUrlFormType()
+    protected function getUrlFormType(): string
     {
         return TextType::class;
     }
 
     /**
      * @param array $value
-     *
-     * @return string
      */
     #[\Override]
-    protected function getUrlValue($value)
+    protected function getUrlValue($value): string
     {
         return $this->urlBuilderManager->getFullUrl($value['url'] ?? '');
     }

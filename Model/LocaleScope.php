@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 class LocaleScope extends Scope implements LocaleScopeInterface
@@ -26,18 +28,12 @@ class LocaleScope extends Scope implements LocaleScopeInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getOptionTitle()
+    public function getOptionTitle(): string
     {
         return (string) $this->locale;
     }
 
-    /**
-     * @return string
-     */
-    public function getUnicityIdentifier()
+    public function getUnicityIdentifier(): string
     {
         return (string) $this->locale;
     }
