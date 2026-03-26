@@ -17,21 +17,6 @@ class ImportCommand extends Command
     public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
     /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -40,11 +25,6 @@ class ImportCommand extends Command
      * @var string
      */
     private $sourceDirectory;
-
-    /**
-     * @var ImportManager
-     */
-    private $importManager;
 
     /**
      * @var array
@@ -61,17 +41,13 @@ class ImportCommand extends Command
      * @param string|null $name
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        ImportManager $importManager,
-        $rootDir,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
+        private readonly ImportManager $importManager,
+        private $rootDir,
         $name = null,
     ) {
         parent::__construct($name);
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
-        $this->importManager = $importManager;
-        $this->rootDir = $rootDir;
     }
 
     protected function configure()
@@ -125,19 +101,13 @@ class ImportCommand extends Command
             $this->addFilesToProcess();
             $this->importManager->setSymfonyStyle($this->symfonyStyle);
             $this->importManager->processData($this->importTypes);
-        } catch (\Exception $e) {
-            $this->symfonyStyle->error($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->symfonyStyle->error($exception->getMessage());
 
-            if (defined(sprintf('%s::FAILURE', get_class($this)))) {
-                return self::FAILURE;
-            }
-
-            return;
+            return self::FAILURE;
         }
 
-        if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
-            return self::SUCCESS;
-        }
+        return self::SUCCESS;
     }
 
     private function addFilesToProcess()
@@ -157,6 +127,7 @@ class ImportCommand extends Command
         } else {
             $finder->name(['*.yaml', '*.yml']);
         }
+
         foreach ($finder as $file) {
             try {
                 $this->importManager->addFileToProcess($file);
@@ -175,6 +146,7 @@ class ImportCommand extends Command
         if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
+
         $initDir = $this->getDirFullPath($initDir);
         $this->sourceDirectory = $initDir;
 
@@ -199,9 +171,10 @@ class ImportCommand extends Command
         $importTypes = $input->getOption('type');
         foreach ($importTypes as $importType) {
             if (!in_array($importType, self::AVAILABLE_ENTITIES)) {
-                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => implode(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
             }
         }
+
         $this->importTypes = $importTypes;
 
         $this->filename = $input->getOption('file');
@@ -216,9 +189,10 @@ class ImportCommand extends Command
      */
     private function getDirFullPath($dir)
     {
-        if (0 !== strpos($dir, '/')) {
+        if (!str_starts_with($dir, '/')) {
             $dir = $this->rootDir.'/'.$dir;
         }
+
         $dir .= '/';
 
         if (!file_exists($dir)) {

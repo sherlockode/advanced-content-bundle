@@ -5,23 +5,20 @@ namespace Sherlockode\AdvancedContentBundle\Import;
 class ImportResult
 {
     public const FAILURE = 0;
+
     public const SUCCESS = 1;
+
     public const UNKNOWN = 2;
 
     /**
      * @var int
      */
-    private $status;
+    private $status = self::UNKNOWN;
 
     /**
      * @var array
      */
     private $messages = [];
-
-    public function __construct()
-    {
-        $this->status = self::UNKNOWN;
-    }
 
     /**
      * @return int

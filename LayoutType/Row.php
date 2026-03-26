@@ -11,6 +11,7 @@ class Row extends AbstractLayoutType
         return 'row';
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-bars';

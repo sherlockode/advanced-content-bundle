@@ -9,14 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WysiwygType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -27,6 +21,7 @@ class WysiwygType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent()
     {
         return CKEditorType::class;

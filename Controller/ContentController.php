@@ -23,70 +23,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ContentController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ContentManager
-     */
-    private $contentManager;
-
-    /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcherInterface;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ContentManager $contentManager,
-        ElementManager $elementManager,
-        ConfigurationManager $configurationManager,
-        FormFactoryInterface $formFactory,
-        TranslatorInterface $translator,
-        VersionManager $versionManager,
-        EventDispatcherInterface $eventDispatcher,
+        private readonly EntityManagerInterface $em,
+        private readonly ContentManager $contentManager,
+        private readonly ElementManager $elementManager,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly FormFactoryInterface $formFactory,
+        private readonly TranslatorInterface $translator,
+        private readonly VersionManager $versionManager,
+        private readonly EventDispatcherInterface $eventDispatcherInterface,
     ) {
-        $this->em = $em;
-        $this->contentManager = $contentManager;
-        $this->elementManager = $elementManager;
-        $this->configurationManager = $configurationManager;
-        $this->formFactory = $formFactory;
-        $this->translator = $translator;
-        $this->versionManager = $versionManager;
-        $this->eventDispatcherInterface = $eventDispatcher;
     }
 
     /**
      * @return Response
      */
-    public function addFieldAction()
+    public function addField()
     {
         $fields = $this->elementManager->getGroupedFieldTypes();
 
@@ -101,7 +53,7 @@ class ContentController extends AbstractController
     /**
      * @return Response
      */
-    public function fieldFormAction(Request $request)
+    public function fieldForm(Request $request)
     {
         $element = $this->elementManager->getElementByCode($request->get('type'));
         $elementData = [];
@@ -170,7 +122,7 @@ class ContentController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function saveDraftAction(Request $request)
+    public function saveDraft(Request $request)
     {
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);
@@ -216,7 +168,7 @@ class ContentController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function deleteVersionAction(Request $request)
+    public function deleteVersion(Request $request)
     {
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);

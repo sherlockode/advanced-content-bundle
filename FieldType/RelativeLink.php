@@ -7,16 +7,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RelativeLink extends Link
 {
-    /**
-     * @var UrlBuilderManager
-     */
-    private $urlBuilderManager;
-
-    public function __construct(UrlBuilderManager $urlBuilderManager)
+    public function __construct(private readonly UrlBuilderManager $urlBuilderManager)
     {
-        $this->urlBuilderManager = $urlBuilderManager;
     }
 
+    #[\Override]
     public function getPreviewTemplate()
     {
         return '@SherlockodeAdvancedContent/Field/preview/link.html.twig';
@@ -27,11 +22,13 @@ class RelativeLink extends Link
      *
      * @return string
      */
+    #[\Override]
     public function getCode()
     {
         return 'relative_link';
     }
 
+    #[\Override]
     public function getPreviewPicture(): ?string
     {
         return 'bundles/sherlockodeadvancedcontent/preview_picture/relative_link.svg';
@@ -40,6 +37,7 @@ class RelativeLink extends Link
     /**
      * @return string
      */
+    #[\Override]
     protected function getUrlFormType()
     {
         return TextType::class;
@@ -50,6 +48,7 @@ class RelativeLink extends Link
      *
      * @return string
      */
+    #[\Override]
     protected function getUrlValue($value)
     {
         return $this->urlBuilderManager->getFullUrl($value['url'] ?? '');

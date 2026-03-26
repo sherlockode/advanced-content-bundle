@@ -10,22 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ScopeController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+        private readonly ConfigurationManager $configurationManager,
     ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
     }
 
     /**
@@ -33,7 +21,7 @@ class ScopeController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id)
     {
         $scope = $this->em->getRepository($this->configurationManager->getEntityClass('scope'))->find($id);
 

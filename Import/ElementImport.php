@@ -15,36 +15,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ElementImport
 {
     /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var UploadManager
-     */
-    private $uploadManager;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    /**
      * @var string
      */
     private $filesDirectory;
@@ -53,19 +23,13 @@ class ElementImport
      * @param string $rootDir
      */
     public function __construct(
-        ElementManager $elementManager,
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        UploadManager $uploadManager,
-        $rootDir,
+        private readonly ElementManager $elementManager,
+        private readonly EntityManagerInterface $em,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
+        private readonly UploadManager $uploadManager,
+        private $rootDir,
     ) {
-        $this->elementManager = $elementManager;
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
-        $this->uploadManager = $uploadManager;
-        $this->rootDir = $rootDir;
     }
 
     public function getElementImportData(array $elementData, int $position = 0)
@@ -80,7 +44,7 @@ class ElementImport
         } elseif ($element instanceof LayoutTypeInterface) {
             $data = $this->getLayoutTypeImportData($element, $elementData);
         } else {
-            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in import', get_class($element)));
+            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in import', $element::class));
         }
 
         return array_merge([
@@ -96,6 +60,7 @@ class ElementImport
         if (null !== $element->getValueModelTransformer()) {
             $value = [];
         }
+
         if (isset($elementData['value'])) {
             $value = $elementData['value'];
             if (is_array($value)) {
@@ -130,6 +95,7 @@ class ElementImport
                 $data = $result;
             }
         }
+
         if (isset($data['content'])) {
             $slug = $data['content'];
             $content = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findOneBy([
@@ -143,11 +109,7 @@ class ElementImport
         // browse array
         $newData = [];
         foreach ($data as $key => $valueEntry) {
-            if (is_array($valueEntry)) {
-                $newData[$key] = $this->processValueArray($valueEntry);
-            } else {
-                $newData[$key] = $valueEntry;
-            }
+            $newData[$key] = is_array($valueEntry) ? $this->processValueArray($valueEntry) : $valueEntry;
         }
 
         return $newData;
@@ -177,12 +139,14 @@ class ElementImport
     {
         if (null === $this->filesDirectory) {
             $filesDirectory = $this->configurationManager->getInitFilesDirectory();
-            if (0 !== strpos($filesDirectory, '/')) {
+            if (!str_starts_with($filesDirectory, '/')) {
                 $filesDirectory = $this->rootDir.'/'.$filesDirectory;
             }
+
             if (!file_exists($filesDirectory)) {
                 throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $filesDirectory], 'AdvancedContentBundle'));
             }
+
             $this->filesDirectory = $filesDirectory.'/';
         }
 

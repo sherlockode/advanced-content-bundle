@@ -17,21 +17,6 @@ class ImportManager
     ];
 
     /**
-     * @var ContentImport
-     */
-    private $contentImport;
-
-    /**
-     * @var PageImport
-     */
-    private $pageImport;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @var array
      */
     private $dataToProcess;
@@ -42,14 +27,11 @@ class ImportManager
     private $symfonyStyle;
 
     public function __construct(
-        PageImport $pageImport,
-        ContentImport $contentImport,
-        TranslatorInterface $translator,
+        private readonly PageImport $pageImport,
+        private readonly ContentImport $contentImport,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->pageImport = $pageImport;
-        $this->contentImport = $contentImport;
         $this->pageImport->setContentImport($this->contentImport);
-        $this->translator = $translator;
 
         $this->dataToProcess = [
             'Page' => [
@@ -73,7 +55,7 @@ class ImportManager
 
         foreach ($data as $entityType => $entities) {
             if (!isset(self::ENTITY_MAPPING[$entityType])) {
-                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $entityType, '%list%' => join(', ', array_keys(self::ENTITY_MAPPING))], 'AdvancedContentBundle'));
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $entityType, '%list%' => implode(', ', array_keys(self::ENTITY_MAPPING))], 'AdvancedContentBundle'));
             }
 
             foreach ($entities as $slug => $entityData) {

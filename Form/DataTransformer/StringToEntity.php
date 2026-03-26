@@ -9,29 +9,14 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class StringToEntity implements DataTransformerInterface
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $entityClass;
-
-    /**
-     * @var string
-     */
-    private $identifierField;
-
-    /**
      * @param string $entityClass
      * @param string $identifierField
      */
-    public function __construct(EntityManagerInterface $em, $entityClass, $identifierField)
-    {
-        $this->em = $em;
-        $this->entityClass = $entityClass;
-        $this->identifierField = $identifierField;
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private $entityClass,
+        private $identifierField,
+    ) {
     }
 
     /**

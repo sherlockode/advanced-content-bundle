@@ -23,26 +23,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AcbFileType extends AbstractType
 {
-    /**
-     * @var UploadManager
-     */
-    private $uploadManager;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var MimeTypeManager
-     */
-    private $mimeTypeManager;
-
-    public function __construct(UploadManager $uploadManager, EventDispatcherInterface $eventDispatcher, MimeTypeManager $mimeTypeManager)
-    {
-        $this->uploadManager = $uploadManager;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->mimeTypeManager = $mimeTypeManager;
+    public function __construct(
+        private readonly UploadManager $uploadManager,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly MimeTypeManager $mimeTypeManager,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -52,17 +37,15 @@ class AcbFileType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'field_type.file.title',
-                'constraints' => !$options['required'] ? [] : [
+                'constraints' => $options['required'] ? [
                     new NotBlank(null, null, null, null, $options['validation_groups']),
-                ],
+                ] : [],
             ])
             ->add('mime_type', ChoiceType::class, [
                 'label' => 'field_type.file.restriction_type',
                 'multiple' => true,
                 'choices' => is_array($mimeTypeChoices) ? $mimeTypeChoices : [],
-                'choice_attr' => function ($choice): array {
-                    return ['data-mime-type' => json_encode($this->mimeTypeManager->getMimeTypesByCode($choice))];
-                },
+                'choice_attr' => fn ($choice): array => ['data-mime-type' => json_encode($this->mimeTypeManager->getMimeTypesByCode($choice))],
                 'attr' => ['data-mime-type-restriction' => ''],
             ])
         ;
@@ -91,6 +74,7 @@ class AcbFileType extends AbstractType
                         $this->uploadManager->remove($data['src']);
                         unset($data['src']);
                     }
+
                     unset($data['delete']);
                 }
 
@@ -164,6 +148,7 @@ class AcbFileType extends AbstractType
 
             $mimeTypes = array_merge([], ...$mimeTypes);
         }
+
         $options['file_constraints'][] = new File(null, null, null, $mimeTypes);
 
         $form
@@ -219,6 +204,7 @@ class AcbFileType extends AbstractType
     /**
      * @return string
      */
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_file';

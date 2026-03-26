@@ -13,14 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ExportType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,9 +23,7 @@ class ExportType extends AbstractType
             ->add('page', EntityType::class, [
                 'label' => 'tools.export.page',
                 'class' => $this->configurationManager->getEntityClass('page'),
-                'choice_label' => function (PageInterface $page) {
-                    return $page->getPageMeta()->getTitle();
-                },
+                'choice_label' => fn (PageInterface $page) => $page->getPageMeta()->getTitle(),
                 'expanded' => true,
                 'multiple' => true,
                 'attr' => ['class' => 'acb-export-entity'],
@@ -50,11 +42,9 @@ class ExportType extends AbstractType
                 'multiple' => true,
                 'attr' => ['class' => 'acb-export-entity'],
                 'required' => false,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')
-                        ->leftJoin('c.page', 'p')
-                        ->where('p.id IS NULL');
-                },
+                'query_builder' => fn (EntityRepository $er) => $er->createQueryBuilder('c')
+                    ->leftJoin('c.page', 'p')
+                    ->where('p.id IS NULL'),
             ])
             ->add('contentAll', CheckboxType::class, [
                 'label' => 'tools.export.all',

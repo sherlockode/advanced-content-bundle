@@ -14,11 +14,13 @@ class EntityType extends AbstractType
         $builder->addModelTransformer(new StringToEntity($options['em'], $options['class'], 'id'));
     }
 
+    #[\Override]
     public function getParent()
     {
         return SymfonyEntityType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_entity';

@@ -10,21 +10,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentImport extends AbstractImport
 {
-    /**
-     * @var ElementImport
-     */
-    private $elementImport;
-
     public function __construct(
         EntityManagerInterface $em,
         ConfigurationManager $configurationManager,
         TranslatorInterface $translator,
         ScopeHandlerInterface $scopeHandler,
-        ElementImport $elementImport,
+        private readonly ElementImport $elementImport,
     ) {
         parent::__construct($em, $configurationManager, $translator, $scopeHandler);
-
-        $this->elementImport = $elementImport;
     }
 
     /**
@@ -42,8 +35,8 @@ class ContentImport extends AbstractImport
         try {
             $scopes = $this->getScopesForEntity($contentData['scopes'] ?? []);
             $content = $this->getExistingScopableEntity($this->entityClasses['content'], ['slug' => $slug], $scopes);
-        } catch (\Exception $e) {
-            $this->errors[] = $e->getMessage();
+        } catch (\Exception $exception) {
+            $this->errors[] = $exception->getMessage();
 
             return;
         }
@@ -87,6 +80,7 @@ class ContentImport extends AbstractImport
                 $this->errors[] = sprintf('%s : %s', $content->getName(), $e->getMessage());
             }
         }
+
         $content->setData($elements);
     }
 

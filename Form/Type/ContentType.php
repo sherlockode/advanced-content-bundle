@@ -20,36 +20,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     public function __construct(
-        ConfigurationManager $configurationManager,
-        UrlGeneratorInterface $urlGenerator,
-        ScopeHandlerInterface $scopeHandler,
-        TranslatorInterface $translator,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly ScopeHandlerInterface $scopeHandler,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->urlGenerator = $urlGenerator;
-        $this->scopeHandler = $scopeHandler;
-        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -96,6 +72,7 @@ class ContentType extends AbstractType
             if (null !== $content && $content->getId()) {
                 $slugClass = '';
             }
+
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'content.form.slug',
@@ -105,7 +82,7 @@ class ContentType extends AbstractType
                     ],
                 ])
             ;
-            if ($form->getParent()) {
+            if (null !== $form->getParent()) {
                 $form->remove('name');
                 $form->remove('slug');
                 if ($form->has('scopes')) {
@@ -133,7 +110,7 @@ class ContentType extends AbstractType
         });
 
         $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $event->setData(json_decode($event->getData(), true));
+            $event->setData(json_decode((string) $event->getData(), true));
         }, 1);
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {

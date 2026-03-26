@@ -9,25 +9,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploadManager
 {
     /**
-     * @var NamerInterface
+     * @param string $targetDir
+     * @param string $webPath
      */
-    private $fileNamer;
-
-    /**
-     * @var string
-     */
-    private $targetDir;
-
-    /**
-     * @var string
-     */
-    private $webPath;
-
-    public function __construct(NamerInterface $fileNamer, $targetDir, $webPath)
-    {
-        $this->fileNamer = $fileNamer;
-        $this->targetDir = $targetDir;
-        $this->webPath = $webPath;
+    public function __construct(
+        private readonly NamerInterface $fileNamer,
+        private $targetDir,
+        private $webPath,
+    ) {
     }
 
     /**
@@ -58,9 +47,11 @@ class UploadManager
         if (!$file->isReadable()) {
             throw new \Exception(sprintf('Source file %s does not exist', $file->getRealPath()));
         }
-        if (!is_writeable($this->getTargetDir())) {
+
+        if (!is_writable($this->getTargetDir())) {
             throw new \Exception(sprintf('Target directory %s is not writeable', $this->getTargetDir()));
         }
+
         copy($file->getRealPath(), $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName);
 
         return $fileName;

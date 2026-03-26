@@ -29,8 +29,8 @@ class PageImport extends AbstractImport
         try {
             $scopes = $this->getScopesForEntity($pageData['scopes'] ?? []);
             $page = $this->getExistingScopableEntity($this->entityClasses['page'], ['pageIdentifier' => $pageIdentifier], $scopes);
-        } catch (\Exception $e) {
-            $this->errors[] = $e->getMessage();
+        } catch (\Exception $exception) {
+            $this->errors[] = $exception->getMessage();
 
             return;
         }
@@ -61,6 +61,7 @@ class PageImport extends AbstractImport
             if (count($pageTypes) > 0) {
                 $pageType = $pageTypes[0];
             }
+
             if (!$pageType instanceof PageTypeInterface) {
                 /** @var PageTypeInterface $pageType */
                 $pageType = new $this->entityClasses['page_type']();
@@ -68,6 +69,7 @@ class PageImport extends AbstractImport
                 $this->em->persist($pageType);
             }
         }
+
         $page->setPageType($pageType);
 
         if (!empty($pageData['content'])) {
@@ -106,6 +108,7 @@ class PageImport extends AbstractImport
             $pageMeta = new $this->entityClasses['page_meta']();
             $page->setPageMeta($pageMeta);
         }
+
         $pageMeta->setTitle($title);
         $pageMeta->setSlug($slug);
         $pageMeta->setMetaTitle($metaData['meta_title'] ?? null);
@@ -120,6 +123,7 @@ class PageImport extends AbstractImport
 
             return;
         }
+
         if (!$this->scopeHandler->isPageSlugValid($page)) {
             if ($this->configurationManager->isScopesEnabled()) {
                 $this->errors[] = $this->translator->trans('page.errors.duplicate_slug_scopes', [], 'AdvancedContentBundle');

@@ -19,29 +19,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     public function __construct(
-        ConfigurationManager $configurationManager,
-        ScopeHandlerInterface $scopeHandler,
-        TranslatorInterface $translator,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly ScopeHandlerInterface $scopeHandler,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->scopeHandler = $scopeHandler;
-        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -103,6 +85,7 @@ class PageType extends AbstractType
                 $content = new ($this->configurationManager->getEntityClass('content'));
                 $page->setContent($content);
             }
+
             if (!$content->getId()) {
                 $content->setName('page-'.$page->getPageIdentifier().'-'.bin2hex(random_bytes(6)));
                 $content->setSlug($page->getPageMeta()->getSlug().'-'.bin2hex(random_bytes(6)));
@@ -120,6 +103,7 @@ class PageType extends AbstractType
                     ));
                 }
             }
+
             if (!$this->scopeHandler->isPageIdentifierValid($page)) {
                 if ($this->configurationManager->isScopesEnabled()) {
                     $form->get('pageIdentifier')->addError(new FormError(
@@ -150,6 +134,7 @@ class PageType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_page';

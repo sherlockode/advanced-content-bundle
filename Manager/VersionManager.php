@@ -15,40 +15,20 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class VersionManager
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var UserProviderInterface
-     */
-    private $userProvider;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(
-        ConfigurationManager $configurationManager,
-        UserProviderInterface $userProvider,
-        RequestStack $requestStack,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly UserProviderInterface $userProvider,
+        private readonly RequestStack $requestStack,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->userProvider = $userProvider;
-        $this->requestStack = $requestStack;
     }
 
     public function getContentData(ContentInterface $content): array
     {
-        if (null === $content->getPage()) {
-            if ($mainRequest = $this->getRequest()) {
-                if ($contentVersionId = $mainRequest->get('versionId')) {
-                    foreach ($content->getVersions() as $version) {
-                        if ($version->getId() === (int) $contentVersionId) {
-                            return $version->getData();
-                        }
+        if (null === $content->getPage() && $mainRequest = $this->getRequest()) {
+            if ($contentVersionId = $mainRequest->get('versionId')) {
+                foreach ($content->getVersions() as $version) {
+                    if ($version->getId() === (int) $contentVersionId) {
+                        return $version->getData();
                     }
                 }
             }
@@ -67,6 +47,7 @@ class VersionManager
         $contentVersion->setData($content->getData());
         $contentVersion->setCreatedAt(new \DateTimeImmutable());
         $contentVersion->setUserId($this->userProvider->getUserId());
+
         $content->addVersion($contentVersion);
         if ($linkVersion) {
             $content->setContentVersion($contentVersion);
@@ -85,6 +66,7 @@ class VersionManager
             $lastDraft->setUserId($userId);
             $lastDraft->setAutoSave(true);
         }
+
         $lastDraft->setCreatedAt(new \DateTimeImmutable());
 
         return $lastDraft;
@@ -101,12 +83,15 @@ class VersionManager
             if ($currentVersionId === $version->getId()) {
                 continue;
             }
+
             if ($version->getUserId() !== $userId) {
                 continue;
             }
+
             if (!$version->isAutoSave()) {
                 continue;
             }
+
             if (null === $lastDraft || $lastDraft->getCreatedAt() < $version->getCreatedAt()) {
                 $lastDraft = $version;
             }
@@ -125,6 +110,7 @@ class VersionManager
             $contentVersion = $this->getNewContentVersion($page->getContent(), false);
             $pageVersion->setContentVersion($contentVersion);
         }
+
         if (null !== $page->getPageMeta()) {
             $pageMetaVersion = $this->getNewPageMetaVersion($page->getPageMeta());
             $pageVersion->setPageMetaVersion($pageMetaVersion);
@@ -145,6 +131,7 @@ class VersionManager
         $pageMetaVersion->setMetaDescription($pageMeta->getMetaDescription());
         $pageMetaVersion->setCreatedAt(new \DateTimeImmutable());
         $pageMetaVersion->setUserId($this->userProvider->getUserId());
+
         $pageMeta->addVersion($pageMetaVersion);
 
         return $pageMetaVersion;
@@ -161,6 +148,7 @@ class VersionManager
             $lastDraft->setUserId($userId);
             $lastDraft->setAutoSave(true);
         }
+
         $lastDraft->setCreatedAt(new \DateTimeImmutable());
 
         if (null !== $page->getContent()) {
@@ -170,9 +158,11 @@ class VersionManager
                 $contentVersion->setAutoSave(true);
                 $lastDraft->setContentVersion($contentVersion);
             }
+
             $contentVersion->setCreatedAt(new \DateTimeImmutable());
             $contentVersion->setData($page->getContent()->getData());
         }
+
         if (null !== $page->getPageMeta()) {
             $pageMetaVersion = $lastDraft->getPageMetaVersion();
             if (null === $pageMetaVersion) {
@@ -180,6 +170,7 @@ class VersionManager
                 $pageMetaVersion->setAutoSave(true);
                 $lastDraft->setPageMetaVersion($pageMetaVersion);
             }
+
             $pageMetaVersion->setCreatedAt(new \DateTimeImmutable());
             $pageMetaVersion->setTitle($page->getPageMeta()->getTitle());
             $pageMetaVersion->setSlug($page->getPageMeta()->getSlug());
@@ -192,21 +183,15 @@ class VersionManager
 
     public function getPageVersionToLoad(PageInterface $page): ?PageVersionInterface
     {
-        if ($mainRequest = $this->getRequest()) {
-            if ($pageVersionId = $mainRequest->get('versionId')) {
-                foreach ($page->getVersions() as $version) {
-                    if ($version->getId() === (int) $pageVersionId) {
-                        return $version;
-                    }
+        if (($mainRequest = $this->getRequest()) && $pageVersionId = $mainRequest->get('versionId')) {
+            foreach ($page->getVersions() as $version) {
+                if ($version->getId() === (int) $pageVersionId) {
+                    return $version;
                 }
             }
         }
 
-        if (null !== $page->getPageVersion()) {
-            return $page->getPageVersion();
-        }
-
-        return null;
+        return $page->getPageVersion();
     }
 
     private function getRequest(): ?Request

@@ -6,20 +6,10 @@ use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentExport
 {
-    /**
-     * @var ElementExport
-     */
-    private $elementExport;
-
-    /**
-     * @var ScopeExport
-     */
-    private $scopeExport;
-
-    public function __construct(ElementExport $elementExport, ScopeExport $scopeExport)
-    {
-        $this->elementExport = $elementExport;
-        $this->scopeExport = $scopeExport;
+    public function __construct(
+        private readonly ElementExport $elementExport,
+        private readonly ScopeExport $scopeExport,
+    ) {
     }
 
     /**
@@ -53,7 +43,8 @@ class ContentExport
         if (!is_array($elements)) {
             return [];
         }
-        if (0 === count($elements)) {
+
+        if ([] === $elements) {
             return [];
         }
 

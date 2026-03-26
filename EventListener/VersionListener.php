@@ -30,12 +30,15 @@ class VersionListener
             if (!$version->isAutoSave()) {
                 continue;
             }
+
             if ($version->getUserId() !== $entity->getUserId()) {
                 continue;
             }
+
             if ($version->getCreatedAt() < $entity->getCreatedAt()) {
                 ++$count;
             }
+
             if ($count >= 10) {
                 // Keep only the last 10 drafts by same user
                 $args->getEntityManager()->remove($version);

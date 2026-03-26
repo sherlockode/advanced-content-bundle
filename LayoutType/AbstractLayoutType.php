@@ -37,6 +37,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      *
      * @return void
      */
+    #[\Override]
     public function buildContentElement(FormBuilderInterface $builder)
     {
         parent::buildContentElement($builder);
@@ -64,9 +65,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
     public function getRawData($element)
     {
         $elements = $element['elements'] ?? [];
-        uasort($elements, function ($a, $b) {
-            return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
-        });
+        uasort($elements, fn ($a, $b) => ($a['position'] ?? 0) <=> ($b['position'] ?? 0));
 
         return [
             'elements' => $elements,

@@ -7,27 +7,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MimeTypeManager
 {
     public const MIME_TYPE_IMAGE = 10;
+
     public const MIME_TYPE_PDF = 20;
+
     public const MIME_TYPE_EXE = 30;
+
     public const MIME_TYPE_ARCHIVE = 40;
+
     public const MIME_TYPE_TEXT = 50;
+
     public const MIME_TYPE_SPREADSHEET = 60;
+
     public const MIME_TYPE_MULTIMEDIA = 70;
 
-    /**
-     * @var array
-     */
-    private $mimeTypes;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(array $mimeTypes, TranslatorInterface $translator)
-    {
-        $this->mimeTypes = $mimeTypes;
-        $this->translator = $translator;
+    public function __construct(
+        private array $mimeTypes,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
@@ -83,7 +79,7 @@ class MimeTypeManager
         }
 
         foreach ($types as $type) {
-            $extensions[] = basename($type);
+            $extensions[] = basename((string) $type);
         }
 
         return array_combine($extensions, $extensions);

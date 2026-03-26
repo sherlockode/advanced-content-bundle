@@ -12,14 +12,8 @@ class PageExport
      */
     private $contentExport;
 
-    /**
-     * @var ScopeExport
-     */
-    private $scopeExport;
-
-    public function __construct(ScopeExport $scopeExport)
+    public function __construct(private readonly ScopeExport $scopeExport)
     {
-        $this->scopeExport = $scopeExport;
     }
 
     /**
@@ -32,6 +26,7 @@ class PageExport
         if ($page->getPageType() instanceof PageTypeInterface) {
             $data['pageType'] = $page->getPageType()->getName();
         }
+
         $data = array_merge($data, $this->scopeExport->getEntityScopes($page));
         if (null !== $page->getContent()) {
             $data['content'] = $this->contentExport->exportElements($page->getContent()->getData());

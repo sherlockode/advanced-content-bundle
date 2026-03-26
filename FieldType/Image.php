@@ -9,16 +9,19 @@ class Image extends File
     /**
      * @return string
      */
+    #[\Override]
     public function getFormFieldType()
     {
         return PictureType::class;
     }
 
+    #[\Override]
     protected function getDefaultIconClass()
     {
         return 'fa-solid fa-image';
     }
 
+    #[\Override]
     public function getPreviewPicture(): ?string
     {
         return 'bundles/sherlockodeadvancedcontent/preview_picture/image.svg';
@@ -29,11 +32,13 @@ class Image extends File
      *
      * @return string
      */
+    #[\Override]
     public function getCode()
     {
         return 'image';
     }
 
+    #[\Override]
     public function getRawValue($element)
     {
         $element['image'] = parent::getRawValue($element['image'] ?? []);

@@ -8,14 +8,8 @@ use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 
 class SlugProvider implements SlugProviderInterface
 {
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    public function __construct(ScopeHandlerInterface $scopeHandler)
+    public function __construct(private readonly ScopeHandlerInterface $scopeHandler)
     {
-        $this->scopeHandler = $scopeHandler;
     }
 
     public function setPageValidIdentifier(PageInterface $page): void
@@ -24,6 +18,7 @@ class SlugProvider implements SlugProviderInterface
             if ($this->scopeHandler->isPageIdentifierValid($page)) {
                 break;
             }
+
             $page->setPageIdentifier($this->getNewValue($page->getPageIdentifier()));
         }
     }
@@ -34,6 +29,7 @@ class SlugProvider implements SlugProviderInterface
             if ($this->scopeHandler->isPageSlugValid($page)) {
                 break;
             }
+
             $page->getPageMeta()->setSlug($this->getNewValue($page->getPageMeta()->getSlug()));
         }
     }
@@ -44,6 +40,7 @@ class SlugProvider implements SlugProviderInterface
             if ($this->scopeHandler->isContentSlugValid($content)) {
                 break;
             }
+
             $content->setSlug($this->getNewValue($content->getSlug()));
         }
     }

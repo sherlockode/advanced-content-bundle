@@ -11,6 +11,7 @@ class TextArea extends AbstractInputType
      *
      * @return array
      */
+    #[\Override]
     public function getFormElementOptions()
     {
         $fieldOptions = [];

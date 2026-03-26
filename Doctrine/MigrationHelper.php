@@ -9,20 +9,10 @@ use Sherlockode\AdvancedContentBundle\Model\PageInterface;
 
 class MigrationHelper implements MigrationHelperInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var array
-     */
-    private $mapping;
-
-    public function __construct(EntityManagerInterface $em, array $mapping)
-    {
-        $this->em = $em;
-        $this->mapping = $mapping;
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private array $mapping,
+    ) {
     }
 
     /**
@@ -65,7 +55,7 @@ class MigrationHelper implements MigrationHelperInterface
         $raw = $row['data'] ?? null;
 
         if ($raw) {
-            return json_decode($raw, true);
+            return json_decode((string) $raw, true);
         }
 
         return null;
@@ -167,7 +157,7 @@ class MigrationHelper implements MigrationHelperInterface
         $raw = $row['data'] ?? null;
 
         if ($raw) {
-            return json_decode($raw, true);
+            return json_decode((string) $raw, true);
         }
 
         return null;

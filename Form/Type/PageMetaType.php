@@ -14,14 +14,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PageMetaType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -71,6 +65,7 @@ class PageMetaType extends AbstractType
             if (null !== $pageMeta && $pageMeta->getId()) {
                 $slugClass = '';
             }
+
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'page.form.slug',

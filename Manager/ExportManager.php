@@ -11,26 +11,14 @@ use Symfony\Component\Yaml\Yaml;
 class ExportManager
 {
     /**
-     * @var PageExport
-     */
-    private $pageExport;
-
-    /**
-     * @var ContentExport
-     */
-    private $contentExport;
-
-    /**
      * @var array
      */
     private $filesData = [];
 
     public function __construct(
-        PageExport $pageExport,
-        ContentExport $contentExport,
+        private readonly PageExport $pageExport,
+        private readonly ContentExport $contentExport,
     ) {
-        $this->pageExport = $pageExport;
-        $this->contentExport = $contentExport;
         $this->pageExport->setContentExport($this->contentExport);
     }
 
@@ -78,6 +66,7 @@ class ExportManager
         if ($useDatePrefix) {
             $prefix = date('Ymd-His_');
         }
+
         foreach ($this->filesData as $filename => $data) {
             file_put_contents($directory.$prefix.$filename, $data);
         }
@@ -101,6 +90,7 @@ class ExportManager
         foreach (glob($tmpDir.'*') as $file) {
             unlink($file);
         }
+
         rmdir($tmpDir);
 
         return $zipFileName;

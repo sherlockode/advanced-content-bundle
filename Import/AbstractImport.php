@@ -101,13 +101,14 @@ abstract class AbstractImport
             foreach ($this->errors as $error) {
                 $result->addMessage($error);
             }
+
             if (count($this->errors) > 0) {
                 $result->failure();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $result
                 ->failure()
-                ->addMessage($e->getMessage())
+                ->addMessage($exception->getMessage())
             ;
         }
 
@@ -138,7 +139,7 @@ abstract class AbstractImport
     protected function getScopesForEntity(array $scopesData): array
     {
         if (!$this->configurationManager->isScopesEnabled()) {
-            if (count($scopesData) > 0) {
+            if ([] !== $scopesData) {
                 throw new \Exception($this->translator->trans('init.errors.scopes_disabled', [], 'AdvancedContentBundle'));
             }
 
@@ -151,6 +152,7 @@ abstract class AbstractImport
             if (null === $scope) {
                 throw new \Exception($this->translator->trans('init.errors.unknown_scope', ['%scope%' => json_encode($scopeData)], 'AdvancedContentBundle'));
             }
+
             $scopes[] = $scope;
         }
 
@@ -166,24 +168,24 @@ abstract class AbstractImport
         if (0 === count($existingEntities)) {
             return null;
         }
+
         if (1 === count($existingEntities)) {
             return reset($existingEntities);
         }
 
         $entity = null;
         foreach ($existingEntities as $existingEntity) {
-            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), function ($a, $b) {
-                return $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier();
-            });
+            $result = array_uintersect($scopes, $existingEntity->getScopes()->toArray(), fn ($a, $b) => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
 
             if (count($result) === count($scopes)) {
                 return $existingEntity;
             }
 
-            if (count($result) > 0) {
+            if ([] !== $result) {
                 if (null !== $entity) {
                     throw new \Exception($this->translator->trans('init.errors.multiple_entities_same_scope', [], 'AdvancedContentBundle'));
                 }
+
                 $entity = $existingEntity;
             }
         }
@@ -203,8 +205,10 @@ abstract class AbstractImport
                     continue 2;
                 }
             }
+
             $entity->removeScope($existingScope);
         }
+
         foreach ($scopes as $scope) {
             $entity->addScope($scope);
         }
