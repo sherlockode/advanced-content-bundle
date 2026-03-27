@@ -35,9 +35,6 @@ class Image extends File
         return 'image';
     }
 
-    /**
-     * @return mixed[]
-     */
     #[\Override]
     public function getRawValue($element): array
     {

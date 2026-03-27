@@ -90,7 +90,7 @@ class UploadManager
      */
     public function isFileUploaded(?string $src)
     {
-        if (in_array($src, [null, '', '0'], true)) {
+        if (empty($src)) {
             return false;
         }
 

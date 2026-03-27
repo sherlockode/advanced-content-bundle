@@ -54,10 +54,7 @@ class ExportManager
         $this->filesData[$filename.'.yaml'] = $data;
     }
 
-    /**
-     * @param bool $useDatePrefix
-     */
-    public function generateFiles(string $directory, $useDatePrefix = true): void
+    public function generateFiles(string $directory, bool $useDatePrefix = true): void
     {
         $prefix = '';
         if ($useDatePrefix) {

@@ -88,9 +88,6 @@ class ElementImport
         ];
     }
 
-    /**
-     * @return mixed[]
-     */
     private function processValueArray(array $data): array
     {
         if (isset($data['_file'])) {
