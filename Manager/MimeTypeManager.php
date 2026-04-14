@@ -44,7 +44,7 @@ class MimeTypeManager
         ];
     }
 
-    public function getMimeTypesByCode(string $code): array
+    public function getMimeTypesByCode(int|string $code): array
     {
         $mimeTypes = [
             self::MIME_TYPE_IMAGE => 'sherlockode_advanced_content.mime_type_group.image',
@@ -89,9 +89,6 @@ class MimeTypeManager
 
     public function getAllMimeTypes(): array
     {
-        $mimeTypes = [];
-        $mimeTypes = $this->mimeTypes;
-
-        return array_merge([], ...$mimeTypes);
+        return array_merge([], ...array_values($this->mimeTypes));
     }
 }
