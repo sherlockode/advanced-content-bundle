@@ -12,10 +12,11 @@ use Sherlockode\AdvancedContentBundle\Model\VersionInterface;
 use Sherlockode\AdvancedContentBundle\Scope\ScopeHandlerInterface;
 use Sherlockode\AdvancedContentBundle\User\UserProviderInterface;
 use Symfony\Component\Form\FormView;
-use Twig\Attribute\AsTwigFunction;
 use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ContentExtension
+class ContentExtension extends AbstractExtension
 {
     /**
      * @param string $baseFormTheme
@@ -31,7 +32,26 @@ class ContentExtension
     ) {
     }
 
-    #[AsTwigFunction(name: 'acb_render_element', isSafe: ['html'])]
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('acb_render_element', [$this, 'renderElement'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_element_preview', [$this, 'renderElementPreview'], ['is_safe' => ['html']]),
+            new TwigFunction('acb_find_entity', [$this, 'findEntity']),
+            new TwigFunction('acb_base_form_theme', [$this, 'getBaseFormTheme']),
+            new TwigFunction('acb_get_file_url', [$this, 'getFileUrl']),
+            new TwigFunction('acb_get_full_url', [$this, 'getFullUrl']),
+            new TwigFunction('acb_get_element_label', [$this, 'getElementLabel']),
+            new TwigFunction('acb_get_column_classes', [$this, 'getColumnClasses']),
+            new TwigFunction('acb_get_row_classes', [$this, 'getRowClasses']),
+            new TwigFunction('acb_get_element_attributes', [$this, 'getElementAttributes']),
+            new TwigFunction('acb_get_json_form', [$this, 'getJsonForm']),
+            new TwigFunction('acb_get_version_user_name', [$this, 'getVersionUserName']),
+            new TwigFunction('acb_get_content_by_slug', [$this, 'getContentBySlug']),
+            new TwigFunction('acb_get_col_size', [$this, 'getColSize']),
+        ];
+    }
+
     public function renderElement(array $elementData): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
@@ -40,7 +60,6 @@ class ContentExtension
         return $this->twig->render($element->getFrontTemplate(), $params);
     }
 
-    #[AsTwigFunction(name: 'acb_element_preview', isSafe: ['html'])]
     public function renderElementPreview(array $elementData, ?FormView $form = null): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
@@ -54,7 +73,6 @@ class ContentExtension
         return $this->twig->render($template, array_merge($params, ['form' => $form]));
     }
 
-    #[AsTwigFunction(name: 'acb_find_entity')]
     public function findEntity($identifier, $class)
     {
         return $this->em->getRepository($class)->find($identifier);
@@ -63,25 +81,21 @@ class ContentExtension
     /**
      * @return string
      */
-    #[AsTwigFunction(name: 'acb_base_form_theme')]
     public function getBaseFormTheme()
     {
         return $this->baseFormTheme;
     }
 
-    #[AsTwigFunction(name: 'acb_get_file_url')]
     public function getFileUrl(string $fileName): string
     {
         return $this->urlBuilderManager->getFileUrl($fileName);
     }
 
-    #[AsTwigFunction(name: 'acb_get_full_url')]
     public function getFullUrl(string $url): string
     {
         return $this->urlBuilderManager->getFullUrl($url);
     }
 
-    #[AsTwigFunction(name: 'acb_get_element_label')]
     public function getElementLabel(string $elementType): string
     {
         $element = $this->elementManager->getElementByCode($elementType);
@@ -89,7 +103,6 @@ class ContentExtension
         return $element->getFormFieldLabel();
     }
 
-    #[AsTwigFunction(name: 'acb_get_column_classes')]
     public function getColumnClasses(array $config): array
     {
         $classes = [];
@@ -119,7 +132,6 @@ class ContentExtension
         return $classes;
     }
 
-    #[AsTwigFunction(name: 'acb_get_row_classes')]
     public function getRowClasses(array $config): array
     {
         $classes = [];
@@ -131,7 +143,6 @@ class ContentExtension
         return $classes;
     }
 
-    #[AsTwigFunction(name: 'acb_get_element_attributes')]
     public function getElementAttributes(array $extra, string $defaultDisplay = 'block'): array
     {
         return [
@@ -251,7 +262,6 @@ class ContentExtension
     /**
      * @return array|mixed
      */
-    #[AsTwigFunction(name: 'acb_get_json_form')]
     public function getJsonForm(FormView $form)
     {
         // Looping on multiple choice type children will return an array of all available choices,
@@ -261,6 +271,7 @@ class ContentExtension
             && isset($form->vars['multiple'])
             && true === $form->vars['multiple']
         );
+
         if ($form->vars['compound'] && !$useValueForSerialization) {
             foreach ($form->children as $child) {
                 $json[$child->vars['name']] = $this->getJsonForm($child);
@@ -276,19 +287,16 @@ class ContentExtension
         return $form->vars['data'];
     }
 
-    #[AsTwigFunction(name: 'acb_get_version_user_name')]
     public function getVersionUserName(VersionInterface $version): string
     {
         return $this->userProvider->getUserName($version->getUserId());
     }
 
-    #[AsTwigFunction(name: 'acb_get_content_by_slug')]
     public function getContentBySlug(string $slug): ?ContentInterface
     {
         return $this->scopeHandler->getEntityForCurrentScope('content', ['slug' => $slug]);
     }
 
-    #[AsTwigFunction(name: 'acb_get_col_size')]
     public function getColSize(array $config): string
     {
         $colSize = $this->cleanColSize($config['size']);
