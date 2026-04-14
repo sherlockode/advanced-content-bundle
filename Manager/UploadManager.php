@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
@@ -62,7 +64,7 @@ class UploadManager
      *
      * @param string $fileName
      */
-    public function remove($fileName)
+    public function remove($fileName): void
     {
         $fileName = $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName;
 
@@ -77,20 +79,16 @@ class UploadManager
      * Get file name.
      *
      * @param UploadedFile|File $file
-     *
-     * @return string
      */
-    public function getFileName(File $file)
+    public function getFileName(File $file): string
     {
         return $this->fileNamer->getFilename($file);
     }
 
     /**
-     * @param string $src
-     *
      * @return bool
      */
-    public function isFileUploaded($src)
+    public function isFileUploaded(?string $src)
     {
         if (empty($src)) {
             return false;

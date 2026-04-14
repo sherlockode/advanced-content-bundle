@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;

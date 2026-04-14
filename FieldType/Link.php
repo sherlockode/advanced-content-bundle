@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\LinkType;
@@ -7,48 +9,40 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class Link extends AbstractFieldType
 {
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return LinkType::class;
     }
 
     #[\Override]
-    protected function getDefaultIconClass()
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-link';
     }
 
     #[\Override]
-    public function getFrontTemplate()
+    public function getFrontTemplate(): string
     {
         return '@SherlockodeAdvancedContent/Field/front/link.html.twig';
     }
 
     #[\Override]
-    public function getFormElementOptions()
+    public function getFormElementOptions(): array
     {
         return [
             'url_form_type' => $this->getUrlFormType(),
         ];
     }
 
-    /**
-     * @return string
-     */
-    protected function getUrlFormType()
+    protected function getUrlFormType(): string
     {
         return UrlType::class;
     }
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return 'link';
     }
@@ -73,11 +67,9 @@ class Link extends AbstractFieldType
     }
 
     /**
-     * @param array $value
-     *
      * @return string
      */
-    protected function getUrlValue($value)
+    protected function getUrlValue(array $value)
     {
         return $value['url'] ?? '';
     }

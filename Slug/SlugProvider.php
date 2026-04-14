@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Slug;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -45,10 +47,7 @@ class SlugProvider implements SlugProviderInterface
         }
     }
 
-    /**
-     * @param string $value
-     */
-    private function getNewValue($value): string
+    private function getNewValue(string $value): string
     {
         if (preg_match('/-(\d+)$/', $value, $matches) && array_key_exists(1, $matches)) {
             return preg_replace('/'.$matches[1].'$/', $matches[1] + 1, $value);

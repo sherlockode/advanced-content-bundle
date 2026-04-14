@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Scope;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,22 +12,10 @@ use Sherlockode\AdvancedContentBundle\Model\ScopableInterface;
 
 abstract class ScopeHandler implements ScopeHandlerInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    protected $configurationManager;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager,
+        protected EntityManagerInterface $em,
+        protected ConfigurationManager $configurationManager,
     ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
     }
 
     public function isContentSlugValid(ContentInterface $content): bool
@@ -87,7 +77,7 @@ abstract class ScopeHandler implements ScopeHandlerInterface
                 return false;
             }
 
-            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), fn ($a, $b) => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
+            $result = array_uintersect($scopable->getScopes()->toArray(), $existingEntity->getScopes()->toArray(), fn ($a, $b): int => $a->getUnicityIdentifier() <=> $b->getUnicityIdentifier());
 
             if ([] !== $result) {
                 return false;

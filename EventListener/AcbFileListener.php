@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Sherlockode\AdvancedContentBundle\Event\AcbFilePostValidate;
@@ -9,10 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AcbFileListener implements EventSubscriberInterface
 {
-    /**
-     * @var array
-     */
-    private $files = [];
+    private array $files = [];
 
     public function __construct(private readonly UploadManager $uploadManager)
     {

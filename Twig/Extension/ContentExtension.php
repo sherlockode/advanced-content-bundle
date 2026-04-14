@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Twig\Extension;
 
 use Doctrine\ORM\EntityManager;
@@ -30,7 +32,7 @@ class ContentExtension
     }
 
     #[AsTwigFunction(name: 'acb_render_element', isSafe: ['html'])]
-    public function renderElement(array $elementData)
+    public function renderElement(array $elementData): string
     {
         $element = $this->elementManager->getElementByCode($elementData['elementType']);
         $params = $element->getRawData($elementData);
@@ -259,14 +261,15 @@ class ContentExtension
             && isset($form->vars['multiple'])
             && true === $form->vars['multiple']
         );
-
         if ($form->vars['compound'] && !$useValueForSerialization) {
             foreach ($form->children as $child) {
                 $json[$child->vars['name']] = $this->getJsonForm($child);
             }
 
             return $json ?? [];
-        } elseif ($useValueForSerialization || is_object($form->vars['data'])) {
+        }
+
+        if ($useValueForSerialization || is_object($form->vars['data'])) {
             return $form->vars['value'];
         }
 

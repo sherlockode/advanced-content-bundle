@@ -1,22 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\PictureType;
 
 class Image extends File
 {
-    /**
-     * @return string
-     */
     #[\Override]
-    public function getFormFieldType()
+    public function getFormFieldType(): string
     {
         return PictureType::class;
     }
 
     #[\Override]
-    protected function getDefaultIconClass()
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-image';
     }
@@ -29,17 +28,15 @@ class Image extends File
 
     /**
      * Get field's code.
-     *
-     * @return string
      */
     #[\Override]
-    public function getCode()
+    public function getCode(): string
     {
         return 'image';
     }
 
     #[\Override]
-    public function getRawValue($element)
+    public function getRawValue($element): array
     {
         $element['image'] = parent::getRawValue($element['image'] ?? []);
         $element = array_merge($element, $element['image']);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -69,7 +71,7 @@ class ContentImport extends AbstractImport
         $this->em->flush();
     }
 
-    public function createElements(array $elementsData, ContentInterface $content)
+    public function createElements(array $elementsData, ContentInterface $content): void
     {
         $elements = [];
         $position = 0;
@@ -87,7 +89,7 @@ class ContentImport extends AbstractImport
     /**
      * @param string $dir
      */
-    public function setFilesDirectory($dir)
+    public function setFilesDirectory($dir): void
     {
         $this->elementImport->setFilesDirectory($dir);
     }

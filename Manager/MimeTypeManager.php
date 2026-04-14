@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -88,9 +90,7 @@ class MimeTypeManager
     public function getAllMimeTypes(): array
     {
         $mimeTypes = [];
-        foreach ($this->mimeTypes as $item) {
-            $mimeTypes[] = $item;
-        }
+        $mimeTypes = $this->mimeTypes;
 
         return array_merge([], ...$mimeTypes);
     }

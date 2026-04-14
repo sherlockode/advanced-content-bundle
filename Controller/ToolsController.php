@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +15,7 @@ use Sherlockode\AdvancedContentBundle\Manager\ImportManager;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -33,7 +36,7 @@ class ToolsController extends AbstractController
     ) {
     }
 
-    public function index(Request $request)
+    public function index(Request $request): RedirectResponse|Response
     {
         $importForm = $this->createForm(ImportType::class, null, [
             'action' => $this->generateUrl('sherlockode_acb_tools_import'),
@@ -102,7 +105,7 @@ class ToolsController extends AbstractController
     /**
      * @return Response
      */
-    public function import(Request $request)
+    public function import(Request $request): RedirectResponse
     {
         $form = $this->createForm(ImportType::class);
 
@@ -131,7 +134,7 @@ class ToolsController extends AbstractController
     /**
      * @return Response
      */
-    public function export(Request $request)
+    public function export(Request $request): Response|RedirectResponse
     {
         $form = $this->createForm(ExportType::class);
 
@@ -171,7 +174,7 @@ class ToolsController extends AbstractController
      *
      * @return Response
      */
-    public function deletePageType($id)
+    public function deletePageType($id): RedirectResponse
     {
         $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 

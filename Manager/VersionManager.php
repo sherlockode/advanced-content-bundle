@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -24,12 +26,10 @@ class VersionManager
 
     public function getContentData(ContentInterface $content): array
     {
-        if (null === $content->getPage() && $mainRequest = $this->getRequest()) {
-            if ($contentVersionId = $mainRequest->get('versionId')) {
-                foreach ($content->getVersions() as $version) {
-                    if ($version->getId() === (int) $contentVersionId) {
-                        return $version->getData();
-                    }
+        if (null === $content->getPage() && ($mainRequest = $this->getRequest()) && $contentVersionId = $mainRequest->get('versionId')) {
+            foreach ($content->getVersions() as $version) {
+                if ($version->getId() === (int) $contentVersionId) {
+                    return $version->getData();
                 }
             }
         }
