@@ -35,7 +35,7 @@ class ElementsType extends AbstractType
             $i = 0;
             foreach ($data as $name => $element) {
                 $field = $this->elementManager->getElementByCode($element['elementType']);
-                $form->add($i++, ElementType::class, [
+                $form->add((string) $i++, ElementType::class, [
                     'label' => $field->getFormFieldLabel(),
                     'element_type' => $field,
                     'property_path' => '['.$name.']',
@@ -60,8 +60,8 @@ class ElementsType extends AbstractType
             $form->setData([]);
 
             foreach ($data as $name => $element) {
-                if (!$form->has($name)) {
-                    $form->add($name, ElementType::class, [
+                if (!$form->has((string) $name)) {
+                    $form->add((string) $name, ElementType::class, [
                         'element_type' => $this->elementManager->getElementByCode($element['elementType'] ?? 'text'),
                         'property_path' => '['.$name.']',
                     ]);

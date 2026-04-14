@@ -141,7 +141,7 @@ class AcbFileType extends AbstractType
                 $mimeTypes[] = $this->mimeTypeManager->getMimeTypesByCode($type);
             }
 
-            $mimeTypes = array_merge([], ...$mimeTypes);
+            $mimeTypes = array_merge([], ...array_values($mimeTypes));
         }
 
         $options['file_constraints'][] = new File(null, null, null, $mimeTypes);

@@ -318,15 +318,15 @@ class ContentExtension extends AbstractExtension
             return $colSize;
         }
 
-        return $colSize + $colOffset;
+        return (string) ($colSize + $colOffset);
     }
 
-    private function cleanColSize(string $value): string
+    private function cleanColSize(int|string $value): string
     {
         if ('auto' === $value || '-' === $value) {
             return str_replace('-', '', $value);
         }
 
-        return min(12, max(1, is_numeric($value) ? $value : 12));
+        return (string) min(12, max(1, is_numeric($value) ? $value : 12));
     }
 }
