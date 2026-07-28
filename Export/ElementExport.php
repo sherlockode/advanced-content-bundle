@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Export;
 
 use Sherlockode\AdvancedContentBundle\Exception\InvalidElementException;
@@ -13,31 +15,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ElementExport
 {
-    /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param ElementManager      $elementManager
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(ElementManager $elementManager, TranslatorInterface $translator)
-    {
-        $this->elementManager = $elementManager;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ElementManager $elementManager,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
-    /**
-     * @param array $elementData
-     *
-     * @return array
-     */
     public function getElementExportData(array $elementData): array
     {
         if (!isset($elementData['elementType'])) {
@@ -50,7 +33,7 @@ class ElementExport
         } elseif ($element instanceof LayoutTypeInterface) {
             $data = $this->getLayoutTypeExportData($element, $elementData);
         } else {
-            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in export', get_class($element)));
+            throw new InvalidElementException(sprintf('Element of type "%s" is not handled in export', $element::class));
         }
 
         return array_merge([
@@ -59,12 +42,6 @@ class ElementExport
         ], $data);
     }
 
-    /**
-     * @param FieldTypeInterface $element
-     * @param array              $elementData
-     *
-     * @return array
-     */
     private function getFieldTypeExportData(FieldTypeInterface $element, array $elementData): array
     {
         $raw = $element->getRawValue($elementData['value'] ?? null);
@@ -74,6 +51,7 @@ class ElementExport
                 if (isset($raw['image']['url'])) {
                     unset($raw['image']['url']);
                 }
+
                 if (isset($raw['sources']) && is_array($raw['sources'])) {
                     foreach ($raw['sources'] as $key => $source) {
                         if (is_array($source) && isset($source['url'])) {
@@ -81,6 +59,7 @@ class ElementExport
                         }
                     }
                 }
+
                 // Root data is only needed as template variables, no need to export them
                 $rootDataToDelete = ['alt', 'src', 'file', 'mime_type', 'url'];
                 foreach ($rootDataToDelete as $key) {
@@ -94,19 +73,15 @@ class ElementExport
                 unset($raw['url']);
             }
         }
-        if ($element instanceof Content) {
-            if (array_key_exists('entity', $raw)) {
-                unset($raw['entity']);
-            }
+
+        if ($element instanceof Content && array_key_exists('entity', $raw)) {
+            unset($raw['entity']);
         }
 
         return ['value' => $raw];
     }
 
     /**
-     * @param LayoutTypeInterface $element
-     * @param array               $elementData
-     *
      * @return array[]
      */
     private function getLayoutTypeExportData(LayoutTypeInterface $element, array $elementData): array

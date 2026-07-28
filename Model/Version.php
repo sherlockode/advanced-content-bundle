@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 abstract class Version implements VersionInterface
@@ -22,32 +24,23 @@ abstract class Version implements VersionInterface
     /**
      * @var bool
      */
-    protected $autoSave;
+    protected $autoSave = false;
 
     public function __construct()
     {
-        $this->autoSave = false;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return int|null
-     */
     public function getUserId(): ?int
     {
         return $this->userId;
     }
 
     /**
-     * @param int|null $userId
-     *
      * @return $this
      */
     public function setUserId(?int $userId): self
@@ -57,17 +50,12 @@ abstract class Version implements VersionInterface
         return $this;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
-     *
      * @return $this
      */
     public function setCreatedAt(\DateTimeInterface $createdAt): self
@@ -77,17 +65,12 @@ abstract class Version implements VersionInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAutoSave(): bool
     {
         return $this->autoSave;
     }
 
     /**
-     * @param bool $autoSave
-     *
      * @return $this
      */
     public function setAutoSave(bool $autoSave): self

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RepeaterType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($builder->hasAttribute('prototype')) {
             /** @var FormInterface $prototype */
@@ -23,7 +25,7 @@ class RepeaterType extends AbstractType
             } else {
                 // rebuild prototype using the RepeatedChildWrappedType
                 $prototypeOptions = $prototype->getConfig()->getOptions();
-                $prototypeOptions = array_filter($prototypeOptions, function ($k, $v) {
+                $prototypeOptions = array_filter($prototypeOptions, function ($k, $v): bool {
                     $whitelist = [
                         'data_class',
                         'empty_data',
@@ -45,7 +47,7 @@ class RepeaterType extends AbstractType
                 }, ARRAY_FILTER_USE_BOTH);
                 $prototypeOptions = array_merge($prototypeOptions, [
                     'child_options' => $prototype->getConfig()->getOptions(),
-                    'child_form' => get_class($prototype->getConfig()->getType()->getInnerType()),
+                    'child_form' => $prototype->getConfig()->getType()->getInnerType()::class,
                     'compound' => true,
                 ]);
 
@@ -55,7 +57,7 @@ class RepeaterType extends AbstractType
         }
 
         // add the position field to all collection children
-        $positionCallback = function (FormEvent $event) {
+        $positionCallback = function (FormEvent $event): void {
             $form = $event->getForm();
 
             foreach ($form->all() as $i => $child) {
@@ -64,8 +66,8 @@ class RepeaterType extends AbstractType
                 } else {
                     $form->add($i, RepeatedChildWrappedType::class, [
                         'child_options' => $child->getConfig()->getOptions(),
-                        'child_form' => get_class($child->getConfig()->getType()->getInnerType()),
-                        'position' => $i
+                        'child_form' => $child->getConfig()->getType()->getInnerType()::class,
+                        'position' => $i,
                     ]);
                 }
             }
@@ -75,7 +77,7 @@ class RepeaterType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, $positionCallback, -10);
 
         // reorder the children array depending on the new position
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $data = $event->getData();
 
             $orderedData = [];
@@ -83,14 +85,15 @@ class RepeaterType extends AbstractType
                 if (!is_array($item)) {
                     return;
                 }
+
                 if (!isset($item['position'])) {
                     $item['position'] = 0;
                 }
+
                 $orderedData[] = $item;
             }
-            usort($orderedData, function ($a, $b) {
-                return $a['position'] <=> $b['position'];
-            });
+
+            usort($orderedData, fn (array $a, array $b): int => $a['position'] <=> $b['position']);
 
             // unset the position key in the saved data
             $orderedData = array_map(function ($item) {
@@ -100,6 +103,7 @@ class RepeaterType extends AbstractType
                         $item = $item['wrapped_child'];
                     }
                 }
+
                 return $item;
             }, $orderedData);
 
@@ -107,12 +111,13 @@ class RepeaterType extends AbstractType
         });
     }
 
+    #[\Override]
     public function getParent()
     {
         return CollectionType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'allow_add' => true,
@@ -123,6 +128,7 @@ class RepeaterType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getBlockPrefix()
     {
         return 'acb_field_collection';

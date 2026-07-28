@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -9,20 +11,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WysiwygType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $toolbar = $this->configurationManager->getDefaultWysiwygToolbar();
         $resolver->setDefaults([
@@ -30,6 +23,7 @@ class WysiwygType extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent()
     {
         return CKEditorType::class;

@@ -1,44 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\FieldType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\ImageCarouselType;
 
 class ImageCarousel extends File
 {
-    /**
-     * @return string
-     */
-    public function getFormFieldType()
+    #[\Override]
+    public function getFormFieldType(): string
     {
         return ImageCarouselType::class;
     }
 
-    protected function getDefaultIconClass()
+    #[\Override]
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-images';
     }
 
     /**
-     * Get field's code
-     *
-     * @return string
+     * Get field's code.
      */
-    public function getCode()
+    #[\Override]
+    public function getCode(): string
     {
         return 'image_carousel';
     }
 
+    #[\Override]
     public function getPreviewPicture(): ?string
     {
         return 'bundles/sherlockodeadvancedcontent/preview_picture/image_carousel.svg';
     }
 
-    /**
-     * @param mixed $element
-     *
-     * @return mixed
-     */
+    #[\Override]
     public function getRawValue($element)
     {
         $images = $element['images'] ?? [];
@@ -53,6 +50,7 @@ class ImageCarousel extends File
             if (isset($imageData['delete'])) {
                 unset($imageData['delete']);
             }
+
             $element['images'][$key] = $imageData;
         }
 

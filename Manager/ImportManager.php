@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Import\ContentImport;
-use Sherlockode\AdvancedContentBundle\Import\ContentTypeImport;
 use Sherlockode\AdvancedContentBundle\Import\ImportResult;
 use Sherlockode\AdvancedContentBundle\Import\PageImport;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -12,50 +13,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportManager
 {
-    const ENTITY_MAPPING = [
+    public const ENTITY_MAPPING = [
         'pages' => 'Page',
         'contents' => 'Content',
     ];
 
-    /**
-     * @var ContentImport
-     */
-    private $contentImport;
+    private array $dataToProcess;
 
-    /**
-     * @var PageImport
-     */
-    private $pageImport;
+    private ?SymfonyStyle $symfonyStyle = null;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var array
-     */
-    private $dataToProcess;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @param PageImport          $pageImport
-     * @param ContentImport       $contentImport
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
-        PageImport $pageImport,
-        ContentImport $contentImport,
-        TranslatorInterface $translator
+        private readonly PageImport $pageImport,
+        private readonly ContentImport $contentImport,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->pageImport = $pageImport;
-        $this->contentImport = $contentImport;
         $this->pageImport->setContentImport($this->contentImport);
-        $this->translator = $translator;
 
         $this->dataToProcess = [
             'Page' => [
@@ -70,18 +42,16 @@ class ImportManager
     }
 
     /**
-     * @param \SplFileInfo $file
-     *
      * @throws \Exception
      */
-    public function addFileToProcess(\SplFileInfo $file)
+    public function addFileToProcess(\SplFileInfo $file): void
     {
         $filePath = $file->getRealPath();
         $data = Yaml::parseFile($filePath);
 
         foreach ($data as $entityType => $entities) {
             if (!isset(self::ENTITY_MAPPING[$entityType])) {
-                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $entityType, '%list%' => join(', ', array_keys(self::ENTITY_MAPPING))], 'AdvancedContentBundle'));
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $entityType, '%list%' => implode(', ', array_keys(self::ENTITY_MAPPING))], 'AdvancedContentBundle'));
             }
 
             foreach ($entities as $slug => $entityData) {
@@ -95,7 +65,7 @@ class ImportManager
      *
      * @return array|ImportResult[]
      */
-    public function processData($allowedTypes = [])
+    public function processData($allowedTypes = []): array
     {
         $results = [];
         foreach ($this->dataToProcess as $type => $dataToProcess) {
@@ -104,7 +74,7 @@ class ImportManager
             }
 
             $nbEntities = count($dataToProcess['data']);
-            if ($nbEntities === 0) {
+            if (0 === $nbEntities) {
                 continue;
             }
 
@@ -141,16 +111,13 @@ class ImportManager
     /**
      * @param bool $allowUpdate
      */
-    public function setAllowUpdate($allowUpdate)
+    public function setAllowUpdate($allowUpdate): void
     {
         $this->pageImport->setAllowUpdate($allowUpdate);
         $this->contentImport->setAllowUpdate($allowUpdate);
     }
 
-    /**
-     * @param SymfonyStyle $symfonyStyle
-     */
-    public function setSymfonyStyle(SymfonyStyle $symfonyStyle)
+    public function setSymfonyStyle(SymfonyStyle $symfonyStyle): void
     {
         $this->symfonyStyle = $symfonyStyle;
     }
@@ -158,7 +125,7 @@ class ImportManager
     /**
      * @param string $dir
      */
-    public function setFilesDirectory($dir)
+    public function setFilesDirectory($dir): void
     {
         $this->contentImport->setFilesDirectory($dir);
     }

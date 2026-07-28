@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -14,23 +16,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PageMetaType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     */
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct(private readonly ConfigurationManager $configurationManager)
     {
-        $this->configurationManager = $configurationManager;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $token = uniqid('page_meta_');
         $builder
@@ -69,14 +59,15 @@ class PageMetaType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options, $token): void {
             $form = $event->getForm();
             /** @var PageMetaInterface $pageMeta */
             $pageMeta = $event->getData();
             $slugClass = 'acb-pagemeta-slug';
-            if ($pageMeta !== null && $pageMeta->getId()) {
+            if (null !== $pageMeta && $pageMeta->getId()) {
                 $slugClass = '';
             }
+
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'page.form.slug',
@@ -93,10 +84,7 @@ class PageMetaType extends AbstractType
         });
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',

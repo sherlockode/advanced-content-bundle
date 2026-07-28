@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -12,30 +14,13 @@ use Sherlockode\AdvancedContentBundle\Model\PageMetaInterface;
 
 class PageListener
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     * @param VersionManager       $versionManager
-     */
-    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
-    {
-        $this->configurationManager = $configurationManager;
-        $this->versionManager = $versionManager;
+    public function __construct(
+        private readonly ConfigurationManager $configurationManager,
+        private readonly VersionManager $versionManager,
+    ) {
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
 
@@ -44,12 +29,12 @@ class PageListener
         }
 
         $pageVersion = $this->versionManager->getPageVersionToLoad($entity);
-        if ($pageVersion === null) {
+        if (null === $pageVersion) {
             return;
         }
 
         $pageMetaVersion = $pageVersion->getPageMetaVersion();
-        if ($pageMetaVersion !== null) {
+        if (null !== $pageMetaVersion) {
             foreach ($entity->getPageMeta()->getVersions() as $version) {
                 if ($version->getId() === $pageMetaVersion->getId()) {
                     $entity->getPageMeta()->setTitle($version->getTitle());
@@ -62,7 +47,7 @@ class PageListener
         }
 
         $contentVersion = $pageVersion->getContentVersion();
-        if ($contentVersion !== null) {
+        if (null !== $contentVersion) {
             foreach ($entity->getContent()->getVersions() as $version) {
                 if ($version->getId() === $contentVersion->getId()) {
                     $entity->getContent()->setData($contentVersion->getData());
@@ -72,10 +57,7 @@ class PageListener
         }
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
 
@@ -83,22 +65,19 @@ class PageListener
             return;
         }
 
-        if ($object->getStatus() === null) {
+        if (null === $object->getStatus()) {
             $object->setStatus(PageInterface::STATUS_DRAFT);
         }
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
 
         $entities = [
             ...$uow->getScheduledEntityInsertions(),
-            ...$uow->getScheduledEntityUpdates()
+            ...$uow->getScheduledEntityUpdates(),
         ];
 
         $pages = [];
@@ -107,11 +86,13 @@ class PageListener
                 $pages[$entity->getId()] = $entity;
                 continue;
             }
-            if ($entity instanceof PageMetaInterface && $entity->getPage() !== null && $entity->getPage()->getId()) {
+
+            if ($entity instanceof PageMetaInterface && null !== $entity->getPage() && $entity->getPage()->getId()) {
                 $pages[$entity->getPage()->getId()] = $entity->getPage();
                 continue;
             }
-            if ($entity instanceof ContentInterface && $entity->getPage() !== null && $entity->getPage()->getId()) {
+
+            if ($entity instanceof ContentInterface && null !== $entity->getPage() && $entity->getPage()->getId()) {
                 $pages[$entity->getPage()->getId()] = $entity->getPage();
             }
         }
@@ -128,10 +109,12 @@ class PageListener
                 $em->persist($contentVersion);
                 $uow->computeChangeSet($contentVersionClassMetadata, $contentVersion);
             }
+
             if ($pageMetaVersion = $pageVersion->getPageMetaVersion()) {
                 $em->persist($pageMetaVersion);
                 $uow->computeChangeSet($pageMetaVersionClassMetadata, $pageMetaVersion);
             }
+
             $uow->recomputeSingleEntityChangeSet($pageClassMetadata, $page);
         }
     }

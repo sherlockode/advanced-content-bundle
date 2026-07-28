@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Command;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -14,37 +16,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCommand extends Command
 {
-    const AVAILABLE_ENTITIES = ['Page', 'Content'];
+    public const AVAILABLE_ENTITIES = ['Page', 'Content'];
 
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var string
-     */
-    private $rootDir;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
+    private ?SymfonyStyle $symfonyStyle = null;
 
     /**
      * @var string
      */
     private $sourceDirectory;
-
-    /**
-     * @var ImportManager
-     */
-    private $importManager;
 
     /**
      * @var array
@@ -57,24 +36,16 @@ class ImportCommand extends Command
     private $filename;
 
     /**
-     * @param ConfigurationManager $configurationManager
-     * @param TranslatorInterface  $translator
-     * @param ImportManager        $importManager
-     * @param string               $rootDir
-     * @param null|string          $name
+     * @param string $rootDir
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        TranslatorInterface $translator,
-        ImportManager $importManager,
-        $rootDir,
-        $name = null
+        private readonly ConfigurationManager $configurationManager,
+        private readonly TranslatorInterface $translator,
+        private readonly ImportManager $importManager,
+        private $rootDir,
+        ?string $name = null,
     ) {
         parent::__construct($name);
-        $this->configurationManager = $configurationManager;
-        $this->translator = $translator;
-        $this->importManager = $importManager;
-        $this->rootDir = $rootDir;
     }
 
     protected function configure()
@@ -117,12 +88,9 @@ class ImportCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->symfonyStyle = new SymfonyStyle($input, $output);
         try {
@@ -131,28 +99,21 @@ class ImportCommand extends Command
             $this->addFilesToProcess();
             $this->importManager->setSymfonyStyle($this->symfonyStyle);
             $this->importManager->processData($this->importTypes);
+        } catch (\Exception $exception) {
+            $this->symfonyStyle->error($exception->getMessage());
 
-        } catch (\Exception $e) {
-            $this->symfonyStyle->error($e->getMessage());
-
-            if (defined(sprintf('%s::FAILURE', get_class($this)))) {
-                return self::FAILURE;
-            }
-
-            return;
+            return self::FAILURE;
         }
 
-        if (defined(sprintf('%s::SUCCESS', get_class($this)))) {
-            return self::SUCCESS;
-        }
+        return self::SUCCESS;
     }
 
-    private function addFilesToProcess()
+    private function addFilesToProcess(): void
     {
         $finder = new Finder();
         $finder->files()->in($this->sourceDirectory);
 
-        if ($this->filename !== null) {
+        if (null !== $this->filename) {
             $finder->name($this->filename);
             if (!$finder->hasResults()) {
                 $this->symfonyStyle->warning(
@@ -164,6 +125,7 @@ class ImportCommand extends Command
         } else {
             $finder->name(['*.yaml', '*.yml']);
         }
+
         foreach ($finder as $file) {
             try {
                 $this->importManager->addFileToProcess($file);
@@ -174,36 +136,31 @@ class ImportCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @throws \Exception
      */
-    private function init(InputInterface $input)
+    private function init(InputInterface $input): void
     {
         $initDir = $input->getOption('dir');
-        if ($initDir === null) {
+        if (null === $initDir) {
             $initDir = $this->configurationManager->getInitDirectory();
         }
+
         $initDir = $this->getDirFullPath($initDir);
         $this->sourceDirectory = $initDir;
 
         $filesDir = $input->getOption('files-dir');
-        if ($filesDir !== null) {
+        if (null !== $filesDir) {
             $filesDir = $this->getDirFullPath($filesDir);
             $this->importManager->setFilesDirectory($filesDir);
         }
 
         $targetDir = $this->configurationManager->getImageDirectory();
-        if (!file_exists($targetDir) && !mkdir($targetDir, 0755)) {
-            throw new \Exception($this->translator->trans(
-                'init.errors.cannot_create_directory',
-                ['%path%' => $targetDir],
-                'AdvancedContentBundle'
-            ));
+        if (!file_exists($targetDir) && !mkdir($targetDir, 0o755)) {
+            throw new \Exception($this->translator->trans('init.errors.cannot_create_directory', ['%path%' => $targetDir], 'AdvancedContentBundle'));
         }
 
         $allowUpdate = $this->configurationManager->initCanUpdate();
-        if ($input->getOption('update') === true) {
+        if (true === $input->getOption('update')) {
             $allowUpdate = true;
         }
 
@@ -212,11 +169,10 @@ class ImportCommand extends Command
         $importTypes = $input->getOption('type');
         foreach ($importTypes as $importType) {
             if (!in_array($importType, self::AVAILABLE_ENTITIES)) {
-                throw new \Exception(
-                    $this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => join(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle')
-                );
+                throw new \Exception($this->translator->trans('init.errors.unknown_entity_type', ['%type%' => $importType, '%list%' => implode(', ', self::AVAILABLE_ENTITIES)], 'AdvancedContentBundle'));
             }
         }
+
         $this->importTypes = $importTypes;
 
         $this->filename = $input->getOption('file');
@@ -225,21 +181,18 @@ class ImportCommand extends Command
     /**
      * @param string $dir
      *
-     * @return string
-     *
      * @throws \Exception
      */
-    private function getDirFullPath($dir)
+    private function getDirFullPath($dir): string
     {
-        if (strpos($dir, '/') !== 0) {
-            $dir = $this->rootDir . '/' . $dir;
+        if (!str_starts_with($dir, '/')) {
+            $dir = $this->rootDir.'/'.$dir;
         }
+
         $dir .= '/';
 
         if (!file_exists($dir)) {
-            throw new \Exception(
-                $this->translator->trans('init.errors.init_dir', ['%dir%' => $dir], 'AdvancedContentBundle')
-            );
+            throw new \Exception($this->translator->trans('init.errors.init_dir', ['%dir%' => $dir], 'AdvancedContentBundle'));
         }
 
         return $dir;

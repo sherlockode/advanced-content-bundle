@@ -1,22 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
-use Sherlockode\AdvancedContentBundle\Entity\Content;
-use Sherlockode\AdvancedContentBundle\Entity\Page;
-use Sherlockode\AdvancedContentBundle\Entity\PageMeta;
-use Sherlockode\AdvancedContentBundle\Entity\PageType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
     /**
-     * Build config tree for bundle
-     *
-     * @return TreeBuilder
+     * Build config tree for bundle.
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $tb = new TreeBuilder('sherlockode_advanced_content');
         $root = $tb->getRootNode();

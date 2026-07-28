@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection;
 
 use Sherlockode\AdvancedContentBundle\FieldType\FieldTypeInterface;
@@ -11,13 +13,13 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class SherlockodeAdvancedContentExtension
+ * Class SherlockodeAdvancedContentExtension.
  */
 class SherlockodeAdvancedContentExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
         $loader->load('controllers.xml');
         $loader->load('field_types.xml');
@@ -60,12 +62,6 @@ class SherlockodeAdvancedContentExtension extends Extension
         ]);
     }
 
-    /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     *
-     * @return void
-     */
     private function setupMimeType(array $config, ContainerBuilder $container): void
     {
         $mimeTypesConfiguration = $config['mime_type_group'] ?? null;

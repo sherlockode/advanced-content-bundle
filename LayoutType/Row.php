@@ -1,24 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\LayoutType;
 
 use Sherlockode\AdvancedContentBundle\Form\Type\RowType;
 
 class Row extends AbstractLayoutType
 {
-    public function getCode()
+    public function getCode(): string
     {
         return 'row';
     }
 
-    protected function getDefaultIconClass()
+    #[\Override]
+    protected function getDefaultIconClass(): string
     {
         return 'fa-solid fa-bars';
     }
 
-    /**
-     * @return string|null
-     */
     protected function getConfigurationFormType(): ?string
     {
         return RowType::class;

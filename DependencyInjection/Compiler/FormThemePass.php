@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -8,7 +10,7 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class FormThemePass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->has('twig')) {
             return;
@@ -18,6 +20,7 @@ class FormThemePass implements CompilerPassInterface
         if (Kernel::VERSION_ID < 50300) {
             $theme = 'bootstrap_4_layout.html.twig';
         }
+
         $container->getDefinition('sherlockode_advanced_content.content_extension')->setArgument('$baseFormTheme', $theme);
     }
 }

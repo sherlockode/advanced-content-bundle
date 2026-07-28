@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Import;
 
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -9,10 +11,7 @@ use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 
 class PageImport extends AbstractImport
 {
-    /**
-     * @var ContentImport
-     */
-    private $contentImport;
+    private ?ContentImport $contentImport = null;
 
     /**
      * @param string $pageIdentifier
@@ -29,14 +28,14 @@ class PageImport extends AbstractImport
         try {
             $scopes = $this->getScopesForEntity($pageData['scopes'] ?? []);
             $page = $this->getExistingScopableEntity($this->entityClasses['page'], ['pageIdentifier' => $pageIdentifier], $scopes);
-        } catch (\Exception $e) {
-            $this->errors[] = $e->getMessage();
+        } catch (\Exception $exception) {
+            $this->errors[] = $exception->getMessage();
 
             return;
         }
 
         if (!$page instanceof PageInterface) {
-            $page = new $this->entityClasses['page'];
+            $page = new $this->entityClasses['page']();
         } elseif (!$this->allowUpdate) {
             // Page already exist but update is not allowed by configuration
             return;
@@ -49,7 +48,7 @@ class PageImport extends AbstractImport
         $pageType = null;
         if (isset($pageData['pageType'])) {
             $pageTypes = $this->em->getRepository($this->entityClasses['page_type'])->findBy([
-                'name' => $pageData['pageType']
+                'name' => $pageData['pageType'],
             ]);
             if (count($pageTypes) > 1) {
                 $this->errors[] = $this->translator->trans('init.errors.page_type_too_many_matches', ['%name%' => $pageData['pageType']], 'AdvancedContentBundle');
@@ -61,21 +60,23 @@ class PageImport extends AbstractImport
             if (count($pageTypes) > 0) {
                 $pageType = $pageTypes[0];
             }
+
             if (!$pageType instanceof PageTypeInterface) {
                 /** @var PageTypeInterface $pageType */
-                $pageType = new $this->entityClasses['page_type'];
+                $pageType = new $this->entityClasses['page_type']();
                 $pageType->setName($pageData['pageType']);
                 $this->em->persist($pageType);
             }
         }
+
         $page->setPageType($pageType);
 
         if (!empty($pageData['content'])) {
             $contentData = $pageData['content'];
             $content = $page->getContent();
-            if ($content === null) {
+            if (null === $content) {
                 /** @var ContentInterface $content */
-                $content = new $this->entityClasses['content'];
+                $content = new $this->entityClasses['content']();
                 $content->setName($page->getPageIdentifier());
                 $content->setSlug($page->getPageIdentifier());
                 $page->setContent($content);
@@ -101,11 +102,12 @@ class PageImport extends AbstractImport
 
         $title = $metaData['title'];
         $slug = $metaData['slug'];
-        if ($pageMeta === null) {
+        if (null === $pageMeta) {
             /** @var PageMetaInterface $pageMeta */
-            $pageMeta = new $this->entityClasses['page_meta'];
+            $pageMeta = new $this->entityClasses['page_meta']();
             $page->setPageMeta($pageMeta);
         }
+
         $pageMeta->setTitle($title);
         $pageMeta->setSlug($slug);
         $pageMeta->setMetaTitle($metaData['meta_title'] ?? null);
@@ -117,14 +119,17 @@ class PageImport extends AbstractImport
             } else {
                 $this->errors[] = $this->translator->trans('page.errors.duplicate_identifier_no_scope', [], 'AdvancedContentBundle');
             }
+
             return;
         }
+
         if (!$this->scopeHandler->isPageSlugValid($page)) {
             if ($this->configurationManager->isScopesEnabled()) {
                 $this->errors[] = $this->translator->trans('page.errors.duplicate_slug_scopes', [], 'AdvancedContentBundle');
             } else {
                 $this->errors[] = $this->translator->trans('page.errors.duplicate_slug_no_scope', [], 'AdvancedContentBundle');
             }
+
             return;
         }
 
@@ -135,11 +140,9 @@ class PageImport extends AbstractImport
     }
 
     /**
-     * @param ContentImport $contentImport
-     *
      * @return $this
      */
-    public function setContentImport(ContentImport $contentImport)
+    public function setContentImport(ContentImport $contentImport): static
     {
         $this->contentImport = $contentImport;
 

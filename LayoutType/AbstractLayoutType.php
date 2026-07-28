@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\LayoutType;
 
 use Sherlockode\AdvancedContentBundle\Element\AbstractElement;
@@ -13,7 +15,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      */
     public function getFormFieldLabel()
     {
-        return 'layout_type.' . $this->getCode() . '.label';
+        return 'layout_type.'.$this->getCode().'.label';
     }
 
     /**
@@ -21,7 +23,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      */
     public function getFrontTemplate()
     {
-        return '@SherlockodeAdvancedContent/Layout/front/' . $this->getCode() . '.html.twig';
+        return '@SherlockodeAdvancedContent/Layout/front/'.$this->getCode().'.html.twig';
     }
 
     /**
@@ -29,17 +31,14 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
      */
     public function getPreviewTemplate()
     {
-        return '@SherlockodeAdvancedContent/Layout/preview/'. $this->getCode() .'.html.twig';
+        return '@SherlockodeAdvancedContent/Layout/preview/'.$this->getCode().'.html.twig';
     }
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
-     *
-     * @return void
+     * Add element's field(s) to content form.
      */
-    public function buildContentElement(FormBuilderInterface $builder)
+    #[\Override]
+    public function buildContentElement(FormBuilderInterface $builder): void
     {
         parent::buildContentElement($builder);
 
@@ -51,7 +50,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
         ]);
 
         $configurationFormType = $this->getConfigurationFormType();
-        if ($configurationFormType !== null) {
+        if (null !== $configurationFormType) {
             $builder->add('config', $configurationFormType, [
                 'label' => false,
             ]);
@@ -66,9 +65,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
     public function getRawData($element)
     {
         $elements = $element['elements'] ?? [];
-        uasort($elements, function ($a, $b) {
-            return ($a['position'] ?? 0) <=> ($b['position'] ?? 0);
-        });
+        uasort($elements, fn ($a, $b): int => ($a['position'] ?? 0) <=> ($b['position'] ?? 0));
 
         return [
             'elements' => $elements,
@@ -78,9 +75,7 @@ abstract class AbstractLayoutType extends AbstractElement implements LayoutTypeI
     }
 
     /**
-     * Get layout configuration form type
-     *
-     * @return string
+     * Get layout configuration form type.
      */
     abstract protected function getConfigurationFormType(): ?string;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Element\ElementInterface;
@@ -12,52 +14,44 @@ class ElementManager
     /**
      * @var ElementInterface[]
      */
-    private $elements;
+    private array $elements = [];
 
-    /**
-     * @var array
-     */
-    private $fieldsConfiguration;
-
-    public function __construct(array $fieldsConfiguration)
+    public function __construct(private array $fieldsConfiguration)
     {
-        $this->elements = [];
-        $this->fieldsConfiguration = $fieldsConfiguration;
     }
 
     /**
-     * Add field type
-     *
-     * @param FieldTypeInterface $fieldType
+     * Add field type.
      */
-    public function addFieldType(FieldTypeInterface $fieldType)
+    public function addFieldType(FieldTypeInterface $fieldType): void
     {
         $enabled = true;
         if (isset($this->fieldsConfiguration[$fieldType->getCode()])) {
-            if ($this->fieldsConfiguration[$fieldType->getCode()]['enabled'] === false) {
+            if (false === $this->fieldsConfiguration[$fieldType->getCode()]['enabled']) {
                 $enabled = false;
             }
+
             $fieldType->setConfigData($this->fieldsConfiguration[$fieldType->getCode()]);
         }
+
         if ($enabled) {
             $this->elements[$fieldType->getCode()] = $fieldType;
         }
     }
 
     /**
-     * Get available field types
-     *
-     * @return array
+     * Get available field types.
      */
-    public function getGroupedFieldTypes()
+    public function getGroupedFieldTypes(): array
     {
         $choices = [];
         foreach ($this->elements as $element) {
             if ($element instanceof FieldTypeInterface) {
-                $fieldGroup = 'field_type.group.' . $element->getFieldGroup();
+                $fieldGroup = 'field_type.group.'.$element->getFieldGroup();
                 if (!isset($choices[$fieldGroup])) {
                     $choices[$fieldGroup] = [];
                 }
+
                 $choices[$fieldGroup][$element->getFormFieldLabel()] = $element;
             }
         }
@@ -66,17 +60,15 @@ class ElementManager
     }
 
     /**
-     * Add layout type
-     *
-     * @param LayoutTypeInterface $layoutType
+     * Add layout type.
      */
-    public function addLayoutType(LayoutTypeInterface $layoutType)
+    public function addLayoutType(LayoutTypeInterface $layoutType): void
     {
         $this->elements[$layoutType->getCode()] = $layoutType;
     }
 
     /**
-     * Get element
+     * Get element.
      *
      * @param string $elementCode
      *
@@ -89,6 +81,7 @@ class ElementManager
         if (!isset($this->elements[$elementCode])) {
             throw new InvalidElementException(sprintf('Element "%s" is not handled.', $elementCode));
         }
+
         return $this->elements[$elementCode];
     }
 }

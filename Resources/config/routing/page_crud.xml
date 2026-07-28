@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     <route id="sherlockode_acb_page_edit" path="/page/crud/edit/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.page_crud::editAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.page_crud::edit</default>
     </route>
     <route id="sherlockode_acb_page_create" path="/page/crud/create">
-        <default key="_controller">sherlockode_advanced_content.controller.page_crud::createAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.page_crud::create</default>
     </route>
     <route id="sherlockode_acb_page_delete" path="/page/crud/delete/{id}">
-        <default key="_controller">sherlockode_advanced_content.controller.page_crud::deleteAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.page_crud::delete</default>
     </route>
     <route id="sherlockode_acb_page_list" path="/page/crud/list">
-        <default key="_controller">sherlockode_advanced_content.controller.page_crud::listAction</default>
+        <default key="_controller">sherlockode_advanced_content.controller.page_crud::list</default>
     </route>
 </routes>

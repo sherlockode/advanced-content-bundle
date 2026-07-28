@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -10,54 +12,35 @@ use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 
 class ContentListener
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @param ConfigurationManager $configurationManager
-     * @param VersionManager       $versionManager
-     */
-    public function __construct(ConfigurationManager $configurationManager, VersionManager $versionManager)
-    {
-        $this->configurationManager = $configurationManager;
-        $this->versionManager = $versionManager;
+    public function __construct(
+        private readonly ConfigurationManager $configurationManager,
+        private readonly VersionManager $versionManager,
+    ) {
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
 
         if (!$entity instanceof ContentInterface) {
             return;
         }
-        if ($entity->getPage() !== null) {
+
+        if (null !== $entity->getPage()) {
             return;
         }
 
         $entity->setData($this->versionManager->getContentData($entity), false);
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
-    public function onFlush(OnFlushEventArgs $args)
+    public function onFlush(OnFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
 
         $entities = [
             ...$uow->getScheduledEntityInsertions(),
-            ...$uow->getScheduledEntityUpdates()
+            ...$uow->getScheduledEntityUpdates(),
         ];
 
         $contentVersionClassMetadata = $em->getClassMetadata($this->configurationManager->getEntityClass('content_version'));
@@ -66,7 +49,8 @@ class ContentListener
             if (!$entity instanceof ContentInterface) {
                 continue;
             }
-            if ($entity->getPage() !== null) {
+
+            if (null !== $entity->getPage()) {
                 continue;
             }
 

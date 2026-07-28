@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,84 +21,26 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class ContentController
+ * Class ContentController.
  */
 class ContentController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ContentManager
-     */
-    private $contentManager;
-
-    /**
-     * @var ElementManager
-     */
-    private $elementManager;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var VersionManager
-     */
-    private $versionManager;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcherInterface;
-
-    /**
-     * @param EntityManagerInterface   $em
-     * @param ContentManager           $contentManager
-     * @param ElementManager           $elementManager
-     * @param ConfigurationManager     $configurationManager
-     * @param FormFactoryInterface     $formFactory
-     * @param TranslatorInterface      $translator
-     * @param VersionManager           $versionManager
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(
-        EntityManagerInterface $em,
-        ContentManager         $contentManager,
-        ElementManager         $elementManager,
-        ConfigurationManager   $configurationManager,
-        FormFactoryInterface   $formFactory,
-        TranslatorInterface    $translator,
-        VersionManager $versionManager,
-        EventDispatcherInterface $eventDispatcher
+        private readonly EntityManagerInterface $em,
+        private readonly ContentManager $contentManager,
+        private readonly ElementManager $elementManager,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly FormFactoryInterface $formFactory,
+        private readonly TranslatorInterface $translator,
+        private readonly VersionManager $versionManager,
+        private readonly EventDispatcherInterface $eventDispatcherInterface,
     ) {
-        $this->em = $em;
-        $this->contentManager = $contentManager;
-        $this->elementManager = $elementManager;
-        $this->configurationManager = $configurationManager;
-        $this->formFactory = $formFactory;
-        $this->translator = $translator;
-        $this->versionManager = $versionManager;
-        $this->eventDispatcherInterface = $eventDispatcher;
     }
 
     /**
      * @return Response
      */
-    public function addFieldAction()
+    public function addField()
     {
         $fields = $this->elementManager->getGroupedFieldTypes();
 
@@ -109,11 +53,9 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function fieldFormAction(Request $request)
+    public function fieldForm(Request $request)
     {
         $element = $this->elementManager->getElementByCode($request->get('type'));
         $elementData = [];
@@ -139,12 +81,12 @@ class ContentController extends AbstractController
                 // Rebuild form for row and columns
                 // Because data is being rearranged on submit
                 // Otherwise posted elements cannot be matched with form children
-                if ($element->getCode() === 'row' || $element->getCode() === 'column') {
+                if ('row' === $element->getCode() || 'column' === $element->getCode()) {
                     $formBuilder = $this->formFactory->createNamedBuilder('__field_name__', ElementType::class, $form->getData(), [
-                        'element_type'    => $element,
-                        'action'          => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
+                        'element_type' => $element,
+                        'action' => $this->generateUrl('sherlockode_acb_content_field_form', ['type' => $element->getCode()]),
                         'csrf_protection' => false,
-                        'label'           => $element->getFormFieldLabel(),
+                        'label' => $element->getFormFieldLabel(),
                     ]);
                     $form = $formBuilder->getForm();
                 }
@@ -158,14 +100,14 @@ class ContentController extends AbstractController
                         'form' => $form->createView(),
                     ]),
                 ]);
-            } else {
-                return new JsonResponse([
-                    'success' => false,
-                    'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
-                        'form' => $form->createView(),
-                    ]),
-                ]);
             }
+
+            return new JsonResponse([
+                'success' => false,
+                'content' => $this->renderView('@SherlockodeAdvancedContent/Content/_edit_element.html.twig', [
+                    'form' => $form->createView(),
+                ]),
+            ]);
         }
 
         return new JsonResponse([
@@ -180,15 +122,14 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
-    public function saveDraftAction(Request $request)
+    public function saveDraft(Request $request)
     {
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
+        if (null === $content) {
             return new JsonResponse([
                 'success' => false,
             ]);
@@ -227,22 +168,20 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function deleteVersionAction(Request $request)
+    public function deleteVersion(Request $request)
     {
         $id = $request->get('id');
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
+        if (null === $content) {
             return new JsonResponse([
                 'success' => false,
             ]);
         }
 
-        $versionId = (int)$request->get('versionId');
+        $versionId = (int) $request->get('versionId');
         foreach ($content->getVersions() as $version) {
             if ($versionId === $version->getId()) {
                 $this->em->remove($version);

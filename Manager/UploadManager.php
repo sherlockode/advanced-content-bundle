@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Naming\NamerInterface;
@@ -9,51 +11,35 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploadManager
 {
     /**
-     * @var NamerInterface
+     * @param string $targetDir
+     * @param string $webPath
      */
-    private $fileNamer;
-
-    /**
-     * @var string
-     */
-    private $targetDir;
-
-    /**
-     * @var string
-     */
-    private $webPath;
-
-    public function __construct(NamerInterface $fileNamer, $targetDir, $webPath)
-    {
-        $this->fileNamer = $fileNamer;
-        $this->targetDir = $targetDir;
-        $this->webPath = $webPath;
+    public function __construct(
+        private readonly NamerInterface $fileNamer,
+        private $targetDir,
+        private $webPath,
+    ) {
     }
 
     /**
-     * Upload file on server
-     *
-     * @param UploadedFile|null $file
-     * @param string|null       $fileName
+     * Upload file on server.
      *
      * @return string
      */
-    public function upload(UploadedFile $file = null,  ?string $fileName = null)
+    public function upload(?UploadedFile $file = null, ?string $fileName = null)
     {
-        if ($file === null) {
+        if (null === $file) {
             return '';
         }
 
-        $fileName =  $fileName ?? $this->getFileName($file);
+        $fileName ??= $this->getFileName($file);
         $file->move($this->getTargetDir(), $fileName);
 
         return $fileName;
     }
 
     /**
-     * Copy file into acb files directory
-     *
-     * @param File $file
+     * Copy file into acb files directory.
      *
      * @return string
      */
@@ -63,22 +49,24 @@ class UploadManager
         if (!$file->isReadable()) {
             throw new \Exception(sprintf('Source file %s does not exist', $file->getRealPath()));
         }
-        if (!is_writeable($this->getTargetDir())) {
+
+        if (!is_writable($this->getTargetDir())) {
             throw new \Exception(sprintf('Target directory %s is not writeable', $this->getTargetDir()));
         }
-        copy($file->getRealPath(), $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName);
+
+        copy($file->getRealPath(), $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName);
 
         return $fileName;
     }
 
     /**
-     * Remove file
+     * Remove file.
      *
      * @param string $fileName
      */
-    public function remove($fileName)
+    public function remove($fileName): void
     {
-        $fileName = $this->getTargetDir() . DIRECTORY_SEPARATOR . $fileName;
+        $fileName = $this->getTargetDir().DIRECTORY_SEPARATOR.$fileName;
 
         if (!file_exists($fileName)) {
             return;
@@ -88,35 +76,31 @@ class UploadManager
     }
 
     /**
-     * Get file name
+     * Get file name.
      *
      * @param UploadedFile|File $file
-     *
-     * @return string
      */
-    public function getFileName(File $file)
+    public function getFileName(File $file): string
     {
         return $this->fileNamer->getFilename($file);
     }
 
     /**
-     * @param string $src
-     *
      * @return bool
      */
-    public function isFileUploaded($src)
+    public function isFileUploaded(?string $src)
     {
         if (empty($src)) {
             return false;
         }
 
-        $fileName = $this->getTargetDir() . DIRECTORY_SEPARATOR . $src;
+        $fileName = $this->getTargetDir().DIRECTORY_SEPARATOR.$src;
 
         return file_exists($fileName);
     }
 
     /**
-     * Get target directory
+     * Get target directory.
      *
      * @return string
      */

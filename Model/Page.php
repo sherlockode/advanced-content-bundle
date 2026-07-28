@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,7 +20,7 @@ abstract class Page implements PageInterface, ScopableInterface
     protected $pageIdentifier;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $status;
 
@@ -65,10 +67,12 @@ abstract class Page implements PageInterface, ScopableInterface
 
         $newPageMeta = clone $this->pageMeta;
         $newPageMeta->setPage($this);
+
         $this->pageMeta = $newPageMeta;
 
         $newContent = clone $this->content;
         $newContent->setPage($this);
+
         $this->content = $newContent;
 
         $this->versions = new ArrayCollection();
@@ -132,15 +136,14 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param ContentInterface|null $content
-     *
      * @return PageInterface|void
      */
-    public function setContent(ContentInterface $content = null)
+    public function setContent(?ContentInterface $content = null)
     {
-        if ($content !== null) {
+        if (null !== $content) {
             $content->setPage($this);
         }
+
         $this->content = $content;
 
         return $this;
@@ -155,11 +158,9 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param PageTypeInterface|null $pageType
-     *
      * @return $this
      */
-    public function setPageType(PageTypeInterface $pageType = null)
+    public function setPageType(?PageTypeInterface $pageType = null)
     {
         $this->pageType = $pageType;
 
@@ -175,15 +176,14 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param PageMetaInterface|null $pageMeta
-     *
      * @return PageInterface|void
      */
-    public function setPageMeta(PageMetaInterface $pageMeta = null)
+    public function setPageMeta(?PageMetaInterface $pageMeta = null)
     {
-        if ($pageMeta !== null) {
+        if (null !== $pageMeta) {
             $pageMeta->setPage($this);
         }
+
         $this->pageMeta = $pageMeta;
 
         return $this;
@@ -198,8 +198,6 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function addScope(ScopeInterface $scope)
@@ -210,8 +208,6 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function removeScope(ScopeInterface $scope)
@@ -221,17 +217,12 @@ abstract class Page implements PageInterface, ScopableInterface
         return $this;
     }
 
-    /**
-     * @return PageVersionInterface|null
-     */
     public function getPageVersion(): ?PageVersionInterface
     {
         return $this->pageVersion;
     }
 
     /**
-     * @param PageVersionInterface|null $pageVersion
-     *
      * @return $this
      */
     public function setPageVersion(?PageVersionInterface $pageVersion)
@@ -250,8 +241,6 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param PageVersionInterface $pageVersion
-     *
      * @return $this
      */
     public function addVersion(PageVersionInterface $pageVersion)
@@ -263,8 +252,6 @@ abstract class Page implements PageInterface, ScopableInterface
     }
 
     /**
-     * @param PageVersionInterface $pageVersion
-     *
      * @return $this
      */
     public function removeVersion(PageVersionInterface $pageVersion)

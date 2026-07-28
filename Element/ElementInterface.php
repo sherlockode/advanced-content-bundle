@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Element;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,22 +23,17 @@ interface ElementInterface
      */
     public function getFrontTemplate();
 
-    /**
-     * @return mixed
-     */
     public function getPreviewTemplate();
 
     /**
-     * Add element's field(s) to content form
-     *
-     * @param FormBuilderInterface $builder
+     * Add element's field(s) to content form.
      *
      * @return void
      */
     public function buildContentElement(FormBuilderInterface $builder);
 
     /**
-     * Get field's code
+     * Get field's code.
      *
      * @return string
      */

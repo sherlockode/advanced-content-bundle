@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -8,60 +10,36 @@ use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\ContentManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ContentController
+ * Class ContentController.
  */
 class ContentController extends AbstractController
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ContentManager
-     */
-    private $contentManager;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
      * ContentController constructor.
-     *
-     * @param EntityManagerInterface $em
-     * @param ContentManager         $contentManager
-     * @param ConfigurationManager   $configurationManager
      */
     public function __construct(
-        EntityManagerInterface $em,
-        ContentManager $contentManager,
-        ConfigurationManager $configurationManager
+        private readonly EntityManagerInterface $em,
+        private readonly ContentManager $contentManager,
+        private readonly ConfigurationManager $configurationManager,
     ) {
-        $this->em = $em;
-        $this->contentManager = $contentManager;
-        $this->configurationManager = $configurationManager;
     }
 
     /**
-     * @param int     $id
-     * @param Request $request
+     * @param int $id
      *
      * @return Response
      */
-    public function editAction($id, Request $request)
+    public function edit($id, Request $request): RedirectResponse|Response
     {
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-            );
+        if (null === $content) {
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
         }
 
         $form = $this->createForm(ContentType::class, $content, [
@@ -77,29 +55,26 @@ class ContentController extends AbstractController
         }
 
         return $this->render('@SherlockodeAdvancedContent/Content/edit_content.html.twig', [
-                'form' => $form->createView(),
-                'data' => $content,
-            ]);
+            'form' => $form->createView(),
+            'data' => $content,
+        ]);
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function createAction(Request $request)
+    public function create(Request $request): RedirectResponse|Response
     {
         if ($id = $request->get('duplicateId')) {
             $contentToDuplicate = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->find($id);
             if (!$contentToDuplicate instanceof ContentInterface) {
-                throw $this->createNotFoundException(
-                    sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-                );
+                throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
             }
+
             $content = $this->contentManager->duplicate($contentToDuplicate);
         } else {
             $contentEntityClass = $this->configurationManager->getEntityClass('content');
-            $content = new $contentEntityClass;
+            $content = new $contentEntityClass();
         }
 
         $form = $this->createForm(ContentType::class, $content, [
@@ -121,10 +96,7 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @return Response
-     */
-    public function listAction()
+    public function list(): Response
     {
         $contents = $this->contentManager->getContents();
 
@@ -138,14 +110,12 @@ class ContentController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id): RedirectResponse
     {
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-            );
+        if (null === $content) {
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
         }
 
         $this->em->remove($content);
@@ -156,17 +126,13 @@ class ContentController extends AbstractController
 
     /**
      * @param int $id
-     *
-     * @return Response
      */
-    public function showAction($id)
+    public function show($id): Response
     {
         $content = $this->contentManager->getContentById($id);
 
-        if ($content === null) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id)
-            );
+        if (null === $content) {
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('content'), $id));
         }
 
         return $this->render('@SherlockodeAdvancedContent/Content/show.html.twig', [

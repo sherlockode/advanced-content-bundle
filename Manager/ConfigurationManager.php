@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 class ConfigurationManager
@@ -10,17 +12,15 @@ class ConfigurationManager
     protected $config;
 
     /**
-     * Set bundle configuration
-     *
-     * @param $config
+     * Set bundle configuration.
      */
-    public function setConfig($config)
+    public function setConfig($config): void
     {
         $this->config = $config;
     }
 
     /**
-     * Get entity class configuration for given type
+     * Get entity class configuration for given type.
      *
      * @param string $type
      *
@@ -45,9 +45,6 @@ class ConfigurationManager
         return $this->config['entity_class'];
     }
 
-    /**
-     * @return mixed
-     */
     public function getImageDirectory()
     {
         return $this->config['upload']['image_directory'];
@@ -101,12 +98,7 @@ class ConfigurationManager
         return $this->config['scopes']['enabled'];
     }
 
-    /**
-     * @param string $option
-     *
-     * @return mixed
-     */
-    private function getDefaultOptionValue($option)
+    private function getDefaultOptionValue(string $option)
     {
         return $this->config['default_options'][$option];
     }

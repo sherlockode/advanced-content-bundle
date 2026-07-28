@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,43 +11,21 @@ use Sherlockode\AdvancedContentBundle\Slug\SlugProviderInterface;
 class ContentManager
 {
     /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var SlugProviderInterface
-     */
-    private $slugProvider;
-
-    /**
      * ContentManager constructor.
-     *
-     * @param ConfigurationManager   $configurationManager
-     * @param EntityManagerInterface $em
-     * @param SlugProviderInterface  $slugProvider
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        EntityManagerInterface $em,
-        SlugProviderInterface $slugProvider
+        private readonly ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+        private readonly SlugProviderInterface $slugProvider,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->em = $em;
-        $this->slugProvider = $slugProvider;
     }
 
     /**
-     * Get content by its id
+     * Get content by its id.
      *
      * @param int $id
      *
-     * @return null|ContentInterface
+     * @return ContentInterface|null
      */
     public function getContentById($id)
     {
@@ -53,7 +33,7 @@ class ContentManager
     }
 
     /**
-     * Get all contents
+     * Get all contents.
      *
      * @return array
      */
@@ -62,11 +42,6 @@ class ContentManager
         return $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findAll();
     }
 
-    /**
-     * @param ContentInterface $content
-     *
-     * @return ContentInterface
-     */
     public function duplicate(ContentInterface $content): ContentInterface
     {
         $newContent = clone $content;

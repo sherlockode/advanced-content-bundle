@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -66,8 +68,6 @@ interface PageMetaInterface
     public function getPage();
 
     /**
-     * @param PageInterface $page
-     *
      * @return $this
      */
     public function setPage(PageInterface $page);

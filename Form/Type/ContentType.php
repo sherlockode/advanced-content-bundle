@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -20,49 +22,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @param ConfigurationManager  $configurationManager
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param ScopeHandlerInterface $scopeHandler
-     * @param TranslatorInterface   $translator
-     */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        UrlGeneratorInterface $urlGenerator,
-        ScopeHandlerInterface $scopeHandler,
-        TranslatorInterface $translator
+        private readonly ConfigurationManager $configurationManager,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly ScopeHandlerInterface $scopeHandler,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->urlGenerator = $urlGenerator;
-        $this->scopeHandler = $scopeHandler;
-        $this->translator = $translator;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $token = uniqid('content_');
 
@@ -98,14 +66,15 @@ class ContentType extends AbstractType
             ]);
         }
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use ($options, $token) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($options, $token): void {
             $form = $event->getForm();
             /** @var ContentInterface $content */
             $content = $event->getData();
             $slugClass = 'acb-content-slug';
-            if ($content !== null && $content->getId()) {
+            if (null !== $content && $content->getId()) {
                 $slugClass = '';
             }
+
             $form
                 ->add('slug', TextType::class, [
                     'label' => 'content.form.slug',
@@ -115,7 +84,7 @@ class ContentType extends AbstractType
                     ],
                 ])
             ;
-            if ($form->getParent()) {
+            if (null !== $form->getParent()) {
                 $form->remove('name');
                 $form->remove('slug');
                 if ($form->has('scopes')) {
@@ -123,7 +92,7 @@ class ContentType extends AbstractType
                 }
             }
 
-            if ($content === null || empty($content->getData())) {
+            if (null === $content || empty($content->getData())) {
                 $emptyRowCol = [
                     'elementType' => 'row',
                     'position' => 0,
@@ -142,11 +111,11 @@ class ContentType extends AbstractType
             }
         });
 
-        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) {
-            $event->setData(json_decode($event->getData(), true));
+        $builder->get('data')->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+            $event->setData(json_decode((string) $event->getData(), true));
         }, 1);
 
-        $builder->addEventListener(FormEvents::SUBMIT, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
             $form = $event->getForm();
             if ($form->has('slug')) {
                 $content = $event->getData();
@@ -165,16 +134,13 @@ class ContentType extends AbstractType
         });
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         // ensure the form is working on the first added image (multipart would not be set in this case)
         $view->vars['multipart'] = true;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'translation_domain' => 'AdvancedContentBundle',

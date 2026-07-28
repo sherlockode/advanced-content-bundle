@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,31 +12,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class AcbContentType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @param ConfigurationManager   $configurationManager
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(ConfigurationManager $configurationManager, EntityManagerInterface $em)
-    {
-        $this->configurationManager = $configurationManager;
-        $this->em = $em;
+    public function __construct(
+        private readonly ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+    ) {
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $contents = $this->em->getRepository($this->configurationManager->getEntityClass('content'))->findBy([
             'page' => null,

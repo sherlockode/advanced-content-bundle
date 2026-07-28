@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Manager;
 
 use Sherlockode\AdvancedContentBundle\Export\ContentExport;
@@ -10,104 +12,78 @@ use Symfony\Component\Yaml\Yaml;
 
 class ExportManager
 {
-    /**
-     * @var PageExport
-     */
-    private $pageExport;
+    private array $filesData = [];
 
-    /**
-     * @var ContentExport
-     */
-    private $contentExport;
-
-    /**
-     * @var array
-     */
-    private $filesData = [];
-
-    /**
-     * @param PageExport        $pageExport
-     * @param ContentExport     $contentExport
-     */
     public function __construct(
-        PageExport $pageExport,
-        ContentExport $contentExport
+        private readonly PageExport $pageExport,
+        private readonly ContentExport $contentExport,
     ) {
-        $this->pageExport = $pageExport;
-        $this->contentExport = $contentExport;
         $this->pageExport->setContentExport($this->contentExport);
     }
 
     /**
      * @param array|PageInterface[] $pages
      */
-    public function generatePagesData($pages)
+    public function generatePagesData($pages): void
     {
         foreach ($pages as $page) {
             /** @var PageInterface $page */
             $data = $this->pageExport->exportData($page);
-            $this->addToFilesData($data, 'page_' . $page->getPageIdentifier());
+            $this->addToFilesData($data, 'page_'.$page->getPageIdentifier());
         }
     }
 
     /**
      * @param array|ContentInterface[] $contents
      */
-    public function generateContentsData($contents)
+    public function generateContentsData($contents): void
     {
         foreach ($contents as $content) {
             /** @var ContentInterface $content */
             $data = $this->contentExport->exportData($content);
-            $this->addToFilesData($data, 'content_' . $content->getSlug());
+            $this->addToFilesData($data, 'content_'.$content->getSlug());
         }
     }
 
     /**
-     * @param array  $data
-     * @param string $filename
+     * @param array $data
      */
-    private function addToFilesData($data, $filename)
+    private function addToFilesData($data, string $filename): void
     {
         $data = Yaml::dump($data, 15);
-        $this->filesData[$filename . '.yaml'] = $data;
+        $this->filesData[$filename.'.yaml'] = $data;
     }
 
-    /**
-     * @param string $directory
-     * @param bool   $useDatePrefix
-     */
-    public function generateFiles($directory, $useDatePrefix = true)
+    public function generateFiles(string $directory, bool $useDatePrefix = true): void
     {
         $prefix = '';
         if ($useDatePrefix) {
             $prefix = date('Ymd-His_');
         }
+
         foreach ($this->filesData as $filename => $data) {
-            file_put_contents($directory . $prefix . $filename, $data);
+            file_put_contents($directory.$prefix.$filename, $data);
         }
     }
 
-    /**
-     * @return string
-     */
-    public function generateZipFile()
+    public function generateZipFile(): string
     {
-        $tmpDir = '/tmp/acb_export_' . time() . '/';
+        $tmpDir = '/tmp/acb_export_'.time().'/';
         mkdir($tmpDir);
         $this->generateFiles($tmpDir, false);
 
-        $zipFileName = '/tmp/acb_export_' . date('Ymd-His') . '.zip';
+        $zipFileName = '/tmp/acb_export_'.date('Ymd-His').'.zip';
         $zip = new \ZipArchive();
         $zip->open($zipFileName, \ZipArchive::CREATE);
         $zip->addPattern('/.*/', $tmpDir, ['remove_all_path' => true]);
         $zip->close();
 
-        foreach (glob($tmpDir . '*') as $file) {
+        foreach (glob($tmpDir.'*') as $file) {
             unlink($file);
         }
+
         rmdir($tmpDir);
 
         return $zipFileName;
     }
-
 }

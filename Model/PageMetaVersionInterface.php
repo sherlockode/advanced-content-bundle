@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 interface PageMetaVersionInterface
@@ -10,8 +12,6 @@ interface PageMetaVersionInterface
     public function getPageMeta();
 
     /**
-     * @param PageMetaInterface $pageMeta
-     *
      * @return $this
      */
     public function setPageMeta(PageMetaInterface $pageMeta);

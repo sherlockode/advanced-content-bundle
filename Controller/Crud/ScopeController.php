@@ -1,35 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller\Crud;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Model\ScopeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ScopeController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param ConfigurationManager   $configurationManager
-     */
     public function __construct(
-        EntityManagerInterface $em,
-        ConfigurationManager $configurationManager
+        private readonly EntityManagerInterface $em,
+        private readonly ConfigurationManager $configurationManager,
     ) {
-        $this->em = $em;
-        $this->configurationManager = $configurationManager;
     }
 
     /**
@@ -37,14 +24,12 @@ class ScopeController extends AbstractController
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function delete($id): RedirectResponse
     {
         $scope = $this->em->getRepository($this->configurationManager->getEntityClass('scope'))->find($id);
 
         if (!$scope instanceof ScopeInterface) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('scope'), $id)
-            );
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('scope'), $id));
         }
 
         $this->em->remove($scope);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Event;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -9,37 +11,17 @@ class AcbFilePreSubmitEvent extends Event
 {
     public const NAME = 'acb_file.pre_submit';
 
-    /**
-     * @var UploadedFile
-     */
-    private $uploadedFile;
-
-    /**
-     * @var string
-     */
-    private $fileName;
-
-    /**
-     * @param UploadedFile $uploadedFile
-     * @param string       $fileName
-     */
-    public function __construct(UploadedFile $uploadedFile, string $fileName)
-    {
-        $this->uploadedFile = $uploadedFile;
-        $this->fileName = $fileName;
+    public function __construct(
+        private readonly UploadedFile $uploadedFile,
+        private readonly string $fileName,
+    ) {
     }
 
-    /**
-     * @return UploadedFile
-     */
     public function getUploadedFile(): UploadedFile
     {
         return $this->uploadedFile;
     }
 
-    /**
-     * @return string
-     */
     public function getFileName(): string
     {
         return $this->fileName;

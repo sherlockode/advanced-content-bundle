@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 interface PageTypeInterface
 {
     /**
-     * Get field id
+     * Get field id.
      *
      * @return int
      */
     public function getId();
 
     /**
-     * Get page type's name
+     * Get page type's name.
      *
      * @return string
      */
     public function getName();
 
     /**
-     * Set page type's name
+     * Set page type's name.
      *
      * @param string $name
      *

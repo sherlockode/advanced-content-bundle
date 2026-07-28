@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Form\Type;
 
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
@@ -10,32 +12,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ScopeChoiceType extends AbstractType
 {
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var ScopeHandlerInterface
-     */
-    private $scopeHandler;
-
-    /**
-     * @param ConfigurationManager  $configurationManager
-     * @param ScopeHandlerInterface $scopeHandler
-     */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        ScopeHandlerInterface $scopeHandler
+        private readonly ConfigurationManager $configurationManager,
+        private readonly ScopeHandlerInterface $scopeHandler,
     ) {
-        $this->configurationManager = $configurationManager;
-        $this->scopeHandler = $scopeHandler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'class' => $this->configurationManager->getEntityClass('scope'),
@@ -48,9 +31,7 @@ class ScopeChoiceType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function getParent(): ?string
     {
         return EntityType::class;

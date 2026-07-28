@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,15 +15,11 @@ interface ScopableInterface
     public function getScopes();
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function addScope(ScopeInterface $scope);
 
     /**
-     * @param ScopeInterface $scope
-     *
      * @return $this
      */
     public function removeScope(ScopeInterface $scope);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sherlockode\AdvancedContentBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +15,7 @@ use Sherlockode\AdvancedContentBundle\Manager\ImportManager;
 use Sherlockode\AdvancedContentBundle\Model\PageTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -21,60 +24,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ToolsController extends AbstractController
 {
     /**
-     * @var ImportManager
-     */
-    private $importManager;
-
-    /**
-     * @var ExportManager
-     */
-    private $exportManager;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var ConfigurationManager
-     */
-    private $configurationManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $template;
-
-    /**
-     * @param ImportManager          $importManager
-     * @param ExportManager          $exportManager
-     * @param TranslatorInterface    $translator
-     * @param ConfigurationManager   $configurationManager
-     * @param EntityManagerInterface $em
-     * @param string                 $template
+     * @param string $template
      */
     public function __construct(
-        ImportManager $importManager,
-        ExportManager $exportManager,
-        TranslatorInterface $translator,
-        ConfigurationManager $configurationManager,
-        EntityManagerInterface $em,
-        $template
+        private readonly ImportManager $importManager,
+        private readonly ExportManager $exportManager,
+        private readonly TranslatorInterface $translator,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly EntityManagerInterface $em,
+        private $template,
     ) {
-        $this->importManager = $importManager;
-        $this->exportManager = $exportManager;
-        $this->translator = $translator;
-        $this->configurationManager = $configurationManager;
-        $this->em = $em;
-        $this->template = $template;
     }
 
-    public function indexAction(Request $request)
+    public function index(Request $request): RedirectResponse|Response
     {
         $importForm = $this->createForm(ImportType::class, null, [
             'action' => $this->generateUrl('sherlockode_acb_tools_import'),
@@ -86,7 +48,7 @@ class ToolsController extends AbstractController
 
         $pageTypeClass = $this->configurationManager->getEntityClass('page_type');
         $pageTypes = $this->em->getRepository($pageTypeClass)->findAll();
-        $pageType = new $pageTypeClass;
+        $pageType = new $pageTypeClass();
         $pageTypeForm = $this->createForm(PageTypeType::class, $pageType, [
             'action' => $this->generateUrl('sherlockode_acb_tools_index'),
         ]);
@@ -95,21 +57,21 @@ class ToolsController extends AbstractController
             $existingPageTypes = $this->em->getRepository($pageTypeClass)->findBy([
                 'name' => $pageType->getName(),
             ]);
-            if (count($existingPageTypes) === 0) {
+            if (0 === count($existingPageTypes)) {
                 $this->em->persist($pageType);
                 $this->em->flush();
 
                 return $this->redirectToRoute('sherlockode_acb_tools_index');
-            } else {
-                $pageTypeForm->addError(new FormError(
-                    $this->translator->trans('page_type.errors.unique_name', [], 'AdvancedContentBundle')
-                ));
             }
+
+            $pageTypeForm->addError(new FormError(
+                $this->translator->trans('page_type.errors.unique_name', [], 'AdvancedContentBundle')
+            ));
         }
 
         $scopeClass = $this->configurationManager->getEntityClass('scope');
         $scopes = $this->em->getRepository($scopeClass)->findAll();
-        $scope = new $scopeClass;
+        $scope = new $scopeClass();
         $scopeForm = $this->createForm(ScopeType::class, $scope, [
             'action' => $this->generateUrl('sherlockode_acb_tools_index'),
         ]);
@@ -118,16 +80,16 @@ class ToolsController extends AbstractController
             $existingScopes = $this->em->getRepository($scopeClass)->findBy([
                 'locale' => $scope->getLocale(),
             ]);
-            if (count($existingScopes) === 0) {
+            if (0 === count($existingScopes)) {
                 $this->em->persist($scope);
                 $this->em->flush();
 
                 return $this->redirectToRoute('sherlockode_acb_tools_index');
-            } else {
-                $scopeForm->addError(new FormError(
-                    $this->translator->trans('scope.errors.unique_locale', [], 'AdvancedContentBundle')
-                ));
             }
+
+            $scopeForm->addError(new FormError(
+                $this->translator->trans('scope.errors.unique_locale', [], 'AdvancedContentBundle')
+            ));
         }
 
         return $this->render($this->template, [
@@ -141,11 +103,9 @@ class ToolsController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function importAction(Request $request)
+    public function import(Request $request): RedirectResponse
     {
         $form = $this->createForm(ImportType::class);
 
@@ -161,6 +121,7 @@ class ToolsController extends AbstractController
                         $this->addFlash('error', $message);
                     }
                 }
+
                 $this->addFlash('success', $this->translator->trans('tools.import.success', [], 'AdvancedContentBundle'));
             } catch (\Exception $e) {
                 $this->addFlash('error', $e->getMessage());
@@ -171,11 +132,9 @@ class ToolsController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function exportAction(Request $request)
+    public function export(Request $request): Response|RedirectResponse
     {
         $form = $this->createForm(ExportType::class);
 
@@ -215,14 +174,12 @@ class ToolsController extends AbstractController
      *
      * @return Response
      */
-    public function deletePageTypeAction($id)
+    public function deletePageType($id): RedirectResponse
     {
         $pageType = $this->em->getRepository($this->configurationManager->getEntityClass('page_type'))->find($id);
 
         if (!$pageType instanceof PageTypeInterface) {
-            throw $this->createNotFoundException(
-                sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id)
-            );
+            throw $this->createNotFoundException(sprintf('Entity %s with ID %s not found', $this->configurationManager->getEntityClass('page_type'), $id));
         }
 
         $this->em->remove($pageType);
