@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Sherlockode\AdvancedContentBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostLoadEventArgs;
 use Sherlockode\AdvancedContentBundle\Manager\ConfigurationManager;
 use Sherlockode\AdvancedContentBundle\Manager\VersionManager;
 use Sherlockode\AdvancedContentBundle\Model\ContentInterface;
@@ -18,9 +18,9 @@ class ContentListener
     ) {
     }
 
-    public function postLoad(LifecycleEventArgs $args): void
+    public function postLoad(PostLoadEventArgs $args): void
     {
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
 
         if (!$entity instanceof ContentInterface) {
             return;
@@ -35,7 +35,7 @@ class ContentListener
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $uow = $em->getUnitOfWork();
 
         $entities = [
