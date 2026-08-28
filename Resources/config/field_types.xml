@@ -45,5 +45,8 @@
             <argument type="service" id="sherlockode_advanced_content.scope_handler"/>
             <tag name="sherlockode_advanced_content.fieldtype"/>
         </service>
+        <service id="sherlockode_acb.field_type.html" class="Sherlockode\AdvancedContentBundle\FieldType\Html">
+            <tag name="sherlockode_advanced_content.fieldtype"/>
+        </service>
     </services>
 </container>

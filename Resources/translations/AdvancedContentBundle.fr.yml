@@ -72,6 +72,8 @@ field_type:
         image_label: Image %nb%
         arrow_previous: Précédent
         arrow_next: Suivant
+    html:
+        label: HTML
     group:
         other: Autres
         simple: Simple
