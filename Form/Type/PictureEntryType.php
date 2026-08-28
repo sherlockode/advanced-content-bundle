@@ -17,6 +17,7 @@ class PictureEntryType extends AbstractType
     {
         $builder->remove('alt');
         $builder->remove('mime_type');
+        $builder->remove('link');
         $builder
             ->add('media_query', TextType::class, [
                 'label' => 'field_type.image.media_query',

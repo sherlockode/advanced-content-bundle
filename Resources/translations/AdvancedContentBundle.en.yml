@@ -26,6 +26,7 @@ field_type:
         picture_main: Main image
         picture_sources: Alternative images
         media_query: Media query
+        link: Image link
     textarea:
         label: Textarea
     iframe:
