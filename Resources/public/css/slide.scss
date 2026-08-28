@@ -18,15 +18,30 @@ $zindex: 1000;
         margin-right: 0;
     }
 
-    .btn-close {
+    .slide-buttons {
         position: absolute;
         top: 16px;
         right: 16px;
-        width: 24px;
-        height: 24px;
-        border: none;
-        background: none;
-        font-size: 16px;
+        button {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            + button {
+                margin-left: 10px;
+            }
+            &.btn-back {
+                display: none;
+            }
+        }
+    }
+    &.new-field-form {
+        .slide-buttons {
+            button.btn-back {
+                display: inline-block;
+            }
+        }
     }
 
     .acb-lateral-slide-header {
