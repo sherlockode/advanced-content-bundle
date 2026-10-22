@@ -34,6 +34,13 @@ class RepeatedChildWrappedType extends AbstractType
         };
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, $dataCallback, -5);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+            $data = $event->getData();
+
+            if (!is_array($data) || !array_key_exists('wrapped_child', $data)) {
+                $event->setData(['wrapped_child' => $data]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
