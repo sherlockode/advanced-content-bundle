@@ -64,7 +64,7 @@ class RepeaterType extends AbstractType
                 if ($child->getConfig()->getCompound()) {
                     $child->add('position', HiddenType::class, ['data' => $i]);
                 } else {
-                    $form->add($i, RepeatedChildWrappedType::class, [
+                    $form->add((string) $i, RepeatedChildWrappedType::class, [
                         'child_options' => $child->getConfig()->getOptions(),
                         'child_form' => $child->getConfig()->getType()->getInnerType()::class,
                         'position' => $i,
